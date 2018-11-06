@@ -1,0 +1,81 @@
+<!--
+Required:
+gn_data.Settings.BaseUrl (URL to SDK-Server)
+gn_data.Settings.BaseDataUrl (URL to SDK-Images)
+gn_data.Settings.ImagePath (Path to the images)
+gn_data.Settings.LoginVerifyUrl (AJAX call for Login-Verifie)
+gn_data.Settings.ReturnUrl (The returnUrl, this is normally a GET-Param and is used as Success-Landing-Page)
+gn_data.Settings.QrCodeImage (The QR-Code-image ServerUrl or data:image/png;base64,...)
+
+Server-Enpoint:
+gn_data.Settings.LoginVerifyUrl POST (loginId used in QrCodeImage as URL-param "?loginId=11111111-1111-1111-1111-111111111111")
+
+Replace {record} with a unique id that identifies the entry
+-->
+
+<!-- MAIN_BEG -->
+<div class="ma-gpsnose" data-gn-version="1.0.6">
+
+    <div id="ma-gpsnose-{record}" class="ma-gpsnose-login" data-bind="visible:true" style="display:none;">
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="alert alert-info">
+                    <h4>
+                        <span aria-hidden="true" class="glyphicon glyphicon-info-sign"></span>
+                        <span data-bind="text: ' ' + GetLangRes('Account_Login_lblTitle', 'Login')"></span>
+                    </h4>
+                    <span data-bind="text: GetLangRes('Account_Login_lblLoginText', 'To login, scan this QR code using your mobile GpsNose app please')"></span>
+                </div>
+            </div>
+            <div class="col-md-6 text-center">
+
+                <img class="ma-qrcode-image" data-bind="attr: { src: gn_data.Settings.QrCodeImage }, visible: gn_data.Settings.QrCodeImage" />
+
+                <div class="alert alert-danger" data-bind="visible: ! gn_data.Settings.QrCodeImage">
+                    <span aria-hidden="true" class="glyphicon glyphicon-info-sign"></span>
+                    <span data-bind="text: ' ' + GetLangRes('Common_lblUnknownError', 'An unknown error is occured!')"></span>
+                </div>
+
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+        <br />
+        <ma-gpsnose-footer params="hideCopyright:true, hideSupportMail:true, imagePath:gn_data.Settings.ImagePath"></ma-gpsnose-footer>
+
+    </div>
+
+</div>
+
+<script>
+var MA_GPSNOSE_IS_MASHUP = true;
+$(document).ready(function() {
+    if (! gn_data.User) gn_data.User = {};
+    ko.applyBindings(new BaseViewModel(), $('#ma-gpsnose-{record}').get(0));
+    window.setTimeout(WaitForLogin, 3500);
+});
+function WaitForLogin() {
+    $.ajax({
+        type: 'POST',
+        url: gn_data.Settings.LoginVerifyUrl,
+        cache: false,
+        dataType: 'json',
+        success: function(result) {
+            if (result.IsOk) {
+                if (gn_data.Settings.ReturnUrl == '') {
+                    document.location.reload();
+                } else {
+                    window.location.replace(gn_data.Settings.ReturnUrl);
+                }
+            } else {
+                window.setTimeout(WaitForLogin, 3500);
+            }
+        },
+        error: function() {
+            window.setTimeout(WaitForLogin, 3500);
+        }
+    });
+}
+</script>
+<!-- MAIN_END -->

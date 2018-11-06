@@ -1,0 +1,80 @@
+<html
+  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+  xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+  data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+
+<f:section name="title"><f:translate key="MashupAdmin_lblTitle" /></f:section>
+
+
+<f:section name="buttons">
+    <f:link.action action="logout" class="btn btn-danger">
+        <core:icon identifier="fa-sign-out" /> <f:translate key="Common_btnLogout" />
+    </f:link.action>
+    <f:link.action action="refresh" class="btn btn-default">
+        <core:icon identifier="fa-cloud" /> <f:translate key="Common_btnSync" />
+    </f:link.action>
+    <f:link.action action="list" class="btn btn-default">
+        <core:icon identifier="fa-refresh" /> <f:translate key="Common_btnRefresh" />
+    </f:link.action>
+</f:section>
+
+
+<f:section name="messages">
+    <f:flashMessages />
+    <f:render partial="KeepAlive" />
+</f:section>
+
+
+<f:section name="content">
+    <table class="table table-hover" >
+        <tr>
+            <th class="col-md-2 col-sm-1 col-xs-3">
+                <f:link.action action="new" class="btn btn-primary btn-xs">
+                    <core:icon identifier="fa-plus" /> <f:translate key="Common_btnAdd" />
+                </f:link.action>
+            </th>
+            <th class="col-md-4 col-sm-5 col-xs-7">
+                <span><f:translate key="MashupAdmin_lblListTitleName" /></span>
+                <span class="hidden-lg hidden-md"> / <f:translate key="MashupAdmin_lblListTitleDate" /></span>
+            </th>
+            <th class="col-md-4 col-sm-4 visible-lg visible-md"><f:translate key="MashupAdmin_lblListTitleDate" /></th>
+            <th class="col-md-2 col-sm-2 col-xs-2"><f:translate key="MashupAdmin_lblListTitleChilds" /></th>
+        </tr>
+        <f:for each="{mashups}" as="mashup">
+            <tr>
+                <td>
+                    <div class="btn-group btn-group-xs">
+                        <f:link.action action="edit" arguments="{mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="fa-wrench" /></f:link.action>
+                        <f:link.action action="show" arguments="{mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="fa-folder-open" /></f:link.action>
+                        <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="fa-qrcode" /></f:link.action>
+                        <f:if condition="{mashup.appKey} == ''">
+                            <f:link.action action="validate" arguments="{mashup : mashup}" class="btn btn-icon btn-warning" title="{f:translate(key: 'MashupAdmin_btnValidateCommunity')}"><core:icon identifier="fa-play" /></f:link.action>
+                            <f:link.action action="delete" arguments="{mashup : mashup}" class="btn btn-icon btn-danger"><core:icon identifier="fa-trash" /></f:link.action>
+                        </f:if>
+                    </div>
+                </td>
+                <td>
+                    <nose:community.label tag="{mashup.communityTag}" /><br/>
+                    <span class="hidden-lg hidden-md">{f:format.date(format:'Y-m-d H:i', date:'{mashup.validationDate}')}</span>
+                </td>
+                <td class="visible-lg visible-md">{f:format.date(format:'Y-m-d H:i', date:'{mashup.validationDate}')}</td>
+                <td>
+                    <span class="badge" title="{nose:string.replace(value: '{f:translate(key:\'MashupAdmin_lblListTitleSubCommunitiesCount\')}', search:'%count%', replace:'{mashup.subCommunities -> f:count()}')}">
+                        <core:icon identifier="fa-link" />
+                        <span><f:count subject="{mashup.subCommunities}" /></span>
+                    </span>
+                    <span class="badge" title="{nose:string.replace(value: '{f:translate(key:\'MashupAdmin_lblListTitleHostsCount\')}', search:'%count%', replace:'{mashup.hosts -> f:count()}')}">
+                        <core:icon identifier="fa-share" />
+                        <span><f:count subject="{mashup.hosts}" /></span>
+                    </span>
+                </td>
+            </tr>
+        </f:for>
+    </table>
+</f:section>
+
+</html>

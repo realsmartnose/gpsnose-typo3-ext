@@ -1,0 +1,31 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<div class="panel panel-default">
+    <div class="panel-heading"><f:translate key="LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_plugin_loginqrcode.title" /></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <span class="badge">#{tx_gpsnose_mashup}</span>
+            <f:translate key="LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tt_content.tx_gpsnose_mashup" />
+         </li>
+        <f:if condition="{tx_gpsnose_mashup_login_option_must_join}">
+            <li class="list-group-item">
+                <f:translate key="LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tt_content.tx_gpsnose_mashup_login_option_must_join" />
+            </li>
+        </f:if>
+        <f:if condition="{tx_gpsnose_mashup_login_option_needs_activation}">
+            <li class="list-group-item">
+                <f:translate key="LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tt_content.tx_gpsnose_mashup_login_option_needs_activation" />
+            </li>
+        </f:if>
+        <li class="list-group-item">
+            <span class="badge">{tx_gpsnose_mashup_login_acl}</span>
+            <f:translate key="LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tt_content.tx_gpsnose_mashup_login_acl" />
+        </li>
+    </ul>
+</div>
+
+</html>

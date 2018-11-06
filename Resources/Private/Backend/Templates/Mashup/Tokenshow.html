@@ -1,0 +1,82 @@
+<html
+  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+  xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+  data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+
+<f:section name="title"><f:translate key="MashupAdmin_lblDetailTitle" /></f:section>
+
+
+<f:section name="buttons">
+    <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-default">
+        <core:icon identifier="fa-chevron-left" /> <f:translate key="Common_btnBackToList" />
+    </f:link.action>
+    <f:link.action action="tokenshow" arguments="{token : token, mashup : mashup}" class="btn btn-default">
+        <core:icon identifier="fa-refresh" /> <f:translate key="Common_btnRefresh" />
+    </f:link.action>
+</f:section>
+
+
+<f:section name="messages">
+    <f:flashMessages />
+    <f:render partial="KeepAlive" />
+</f:section>
+
+
+<f:section name="content">
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <nose:community.label tag="{mashup.communityTag}" />
+    </div>
+    <table class="table">
+        <tr>
+            <td class="col-xs-4"><f:translate key="MashupAdmin_lblMashupTokenValueLabel" /></td>
+            <td class="col-xs-8"><pre style="white-space:pre-wrap; word-wrap:break-word;">{token.payload}</pre></td>
+        </tr>
+        <tr>
+            <td><f:translate key="MashupAdmin_lblMashupTokenDateLabel" /></td>
+            <td><nose:ticks.datetime ticks="{token.validToTicks}" /></td>
+        </tr>
+        <tr>
+            <td><f:translate key="MashupAdmin_lblMashupTokenImageLabel" /></td>
+            <td>
+                <f:if condition="{qr_code_image}">
+                    <f:then>
+                        <img class="qrcode" src="data:image/png;base64,{qr_code_image}" />
+                    </f:then>
+                    <f:else>
+                        <p>No image created</p>
+                    </f:else>
+                </f:if>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Scans
+    </div>
+    <table class="table">
+        <tr>
+            <th class="col-xs-4"><f:translate key="MashupAdmin_lblMashupTokenScanUserLabel" /></th>
+            <th class="col-xs-4"><f:translate key="MashupAdmin_lblMashupTokenScanDateLabel" /></th>
+            <th class="col-xs-4"><f:translate key="MashupAdmin_lblMashupTokenScanLocationLabel" /></th>
+        </tr>
+        <f:for each="{token.tokenScans}" as="scan" reverse="true">
+            <tr>
+                <td>{scan.scannedByLoginName}</td>
+                <td><nose:ticks.datetime ticks="{scan.scannedTicks}" /></td>
+                <td><a href="https://www.google.com/maps/search/?api=1&query={scan.scannedLatitude},{scan.scannedLongitude}" target="_new">{scan.scannedLatitude},{scan.scannedLongitude}</a></td>
+            </tr>
+        </f:for>
+    </table>
+</div>
+
+</f:section>
+
+</html>

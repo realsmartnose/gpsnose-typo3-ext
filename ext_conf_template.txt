@@ -1,0 +1,19 @@
+
+# cat=Common/010; type=string; label=GpsNose-Cookie Crypt-Password
+cookieCryptPass = 
+
+# cat=Common/020; type=options[typo3,memcached,none]; label=Cache-Type
+cacheType = typo3
+
+# cat=Common/030; type=string; label=Memcached server host
+memcachedServerHost = 127.0.0.1
+
+# cat=Common/040; type=int; label=Memcached server port
+memcachedServerPort = 11211
+
+
+# cat=Backend/010; type=boolean; label=Debug-Log
+debugLog = 0
+
+# cat=Backend/020; type=string; label=Backend-Modul locked to GpsNose-User
+backendLockedUser = 

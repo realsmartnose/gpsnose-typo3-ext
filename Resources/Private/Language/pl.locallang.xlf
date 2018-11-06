@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="pl" datatype="plaintext" original="messages" date="2018-04-30T12:54:45Z" product-name="gpsnose">
+		<header/>
+		<body>
+			<trans-unit id="MashupAdmin_btnCreateMashupToken">
+				<source><![CDATA[Create mashup-token]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_btnMashupToken">
+				<source><![CDATA[Mashup-token]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_btnRegenerateAppKey">
+				<source><![CDATA[Get new App-Key]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_btnValidateCommunity">
+				<source><![CDATA[Validate]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblAddFail">
+				<source><![CDATA[To add a mashup-site, make sure you entered a valide url without protocol (e.g.: www.exemple.com) and use a maximum of %max_characters% characters]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblAddHostPlaceholder">
+				<source><![CDATA[Add new host]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblAddSubCommunityPlaceholder">
+				<source><![CDATA[Add new sub-community]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblAddTitle">
+				<source><![CDATA[Add new Mashup]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblAllowedHosts">
+				<source><![CDATA[Allowed hosts]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblAppKey">
+				<source><![CDATA[App-Key]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblChartCalls">
+				<source><![CDATA[Calls]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblChartDate">
+				<source><![CDATA[Date]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblChartExQuotas">
+				<source><![CDATA[Over quota]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblChartHitsPerDay">
+				<source><![CDATA[Hits per day]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblDetailTitle">
+				<source><![CDATA[Mashup detail]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblEditTitle">
+				<source><![CDATA[Edit Mashup]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblHostsHint">
+				<source><![CDATA[Enter the domain of the new host here and click add, the data for this community will only be accessible from these hosts]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblListTitleChilds">
+				<source><![CDATA[Entries]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblListTitleDate">
+				<source><![CDATA[Date]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblListTitleHostsCount">
+				<source><![CDATA[%count% hosts]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblListTitleName">
+				<source><![CDATA[Name]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblListTitleSubCommunitiesCount">
+				<source><![CDATA[%count% sub-communities]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblLoginTitle">
+				<source><![CDATA[GpsNose Login]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblLogoutTitle">
+				<source><![CDATA[GpsNose Logout]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenDateHint">
+				<source><![CDATA[Set the date until the token should be valid, empty means, it will remain until the eternity]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenDateLabel">
+				<source><![CDATA[Expiration date]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenDatePlaceholder">
+				<source><![CDATA[Valid until]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenImageLabel">
+				<source><![CDATA[Token]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenListTitle">
+				<source><![CDATA[Mashup-token admin]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenScanDateLabel">
+				<source><![CDATA[Date]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenScanLocationLabel">
+				<source><![CDATA[Location]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenScans">
+				<source><![CDATA[Scan-count]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenScanUserLabel">
+				<source><![CDATA[User]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenTitle">
+				<source><![CDATA[Create mashup-token]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenValueHint">
+				<source><![CDATA[To create a mashup-token, make sure you use a maximum of %max_characters% characters for the identifier]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenValueLabel">
+				<source><![CDATA[Token identifier]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenValuePlaceholder">
+				<source><![CDATA[Enter token identifier here]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblQuotaLimit">
+				<source><![CDATA[Quota = %quota%]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblRegisterCommunityPlaceholder">
+				<source><![CDATA[Insert Sitename here]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblSubCommunities">
+				<source><![CDATA[Sub Communities]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblSubCommunitiesFail">
+				<source><![CDATA[To add a sub-community, make sure you only use the characters \'0-9 a-z and -\' and a maximum of %max_characters% characters]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblSubCommunitiesHint">
+				<source><![CDATA[Enter the name of the new subcommunity here and click add, it will show as community@subcommunity]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblSubHostsFail">
+				<source><![CDATA[To add a host, make sure you entered a valide url without protocol (e.g.: www.exemple.com) and use a maximum of %max_characters% characters]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblTitle">
+				<source><![CDATA[Mashup Admin]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblUnvalidatedMashup">
+				<source><![CDATA[There is already an unvalidated mashup, please remove first the other enrty before you add a new one]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblValidateCommunityMessage">
+				<source><![CDATA[Add the key %key% to your webpage %mashup% then click Validate. The key can be placed into your website\'s default home document as a meta-tag named "gpsnose-validation-key" (and content is the key), or as a file named as the key without any extension or with some of the .txt | .htm | .html extensions. See the Wiki page under http://wiki.gpsnose.com for more details.]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblValidationDate">
+				<source><![CDATA[Validation date]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblValidationKey">
+				<source><![CDATA[Validation-Key]]></source>
+			</trans-unit>
+			<trans-unit id="NewsPart_Load_lblBlogWasDeleted">
+				<source><![CDATA[Wrażenie zostało usunięte]]></source>
+			</trans-unit>
+			<trans-unit id="NewsPart_Load_lblCommentWasDeleted">
+				<source><![CDATA[Komentarz został usunięty]]></source>
+			</trans-unit>
+			<trans-unit id="Account_Login_lblLoginText">
+				<source><![CDATA[Aby się zalogować, zeskanowuj kod QR poprzez Twoją aplikacją mobilną GpsNose]]></source>
+			</trans-unit>
+			<trans-unit id="Account_Login_lblTitle">
+				<source><![CDATA[Login]]></source>
+			</trans-unit>
+			<trans-unit id="Comment_lblErrorCannotSave">
+				<source><![CDATA[Nie można zaktualizować komentarza na serwerze!]]></source>
+			</trans-unit>
+			<trans-unit id="Comment_lblErrorTextRequired">
+				<source><![CDATA[Wymagany jest tekst]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnAdd">
+				<source><![CDATA[Nowy]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnBackToList">
+				<source><![CDATA[Powrót do listy]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnCancel">
+				<source><![CDATA[przerwać]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnClose">
+				<source><![CDATA[Zamknij]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnDelete">
+				<source><![CDATA[usuń]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnEdit">
+				<source><![CDATA[Edituj]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnJoinCommunity">
+				<source><![CDATA[Dołącz do społeczności]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnLogin">
+				<source><![CDATA[Zaloguj się]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnLogout">
+				<source><![CDATA[Wyloguj się]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnOk">
+				<source><![CDATA[Ok]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnRefresh">
+				<source><![CDATA[Załaduj na nowo]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnRemove">
+				<source><![CDATA[Usunąć]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnSend">
+				<source><![CDATA[Wyślij]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnShowProfile">
+				<source><![CDATA[Pokaż profil]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnSync">
+				<source><![CDATA[Synchronizować]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblAreYouSureMessage">
+				<source><![CDATA[Nie można tego cofnąć, mimo to kontynuować?]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblAreYouSureTitle">
+				<source><![CDATA[Jesteś pewien?]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblCommentAdd">
+				<source><![CDATA[Utworzyć komentarz]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblCommentAddHint">
+				<source><![CDATA[Napisz komentarz]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblCommentEdit">
+				<source><![CDATA[Edytuj komentarz]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblCommentEditHint">
+				<source><![CDATA[Usuń komentarz]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblComments">
+				<source><![CDATA[Komentarze]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblCompanyName">
+				<source><![CDATA[Nemanicnedanic, Inc.]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblError">
+				<source><![CDATA[Błąd]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblErrorCannotPage">
+				<source><![CDATA[Nie można otworzyć strony!]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblLoadMore">
+				<source><![CDATA[więcej ..]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblLoggedOut">
+				<source><![CDATA[Zostałeś wylogowany. Aby kontynuować pracę, musisz zalogować się ponownie.]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblMaxCountReached">
+				<source><![CDATA[Osiągnąłeś maksymalną liczbę dozwolonych wpisów. Jeśli potrzebujesz więcej, skontaktuj się z nami pod adresem info@gpsnose.com]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblNoCommentsAvailable">
+				<source><![CDATA[Obecnie nie ma komentarzy dla tego wpisu.]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblNotActivated">
+				<source><![CDATA[Aby korzystać z tej funkcji, musisz najpierw aktywować swój profil logowania w aplikacji mobilnej]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblRequestInProgress">
+				<source><![CDATA[Ładuję]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblScanToJoin">
+				<source><![CDATA[Jeśli chcesz dołączyć do społeczności, zeskanuj ten QR-kod za pomocą mobilnej aplikacji GpsNose]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblUnknownError">
+				<source><![CDATA[Wystąpił nieznany błąd!]]></source>
+			</trans-unit>
+			<trans-unit id="Common_loginRequired">
+				<source><![CDATA[Proszę się najpierw zalogować.]]></source>
+			</trans-unit>
+			<trans-unit id="Community_lblMembersNoEntryMessage">
+				<source><![CDATA[Obecnie nie ma członków tej społeczności.]]></source>
+			</trans-unit>
+			<trans-unit id="Community_loginRequired">
+				<source><![CDATA[Logowanie wymagane do pisania]]></source>
+			</trans-unit>
+			<trans-unit id="Home_Index_lblNoNews">
+				<source><![CDATA[Obecnie nie ma takich informacji w Twojej okolicy.]]></source>
+			</trans-unit>
+			<trans-unit id="Home_Index_lblNoPublishers">
+				<source><![CDATA[Obecnie nie ma takich Nosów w Twojej okolicy; Ale możesz przekazać aplikację mobilną przyjaciołom aby ich tutaj zobaczyć.]]></source>
+			</trans-unit>
+			<trans-unit id="Nearby_lblNoEvents">
+				<source><![CDATA[W tej chwili nie ma żadnych wydarzeń w okolicy]]></source>
+			</trans-unit>
+			<trans-unit id="Nearby_lblNoImpressions">
+				<source><![CDATA[Aktualnie w Twojej okolicy nie ma żadnych wrażeń, możesz być pierwszą osobą która stworzy je tutaj…]]></source>
+			</trans-unit>
+			<trans-unit id="Nearby_lblNoNoses">
+				<source><![CDATA[Nie ma obecnie żadnych innych nosów w okolicy]]></source>
+			</trans-unit>
+			<trans-unit id="Nearby_lblNoPois">
+				<source><![CDATA[Żadne miejsca w Twojej okolicy nie są dostępne]]></source>
+			</trans-unit>
+			<trans-unit id="Nearby_lblNoTracks">
+				<source><![CDATA[Obecnie brak dostępnych tras w okolicy]]></source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

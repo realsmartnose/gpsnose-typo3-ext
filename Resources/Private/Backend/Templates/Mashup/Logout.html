@@ -1,0 +1,29 @@
+<html
+  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+  xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+  data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+
+<f:section name="title"><f:translate key="MashupAdmin_lblLogoutTitle" /></f:section>
+
+
+<f:section name="buttons">
+    <f:link.action action="login" class="btn btn-default">
+        <core:icon identifier="fa-chevron-left" /> <f:translate key="Common_btnLogin" />
+    </f:link.action>
+</f:section>
+
+
+<f:section name="messages">
+    <f:flashMessages />
+    <f:render partial="KeepAlive" />
+</f:section>
+
+
+<f:section name="content">
+</f:section>
+
+</html>

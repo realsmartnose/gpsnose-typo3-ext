@@ -1,0 +1,37 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <nose:community.label tag="{mashup.communityTag}" />
+    </div>
+    <table class="table">
+        <tr>
+            <td><f:translate key="MashupAdmin_lblValidationDate" /></td>
+            <td>{f:format.date(format:'Y-m-d H:i', date:'{mashup.validationDate}')}</td>
+        </tr>
+        <tr>
+            <td><f:translate key="MashupAdmin_lblValidationKey" /></td>
+            <td>{mashup.validationKey}</td>
+        </tr>
+        <tr>
+            <td><f:translate key="MashupAdmin_lblAppKey" /></td>
+            <td>
+                {mashup.appKey}
+                <f:if condition="{mashup.appKey} != '' && {edit} == '1'">
+                <br />
+                    <f:link.action action="regenerateAppKey" arguments="{mashup : mashup}" class="btn btn-xs btn-danger">
+                        <core:icon identifier="fa-refresh" />
+                        <span> <f:translate key="MashupAdmin_btnRegenerateAppKey" /></span>
+                    </f:link.action>
+                </f:if>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+</html>

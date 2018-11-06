@@ -1,0 +1,5 @@
+1.0.1
+- ADD: gn_data.Settings.LoginId to detail-url
+
+1.0.0
+- ADD: Initial Release

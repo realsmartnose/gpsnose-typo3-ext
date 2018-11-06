@@ -1,0 +1,47 @@
+<svg id="QR-Code" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <metadata><?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c140 79.160451, 2017/05/06-01:08:21        ">
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about=""/>
+   </rdf:RDF>
+</x:xmpmeta>
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                           
+<?xpacket end="w"?></metadata>
+<defs>
+    <style>
+      .cls-1 {
+        fill: #007800;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <rect id="Abgerundetes_Rechteck_1" data-name="Abgerundetes Rechteck 1" class="cls-1" width="512" height="512"/>
+  <path id="Rechteck_1" data-name="Rechteck 1" class="cls-2" d="M64,64H240V240H64V64ZM96,96H208V208H96V96Zm32,32h48v48H128V128Z"/>
+  <path id="Rechteck_2" data-name="Rechteck 2" class="cls-2" d="M272,64H448V240H272V64Zm32,32H416V208H304V96Zm32,32h48v48H336V128Z"/>
+  <path id="Rechteck_3" data-name="Rechteck 3" class="cls-2" d="M64,272H240V448H64V272Zm32,32H208V416H96V304Zm32,32h48v48H128V336Z"/>
+  <path id="Rechtecke" class="cls-2" d="M272,272h64v32H272V272Zm32,32h80v32H304V304Zm-32,32h32V448H272V336Zm64,48h48v32H336V384Zm80,0h32v32H416V384Zm-32-48h32v48H384V336Zm-48,80H448v32H336V416Zm48-144h64v32H384V272Z"/>
+</svg>

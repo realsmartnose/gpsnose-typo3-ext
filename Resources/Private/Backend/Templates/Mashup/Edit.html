@@ -1,0 +1,200 @@
+<html
+  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+  xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+  data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+
+<f:section name="title">Edit Mashup community</f:section>
+
+
+<f:section name="buttons">
+    <f:link.action action="list" class="btn btn-default">
+        <core:icon identifier="fa-chevron-left" /> <f:translate key="Common_btnBackToList" />
+    </f:link.action>
+    <f:link.action action="edit" arguments="{mashup : mashup}" class="btn btn-default">
+        <core:icon identifier="fa-refresh" /> <f:translate key="Common_btnRefresh" />
+    </f:link.action>
+</f:section>
+
+
+<f:section name="messages">
+    <f:flashMessages />
+    <f:render partial="KeepAlive" />
+    <f:render partial="FormErrors" arguments="{object:Mashup}" />
+</f:section>
+
+
+<f:section name="content">
+
+<f:render partial="Mashup/Properties" arguments="{mashup : mashup, edit : 1}" />
+
+<div class="row">
+
+    <!-- SubCommunities -->
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span><f:translate key="MashupAdmin_lblSubCommunities" /></span>
+                <span class="pull-right">{mashup.subCommunities -> f:count()} / {mashup.maxSubSites}</span>
+            </div>
+            <f:if condition="{mashup.subCommunities -> f:count()} >= {mashup.maxSubSites}">
+                <f:then>
+                    <div class="alert alert-info">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                        <span><f:translate key="Common_lblMaxCountReached" /></span>
+                    </div>
+                </f:then>
+                <f:else>
+                    <div class="panel-body">
+                        <f:form action="addSubCommunity" name="mashup" object="{mashup}">
+                            <f:form.textfield property="visibility" id="visibility" type="hidden" />
+                            <p><f:translate key="MashupAdmin_lblSubCommunitiesHint" /></p>
+                            <div class="form-group">
+                                <div class="input-group">
+
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="keyword-label" id="description"></span>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <f:for each="{visibilities}" as="description" key="visibility">
+                                                <li><a href="javascript:changeVisibility('{visibility}', '{description}');"><span class="keyword-label"><nose:community.label tag="{visibility}{description}" /></span></a></li>
+                                            </f:for>
+                                        </ul>
+                                    </div>
+
+                                    <span class="input-group-addon hidden-xs"><span class="keyword-label"><nose:community.label tag="{mashup.communityTag}" icon-type="none" /></span>@</span>
+                                    <f:form.textfield property="tempSubCommunity" id="subCommunityField" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblAddSubCommunityPlaceholder')}" />
+                                    <span class="input-group-btn">
+                                        <button type="submit" id="addSubCommunityButton" class="btn btn-primary" disabled="disabled">
+                                            <core:icon identifier="fa-plus" />
+                                            <span class="hidden-xs"> <f:translate key="Common_btnAdd" /></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span class="help-block"><nose:string.replace value="{f:translate(key: 'MashupAdmin_lblSubCommunitiesFail')}" search="%max_characters%" replace="{addSubCommunityMaxChars}" /></span>
+                            </div>
+                        </f:form>
+                    </div>
+                </f:else>
+            </f:if>
+            <ul class="list-group">
+                <f:for each="{mashup.subCommunities}" as="subCommunity">
+                    <li class="list-group-item">
+                        <f:link.action action="removeSubCommunity" arguments="{mashup : mashup, subCommunity : subCommunity}" class="btn btn-danger btn-xs">
+                            <core:icon identifier="fa-trash" />
+                            <span> <f:translate key="Common_btnRemove" /></span>
+                        </f:link.action>
+                        <span><nose:community.label tag="{subCommunity.name}" /></span>
+                    </li>
+                </f:for>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Hosts -->
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span><f:translate key="MashupAdmin_lblAllowedHosts" /></span>
+                <span class="pull-right">{mashup.hosts -> f:count()} / {mashup.maxHosts}</span>
+            </div>
+            <f:if condition="{mashup.hosts -> f:count()} >= {mashup.maxHosts}">
+                <f:then>
+                    <div class="alert alert-info">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                        <span><f:translate key="Common_lblMaxCountReached" /></span>
+                    </div>
+                </f:then>
+                <f:else>
+                    <div class="panel-body">
+                        <f:form action="addHost" name="mashup" object="{mashup}">
+                            <p><f:translate key="MashupAdmin_lblHostsHint" /></p>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <f:form.textfield property="tempHost" id="hostField" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblAddHostPlaceholder')}" />
+                                    <span class="input-group-btn">
+                                        <button type="submit" id="addHostButton" class="btn btn-primary" disabled="disabled">
+                                            <core:icon identifier="fa-plus" />
+                                            <span class="hidden-xs"> <f:translate key="Common_btnAdd" /></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span class="help-block"><nose:string.replace value="{f:translate(key: 'MashupAdmin_lblSubHostsFail')}" search="%max_characters%" replace="{addHostMaxChars}" /></span>
+                            </div>
+                        </f:form>
+                    </div>
+                </f:else>
+            </f:if>
+            <ul class="list-group">
+                <f:for each="{mashup.hosts}" as="host">
+                    <li class="list-group-item">
+                        <f:link.action action="removeHost" arguments="{mashup : mashup, host : host}" class="btn btn-danger btn-xs">
+                            <core:icon identifier="fa-trash" />
+                            <span> <f:translate key="Common_btnRemove" /></span>
+                        </f:link.action>
+                        <span>{host.domain}</span>
+                    </li>
+                </f:for>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+var addSubCommunityMaxChars = {addSubCommunityMaxChars};
+var addHostMaxChars = {addHostMaxChars};
+
+var visibility = '';
+function changeVisibility(newVisibility, description) {{
+    visibility = newVisibility;
+    $('#description').text(description);
+    $('#visibility').val(visibility);
+}}
+$(document).ready(function() {{
+    <f:for each="{visibilities}" as="description" key="visibility" iteration="i"><f:if condition="{i.cycle} == 1">changeVisibility('{visibility}', '{description}');</f:if></f:for>
+}});
+
+$('#subCommunityField').on('input', function() {
+    var newValue = $(this).val();
+    var isValid = IsValidCommunity(newValue, addSubCommunityMaxChars);
+    $('#addSubCommunityButton').attr('disabled', ! isValid);
+    if (isValid || newValue === '') {
+        $(this).closest('.form-group').removeClass('has-error');
+    } else {
+        $(this).closest('.form-group').addClass('has-error');
+    }
+});
+
+$('#hostField').on('input', function() {
+    var newValue = $(this).val();
+    var isValid = IsValidDomain(newValue, addHostMaxChars);
+    $('#addHostButton').attr('disabled', ! isValid);
+    if (isValid || newValue === '') {
+        $(this).closest('.form-group').removeClass('has-error');
+    } else {
+        $(this).closest('.form-group').addClass('has-error');
+    }
+});
+
+// Formhanding
+$('form').on('submit', function() {
+    $return = true;
+    $.each($(this).find('button'), function() {
+        if ($(this).attr('disabled')) {
+            $return = false;
+        }
+    });
+    return $return;
+});
+</script>
+
+</f:section>
+
+</html>

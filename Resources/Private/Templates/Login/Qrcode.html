@@ -1,0 +1,102 @@
+<html
+  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+  xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+  data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+
+<f:section name="pre">
+
+<script>
+var tLoginVerifyUrl = $('<textarea />').html('{f:uri.action(action: 'loginVerifie', controller: 'Api', pageType: '{settings.ajax.loginVerifie}', arguments: {mashup : mashup, loginId:'{login_id}'})}').text();
+var tReturnUrl = '{return_url}';
+var tQrCodeImage = '{qr_code_image}';
+$(document).ready(function() {
+    AddLangRes('Account_Login_lblTitle', '<f:translate key="Account_Login_lblTitle" />');
+    AddLangRes('Account_Login_lblLoginText', '<f:translate key="Account_Login_lblLoginText" />');
+    AddLangRes('Common_lblUnknownError', '<f:translate key="Common_lblUnknownError" />');
+    AddLangRes('Common_lblCompanyName', '<f:translate key="Common_lblCompanyName" />');
+    gn_data.Settings.LoginVerifyUrl = tLoginVerifyUrl;
+    gn_data.Settings.ReturnUrl = tReturnUrl;
+    gn_data.Settings.QrCodeImage = tQrCodeImage;
+});
+</script>
+
+</f:section>
+
+
+<f:section name="main">
+
+<!-- MAIN_BEG -->
+<div class="ma-gpsnose" data-gn-version="1.0.6">
+
+    <div id="ma-gpsnose-{record}" class="ma-gpsnose-login" data-bind="visible:true" style="display:none;">
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="alert alert-info">
+                    <h4>
+                        <span aria-hidden="true" class="glyphicon glyphicon-info-sign"></span>
+                        <span data-bind="text: ' ' + GetLangRes('Account_Login_lblTitle', 'Login')"></span>
+                    </h4>
+                    <span data-bind="text: GetLangRes('Account_Login_lblLoginText', 'To login, scan this QR code using your mobile GpsNose app please')"></span>
+                </div>
+            </div>
+            <div class="col-md-6 text-center">
+
+                <img class="ma-qrcode-image" data-bind="attr: { src: gn_data.Settings.QrCodeImage }, visible: gn_data.Settings.QrCodeImage" />
+
+                <div class="alert alert-danger" data-bind="visible: ! gn_data.Settings.QrCodeImage">
+                    <span aria-hidden="true" class="glyphicon glyphicon-info-sign"></span>
+                    <span data-bind="text: ' ' + GetLangRes('Common_lblUnknownError', 'An unknown error is occured!')"></span>
+                </div>
+
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+        <br />
+        <ma-gpsnose-footer params="hideCopyright:true, hideSupportMail:true, imagePath:gn_data.Settings.ImagePath"></ma-gpsnose-footer>
+
+    </div>
+
+</div>
+
+<script>
+var MA_GPSNOSE_IS_MASHUP = true;
+$(document).ready(function() {
+    if (! gn_data.User) gn_data.User = {};
+    ko.applyBindings(new BaseViewModel(), $('#ma-gpsnose-{record}').get(0));
+    window.setTimeout(WaitForLogin, 3500);
+});
+function WaitForLogin() {
+    $.ajax({
+        type: 'POST',
+        url: gn_data.Settings.LoginVerifyUrl,
+        cache: false,
+        dataType: 'json',
+        success: function(result) {
+            if (result.IsOk) {
+                if (gn_data.Settings.ReturnUrl == '') {
+                    document.location.reload();
+                } else {
+                    window.location.replace(gn_data.Settings.ReturnUrl);
+                }
+            } else {
+                window.setTimeout(WaitForLogin, 3500);
+            }
+        },
+        error: function() {
+            window.setTimeout(WaitForLogin, 3500);
+        }
+    });
+}
+</script>
+<!-- MAIN_END -->
+
+</f:section>
+
+
+</html>

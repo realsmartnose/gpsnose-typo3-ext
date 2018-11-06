@@ -1,0 +1,103 @@
+<html
+  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+  xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+  data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+
+<f:section name="title"><f:translate key="MashupAdmin_lblAddTitle" /></f:section>
+
+
+<f:section name="buttons">
+    <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-default">
+        <core:icon identifier="fa-chevron-left" /> <f:translate key="Common_btnBackToList" />
+    </f:link.action>
+    <f:link.action action="tokennew" arguments="{token : token, mashup : mashup}" class="btn btn-default">
+        <core:icon identifier="fa-refresh" /> <f:translate key="Common_btnRefresh" />
+    </f:link.action>
+</f:section>
+
+
+<f:section name="messages">
+    <f:flashMessages />
+    <f:render partial="KeepAlive" />
+</f:section>
+
+
+<f:section name="content">
+    <div class="row">
+        <div class="col-md-6">
+            <f:render partial="FormErrors" arguments="{object : Token}" />
+
+            <f:form action="tokencreate" name="newToken" object="{newToken}">
+
+                <f:form.textfield property="mashup" value="{mashup}" type="hidden" />
+                <f:form.textfield property="validToTicks" value="" type="hidden" />
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><nose:community.label tag="{mashup.communityTag}" /></div>
+                    <div class="panel-body">
+                        <div class="form-group row">
+                            <label class="col-lg-4 control-label"><f:translate key="MashupAdmin_lblMashupTokenValueLabel" /></label>
+                            <div class="col-lg-8">
+                                <f:form.textarea property="payload" class="form-control" rows="3" id="payload" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenValuePlaceholder')}" />
+                                <span class="help-block"><nose:string.replace value="{f:translate(key: 'MashupAdmin_lblMashupTokenValueHint')}" search="%max_characters%" replace="{addTokenMaxChars}" /></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-4 control-label"><f:translate key="MashupAdmin_lblMashupTokenDateLabel" /></label>
+                            <div class="col-lg-8">
+                                <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-week-start="true" data-date-today-highlight="true" data-date-toggle-active="true" data-date-start-date="0d" data-date-clear-btn="true" data-date-orientation="bottom">
+                                    <f:form.textfield property="validToDateString" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenDatePlaceholder')}" />
+                                    <div class="input-group-addon">
+                                        <core:icon identifier="fa-calendar" />
+                                    </div>
+                                </div>
+                                <span class="help-block"><f:translate key="MashupAdmin_lblMashupTokenDateHint" /></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-lg-offset-4">
+                                <button class="btn btn-primary" type="submit" id="addButton" disabled="disabled">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    <span><f:translate key="MashupAdmin_btnCreateMashupToken" /></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </f:form>
+        </div>
+    </div>
+
+<script>
+var addTokenMaxChars = {addTokenMaxChars};
+
+$('#payload').on('input', function() {
+    var newValue = $(this).val();
+    var isValid = newValue.length > 0 && newValue.length <= addTokenMaxChars;
+    $('#addButton').attr('disabled', ! isValid);
+    if (isValid || newValue === '') {
+        $(this).closest('.form-group').removeClass('has-error');
+    } else {
+        $(this).closest('.form-group').addClass('has-error');
+    }
+});
+
+$('form').on('submit', function() {
+    $return = true;
+    $.each($(this).find('button'), function() {
+        if ($(this).attr('disabled')) {
+            $return = false;
+        }
+    });
+    return $return;
+});
+
+</script>
+
+</f:section>
+
+</html>

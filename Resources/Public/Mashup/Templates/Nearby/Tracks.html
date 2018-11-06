@@ -1,0 +1,129 @@
+<!--
+Required:
+gn_data.Community.TagName (String with the used community-tag)
+gn_data.Community.CreatorLoginName (String wuth the name of the creator)
+gn_data.Community.Acls (Integer wuth the acl of the requested communiy)
+gn_data.Community.Admins (Array with admins)
+gn_data.Community.QrCodeJoinImage (The QR-Code-image ServerUrl or data:image/png;base64,...)
+
+gn_data.User.LoginName (String with the users login-name)
+gn_data.User.IsActivated (Boolean is set if user is activated)
+gn_data.User.Communities (Array with the communities the user is in)
+
+gn_data.Settings.BaseUrl (URL to SDK-Server)
+gn_data.Settings.BaseDataUrl (URL to SDK-Images)
+gn_data.Settings.ImagePath (Path to the images)
+gn_data.Settings.NearbyTracksPageSize (Integer with the count per page for Nearby-Tracks)
+gn_data.Settings.NearbyTracksPageUrl (URL for AJAX call for Nearby-Tracks-Page)
+gn_data.Settings.LoginUrl (URL to the Login-Page)
+gn_data.Settings.LoginId (String with the LoginId of the currently logged in user)
+
+Optional:
+gn_data.Tracks (Array with Tracks)
+
+Server-Enpoint:
+gn_data.Settings.NearbyTracksPageUrl POST (string lastKnownTicks, int pageSize, string community)
+
+Replace {record} with a unique id that identifies the entry
+-->
+
+<!-- MAIN_BEG -->
+<div class="ma-gpsnose" data-gn-version="1.0.6">
+
+    <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-tracks" data-bind="visible:true" style="display:none;">
+
+        <div class="btn-group btn-group-xs ma-btn-group">
+            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.detailUrl() }"></a>
+            <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
+        </div>
+
+        <div data-bind="if: ! gn_data.User.LoginName">
+            <div class="alert alert-info">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                <span data-bind="text: ' ' + GetLangRes('Common_loginRequired', 'Please login first.')"></span>
+                <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.getLoginUrl(gn_data.Settings.LoginUrl); }">
+                    <span class="glyphicon glyphicon-user"></span>
+                    <span data-bind="text: ' ' + GetLangRes('Common_btnLogin', 'Login')"></span>
+                </button>
+            </div>
+        </div>
+        <div data-bind="if: gn_data.User.LoginName">
+            <div class="grid">
+                <div class="tracks" id="tracksContainer" data-bind="if: pageableTracks.items().length > 0">
+                    <div class="grid-sizer col-lg-4 col-sm-6 col-xs-12"></div>
+                    <div data-bind="foreach: pageableTracks.items()">
+                        <div class="grid-item col-lg-4 col-sm-6 col-xs-12">
+                            <div data-external data-bind="attr: { 'data-src': $data.detailUrl() }">
+                                <div class="outer">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <img class="media-object img-rounded media-height" data-bind="attr: { src: window.gn_data.Settings.ImagePath+'/EmptyTour' + $data.TrackType + '.png' }" onerror="ImageErrorHandler(this, window.gn_data.Settings.ImagePath+'/EmptyMap.png')" />
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="media-height">
+                                                <h4 class="media-heading" data-bind="text: $data.Name"></h4>
+                                                <p data-bind="text: $data.Description"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <ma-gpsnose-rating params="percent: $data.RatingAvgPercent, count: $data.RatingCount, imagePath: gn_data.Settings.ImagePath"></ma-gpsnose-rating>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-7" data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></div>
+                                        <div class="col-xs-5 text-right" data-bind="text: GetDistanceString($data)"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info" data-bind="visible: pageableTracks.items().length == 0 && ! pageableTracks.itemsRequestActive()">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoTracks', 'Currently there are no Tracks around')"></span>
+            </div>
+
+            <div class="text-center">
+
+                <div class="btn btn-default btn-lg" data-bind="click: function(){ pageableTracks.pageItems() }, visible: pageableTracks.hasMoreItems(), attr: { disabled: pageableTracks.itemsRequestActive() }">
+                    <div data-bind="visible: ! pageableTracks.itemsRequestActive()">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
+                    </div>
+                    <div data-bind="visible: pageableTracks.itemsRequestActive()">
+                        <span class="glyphicon glyphicon-repeat gly-spin"></span>
+                        <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+var MA_GPSNOSE_IS_MASHUP = true;
+$(document).ready(function() {
+    if (! gn_data.User) gn_data.User = {};
+    var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
+    vm.pageableTracks.itemPageUrl = gn_data.Settings.NearbyTracksPageUrl;
+    vm.pageableTracks.onAddItems = function() {
+        $('#ma-gpsnose-{record} .grid').imagesLoaded(function() {
+            MasonryReload();
+        });
+    }
+
+    ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
+
+    if (gn_data.Tracks) {
+        vm.pageableTracks.addItems(gn_data.Tracks);
+    } else if (gn_data.User.LoginName) {
+        vm.pageableTracks.pageItems();
+    }
+});
+</script>
+<!-- MAIN_END -->

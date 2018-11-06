@@ -1,0 +1,134 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+
+<f:section name="pre">
+
+<script>
+$(document).ready(function() {
+	AddLangRes('Common_btnJoinCommunity', '<f:translate key="Common_btnJoinCommunity" />');
+    AddLangRes('Common_btnLogin', '<f:translate key="Common_btnLogin" />');
+    AddLangRes('Common_lblError', '<f:translate key="Common_lblError" />');
+    AddLangRes('Common_lblLoadMore', '<f:translate key="Common_lblLoadMore" />');
+    AddLangRes('Common_lblRequestInProgress', '<f:translate key="Common_lblRequestInProgress" />');
+    AddLangRes('Common_lblScanToJoin', '<f:translate key="Common_lblScanToJoin" />');
+    AddLangRes('Common_loginRequired', '<f:translate key="Common_loginRequired" />');
+    AddLangRes('Nearby_lblNoEvents', '<f:translate key="Nearby_lblNoEvents" />');
+    gn_data.Settings.LoginUrl = $('<textarea />').html('{f:uri.page(pageUid:'{settings.login.loginPid}')}').text();
+    gn_data.Settings.NearbyEventsPageUrl = $('<textarea />').html('{f:uri.action(action:'pageNearbyEvents', controller:'Api', pluginName:'Pagenearbyevents', pageType:'{settings.ajax.pageNearbyEvents}', arguments:'{ communityTag : communityTag }')}').text();
+});
+</script>
+
+</f:section>
+
+
+<f:section name="main">
+
+<!-- MAIN_BEG -->
+<div class="ma-gpsnose" data-gn-version="1.0.6">
+
+    <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-events" data-bind="visible:true" style="display:none;">
+
+        <div class="btn-group btn-group-xs ma-btn-group">
+            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.detailUrl() }"></a>
+            <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
+        </div>
+
+        <div data-bind="if: ! gn_data.User.LoginName">
+            <div class="alert alert-info">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                <span data-bind="text: ' ' + GetLangRes('Common_loginRequired', 'Please login first.')"></span>
+                <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.getLoginUrl(gn_data.Settings.LoginUrl); }">
+                    <span class="glyphicon glyphicon-user"></span>
+                    <span data-bind="text: ' ' + GetLangRes('Common_btnLogin', 'Login')"></span>
+                </button>
+            </div>
+        </div>
+        <div data-bind="if: gn_data.User.LoginName">
+            <div class="grid">
+                <div class="events" id="eventsContainer" data-bind="if: pageableEvents.items().length > 0">
+                    <div class="grid-sizer col-lg-4 col-sm-6 col-xs-12"></div>
+                    <div data-bind="foreach: pageableEvents.items()">
+                        <div class="grid-item col-lg-4 col-sm-6 col-xs-12">
+                            <div data-external data-bind="attr: { 'data-src': $data.detailUrl() }">
+                                <div class="outer">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <img class="media-object img-rounded media-height" data-bind="attr: { src: $data.imageUrl() }" onerror="ImageErrorHandler(this, window.gn_data.Settings.ImagePath+'/EmptyImage.png')" />
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="media-height">
+                                                <h4 class="media-heading" data-bind="text: $data.Name"></h4>
+                                                <p data-bind="text: $data.Description"></p>
+                                                <p data-bind="text: $data.Address"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-7" data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></div>
+                                        <div class="col-xs-5 text-right" data-bind="text: GetDistanceString($data)"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info" data-bind="visible: pageableEvents.items().length == 0 && ! pageableEvents.itemsRequestActive()">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoEvents', 'Currently there are no Events around')"></span>
+            </div>
+
+            <div class="text-center">
+
+                <div class="btn btn-default btn-lg" data-bind="click: function(){ pageableEvents.pageItems() }, visible: pageableEvents.hasMoreItems(), attr: { disabled: pageableEvents.itemsRequestActive() }">
+                    <div data-bind="visible: ! pageableEvents.itemsRequestActive()">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
+                    </div>
+                    <div data-bind="visible: pageableEvents.itemsRequestActive()">
+                        <span class="glyphicon glyphicon-repeat gly-spin"></span>
+                        <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+var MA_GPSNOSE_IS_MASHUP = true;
+$(document).ready(function() {
+    if (! gn_data.User) gn_data.User = {};
+    var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
+    vm.pageableEvents.itemPageUrl = gn_data.Settings.NearbyEventsPageUrl;
+    vm.pageableEvents.onAddItems = function() {
+        $('#ma-gpsnose-{record} .grid').imagesLoaded(function() {
+            MasonryReload();
+        });
+    }
+
+    ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
+
+    if (gn_data.Events) {
+        vm.pageableEvents.addItems(gn_data.Events);
+    } else if (gn_data.User.LoginName) {
+        vm.pageableEvents.pageItems();
+    }
+});
+</script>
+<!-- MAIN_END -->
+
+</f:section>
+
+
+</html>

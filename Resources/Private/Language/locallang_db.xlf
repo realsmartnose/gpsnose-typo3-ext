@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2018-04-30T12:54:45Z" product-name="gpsnose">
+        <header/>
+        <body>
+            <trans-unit id="tx_gpsnose_plugin_members.title">
+                <source>GpsNose members</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_plugin_members.description">
+                <source>Show list of community members</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_plugin_news.title">
+                <source>GpsNose news</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_plugin_news.description">
+                <source>Show list of community news</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_plugin_comments_community.title">
+                <source>GpsNose community comments</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_plugin_comments_community.description">
+                <source>Show list of community comments</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_plugin_loginqrcode.title">
+                <source>GpsNose Login</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_plugin_loginqrcode.description">
+                <source>Show QR-Code to login by GpsNose</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_plugin_nearby_noses.title">
+                <source>GpsNose nearby members</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_plugin_nearby_noses.description">
+                <source>Show list of nearby members</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_plugin_nearby_impressions.title">
+                <source>GpsNose nearby impressions</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_plugin_nearby_impressions.description">
+                <source>Show list of nearby impressions</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_plugin_nearby_pois.title">
+                <source>GpsNose nearby pois </source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_plugin_nearby_pois.description">
+                <source>Show list of nearby pois</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_plugin_nearby_tracks.title">
+                <source>GpsNose nearby tracks</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_plugin_nearby_tracks.description">
+                <source>Show list of nearby tracks</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_plugin_nearby_events.title">
+                <source>GpsNose nearby events</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_plugin_nearby_events.description">
+                <source>Show list of nearby events</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_domain_model_mashup">
+                <source>Mashup</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.community_tag">
+                <source>Name</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.validation_key">
+                <source>Validation-Key</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.app_key">
+                <source>App-Key</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.validation_ticks">
+                <source>Validation Ticks</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.max_calls_daily">
+                <source>Max Calls Daily</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.max_calls_monthly">
+                <source>Max Calls Monthly</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.max_sub_sites">
+                <source>Max Sub Sites</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.max_hosts">
+                <source>Max Hosts</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.sub_communities">
+                <source>Sub Communities</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.hosts">
+                <source>Hosts</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.call_history">
+                <source>Call History</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.exceeded_quota_history">
+                <source>Exceeded Quota History</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.tokens">
+                <source>Tokens</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_domain_model_subcommunity">
+                <source>Sub Community</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_subcommunity.name">
+                <source>Name</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_domain_model_host">
+                <source>Host</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_host.domain">
+                <source>Domain</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_domain_model_history">
+                <source>History</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_history.ticks">
+                <source>Ticks</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_history.count">
+                <source>Count</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_domain_model_token">
+                <source>Token</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_token.payload">
+                <source>Payload</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_token.valid_to_ticks">
+                <source>Valid to ticks</source>
+            </trans-unit>
+
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan">
+                <source>Token scan</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.scanned_by_login_name">
+                <source>Scanned by login name</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.scanned_ticks">
+                <source>Scanned ticks</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.scanned_latitude">
+                <source>Scanned latitude</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.scanned_longitude">
+                <source>Scanned longitude</source>
+            </trans-unit>
+
+            <trans-unit id="tt_content.palette_title">
+                <source>GpsNose</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_community_tag">
+                <source>Community</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_mashup">
+                <source>Mashup</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_mashup_login_acl">
+                <source>Login ACL</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_mashup_login_acl_help">
+                <source>If you use one of this information, you are responsible for all data stored (GDPR)</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_mashup_login_acl.I.FullName">
+                <source>Fullname</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_mashup_login_acl.I.Email">
+                <source>Email</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_mashup_login_acl.I.CommunitiesNonprivate">
+                <source>Nonprivate communities</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_mashup_login_acl.I.IsSafeMode">
+                <source>Is safe mode</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_mashup_login_acl.I.GpsLocation">
+                <source>GPS location</source>
+            </trans-unit>
+
+            <trans-unit id="tt_content.tx_gpsnose_mashup_login_option_must_join">
+                <source>Must join the community</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_mashup_login_option_needs_activation">
+                <source>Activation needed</source>
+            </trans-unit>
+
+            <trans-unit id="tt_content.tx_gpsnose_mashup_login_redirect">
+                <source>Redirect after successfully login</source>
+            </trans-unit>
+
+            <trans-unit id="fe_users.palette_title">
+                <source>GpsNose</source>
+            </trans-unit>
+            <trans-unit id="fe_users.gpsnose_loginname">
+                <source>GpsNose Loginname</source>
+            </trans-unit>
+            <trans-unit id="fe_users.gpsnose_is_activated">
+                <source>GpsNose is activated</source>
+            </trans-unit>
+            <trans-unit id="fe_users.gpsnose_fullname">
+                <source>GpsNose Fullname</source>
+            </trans-unit>
+            <trans-unit id="fe_users.gpsnose_communities">
+                <source>GpsNose Communities</source>
+            </trans-unit>
+            <trans-unit id="fe_users.gpsnose_is_safe_mode">
+                <source>GpsNose Is safemode</source>
+            </trans-unit>
+            <trans-unit id="fe_users.gpsnose_latitude">
+                <source>GpsNose Latitude</source>
+            </trans-unit>
+            <trans-unit id="fe_users.gpsnose_longitude">
+                <source>GpsNose Longitude</source>
+            </trans-unit>
+
+            <trans-unit id="customsubcategory.resources">
+                <source>Resources</source>
+            </trans-unit>
+            <trans-unit id="customsubcategory.javascript">
+                <source>JavaScript</source>
+            </trans-unit>
+            <trans-unit id="customsubcategory.css">
+                <source>CSS</source>
+            </trans-unit>
+            <trans-unit id="customsubcategory.login">
+                <source>Login</source>
+            </trans-unit>
+
+            <trans-unit id="tx_scheduler.get_token_scans.name">
+                <source>Update scanned tokens</source>
+            </trans-unit>
+            <trans-unit id="tx_scheduler.get_token_scans.description">
+                <source>This Task refresh scanned tokens by the members, it should be run once a day (at least every 7 days)</source>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

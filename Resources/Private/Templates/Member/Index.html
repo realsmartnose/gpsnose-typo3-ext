@@ -1,0 +1,99 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+
+<f:section name="pre">
+
+<script>
+$(document).ready(function() {
+    AddLangRes('Common_btnJoinCommunity', '<f:translate key="Common_btnJoinCommunity" />');
+    AddLangRes('Common_lblLoadMore', '<f:translate key="Common_lblLoadMore" />');
+    AddLangRes('Common_lblRequestInProgress', '<f:translate key="Common_lblRequestInProgress" />');
+    AddLangRes('Common_lblScanToJoin', '<f:translate key="Common_lblScanToJoin" />');
+    AddLangRes('Community_lblMembersNoEntryMessage', '<f:translate key="Community_lblMembersNoEntryMessage" />');
+    gn_data.Settings.MembersPageUrl = $('<textarea />').html('{f:uri.action(action:'pageMembers', controller:'Api', pluginName:'Pagemembers', pageType:'{settings.ajax.pageMembers}', arguments:'{ communityTag : communityTag }')}').text();
+});
+</script>
+
+</f:section>
+
+
+<f:section name="main">
+
+<!-- MAIN_BEG -->
+<div class="ma-gpsnose" data-gn-version="1.0.6">
+
+    <div id="ma-gpsnose-{record}" class="ma-gpsnose-members" data-bind="visible:true" style="display:none;">
+
+        <div class="btn-group btn-group-xs ma-btn-group">
+            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.detailUrl() }"></a>
+            <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
+        </div>
+
+        <div class="row publishers" data-bind="foreach: members">
+            <div class="grid-item col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="outer" data-external="true" data-bind="attr: { 'data-src': $data.NoseDto.detailUrl() }">
+                    <div class="thumbnail">
+                        <img data-bind="attr: { src: $data.NoseDto.imageUrl() + '@200' }" onerror="this.src=window.gn_data.Settings.ImagePath+'/EmptyUser.png'" />
+                        <div data-bind="if: $data.IsAdmin">
+                            <img class="ma-crown" data-bind="attr: { src: window.gn_data.Settings.ImagePath + '/IcActionCrown.png'}" />
+                        </div>
+                        <div class="loginname">
+                            <div data-bind="text: $data.LoginName"></div>
+                            <div data-bind="text: GetAgeStringFromTicks($data.JoinTicks) + ''"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+
+            <div class="btn btn-default btn-lg" data-bind="click: function(){ pageMembers() }, visible: hasMoreMembers(), attr: { disabled: membersRequestActive() }">
+                <div data-bind="visible: ! membersRequestActive()">
+                    <span class="glyphicon glyphicon-cloud-download"></span>
+                    <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
+                </div>
+                <div data-bind="visible: membersRequestActive()">
+                    <span class="glyphicon glyphicon-repeat gly-spin"></span>
+                    <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="alert alert-info" data-bind="visible: members().length == 0 && ! membersRequestActive()">
+            <span class="glyphicon glyphicon-info-sign"></span>
+            <span data-bind="text: ' ' + GetLangRes('Community_lblMembersNoEntryMessage', 'There are no members in this community currently.')"></span>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+var MA_GPSNOSE_IS_MASHUP = true;
+$(document).ready(function() {
+    if (! gn_data.User) gn_data.User = {};
+    var vm = new CommunityDetailViewModel(gn_data.Community, gn_data.User);
+    vm.membersPageUrl = gn_data.Settings.MembersPageUrl;
+    ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
+
+    // Add first Page of Members
+    if (gn_data.Members) {
+        vm.addMembers(gn_data.Members);
+    } else {
+        vm.pageMembers();
+    }
+});
+</script>
+<!-- MAIN_END -->
+
+</f:section>
+
+
+</html>

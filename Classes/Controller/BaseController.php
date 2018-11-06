@@ -1,0 +1,198 @@
+<?php
+namespace SmartNoses\Gpsnose\Controller;
+
+use GpsNose\SDK\Mashup\Framework\GnUtil;
+use SmartNoses\Gpsnose\Utility\GnData;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use SmartNoses\Gpsnose\Service\GnCommunityService;
+use SmartNoses\Gpsnose\Utility\GnUtility;
+$file = __DIR__ . '/../../_dev.php';
+if (file_exists($file)) {
+    include ($file);
+}
+
+/**
+ * *
+ *
+ * This file is part of the "GpsNose" Extension for TYPO3 CMS.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * (c) 2018 Dev2 <info@gpsnose.com>, SmartNoses
+ *
+ * *
+ */
+
+/**
+ * MashupController
+ */
+class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+{
+
+    /**
+     * Property for accessing TypoScriptFrontendController centrally
+     *
+     * @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+     */
+    protected $frontendController;
+
+    /**
+     *
+     * @var int
+     */
+    protected const MAX_DATE_TIME_TICKS = 3155378975999999999;
+
+    /**
+     * BaseController __construct
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->frontendController = $GLOBALS['TSFE'];
+
+        GnUtility::applyExtConf();
+    }
+
+    protected function SetCommunity(string $communityTag = null)
+    {
+        if ($communityTag) {
+            $communityService = new GnCommunityService();
+            /** @var $community \GpsNose\SDK\Mashup\Model\GnCommunity */
+            $community = $communityService->GetCommunity($communityTag);
+
+            if ($community) {
+                $communityArr = array();
+                $communityArr['TagName'] = $communityTag;
+                $communityArr['CreatorLoginName'] = $community->CreatorLoginName;
+                $communityArr['Acls'] = $community->AclsInt;
+                $communityArr['Admins'] = $community->Admins;
+                $communityArr['QrCodeJoinImage'] = 'data:image/png;base64,' . base64_encode($communityService->GetQrCodeJoinImage($communityTag));
+                GnData::$Settings['Community'] = $communityArr;
+            }
+        }
+    }
+
+    /**
+     * Init for FE-Plugins
+     */
+    protected function initFrontend()
+    {
+        // Add the image-path
+        $this->view->assign('imagePath', $this->frontendController->absRefPrefix . $this->frontendController->tmpl->getFileName($this->settings['resources']['imagePath']));
+
+        // Add FrontendCss
+        if ($frontendCss = $this->frontendController->tmpl->getFileName($this->settings['css']['frontendCss'])) {
+            $this->frontendController->additionalHeaderData['gpsnose_css_frontendCss'] = '<link rel="stylesheet" type="text/css" href="' . $frontendCss . '" media="all">';
+        }
+
+        // Add jQuery
+        if ($jquery = $this->frontendController->tmpl->getFileName($this->settings['javascript']['jquery'])) {
+            $this->frontendController->additionalHeaderData['gpsnose_js_jquery'] = '<script src="' . $jquery . '" type="text/javascript"></script>';
+        }
+        // Add bignumber
+        if ($bignumber = $this->frontendController->tmpl->getFileName($this->settings['javascript']['bignumber'])) {
+            $this->frontendController->additionalFooterData['gpsnose_js_bignumber'] = '<script src="' . $bignumber . '" type="text/javascript"></script>';
+        }
+        // Add moment
+        if ($moment = $this->frontendController->tmpl->getFileName($this->settings['javascript']['moment'])) {
+            $this->frontendController->additionalFooterData['gpsnose_js_moment'] = '<script src="' . $moment . '" type="text/javascript"></script>';
+        }
+        // Add numeral
+        if ($numeral = $this->frontendController->tmpl->getFileName($this->settings['javascript']['numeral'])) {
+            $this->frontendController->additionalFooterData['gpsnose_js_numeral'] = '<script src="' . $numeral . '" type="text/javascript"></script>';
+        }
+        // Add imagesloaded
+        if ($imagesloaded = $this->frontendController->tmpl->getFileName($this->settings['javascript']['imagesloaded'])) {
+            $this->frontendController->additionalFooterData['gpsnose_js_imagesloaded'] = '<script src="' . $imagesloaded . '" type="text/javascript"></script>';
+        }
+        // Add masonry
+        if ($masonry = $this->frontendController->tmpl->getFileName($this->settings['javascript']['masonry'])) {
+            $this->frontendController->additionalFooterData['gpsnose_js_masonry'] = '<script src="' . $masonry . '" type="text/javascript"></script>';
+        }
+        // Add knockout
+        if ($knockout = $this->frontendController->tmpl->getFileName($this->settings['javascript']['knockout'])) {
+            $this->frontendController->additionalFooterData['gpsnose_js_knockout'] = '<script src="' . $knockout . '" type="text/javascript"></script>';
+        }
+
+        // gn_data.User
+        $fe_user = $GLOBALS['TSFE']->fe_user->user;
+        $user = array();
+        $user['LoginName'] = $fe_user['gpsnose_loginname'];
+        $user['IsActivated'] = $fe_user['gpsnose_is_activated'];
+        if (! GnUtil::IsNullOrEmpty($fe_user['gpsnose_communities'])) {
+            $user['Communities'] = explode(",", $fe_user['gpsnose_communities']);
+        }
+        GnData::$Settings['User'] = $user;
+
+        // gn_data.Settings
+        $gnSettings = array();
+        $gnSettings['BaseUrl'] = \GpsNose\SDK\Mashup\GnPaths::$HomeUrl;
+        $gnSettings['BaseDataUrl'] = \GpsNose\SDK\Mashup\GnPaths::$DataUrl;
+        $gnSettings['CommunityMembersPageSize'] = intval($this->settings['membersPageSize']);
+        $gnSettings['NewsPageSize'] = intval($this->settings['newsPageSize']);
+        $gnSettings['CommentsPageSize'] = intval($this->settings['commentsPageSize']);
+        $gnSettings['ImagePath'] = $this->frontendController->absRefPrefix . $this->frontendController->tmpl->getFileName($this->settings['resources']['imagePath']);
+        $currentUser = \GpsNose\SDK\Web\Login\GnAuthentication::CurrentUser();
+        if ($currentUser != null) {
+            $gnSettings['LoginId'] = $currentUser->LoginId;
+        }
+        GnData::$Settings['Settings'] = $gnSettings;
+        // Add gn_data
+        $this->frontendController->additionalFooterData['gpsnose_js_gndata'] = '<script type="text/javascript">var gn_data = ' . json_encode(\SmartNoses\Gpsnose\Utility\GnData::$Settings) . ';</script>';
+
+        // Add maframework
+        if ($maframework = $this->frontendController->tmpl->getFileName($this->settings['javascript']['maframework'])) {
+            $this->frontendController->additionalFooterData['gpsnose_js_maframework'] = '<script src="' . $maframework . '" type="text/javascript"></script>';
+        }
+        // Add knockoutVm
+        if ($knockoutVm = $this->frontendController->tmpl->getFileName($this->settings['javascript']['knockoutVm'])) {
+            $this->frontendController->additionalFooterData['gpsnose_js_knockoutVm'] = '<script src="' . $knockoutVm . '" type="text/javascript"></script>';
+        }
+    }
+
+    /**
+     * Persist all data that was not stored by now
+     *
+     * @return void
+     */
+    protected function persistAll()
+    {
+        $this->objectManager->get(PersistenceManager::class)->persistAll();
+    }
+
+    /**
+     * Checks if the user is logged in
+     *
+     * @return boolean
+     */
+    protected function isUserLoggedIn()
+    {
+        return is_array($this->frontendController->fe_user->user);
+    }
+
+    /**
+     * Checks if the user is logged in
+     *
+     * @return boolean
+     */
+    protected function logoffUser()
+    {
+        $this->frontendController->fe_user->logoff();
+    }
+
+    /**
+     * Redirect to a page with given id
+     *
+     * @param integer $pageId
+     *
+     * @return void
+     */
+    protected function redirectToPage($pageId)
+    {
+        $url = $this->uriBuilder->setTargetPageUid($pageId)->build();
+
+        $this->redirectToUri($url);
+    }
+}

@@ -1,0 +1,74 @@
+<!--
+Required:
+gn_data.Community.TagName (String with the used community-tag)
+gn_data.Community.CreatorLoginName (String wuth the name of the creator)
+gn_data.Community.Acls (Integer wuth the acl of the requested communiy)
+gn_data.Community.Admins (Array with admins)
+gn_data.Community.QrCodeJoinImage (The QR-Code-image ServerUrl or data:image/png;base64,...)
+
+gn_data.User.LoginName (String with the users login-name)
+gn_data.User.IsActivated (Boolean is set if user is activated)
+gn_data.User.Communities (Array with the communities the user is in)
+
+gn_data.Settings.BaseUrl (URL to SDK-Server)
+gn_data.Settings.BaseDataUrl (URL to SDK-Images)
+gn_data.Settings.ImagePath (Path to the images)
+gn_data.Settings.CommentsPageSize (Integer with the count per page for Comments)
+gn_data.Settings.CommentPageUrl (URL for AJAX call for Members-Page)
+gn_data.Settings.CommentSaveUrl (URL for AJAX call for Members-Page)
+gn_data.Settings.LoginUrl (URL to the Login-Page)
+gn_data.Settings.LoginId (String with the LoginId of the currently logged in user)
+
+Optional:
+gn_data.Community.Comments (Array with the first page of Comments)
+
+Server-Enpoint:
+gn_data.Settings.CommentPageUrl POST (string lastKnownTicks, int pageSize, string uniqueKey, CommentItemType itemType)
+gn_data.Settings.CommentSaveUrl POST (string uniqueKey, string text, CommentItemType itemType, string creationTicks, boolean isUpdate)
+
+Replace {record} with a unique id that identifies the entry
+-->
+
+<!-- MAIN_BEG -->
+<div class="ma-gpsnose" data-gn-version="1.0.6">
+
+    <div id="ma-gpsnose-{record}" class="ma-gpsnose-comment" data-bind="visible:true" style="display:none;">
+
+        <div class="btn-group btn-group-xs ma-btn-group">
+            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.detailUrl() }"></a>
+            <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
+        </div>
+
+        <ma-gpsnose-comments params="uniqueKey: gn_data.Community.TagName,
+                    entity: vm ? vm.Entity : {},
+                    imagePath: gn_data.Settings.ImagePath,
+                    hideTitle: true,
+                    commentPageUrl: gn_data.Settings.CommentPageUrl,
+                    commentSaveUrl: gn_data.Settings.CommentSaveUrl,
+                    loginUrl: gn_data.Settings.LoginUrl,
+                    comments: gn_data.Community.Comments,
+                    loginName: gn_data.User.LoginName,
+                    isActivated: gn_data.User.IsActivated,
+                    onChangeComments: ma_gpsnose_change"></ma-gpsnose-comments>
+
+        <ma-gpsnose-dialog></ma-gpsnose-dialog>
+
+    </div>
+
+</div>
+
+<script>
+var MA_GPSNOSE_IS_MASHUP = true;
+var vm;
+$(document).ready(function() {
+    if (! gn_data.User) gn_data.User = {};
+    vm = new CommunityDetailViewModel(gn_data.Community, gn_data.User);
+    ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
+});
+function ma_gpsnose_change(container) {
+    $(container).imagesLoaded(function() {
+        setTimeout(function() { MasonryReload(); }, 250);
+    });
+}
+</script>
+<!-- MAIN_END -->

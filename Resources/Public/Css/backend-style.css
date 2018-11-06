@@ -1,0 +1,32 @@
+.panel form {
+    margin-bottom: 0px !important;
+}
+
+.panel .form-group, .panel .help-block {
+    margin-bottom: 0px !important;
+}
+
+.center-xs {
+    text-align: center;
+}
+
+.buttons {
+    margin-bottom: 10px;
+}
+
+.qrcode {
+    width: 100%;
+}
+
+@media ( min-width : 768px) {
+    .center-xs {
+        text-align: inherit;
+    }
+    .buttons {
+        float: right;
+        margin-bottom: 0;
+    }
+    .qrcode {
+        width: 360px;
+    }
+}

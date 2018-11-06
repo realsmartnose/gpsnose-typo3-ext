@@ -1,0 +1,12 @@
+{
+	"repositories": [{
+        "type": "cvs",
+        "url": "/Volumes/GpsNose/GpsNose_Composer/GpsNose.SDK",
+        "options": {
+            "symlink": false
+        }
+    }],
+    "require": {
+      "smartnosese/gpsnosesdk": ">=0.0.0"
+	}
+}

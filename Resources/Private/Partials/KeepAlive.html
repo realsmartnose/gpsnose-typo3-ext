@@ -1,0 +1,53 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<div class="typo3-messages" id="keep-alive-message" style="display: none;">
+    <div class="alert alert-danger">
+        <div class="media">
+            <div class="media-left">
+                <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-times fa-stack-1x"></i>
+                </span>
+            </div>
+            <div class="media-body">
+                <p class="alert-message"><f:translate key="Common_lblLoggedOut" /></p>
+            </div>
+            <div class="media-right">
+                <f:link.action action="login" class="btn btn-danger">
+                    <core:icon identifier="fa-user" />
+                    <span> <f:translate key="Common_btnLogin" /></span>
+                </f:link.action>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var interval = 10*60*1000;
+$(document).ready(function() {
+    window.setTimeout(KeepAlive, interval);
+});
+function KeepAlive() {
+    $.ajax({
+        type: 'POST',
+        url: TYPO3.settings.ajaxUrls['gpsnose::keepAlive'],
+        dataType: 'json',
+        success: function(result) {
+            if (result.IsOk) {
+                $('#keep-alive-message').hide();
+            } else {
+                $('#keep-alive-message').show();
+            }
+        },
+        error: function () {
+            window.setTimeout(KeepAlive, interval);
+        }
+    });
+}
+</script>
+
+</html>

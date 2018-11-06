@@ -1,0 +1,21 @@
+1.0.6
+- ADD: Distance to Nearby
+
+1.0.5
+- ADD: gn_data.Community.QrCodeJoinImage
+- CHA: Use gn_data.Community in News-Template
+
+1.0.4
+- CHA: Small template change
+
+1.0.3
+- CHA: Ref Nearby
+
+1.0.2
+- ADD: gn_data.Settings.NearbyNosesPageSize and gn_data.Settings.NearbyNosesPageUrl to Nearby/Noses.html
+
+1.0.1
+- ADD: gn_data.Settings.LoginId to detail-url
+
+1.0.0
+- ADD: Initial Release

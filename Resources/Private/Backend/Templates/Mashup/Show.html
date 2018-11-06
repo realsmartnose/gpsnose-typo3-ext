@@ -1,0 +1,34 @@
+<html
+  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+  xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+  data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+
+<f:section name="title"><f:translate key="MashupAdmin_lblDetailTitle" /></f:section>
+
+
+<f:section name="buttons">
+    <f:link.action action="list" class="btn btn-default">
+        <core:icon identifier="fa-chevron-left" /> <f:translate key="Common_btnBackToList" />
+    </f:link.action>
+    <f:link.action action="show" arguments="{mashup : mashup}" class="btn btn-default">
+        <core:icon identifier="fa-refresh" /> <f:translate key="Common_btnRefresh" />
+    </f:link.action>
+</f:section>
+
+
+<f:section name="messages">
+    <f:flashMessages />
+    <f:render partial="KeepAlive" />
+</f:section>
+
+
+<f:section name="content">
+    <f:render partial="Mashup/Properties" arguments="{mashup : mashup}" />
+    <!-- TODO: Add chart -->
+</f:section>
+
+</html>

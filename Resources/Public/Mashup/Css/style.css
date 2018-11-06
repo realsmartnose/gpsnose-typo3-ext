@@ -1,0 +1,329 @@
+.ma-gpsnose {
+    margin-bottom: 25px;
+}
+
+    .ma-gpsnose .ma-gpsnose-login {}
+    .ma-gpsnose .ma-gpsnose-comment {}
+    .ma-gpsnose .ma-gpsnose-members {}
+    .ma-gpsnose .ma-gpsnose-news {}
+
+.ma-gpsnose .ma-btn-group {
+    margin-bottom: 5px;
+}
+
+.ma-gpsnose .ma-popover-image {
+    width: 248px;
+}
+
+.ma-gpsnose .ma-gpsnose-action-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.ma-gpsnose .ma-qrcode-image {
+    width: 80%;
+}
+@media (min-width: 1200px) {
+    .ma-gpsnose .ma-qrcode-image {
+        width: 360px;
+    }
+}
+
+.ma-gpsnose [data-fancybox],
+.ma-gpsnose [data-join],
+.ma-gpsnose [data-popup],
+.ma-gpsnose [data-external] {
+    cursor: pointer !important;
+}
+.ma-gpsnose [disabled] {
+    cursor: not-allowed!important;
+}
+
+.ma-gpsnose .outer {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    padding: 6px;
+}
+    .ma-gpsnose .outer.inactive {
+        opacity: 0.4;
+    }
+
+.ma-gpsnose .thumbnail {
+    margin-bottom: 0;
+}
+
+    .ma-gpsnose .thumbnail img {
+        width: 100%;
+    }
+
+.ma-gpsnose .publishers {
+}
+
+    .ma-gpsnose .publishers .thumbnail {
+        border: none;
+        padding: 0;
+        margin: 0;
+        position: relative;
+        min-width: 100%;
+        padding-top: 100%;
+    }
+
+        .ma-gpsnose .publishers .thumbnail img {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+    .ma-gpsnose .publishers .loginname {
+        background-color: forestgreen;
+        color: white;
+        font-size: 12px;
+        line-height: 12px;
+        text-align: center;
+        padding: 2px;
+        display: block;
+        width: 100%;
+        position: relative;
+        bottom: 0;
+        overflow: hidden;
+    }
+    .ma-gpsnose .publishers img.ma-crown {
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        top: 0px;
+        right: 0px;
+        left: inherit;
+    }
+
+.ma-gpsnose #newsContainer .panel-body {
+    padding: 5px;
+}
+
+.ma-gpsnose #newsContainer .panel-bottom {
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.ma-gpsnose #newsContainer .panel-footer {
+    background-color: #f0f0f0;
+    padding: 5px;
+}
+
+    .ma-gpsnose #newsContainer .panel-footer > * {
+        vertical-align: middle;
+        line-height: 32px;
+    }
+
+.ma-gpsnose #newsContainer p {
+    margin: 0;
+}
+
+
+.ma-gpsnose img.media-height {
+    height: 96px;
+}
+
+.ma-gpsnose img.media-height2 {
+    height: 48px;
+}
+
+
+.ma-gpsnose .ProfileImageNews img.image {
+    width: 100%;
+}
+
+.ma-gpsnose .ProfileImageNews p {
+    text-align: center;
+}
+
+.ma-gpsnose .RatingNews .text {
+    text-align: center;
+}
+
+.ma-gpsnose .PhotoBlogNews .text {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.ma-gpsnose .PhotoBlogNews img.image {
+    width: 100%;
+}
+
+.ma-gpsnose .CommentNews .text {
+    text-align: center;
+    white-space: pre-wrap;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+
+.ma-gpsnose .comment-image-container {
+    background: transparent url(../Images/CommentBackground.png) no-repeat center center;
+    background-size: contain;
+    position: relative;
+}
+    .ma-gpsnose .comment-image-container img {
+        width: 40%;
+        border: 1px solid #ccc;
+    }
+    .ma-gpsnose .comment-image-container .comment-image-left {
+        object-fit: cover;
+    }
+    .ma-gpsnose .comment-image-container .comment-image-right {
+        object-fit: cover;
+        position: absolute;
+        height: 100%;
+        overflow-y: hidden;
+        right: 0;
+    }
+
+
+.ma-gpsnose .grid {
+    margin: 0 -15px;
+}
+
+.ma-gpsnose .grid-item {
+    padding: 0 5px 0 5px;
+    margin-bottom: 10px;
+}
+
+    .ma-gpsnose .grid-item .panel {
+        margin: 0;
+    }
+
+@media (min-width: 1200px) {
+    .ma-gpsnose .grid {
+        margin: 0 -20px;
+    }
+
+    .ma-gpsnose .grid-item {
+        padding: 0 10px 0 10px;
+        margin-bottom: 20px;
+    }
+}
+
+
+.ma-gpsnose .comments {
+    margin-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+    .ma-gpsnose .comments .btn-group {
+        margin-top: 10px;
+    }
+    .ma-gpsnose .comments .text {
+        white-space: pre-wrap;
+    }
+    .ma-gpsnose .comments .text-big {
+        white-space: pre-wrap;
+        text-align: center;
+        font-size: 1.2em;
+    }
+    .ma-gpsnose .comments img.ma-crown {
+        margin-left: 4px;
+        margin-top: 10px;
+        width: 24px;
+        height: 24px;
+    }
+
+
+.ma-gpsnose .mood {
+    font-size: 2em;
+}
+.ma-gpsnose .moods-dialog {
+    max-width: 825px;
+}
+@media (min-width: 768px) {
+    .ma-gpsnose .moods-dialog {
+        padding: 24px !important;
+    }
+}
+.ma-gpsnose .moods-dialog .btn {
+    font-size: 3em;
+    margin: 0 5px 5px 0;
+    width: 72px;
+    height: 72px;
+}
+
+.ma-gpsnose .impressions {
+}
+
+    .ma-gpsnose .impressions .img-container {
+        position: relative;
+    }
+
+    .ma-gpsnose .impressions img {
+        width: 100%;
+    }
+
+.ma-gpsnose .keywords {
+    margin-top: 5px;
+}
+.ma-gpsnose .keywords .input-group {
+    margin-bottom: 5px;
+}
+.ma-gpsnose .keywords a {
+    text-transform: lowercase;
+    text-decoration: none;
+    display: block;
+    float: left;
+    padding: 8px;
+    margin: 0 5px 5px 0;
+    border: 3px solid #007800;
+    color: #007800;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    cursor: default;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.ma-gpsnose .keywords a.selected {
+    color: #ffffff;
+    background-color: #007800;
+}
+.ma-gpsnose .keywords .glyphicon {
+    margin-right: 3px;
+}
+.ma-gpsnose .keywords-small .keywords a {
+    font-size: 0.7em;
+    padding: 3px;
+    margin: 0 3px 3px 0;
+    border: none;
+    color: #ffffff;
+    background-color: #007800;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+}
+
+
+.ma-gpsnose .rating-stars-container {
+    margin-top: 5px;
+    text-align: center;
+}
+
+.ma-gpsnose .rating .star {
+    width: 24px;
+    display: inline-block;
+}
+
+.ma-gpsnose .pois .rating .star {
+    width: 20px;
+}
+
+@media (min-width: 992px) {
+    .ma-gpsnose .rating .star {
+        width: 32px;
+    }
+
+    .ma-gpsnose .pois .rating .star {
+        width: 20px;
+    }
+}
