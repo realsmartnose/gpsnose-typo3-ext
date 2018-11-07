@@ -60,7 +60,7 @@ class LoginController extends BaseController
 
     /**
      *
-     * @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApi
+     * @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser
      */
     protected $_gnLoginApi;
 
@@ -102,15 +102,14 @@ class LoginController extends BaseController
 
             if ($mashup) {
                 $loginId = GnUtil::NewGuid();
-                $community = $mashup->getCommunityTag();
                 $appKey = $mashup->getAppKey();
 
                 $mustJoin = $this->contentObj->data['tx_gpsnose_mashup_login_option_must_join'];
                 $needsActivation = $this->contentObj->data['tx_gpsnose_mashup_login_option_needs_activation'];
                 $acls = $this->contentObj->data['tx_gpsnose_mashup_login_acl'];
 
-                $loginApi = $this->_gnApi->GetLoginApi($appKey, $loginId);
-                $this->view->assign('qr_code_image', 'data:image/png;base64,' . base64_encode($loginApi->GenerateQrCode($community, $mustJoin, $needsActivation, $acls)));
+                $loginApi = $this->_gnApi->GetLoginApiForEndUser($appKey, $loginId);
+                $this->view->assign('qr_code_image', 'data:image/png;base64,' . base64_encode($loginApi->GenerateQrCode($mustJoin, $needsActivation, $acls)));
                 $this->view->assign('login_id', $loginId);
 
                 $this->view->assign('mashup', $mashup);

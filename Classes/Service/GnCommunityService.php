@@ -35,7 +35,7 @@ class GnCommunityService extends GnBaseService
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
-                    $gnLoginApi = $this->_gnApi->GetLoginApi($mashup->getAppKey());
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey());
                     $communityItem = $gnLoginApi->GetCommunityApi()->GetCommunity($communityTag);
 
                     return $communityItem;
@@ -66,7 +66,7 @@ class GnCommunityService extends GnBaseService
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
-                    $gnLoginApi = $this->_gnApi->GetLoginApi($mashup->getAppKey());
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey());
                     return $gnLoginApi->GetCommunityApi()->GenerateQrCodeForCommunityJoin($communityTag);
                 }
             }

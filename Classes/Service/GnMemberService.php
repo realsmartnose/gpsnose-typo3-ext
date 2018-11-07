@@ -42,7 +42,7 @@ class GnMemberService extends GnBaseService
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
-                    $gnLoginApi = $this->_gnApi->GetLoginApi($mashup->getAppKey());
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey());
                     $items = $gnLoginApi->GetCommunityApi()->GetMembersPage($lastKnownTicks, $communityTag, $pageSize);
 
                     return $items;

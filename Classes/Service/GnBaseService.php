@@ -36,7 +36,7 @@ class GnBaseService
 
     /**
      *
-     * @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApi
+     * @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser
      */
     protected $_gnLoginApi;
 

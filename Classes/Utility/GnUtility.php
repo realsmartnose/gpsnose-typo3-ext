@@ -71,7 +71,7 @@ class GnUtility
             $frontendUserRepository = $objectManager->get(FrontendUserRepository::class);
 
             $api = new GnApi();
-            $gnLogin = $api->GetLoginApi($mashup->getAppKey(), $loginId)->GetVerified();
+            $gnLogin = $api->GetLoginApiForEndUser($mashup->getAppKey(), $loginId)->GetVerified();
             if ($gnLogin && $gnLogin->LoginName) {
                 $gnSettings = self::getGnSetting();
 

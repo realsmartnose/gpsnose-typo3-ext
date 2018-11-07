@@ -47,7 +47,7 @@ class GnCommentService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     $currentUser = GnAuthentication::CurrentUser();
-                    $gnLoginApi = $this->_gnApi->GetLoginApi($mashup->getAppKey(), $currentUser->LoginId);
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
                     $gnLogin = $gnLoginApi->GetVerified();
                     if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: Should we reset the cache for all pages of comments?
@@ -94,7 +94,7 @@ class GnCommentService extends GnBaseService
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
-                    $gnLoginApi = $this->_gnApi->GetLoginApi($mashup->getAppKey());
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey());
                     $items = $gnLoginApi->GetCommentsApi()->GetCommentsPage($commentType, $itemKey, $pageSize, $lastKnownTicks);
 
                     return $items;

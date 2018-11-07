@@ -6,7 +6,6 @@ use SmartNoses\Gpsnose\Domain\Model\SubCommunity;
 use SmartNoses\Gpsnose\Domain\Model\Host;
 use SmartNoses\Gpsnose\Domain\Model\Token;
 use GpsNose\SDK\Web\Login\GnAuthentication;
-use GpsNose\SDK\Mashup\Api\Modules\GnLoginApi;
 use SmartNoses\Gpsnose\Domain\Model\Mashup;
 use SmartNoses\Gpsnose\Domain\Model\History;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
@@ -20,6 +19,7 @@ use GpsNose\SDK\Mashup\Api\GnApi;
 use GpsNose\SDK\Web\Login\GnAuthenticationData;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Model\TokenScan;
+use GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin;
 
 /**
  * *
@@ -84,7 +84,7 @@ class MashupController extends BaseController
 
     /**
      *
-     * @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApi
+     * @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin
      */
     protected $_gnLoginApi;
 
@@ -120,7 +120,7 @@ class MashupController extends BaseController
     {
         if ($this->_currentUser != null) {
             if (GnUtil::IsNullOrEmpty($this->extConf['backendLockedUser']) || $this->extConf['backendLockedUser'] == $this->_currentUser->LoginName) {
-                $this->_gnLoginApi = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId);
+                $this->_gnLoginApi = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId, "");
             } else {
                 $this->addFlashMessage("The module is locked to the user '{$this->extConf['backendLockedUser']}'", '', FlashMessage::WARNING, TRUE);
                 GnAuthentication::Logout();
@@ -136,13 +136,13 @@ class MashupController extends BaseController
     /**
      * RefreshMashups
      */
-    private function RefreshMashups(GnLoginApi $gnLoginApiForAdmin = null)
+    private function RefreshMashups(GnLoginApiAdmin $gnLoginApiForAdmin = null)
     {
         try {
             if ($gnLoginApiForAdmin == null) {
                 if ($this->_currentUser != null) {
                     // Verifie the user
-                    $gnLoginApiForAdmin = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId);
+                    $gnLoginApiForAdmin = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId, "");
                     $gnLoginApiForAdmin->GetVerified();
                 }
             }
@@ -258,7 +258,7 @@ class MashupController extends BaseController
             $this->AssureLoggedIn();
 
             // Verifie the user
-            $gnLoginApiForAdmin = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId);
+            $gnLoginApiForAdmin = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId, "");
             $gnLogin = $gnLoginApiForAdmin->GetVerified();
             if ($gnLogin != null && $gnLoginApiForAdmin->getIsLoggedIn()) {
                 $this->RefreshMashups($gnLoginApiForAdmin);
@@ -291,8 +291,7 @@ class MashupController extends BaseController
         } else {
             $this->addFlashMessage('To login, scan this QR code using your mobile GpsNose app please', 'Info', FlashMessage::INFO);
             $loginId = GnUtil::NewGuid();
-            $this->view->assign('qr_code_image', base64_encode($this->_gnApi->GetLoginApiForAdmin($loginId)
-                ->GenerateQrCode()));
+            $this->view->assign('qr_code_image', base64_encode($this->_gnApi->GetLoginApiForAdmin($loginId, "")->GenerateQrCode()));
             $this->view->assign('login_id', $loginId);
         }
     }
@@ -312,7 +311,7 @@ class MashupController extends BaseController
         $isOk = false;
         if ($data["LoginId"]) {
             $loginId = $data["LoginId"];
-            $gnLoginApiForAdmin = $this->_gnApi->GetLoginApiForAdmin($loginId);
+            $gnLoginApiForAdmin = $this->_gnApi->GetLoginApiForAdmin($loginId, "");
             $gnLogin = $gnLoginApiForAdmin->GetVerified();
             if ($gnLogin != null && $gnLoginApiForAdmin->getIsLoggedIn()) {
                 $gnAuthData = new GnAuthenticationData();
@@ -344,7 +343,7 @@ class MashupController extends BaseController
         $isOk = false;
         $this->_currentUser = GnAuthentication::CurrentUser();
         if ($this->_currentUser) {
-            $gnLoginApiForAdmin = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId);
+            $gnLoginApiForAdmin = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId, "");
             $gnLogin = $gnLoginApiForAdmin->GetVerified();
             if ($gnLogin != null && $gnLoginApiForAdmin->getIsLoggedIn()) {
                 $isOk = true;
@@ -809,7 +808,7 @@ class MashupController extends BaseController
             $token->setValidToTicks("0");
         }
 
-        $gnLoginApi = $this->_gnApi->GetLoginApi($mashup->getAppKey(), $this->_currentUser->LoginId);
+        $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $this->_currentUser->LoginId);
         $gnLogin = $gnLoginApi->GetVerified();
         if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
             try {
@@ -840,7 +839,7 @@ class MashupController extends BaseController
 
         try {
             $updateCount = 0;
-            $gnLoginApi = $this->_gnApi->GetLoginApi($mashup->getAppKey(), null, null);
+            $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), null, null);
             $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
             /** @var $mashupToken GnMashupToken */
             foreach ($mashupTokensApi->GetMashupTokensPage($mashup->getCommunityTag(), $mashup->getLatestTokenScanTicks(), 50) as $mashupToken) {
@@ -918,7 +917,7 @@ class MashupController extends BaseController
         } else {
             if ($newToken->getValidToDateString() !== "") {
                 $date = new \DateTime($newToken->getValidToDateString());
-                $newToken->setValidToTicks((string)GnUtil::TicksFromDate($date->add(new \DateInterval('PT23H59M59S'))));
+                $newToken->setValidToTicks((string) GnUtil::TicksFromDate($date->add(new \DateInterval('PT23H59M59S'))));
             } else {
                 $newToken->setValidToTicks("0");
             }

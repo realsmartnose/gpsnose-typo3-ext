@@ -44,7 +44,7 @@ class GnNearbyService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     $currentUser = GnAuthentication::CurrentUser();
-                    $gnLoginApi = $this->_gnApi->GetLoginApi($mashup->getAppKey(), $currentUser->LoginId);
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
                     $gnLogin = $gnLoginApi->GetVerified();
                     if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
@@ -88,7 +88,7 @@ class GnNearbyService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     $currentUser = GnAuthentication::CurrentUser();
-                    $gnLoginApi = $this->_gnApi->GetLoginApi($mashup->getAppKey(), $currentUser->LoginId);
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
                     $gnLogin = $gnLoginApi->GetVerified();
                     if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
@@ -132,7 +132,7 @@ class GnNearbyService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     $currentUser = GnAuthentication::CurrentUser();
-                    $gnLoginApi = $this->_gnApi->GetLoginApi($mashup->getAppKey(), $currentUser->LoginId);
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
                     $gnLogin = $gnLoginApi->GetVerified();
                     if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
@@ -176,7 +176,7 @@ class GnNearbyService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     $currentUser = GnAuthentication::CurrentUser();
-                    $gnLoginApi = $this->_gnApi->GetLoginApi($mashup->getAppKey(), $currentUser->LoginId);
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
                     $gnLogin = $gnLoginApi->GetVerified();
                     if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
@@ -220,7 +220,7 @@ class GnNearbyService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     $currentUser = GnAuthentication::CurrentUser();
-                    $gnLoginApi = $this->_gnApi->GetLoginApi($mashup->getAppKey(), $currentUser->LoginId);
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
                     $gnLogin = $gnLoginApi->GetVerified();
                     if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?

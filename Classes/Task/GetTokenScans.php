@@ -40,7 +40,7 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                 if ($mashup) {
                     $gnApi = new GnApi();
 
-                    $gnLoginApi = $gnApi->GetLoginApi($mashup->getAppKey(), null, "en");
+                    $gnLoginApi = $gnApi->GetLoginApiForEndUser($mashup->getAppKey(), null, "en");
                     $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
 
                     $mashupTokens = $mashupTokensApi->GetMashupTokensPage($mashup->getCommunityTag(), $mashup->getLatestTokenScanTicks(), 50);
