@@ -423,7 +423,7 @@ var MashupAdminViewModel = (function () {
             if (self.createMashupTokenDate() != '') {
                 ticks = GetTicksFromDate(moment.utc(self.createMashupTokenDate()).add(1, "d").toDate());
             }
-            var src = "/MashupAdmin/GenerateQrTokenForMashup?tag=" + encodeURI(self.currentMashup().CommunityTag()) + "&payload=" + encodeURI(self.createMashupTokenValue()) + (ticks != null ? '&validToTicks=' + ticks : '');
+            var src = "/MashupApi/GenerateQrTokenForMashup?appKey=" + self.currentMashup().AppKey() + "&tag=" + encodeURI(self.currentMashup().CommunityTag()) + "&payload=" + encodeURI(self.createMashupTokenValue()) + (ticks != null ? '&validToTicks=' + ticks : '');
             var img = new Image();
             img.onload = function () {
                 self.createMashupTokenSrc(src);
