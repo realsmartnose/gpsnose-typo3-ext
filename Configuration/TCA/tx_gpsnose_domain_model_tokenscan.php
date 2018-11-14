@@ -17,16 +17,16 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime'
         ],
-        'searchFields' => 'scanned_by_login_name,scanned_ticks,scanned_latitude,scanned_longitude,token',
+        'searchFields' => 'scanned_by_login_name,scanned_ticks,scanned_latitude,scanned_longitude,callback_response_http_code,callback_response_message,token',
         'iconfile' => 'EXT:gpsnose/Resources/Public/Icons/tx_gpsnose_domain_model_tokenscan.gif',
         'readOnly' => 1
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, scanned_by_login_name, scanned_ticks, scanned_latitude, scanned_longitude, token'
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, scanned_by_login_name, scanned_ticks, scanned_latitude, scanned_longitude, callback_response_http_code, callback_response_message, token'
     ],
     'types' => [
         '1' => [
-            'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, scanned_by_login_name, scanned_ticks, scanned_latitude, scanned_longitude, token, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'
+            'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, scanned_by_login_name, scanned_ticks, scanned_latitude, scanned_longitude, callback_response_http_code, callback_response_message, token, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'
         ]
     ],
     'columns' => [
@@ -148,6 +148,24 @@ return [
                 'type' => 'input',
                 'size' => 10,
                 'eval' => 'float,required'
+            ]
+        ],
+        'callback_response_http_code' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.callback_response_http_code',
+            'config' => [
+                'type' => 'input',
+                'size' => 10,
+                'eval' => 'int'
+            ]
+        ],
+        'callback_response_message' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.callback_response_message',
+            'config' => [
+                'type' => 'input',
+                'size' => 1000,
+                'eval' => 'trim'
             ]
         ],
         'token' => [

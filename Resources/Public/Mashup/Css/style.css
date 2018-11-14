@@ -327,3 +327,12 @@
         width: 20px;
     }
 }
+
+.ma-gpsnose .hosts {
+    padding-top: 5px;
+}
+.ma-gpsnose .host {
+    margin: 0 5px 5px 0;
+    padding: 8px;
+    float: left;
+}

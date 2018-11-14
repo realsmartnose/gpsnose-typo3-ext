@@ -49,7 +49,7 @@
                         <div class="form-group row">
                             <label class="col-lg-4 control-label"><f:translate key="MashupAdmin_lblMashupTokenDateLabel" /></label>
                             <div class="col-lg-8">
-                                <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-week-start="true" data-date-today-highlight="true" data-date-toggle-active="true" data-date-start-date="0d" data-date-clear-btn="true" data-date-orientation="bottom">
+                                <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-week-start="true" data-date-today-highlight="true" data-date-toggle-active="true" data-date-start-date="0d" data-date-clear-btn="true" data-date-orientation="bottom" data-date-language="en">
                                     <f:form.textfield property="validToDateString" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenDatePlaceholder')}" />
                                     <div class="input-group-addon">
                                         <core:icon identifier="fa-calendar" />
@@ -73,30 +73,11 @@
     </div>
 
 <script>
-var addTokenMaxChars = {addTokenMaxChars};
-
-$('#payload').on('input', function() {
-    var newValue = $(this).val();
-    var isValid = newValue.length > 0 && newValue.length <= addTokenMaxChars;
-    $('#addButton').attr('disabled', ! isValid);
-    if (isValid || newValue === '') {
-        $(this).closest('.form-group').removeClass('has-error');
-    } else {
-        $(this).closest('.form-group').addClass('has-error');
-    }
-});
-
-$('form').on('submit', function() {
-    $return = true;
-    $.each($(this).find('button'), function() {
-        if ($(this).attr('disabled')) {
-            $return = false;
-        }
-    });
-    return $return;
-});
-
+var GpsnoseMashupAddTokenMaxChars = {addTokenMaxChars};
 </script>
+<f:be.pageRenderer
+    includeCssFiles="{ 0: '{f:uri.resource(path: \'Libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.min.css\')}' }"
+    includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/MashupTokennew', 1: '{f:uri.resource(path: \'Libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js\')}' }" />
 
 </f:section>
 

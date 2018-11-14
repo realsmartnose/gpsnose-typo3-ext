@@ -93,6 +93,9 @@
             <trans-unit id="tx_gpsnose_domain_model_mashup.max_hosts">
                 <source>Max Hosts</source>
             </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_mashup.mashup_token_callback_url">
+                <source>Callback url</source>
+            </trans-unit>
             <trans-unit id="tx_gpsnose_domain_model_mashup.sub_communities">
                 <source>Sub Communities</source>
             </trans-unit>
@@ -157,6 +160,12 @@
             </trans-unit>
             <trans-unit id="tx_gpsnose_domain_model_tokenscan.scanned_longitude">
                 <source>Scanned longitude</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.callback_response_http_code">
+                <source>Callback response code</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.callback_response_message">
+                <source>Callback response message</source>
             </trans-unit>
 
             <trans-unit id="tt_content.palette_title">

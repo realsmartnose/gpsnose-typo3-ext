@@ -150,6 +150,7 @@ class MashupController extends BaseController
             $ownMashups = $adminApi->GetOwnMashups();
 
             if (is_array($ownMashups)) {
+                /** @var $mashup \GpsNose\SDK\Mashup\Model\GnMashup */
                 foreach ($ownMashups as $mashup) {
                     // Try to find the existing entry
                     $mashupDto = $this->mashupRepository->findByCommunityTag($mashup->CommunityTag);
@@ -165,6 +166,7 @@ class MashupController extends BaseController
                     $mashupDto->setMaxCallsMonthly($mashup->MaxCallsMonthly);
                     $mashupDto->setMaxSubSites($mashup->MaxSubSites);
                     $mashupDto->setMaxHosts($mashup->MaxHosts);
+                    $mashupDto->setMashupTokenCallbackUrl($mashup->MashupTokenCallbackUrl ?: '');
 
                     // Handle SubCommunities
                     if (is_array($mashup->SubCommunities)) {
@@ -291,7 +293,8 @@ class MashupController extends BaseController
         } else {
             $this->addFlashMessage('To login, scan this QR code using your mobile GpsNose app please', 'Info', FlashMessage::INFO);
             $loginId = GnUtil::NewGuid();
-            $this->view->assign('qr_code_image', base64_encode($this->_gnApi->GetLoginApiForAdmin($loginId, "")->GenerateQrCode()));
+            $this->view->assign('qr_code_image', base64_encode($this->_gnApi->GetLoginApiForAdmin($loginId, "")
+                ->GenerateQrCode()));
             $this->view->assign('login_id', $loginId);
         }
     }
@@ -367,6 +370,18 @@ class MashupController extends BaseController
         GnAuthentication::Logout();
 
         $this->addFlashMessage('Successfully logged out', 'Success', FlashMessage::OK);
+    }
+
+    /**
+     * action relogin
+     *
+     * @return void
+     */
+    public function reloginAction()
+    {
+        GnAuthentication::Logout();
+
+        $this->redirect('login');
     }
 
     /**
@@ -517,6 +532,7 @@ class MashupController extends BaseController
 
         $this->view->assign('addSubCommunityMaxChars', 20);
         $this->view->assign('addHostMaxChars', 100);
+        $this->view->assign('mashupTokenCallbackUrlMaxChars', 1000);
         $this->view->assign('mashup', $mashup);
         $this->view->assign('visibilities', $this->_visibilities);
     }
@@ -630,7 +646,7 @@ class MashupController extends BaseController
                 try {
                     // Add the Host
                     $adminApi = $this->_gnLoginApi->GetAdminApi();
-                    $adminApi->UpdateCommunityWeb($mashup->getCommunityTag(), $hosts);
+                    $adminApi->UpdateCommunityWeb($mashup->getCommunityTag(), $hosts, $mashup->getMashupTokenCallbackUrl());
 
                     $host = new Host();
                     $host->setDomain($newHost);
@@ -671,12 +687,12 @@ class MashupController extends BaseController
                 $i = 0;
                 foreach ($mashup->getHosts() as $mHost) {
                     if ($mHost->getDomain() !== $host->getDomain()) {
-                        $hosts[$i] = $host->getDomain();
+                        $hosts[$i] = $mHost->getDomain();
                         $i ++;
                     }
                 }
                 $adminApi = $this->_gnLoginApi->GetAdminApi();
-                $adminApi->UpdateCommunityWeb($mashup->getCommunityTag(), $hosts);
+                $adminApi->UpdateCommunityWeb($mashup->getCommunityTag(), $hosts, $mashup->getMashupTokenCallbackUrl());
 
                 $mashup->removeHost($host);
                 $this->mashupRepository->update($mashup);
@@ -715,6 +731,44 @@ class MashupController extends BaseController
                     $this->mashupRepository->update($mashup);
                     $this->addFlashMessage('Mashup successfully updated', '', FlashMessage::OK, TRUE);
                 }
+            } catch (\Exception $e) {
+                $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+            }
+        } else {
+            GnAuthentication::Logout();
+            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
+        }
+
+        $this->redirect('edit', null, null, [
+            'mashup' => $mashup
+        ]);
+    }
+
+    /**
+     * action updateCallbackUrl
+     *
+     * @param Mashup $mashup
+     * @return void
+     */
+    public function updateCallbackUrlAction(Mashup $mashup)
+    {
+        $this->AssureLoggedIn();
+
+        $gnLogin = $this->_gnLoginApi->GetVerified();
+        if ($gnLogin != null && $this->_gnLoginApi->getIsLoggedIn()) {
+            try {
+                $hosts = [];
+                $i = 0;
+                foreach ($mashup->getHosts() as $host) {
+                    $hosts[$i] = $host->getDomain();
+                    $i ++;
+                }
+                $adminApi = $this->_gnLoginApi->GetAdminApi();
+                $adminApi->UpdateCommunityWeb($mashup->getCommunityTag(), $hosts, $mashup->getMashupTokenCallbackUrl());
+
+                $this->mashupRepository->update($mashup);
+
+                $this->addFlashMessage('Mashup successfully updated', '', FlashMessage::OK, TRUE);
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
             }
@@ -841,7 +895,7 @@ class MashupController extends BaseController
             $updateCount = 0;
             $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), null, null);
             $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
-            /** @var $mashupToken GnMashupToken */
+            /** @var $mashupToken \GpsNose\SDK\Mashup\Model\GnMashupToken */
             foreach ($mashupTokensApi->GetMashupTokensPage($mashup->getCommunityTag(), $mashup->getLatestTokenScanTicks(), 50) as $mashupToken) {
                 $tokenDto = $mashup->findTokenByPayload($mashupToken->Payload);
                 if ($tokenDto == null) {
@@ -857,6 +911,8 @@ class MashupController extends BaseController
                     $tokenScan->setScannedTicks($mashupToken->ScannedTicks);
                     $tokenScan->setScannedLatitude($mashupToken->ScannedLatitude);
                     $tokenScan->setScannedLongitude($mashupToken->ScannedLongitude);
+                    $tokenScan->setCallbackResponseHttpCode($mashupToken->CallbackResponseHttpCode);
+                    $tokenScan->setCallbackResponseMessage($mashupToken->CallbackResponseMessage ?: '');
                     $tokenDto->addTokenScan($tokenScan);
                     $updateCount ++;
                 }

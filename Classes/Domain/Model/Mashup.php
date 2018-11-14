@@ -78,6 +78,13 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $maxHosts = 0;
 
     /**
+     * mashupTokenCallbackUrl
+     *
+     * @var string
+     */
+    protected $mashupTokenCallbackUrl = "";
+
+    /**
      * subCommunities
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\SubCommunity>
@@ -377,6 +384,27 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setMaxHosts($maxHosts)
     {
         $this->maxHosts = $maxHosts;
+    }
+
+    /**
+     * Returns the mashupTokenCallbackUrl
+     *
+     * @return string
+     */
+    public function getMashupTokenCallbackUrl()
+    {
+        return $this->mashupTokenCallbackUrl;
+    }
+
+    /**
+     * Sets the maashupTokenCallbackUrl
+     *
+     * @param string $mashupTokenCallbackUrl
+     * @return void
+     */
+    public function setMashupTokenCallbackUrl($mashupTokenCallbackUrl)
+    {
+        $this->mashupTokenCallbackUrl = $mashupTokenCallbackUrl;
     }
 
     /**
@@ -680,7 +708,7 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         foreach ($this->tokens as $token) {
             $newTicks = $token->getLatestTokenScanTicks();
             if ($newTicks > $latestTicks) {
-                $latestTicks =  $newTicks;
+                $latestTicks = $newTicks;
             }
         }
         return $latestTicks;

@@ -78,41 +78,19 @@
     </div>
 
 <script>
-var addMaxChars = {addMaxChars};
-
-var visibility = '';
-function changeVisibility(newVisibility, description) {{
-    visibility = newVisibility;
-    $('#description').text(description);
-    $('#communityTag').val(visibility + $('#communityTagField').val());
-}}
-$(document).ready(function() {{
+var GpsnoseMashupAddMaxChars = {addMaxChars};
+var GpsnoseMashupVisibility = '';
+var GpsnoseMashupReadyBlock = function() {
     <f:for each="{visibilities}" as="description" key="visibility" iteration="i"><f:if condition="{i.cycle} == 1">changeVisibility('{visibility}', '{description}');</f:if></f:for>
-}});
+}
 
-$('#communityTagField').on('input', function() {
-    var newValue = $(this).val();
-    var isValid = IsValidDomain(newValue, addMaxChars);
-    $('#addButton').attr('disabled', ! isValid);
-    $('#communityTag').val(visibility + newValue);
-    if (isValid || newValue === '') {
-        $(this).closest('.form-group').removeClass('has-error');
-    } else {
-        $(this).closest('.form-group').addClass('has-error');
-    }
-});
-
-$('form').on('submit', function() {
-    $return = true;
-    $.each($(this).find('button'), function() {
-        if ($(this).attr('disabled')) {
-            $return = false;
-        }
-    });
-    return $return;
-});
-
+function changeVisibility(newVisibility, description) {{
+    GpsnoseMashupVisibility = newVisibility;
+    $('#description').text(description);
+    $('#communityTag').val(GpsnoseMashupVisibility + $('#communityTagField').val());
+}}
 </script>
+<f:be.pageRenderer includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/MashupNew' }" />
 
 </f:section>
 

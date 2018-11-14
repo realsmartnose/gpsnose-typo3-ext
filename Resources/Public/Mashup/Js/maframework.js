@@ -341,6 +341,16 @@ function IsValidDomain(domain, maxLength)
     return /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(domain) && domain.length <= maxLength;
 }
 
+function IsValidUrl(url, maxLength, domain)
+{
+    if (domain) {
+        domain = domain.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+        var re = new RegExp('https?:\/\/' + domain + '([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)');
+        return re.test(url) && url.length <= maxLength;
+    } else {
+        return /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/.test(url) && url.length <= maxLength;
+    }
+}
 
 function IsValidCommunity(community, maxLength)
 {
@@ -376,46 +386,48 @@ function ImageErrorHandler(obj, errorSrc)
 }
 
 
-$('body').on('click', '[data-popup]', function(e) {
-    var link = $(this).attr('href');
-    if (! link) link = $(this).data('src');
-    if (link && ! $(this).attr('disabled')) {
-        if (window.MA_GPSNOSE_IS_MASHUP != undefined && window.MA_GPSNOSE_IS_MASHUP)
-            window.open(link, '_blank');
-        else
-            window.location.href = link;
-    }
-    e.preventDefault();
-});
-
-
-$('body').on('click', '[data-external]', function(e) {
-    var link = $(this).attr('href');
-    if (! link) link = $(this).data('src');
-    if (link && ! $(this).attr('disabled')) {
-        window.open(link, '_blank');
-    }
-    e.preventDefault();
-});
-
-$(document).ready(function() {
-    $('[data-remove]').remove();
-});
-$(document).ajaxComplete(function() {
-    $('[data-remove]').remove();
-});
-
-if ($.fn.popover) {
-    $(document).popover({
-        selector: '[data-popover-img]',
-        trigger: 'focus',
-        html: true,
-        placement: 'bottom',
-        content: function () {
-            return '<img class="ma-popover-image" src="'+$(this).data('popover-img')+'" />' +
-                ($(this).data('popover-text') ? '<p class="text-center">'+$(this).data('popover-text')+'</p>' : '');
+if (jQuery === $) {
+    $('body').on('click', '[data-popup]', function(e) {
+        var link = $(this).attr('href');
+        if (! link) link = $(this).data('src');
+        if (link && ! $(this).attr('disabled')) {
+            if (window.MA_GPSNOSE_IS_MASHUP != undefined && window.MA_GPSNOSE_IS_MASHUP)
+                window.open(link, '_blank');
+            else
+                window.location.href = link;
         }
+        e.preventDefault();
     });
+
+    $('body').on('click', '[data-external]', function(e) {
+        var link = $(this).attr('href');
+        if (! link) link = $(this).data('src');
+        if (link && ! $(this).attr('disabled')) {
+            window.open(link, '_blank');
+        }
+        e.preventDefault();
+    });
+
+    $(document).ready(function() {
+        $('[data-remove]').remove();
+    });
+
+    $(document).ajaxComplete(function() {
+        $('[data-remove]').remove();
+    });
+
+    if ($.fn.popover) {
+        $(document).popover({
+            selector: '[data-popover-img]',
+            trigger: 'focus',
+            html: true,
+            placement: 'bottom',
+            content: function () {
+                return '<img class="ma-popover-image" src="'+$(this).data('popover-img')+'" />' +
+                    ($(this).data('popover-text') ? '<p class="text-center">'+$(this).data('popover-text')+'</p>' : '');
+            }
+        });
+    }
 }
 
 

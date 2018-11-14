@@ -230,6 +230,19 @@ call_user_func(
            }'
         );
 
+        if (TYPO3_MODE === 'BE' && !(TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_CLI)) {
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class)->addRequireJsConfiguration([
+                'paths' => [
+                    'maframework' => \TYPO3\CMS\Core\Utility\PathUtility::getAbsoluteWebPath(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('gpsnose', 'Resources/Public/Mashup/Js/')) . 'maframework.min'
+                ],
+                'shim' => [
+                    'deps' => ['jquery'],
+                    'maframework' => [
+                        'exports' => 'maframework'
+                    ]
+                ]
+            ]);
+        }
 
         // Caching framework
         if (!is_array($GLOBALS['TYPO3_CONF_VARS'] ['SYS']['caching']['cacheConfigurations'][$extKey])) {
@@ -346,6 +359,11 @@ call_user_func(
             'fa-calendar',
             \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
             ['name' => 'calendar']
+        );
+        $iconRegistry->registerIcon(
+            'fa-check',
+            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
+            ['name' => 'check']
         );
 
         // Plugin-Icons

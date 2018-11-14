@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'GpsNose',
-    'description' => 'Extension to integrate GpsNose into TYPO3',
+    'description' => 'Extension to integrate GpsNose into TYPO3 - GpsNose connects anonymous people to the real world using the web and mobiles',
     'category' => 'plugin',
     'author' => 'dev',
     'author_email' => 'dev@gpsnose.com',
@@ -21,10 +21,10 @@ $EM_CONF[$_EXTKEY] = [
     'uploadfolder' => '0',
     'createDirs' => '',
     'clearCacheOnLoad' => 0,
-    'version' => '1.0.0',
+    'version' => '1.0.2',
     'constraints' => [
         'depends' => [
-            'typo3' => '7.6.0-8.7.99',
+            'typo3' => '8.7.0-9.5.99',
         ],
         'conflicts' => [],
         'suggests' => [],

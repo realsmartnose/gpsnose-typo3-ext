@@ -12,6 +12,9 @@ var MashupAdminViewModel = (function () {
         var _this = this;
         this.ownMashups = ko.observableArray([]);
         this.currentMashup = ko.observable();
+        this.mashupTokenCallbackUrlValue = ko.observable('n/a');
+        this.mashupTokenCallbackUrlMaxChars = ko.observable(0);
+        this.mashupTokenCallbackUrlIsValid = ko.observable(false);
         this.formType = ko.observable(MashupFormTypeEnum.none);
         this.requestActiveOwnMashups = ko.observable(false);
         this.requestActiveRegisterCommunity = ko.observable(false);
@@ -31,6 +34,7 @@ var MashupAdminViewModel = (function () {
         this.addSubCommunityValue = ko.observable("");
         this.addSubCommunityMaxChars = ko.observable(0);
         this.addSubCommunityIsValid = ko.observable(false);
+        this.hosts = ko.observableArray([]);
         this.addHostValue = ko.observable("");
         this.addHostMaxChars = ko.observable(0);
         this.addHostIsValid = ko.observable(false);
@@ -46,7 +50,7 @@ var MashupAdminViewModel = (function () {
             return _this.currentMashup() != null && _this.currentMashup().SubCommunities().length < _this.currentMashup().MaxSubSites();
         });
         this.isAddHostAllowed = ko.computed(function () {
-            return _this.currentMashup() != null && _this.currentMashup().Hosts().length < _this.currentMashup().MaxHosts();
+            return _this.currentMashup() != null && _this.hosts().length < _this.currentMashup().MaxHosts();
         });
         this.onEditMashup = function (mashupDto) { };
         this.onDetailMashup = function (mashupDto) { };
@@ -56,6 +60,7 @@ var MashupAdminViewModel = (function () {
         this.addSubCommunityMaxChars(20);
         this.addHostMaxChars(100);
         this.createMashupTokenMaxChars(200);
+        this.mashupTokenCallbackUrlMaxChars(1000);
         this.privacyDropdownItems.push('%' + GetLangRes('Common_lblCommunityPublic', 'Public'));
         this.privacyDropdownItems.push('@' + GetLangRes('Common_lblCommunityClosed', 'Closed'));
         this.privacyDropdownItems.push('*' + GetLangRes('Common_lblCommunityPrivate', 'Private'));
@@ -84,10 +89,18 @@ var MashupAdminViewModel = (function () {
         this.createMashupTokenDate.subscribe(function (newValue) {
             _this.createMashupTokenSrc("");
         });
+        this.mashupTokenCallbackUrlValue.subscribe(function (newValue) {
+            var domain = _this.currentMashup() ? _this.currentMashup().CommunityTagSufix() : null;
+            var isValid = newValue.length == 0 || IsValidUrl(newValue, _this.mashupTokenCallbackUrlMaxChars(), domain);
+            _this.mashupTokenCallbackUrlIsValid(isValid);
+        });
     }
     MashupAdminViewModel.prototype.EditMashup = function (mashup) {
         this.currentMashup(mashup);
         this.formType(MashupFormTypeEnum.edit);
+        this.mashupTokenCallbackUrlValue(mashup.MashupTokenCallbackUrl());
+        this.addHostValue('');
+        this.hosts(mashup.Hosts().slice(0));
         if (this.onEditMashup) {
             this.onEditMashup(mashup);
         }
@@ -250,10 +263,11 @@ var MashupAdminViewModel = (function () {
     };
     MashupAdminViewModel.prototype.AddHost = function () {
         if (this.currentMashup() != null) {
-            if (this.currentMashup().Hosts().indexOf(this.addHostValue()) < 0) {
-                var refs = this.currentMashup().Hosts().slice(0);
+            if (this.hosts().indexOf(this.addHostValue()) < 0) {
+                var refs = this.hosts().slice(0);
                 refs.push(this.addHostValue());
-                this.UpdateCommunity(refs);
+                this.hosts(refs);
+                this.addHostValue('');
             }
             else {
                 dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblDuplicateItem", "There is already an entry with the same name!"), null);
@@ -261,17 +275,13 @@ var MashupAdminViewModel = (function () {
         }
     };
     MashupAdminViewModel.prototype.RemoveHost = function (value) {
-        var _this = this;
         if (this.currentMashup() != null) {
-            dialog.show(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
-                dialog.hide();
-                var refs = _this.currentMashup().Hosts().slice(0);
-                refs.splice(refs.indexOf(value), 1);
-                _this.UpdateCommunity(refs);
-            });
+            var refs = this.hosts().slice(0);
+            refs.splice(refs.indexOf(value), 1);
+            this.hosts(refs);
         }
     };
-    MashupAdminViewModel.prototype.UpdateCommunity = function (hosts) {
+    MashupAdminViewModel.prototype.UpdateCommunity = function () {
         if (this.currentMashup() != null) {
             var self = this;
             if (self.requestActiveUpdateCommunity())
@@ -283,13 +293,17 @@ var MashupAdminViewModel = (function () {
                 cache: false,
                 data: {
                     tag: self.currentMashup().CommunityTag(),
-                    hosts: hosts
+                    hosts: this.hosts().slice(0),
+                    mashupTokenCallbackUrl: self.mashupTokenCallbackUrlValue()
                 },
                 dataType: 'json',
                 success: function (result) {
                     self.requestActiveUpdateCommunity(false);
-                    self.currentMashup().Hosts([]);
-                    self.currentMashup().Hosts(hosts);
+                    if (self.currentMashup()) {
+                        self.currentMashup().Hosts([]);
+                        self.currentMashup().Hosts(self.hosts().slice(0));
+                        self.currentMashup().MashupTokenCallbackUrl(self.mashupTokenCallbackUrlValue());
+                    }
                     self.addHostValue("");
                 },
                 error: function () {
@@ -323,9 +337,8 @@ var MashupAdminViewModel = (function () {
                             dialog.show(GetLangRes("Common_lblError", "Error"), result.Message, null);
                         }
                         else {
-                            var currentMashup = self.currentMashup();
-                            if (currentMashup) {
-                                currentMashup.AppKey(result.AppKey);
+                            if (self.currentMashup()) {
+                                self.currentMashup().AppKey(result.AppKey);
                             }
                         }
                     },
@@ -450,6 +463,7 @@ var MashupDto = (function () {
         this.MaxHosts = ko.observable(0);
         this.MaxCallsDaily = ko.observable(0);
         this.MaxCallsMonthly = ko.observable(0);
+        this.MashupTokenCallbackUrl = ko.observable("");
         this.CommunityTag(data.CommunityTag);
         this.ValidationKey(data.ValidationKey);
         this.AppKey(data.AppKey);
@@ -458,6 +472,7 @@ var MashupDto = (function () {
         this.MaxHosts(data.MaxHosts ? data.MaxHosts : 3);
         this.MaxCallsDaily(data.MaxCallsDaily ? data.MaxCallsDaily : 500);
         this.MaxCallsMonthly(data.MaxCallsMonthly ? data.MaxCallsMonthly : 5000);
+        this.MashupTokenCallbackUrl(data.MashupTokenCallbackUrl ? data.MashupTokenCallbackUrl : '');
         var self = this;
         if (data.Hosts) {
             ko.utils.arrayForEach(data.Hosts, function (item, index) {

@@ -37,32 +37,9 @@
 
 <f:if condition="{login_id}">
 <script>
-var loginId = '{login_id}';
-$(document).ready(function() {
-    // Check if logged in
-    window.setTimeout(WaitForLogin, 3500);
-});
-function WaitForLogin() {
-    $.ajax({
-        type: 'POST',
-        url: TYPO3.settings.ajaxUrls['gpsnose::loginVerifie'],
-        data: {
-            "LoginId": loginId
-           },
-        dataType: 'json',
-        success: function(result) {
-            if (result.IsOk) {
-                document.location.reload();
-            } else {
-                window.setTimeout(WaitForLogin, 3500);
-            }
-        },
-        error: function () {
-            window.setTimeout(WaitForLogin, 3500);
-        }
-    });
-}
+var GpsnoseMashupLoginId = '{login_id}';
 </script>
+<f:be.pageRenderer includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/MashupLogin' }" />
 </f:if>
 
 </f:section>

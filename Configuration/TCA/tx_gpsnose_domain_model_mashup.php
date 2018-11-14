@@ -17,16 +17,16 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime'
         ],
-        'searchFields' => 'community_tag,validation_key,app_key,validation_ticks,max_calls_daily,max_calls_monthly,max_sub_sites,max_hosts,sub_communities,hosts,call_history,exceeded_quota_history,tokens',
+        'searchFields' => 'community_tag,validation_key,app_key,validation_ticks,max_calls_daily,max_calls_monthly,max_sub_sites,max_hosts,mashup_token_callback_url,sub_communities,hosts,call_history,exceeded_quota_history,tokens',
         'iconfile' => 'EXT:gpsnose/Resources/Public/Icons/tx_gpsnose_domain_model_mashup.gif',
         'readOnly' => 1
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, community_tag, validation_key, app_key, validation_ticks, max_calls_daily, max_calls_monthly, max_sub_sites, max_hosts, sub_communities, hosts, call_history, exceeded_quota_history, tokens'
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, community_tag, validation_key, app_key, validation_ticks, max_calls_daily, max_calls_monthly, max_sub_sites, max_hosts, mashup_token_callback_url, sub_communities, hosts, call_history, exceeded_quota_history, tokens'
     ],
     'types' => [
         '1' => [
-            'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, community_tag, validation_key, app_key, validation_ticks, max_calls_daily, max_calls_monthly, max_sub_sites, max_hosts, sub_communities, hosts, call_history, exceeded_quota_history, tokens, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'
+            'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, community_tag, validation_key, app_key, validation_ticks, max_calls_daily, max_calls_monthly, max_sub_sites, max_hosts, mashup_token_callback_url, sub_communities, hosts, call_history, exceeded_quota_history, tokens, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'
         ]
     ],
     'columns' => [
@@ -184,6 +184,15 @@ return [
                 'type' => 'input',
                 'size' => 4,
                 'eval' => 'int'
+            ]
+        ],
+        'mashup_token_callback_url' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.mashup_token_callback_url',
+            'config' => [
+                'type' => 'input',
+                'size' => 1000,
+                'eval' => 'trim'
             ]
         ],
         'sub_communities' => [

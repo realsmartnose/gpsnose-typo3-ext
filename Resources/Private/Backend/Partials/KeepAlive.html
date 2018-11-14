@@ -26,6 +26,28 @@
     </div>
 </div>
 
-<f:be.pageRenderer includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/KeepAlive' }" />
+<script>
+var interval = 10*60*1000;
+$(document).ready(function() {
+    window.setTimeout(KeepAlive, interval);
+});
+function KeepAlive() {
+    $.ajax({
+        type: 'POST',
+        url: TYPO3.settings.ajaxUrls['gpsnose::keepAlive'],
+        dataType: 'json',
+        success: function(result) {
+            if (result.IsOk) {
+                $('#keep-alive-message').hide();
+            } else {
+                $('#keep-alive-message').show();
+            }
+        },
+        error: function () {
+            window.setTimeout(KeepAlive, interval);
+        }
+    });
+}
+</script>
 
 </html>

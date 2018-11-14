@@ -49,6 +49,21 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $scannedLongitude = 0.0;
 
     /**
+     * callbackResponseHttpCode
+     *
+     * @var int
+     */
+    protected $callbackResponseHttpCode = 0;
+
+    /**
+     * callbackResponseMessage
+     *
+     * @var string
+     */
+    protected $callbackResponseMessage = "";
+
+    /**
+     *
      * @return string
      */
     public function getScannedByLoginName()
@@ -57,6 +72,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     *
      * @param string $scannedByLoginName
      */
     public function setScannedByLoginName($scannedByLoginName)
@@ -65,6 +81,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     *
      * @return string
      */
     public function getScannedTicks()
@@ -73,6 +90,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     *
      * @param string $scannedTicks
      */
     public function setScannedTicks($scannedTicks)
@@ -81,6 +99,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     *
      * @return number
      */
     public function getScannedLatitude()
@@ -89,6 +108,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     *
      * @param number $scannedLatitude
      */
     public function setScannedLatitude($scannedLatitude)
@@ -97,6 +117,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     *
      * @return number
      */
     public function getScannedLongitude()
@@ -105,6 +126,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     *
      * @param number $scannedLongitude
      */
     public function setScannedLongitude($scannedLongitude)
@@ -112,5 +134,39 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->scannedLongitude = $scannedLongitude;
     }
 
+    /**
+     *
+     * @return number
+     */
+    public function getCallbackResponseHttpCode()
+    {
+        return $this->callbackResponseHttpCode;
+    }
 
+    /**
+     *
+     * @param number $callbackResponseHttpCode
+     */
+    public function setCallbackResponseHttpCode($callbackResponseHttpCode)
+    {
+        $this->callbackResponseHttpCode = $callbackResponseHttpCode;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getCallbackResponseMessage()
+    {
+        return $this->callbackResponseMessage;
+    }
+
+    /**
+     *
+     * @param string $callbackResponseMessage
+     */
+    public function setCallbackResponseMessage($callbackResponseMessage)
+    {
+        $this->callbackResponseMessage = $callbackResponseMessage;
+    }
 }

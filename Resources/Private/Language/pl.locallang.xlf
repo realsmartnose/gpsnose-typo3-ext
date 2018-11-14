@@ -16,7 +16,7 @@
 				<source><![CDATA[Validate]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblAddFail">
-				<source><![CDATA[To add a mashup-site, make sure you entered a valide url without protocol (e.g.: www.exemple.com) and use a maximum of %max_characters% characters]]></source>
+				<source><![CDATA[To add a mashup-site, make sure you entered a valide url without protocol (e.g.: www.example.com) and use a maximum of %max_characters% characters]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblAddHostPlaceholder">
 				<source><![CDATA[Add new host]]></source>
@@ -75,6 +75,15 @@
 			<trans-unit id="MashupAdmin_lblLogoutTitle">
 				<source><![CDATA[GpsNose Logout]]></source>
 			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrl">
+				<source><![CDATA[Callback url]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrlFail">
+				<source><![CDATA[To set a callback url, make sure you entered a valide url (e.g.: http://%mashup_site%/end/point) and use a maximum of %max_characters% characters]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrlPlaceholder">
+				<source><![CDATA[Enter the Callback URL here (optional)]]></source>
+			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenDateHint">
 				<source><![CDATA[Set the date until the token should be valid, empty means, it will remain until the eternity]]></source>
 			</trans-unit>
@@ -130,7 +139,7 @@
 				<source><![CDATA[Enter the name of the new subcommunity here and click add, it will show as community@subcommunity]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblSubHostsFail">
-				<source><![CDATA[To add a host, make sure you entered a valide url without protocol (e.g.: www.exemple.com) and use a maximum of %max_characters% characters]]></source>
+				<source><![CDATA[To add a host, make sure you entered a valide url without protocol (e.g.: www.example.com) and use a maximum of %max_characters% characters]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblTitle">
 				<source><![CDATA[Mashup Admin]]></source>
@@ -209,6 +218,9 @@
 			</trans-unit>
 			<trans-unit id="Common_btnSync">
 				<source><![CDATA[Synchronizować]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnUpdate">
+				<source><![CDATA[Aktualizuj]]></source>
 			</trans-unit>
 			<trans-unit id="Common_lblAreYouSureMessage">
 				<source><![CDATA[Nie można tego cofnąć, mimo to kontynuować?]]></source>
