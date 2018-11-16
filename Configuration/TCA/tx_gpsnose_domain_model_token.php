@@ -22,11 +22,11 @@ return [
         'readOnly' => 1
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, payload, valid_to_ticks, token_scans'
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, payload, valid_to_ticks, callback_response, token_scans'
     ],
     'types' => [
         '1' => [
-            'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, payload, valid_to_ticks, token_scans, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'
+            'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, payload, valid_to_ticks, callback_response, token_scans, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'
         ]
     ],
     'columns' => [
@@ -131,6 +131,16 @@ return [
                 'type' => 'input',
                 'size' => 20,
                 'eval' => 'trim'
+            ]
+        ],
+        'callback_response' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_token.callback_response',
+            'config' => [
+                'type' => 'text',
+                'cols' => 40,
+                'rows' => 3,
+                'eval' => 'trim,required'
             ]
         ],
         'token_scans' => [

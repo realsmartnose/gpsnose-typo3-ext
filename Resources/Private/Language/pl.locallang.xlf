@@ -78,6 +78,12 @@
 			<trans-unit id="MashupAdmin_lblLogoutTitle">
 				<source><![CDATA[GpsNose Logout]]></source>
 			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenCallbackResponseLabel">
+				<source><![CDATA[Callback response]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenCallbackResponsePlaceholder">
+				<source><![CDATA[Enter text for successfully scan token]]></source>
+			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrl">
 				<source><![CDATA[Callback url]]></source>
 			</trans-unit>
@@ -96,11 +102,17 @@
 			<trans-unit id="MashupAdmin_lblMashupTokenDatePlaceholder">
 				<source><![CDATA[Valid until]]></source>
 			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenEditTitle">
+				<source><![CDATA[Edit mashup-token]]></source>
+			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenImageLabel">
 				<source><![CDATA[Token]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenListTitle">
 				<source><![CDATA[Mashup-token admin]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenNewTitle">
+				<source><![CDATA[Create mashup-token]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenScanDateLabel">
 				<source><![CDATA[Date]]></source>
@@ -115,7 +127,7 @@
 				<source><![CDATA[User]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenTitle">
-				<source><![CDATA[Create mashup-token]]></source>
+				<source><![CDATA[Mashup-token]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenValueHint">
 				<source><![CDATA[To create a mashup-token, make sure you use a maximum of %max_characters% characters for the identifier]]></source>

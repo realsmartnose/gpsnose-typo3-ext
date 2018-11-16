@@ -547,8 +547,8 @@ class MashupController extends BaseController
                 ->setTargetPageUid($settings['mashup.']['callbackPid'])
                 ->setCreateAbsoluteUri(TRUE)
                 ->setArguments([
-                    'type' => $settings['mashup.']['callbackTypeNum']
-                ])
+                'type' => $settings['mashup.']['callbackTypeNum']
+            ])
                 ->buildFrontendUri();
             $this->view->assign('mashupCallbackUrl', $uri);
         }
@@ -967,7 +967,7 @@ class MashupController extends BaseController
         $this->AssureLoggedIn();
 
         $this->view->assign('addTokenMaxChars', 200);
-
+        $this->view->assign('callbackResponseMaxChars', 100);
         $this->view->assign('mashup', $mashup);
     }
 
@@ -1008,6 +1008,43 @@ class MashupController extends BaseController
         $this->redirect('tokenshow', null, null, [
             'mashup' => $mashup,
             'token' => $newToken
+        ]);
+    }
+
+    /**
+     * action tokenedit
+     *
+     * @return void
+     */
+    public function tokeneditAction(Token $token, Mashup $mashup)
+    {
+        $this->AssureLoggedIn();
+
+        $this->view->assign('callbackResponseMaxChars', 100);
+        $this->view->assign('mashup', $mashup);
+        $this->view->assign('token', $token);
+    }
+
+    /**
+     * action tokencreate
+     *
+     * @param Mashup $newMashup
+     * @return void
+     */
+    public function tokenupdateAction(Token $token)
+    {
+        $this->AssureLoggedIn();
+
+        $mashup = $token->getMashup();
+        $mashup->addToken($token);
+        $this->mashupRepository->update($mashup);
+        $this->persistenceManager->persistAll();
+
+        $this->addFlashMessage('The object was updated successfully', '', FlashMessage::OK, TRUE);
+
+        $this->redirect('tokenshow', null, null, [
+            'mashup' => $mashup,
+            'token' => $token
         ]);
     }
 

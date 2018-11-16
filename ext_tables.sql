@@ -189,6 +189,7 @@ CREATE TABLE tx_gpsnose_domain_model_token (
 	payload text DEFAULT '' NOT NULL,
 	valid_to_ticks varchar(20) DEFAULT '0' NOT NULL,
 	token_scans int(11) unsigned DEFAULT '0' NOT NULL,
+	callback_response text DEFAULT '' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

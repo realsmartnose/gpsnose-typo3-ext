@@ -7,7 +7,7 @@
 <f:layout name="Default" />
 
 
-<f:section name="title"><f:translate key="MashupAdmin_lblDetailTitle" /></f:section>
+<f:section name="title"><f:translate key="MashupAdmin_lblMashupTokenTitle" /></f:section>
 
 
 <f:section name="buttons">
@@ -35,11 +35,18 @@
     <table class="table">
         <tr>
             <td class="col-xs-4"><f:translate key="MashupAdmin_lblMashupTokenValueLabel" /></td>
-            <td class="col-xs-8"><pre style="white-space:pre-wrap; word-wrap:break-word;">{token.payload}</pre></td>
+            <td class="col-xs-8"><pre style="white-space:pre-wrap; word-wrap:break-word">{token.payload}</pre></td>
         </tr>
         <tr>
             <td><f:translate key="MashupAdmin_lblMashupTokenDateLabel" /></td>
             <td><nose:ticks.datetime ticks="{token.validToTicks}" /></td>
+        </tr>
+        <tr>
+            <td><f:translate key="MashupAdmin_lblMashupTokenCallbackResponseLabel" /></td>
+            <td>
+                <f:if condition="{token.callbackResponse} == ''">-</f:if>
+                {token.callbackResponse}
+            </td>
         </tr>
         <tr>
             <td><f:translate key="MashupAdmin_lblMashupTokenImageLabel" /></td>
@@ -66,12 +73,20 @@
             <th class="col-xs-4"><f:translate key="MashupAdmin_lblMashupTokenScanUserLabel" /></th>
             <th class="col-xs-4"><f:translate key="MashupAdmin_lblMashupTokenScanDateLabel" /></th>
             <th class="col-xs-4"><f:translate key="MashupAdmin_lblMashupTokenScanLocationLabel" /></th>
+            <th class="col-xs-4"><f:translate key="MashupAdmin_lblMashupTokenResponseCodeLabel" /></th>
         </tr>
         <f:for each="{token.tokenScans}" as="scan" reverse="true">
             <tr>
                 <td>{scan.scannedByLoginName}</td>
                 <td><nose:ticks.datetime ticks="{scan.scannedTicks}" /></td>
                 <td><a href="https://www.google.com/maps/search/?api=1&query={scan.scannedLatitude},{scan.scannedLongitude}" target="_new">{scan.scannedLatitude},{scan.scannedLongitude}</a></td>
+                <td>
+                    <f:if condition="{scan.callbackResponseHttpCode} > 0">
+                        <a href="#" class="badge {f:if(condition: '{scan.callbackResponseHttpCode} == 200', then: 'badge-success', else: 'badge-danger')}"  data-toggle="popover" data-placement="left" title="{scan.callbackResponseHttpCode}" data-content="{scan.callbackResponseMessage}">
+                            <span>{scan.callbackResponseHttpCode}</span>
+                        </a>
+                    </f:if>
+                </td>
             </tr>
         </f:for>
     </table>

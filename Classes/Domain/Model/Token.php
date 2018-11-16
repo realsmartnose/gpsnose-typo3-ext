@@ -50,6 +50,13 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $validToDateString = '';
 
     /**
+     * callbackResponse
+     *
+     * @var string
+     */
+    protected $callbackResponse = '';
+
+    /**
      * tokenScans
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\TokenScan>
@@ -149,6 +156,24 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setValidToDateString($validToDateString)
     {
         $this->validToDateString = $validToDateString;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getCallbackResponse()
+    {
+        return $this->callbackResponse;
+    }
+
+    /**
+     *
+     * @param string $callbackResponse
+     */
+    public function setCallbackResponse($callbackResponse)
+    {
+        $this->callbackResponse = $callbackResponse;
     }
 
     /**

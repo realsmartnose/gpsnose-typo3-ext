@@ -66,7 +66,7 @@ call_user_func(
                 'gnadmin',
                 '',
                 [
-                    'Mashup' => 'start, login, loginVerifie, keepAlive, logout, relogin, refresh, list, show, new, create, validate, edit, addSubCommunity, removeSubCommunity, addHost, removeHost, regenerateAppKey, updateCallbackUrl, delete, tokenlist, tokenshow, tokenrefresh, tokennew, tokencreate, tokendelete',
+                    'Mashup' => 'start, login, loginVerifie, keepAlive, logout, relogin, refresh, list, show, new, create, validate, edit, addSubCommunity, removeSubCommunity, addHost, removeHost, regenerateAppKey, updateCallbackUrl, delete, tokenlist, tokenshow, tokenrefresh, tokennew, tokencreate, tokenedit, tokenupdate, tokendelete',
                 ],
                 [
                     'access' => 'user,group',

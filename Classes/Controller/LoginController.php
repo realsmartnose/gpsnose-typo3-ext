@@ -117,8 +117,8 @@ class LoginController extends BaseController
                 $this->view->assign('record', $this->contentObj->data['uid']);
             }
 
-            if (isset($_GET["ReturnUrl"])) {
-                $this->view->assign('return_url', $_GET["ReturnUrl"]);
+            if (isset($_GET["returnUrl"])) {
+                $this->view->assign('return_url', $_GET["returnUrl"]);
             }
         }
     }

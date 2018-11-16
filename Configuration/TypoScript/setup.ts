@@ -245,7 +245,7 @@ gpsnose_callback_page {
   #10 < tt_content.list.20.gpsnose_mashupcallback
   config {
     disableAllHeaderCode = 1
-    additionalHeaders = Content-type:application/json
+    additionalHeaders = Content-type:text/plain
     xhtml_cleaning = 0
     admPanel = 0
     debug = 0

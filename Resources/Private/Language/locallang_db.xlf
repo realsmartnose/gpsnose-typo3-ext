@@ -145,6 +145,9 @@
             <trans-unit id="tx_gpsnose_domain_model_token.valid_to_ticks">
                 <source>Valid to ticks</source>
             </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_token.callback_response">
+                <source>Callback response</source>
+            </trans-unit>
 
             <trans-unit id="tx_gpsnose_domain_model_tokenscan">
                 <source>Token scan</source>

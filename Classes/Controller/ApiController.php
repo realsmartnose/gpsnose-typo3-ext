@@ -7,6 +7,13 @@ use GpsNose\SDK\Mashup\Framework\GnUtil;
 use SmartNoses\Gpsnose\Service\GnMemberService;
 use SmartNoses\Gpsnose\Service\GnNewsService;
 use SmartNoses\Gpsnose\Utility\GnUtility;
+use SmartNoses\Gpsnose\Domain\Model\Token;
+use SmartNoses\Gpsnose\Domain\Model\TokenScan;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
+use GpsNose\SDK\Framework\Logging\GnLogger;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 /**
  * *
@@ -352,9 +359,60 @@ class ApiController extends BaseController
      */
     public function mashupCallbackAction()
     {
-        $this->view->assign('post', $_POST);
-        $this->view->setVariablesToRender(array(
-            'post'
-        ));
+        $message = "";
+        try {
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            $mashupRepository = $objectManager->get(MashupRepository::class);
+
+            if ($mashupRepository) {
+                $mashup = $mashupRepository->findByCommunityTag(GnUtility::getGnSettingsMashupName());
+                if ($mashup) {
+                    $payload = GeneralUtility::_POST("payload");
+                    $user = GeneralUtility::_POST("user");
+                    $ticks = GeneralUtility::_POST("ticks");
+                    $lat = GeneralUtility::_POST("lat");
+                    $lon = GeneralUtility::_POST("lon");
+
+                    if ($payload && $user && $ticks && $lat && $lon) {
+                        $tokenDto = $mashup->findTokenByPayload($payload);
+                        if ($tokenDto == null) {
+                            $tokenDto = new Token();
+                            $tokenDto->setPayload($payload);
+                            $tokenDto->setValidToTicks('0');
+                            $tokenDto->setCallbackResponse('');
+                        }
+                        $message = $tokenDto->getCallbackResponse();
+
+                        $tokenScan = $tokenDto->findTokenScanByUserAndTicks($user, $ticks);
+                        if ($tokenScan == null) {
+                            $tokenScan = new TokenScan();
+                            $tokenScan->setScannedByLoginName($user);
+                            $tokenScan->setScannedTicks($ticks);
+                            $tokenScan->setScannedLatitude($lat);
+                            $tokenScan->setScannedLongitude($lon);
+                            $tokenScan->setCallbackResponseHttpCode(200);
+                            $tokenScan->setCallbackResponseMessage($message);
+                            $tokenDto->addTokenScan($tokenScan);
+                            $mashup->addToken($tokenDto);
+                            $this->mashupRepository->update($mashup);
+                            $objectManager->get(PersistenceManager::class)->persistAll();
+                        } else {
+                            throw new \Exception("Token already submitted!");
+                        }
+                    } else {
+                        throw new \Exception("Missing information to store the token!");
+                    }
+                } else {
+                    throw new \Exception("Mashup not configured!");
+                }
+            }
+        } catch (\Exception $e) {
+            http_response_code(500);
+            $message = $e->getMessage();
+            GnLogger::Warning($message);
+        }
+
+        echo $message;
+        die();
     }
 }

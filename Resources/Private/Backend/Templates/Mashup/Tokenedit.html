@@ -7,14 +7,14 @@
 <f:layout name="Default" />
 
 
-<f:section name="title"><f:translate key="MashupAdmin_lblMashupTokenNewTitle" /></f:section>
+<f:section name="title"><f:translate key="MashupAdmin_lblMashupTokenEditTitle" /></f:section>
 
 
 <f:section name="buttons">
     <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-default">
         <core:icon identifier="fa-chevron-left" /> <f:translate key="Common_btnBackToList" />
     </f:link.action>
-    <f:link.action action="tokennew" arguments="{token : token, mashup : mashup}" class="btn btn-default">
+    <f:link.action action="tokenedit" arguments="{token : token, mashup : mashup}" class="btn btn-default">
         <core:icon identifier="fa-refresh" /> <f:translate key="Common_btnRefresh" />
     </f:link.action>
 </f:section>
@@ -31,10 +31,7 @@
         <div class="col-md-6">
             <f:render partial="FormErrors" arguments="{object : Token}" />
 
-            <f:form action="tokencreate" name="newToken" object="{newToken}">
-
-                <f:form.textfield property="mashup" value="{mashup}" type="hidden" />
-                <f:form.textfield property="validToTicks" value="" type="hidden" />
+            <f:form action="tokenupdate" name="token" object="{token}">
 
                 <div class="panel panel-primary">
                     <div class="panel-heading"><nose:community.label tag="{mashup.communityTag}" /></div>
@@ -42,20 +39,13 @@
                         <div class="form-group row">
                             <label class="col-lg-4 control-label"><f:translate key="MashupAdmin_lblMashupTokenValueLabel" /></label>
                             <div class="col-lg-8">
-                                <f:form.textarea property="payload" class="form-control" rows="3" id="payload" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenValuePlaceholder')}" />
-                                <span class="help-block"><nose:string.replace value="{f:translate(key: 'MashupAdmin_lblMashupTokenValueHint')}" search="%max_characters%" replace="{addTokenMaxChars}" /></span>
+                                <pre>{token.payload}</pre>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-lg-4 control-label"><f:translate key="MashupAdmin_lblMashupTokenDateLabel" /></label>
                             <div class="col-lg-8">
-                                <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-week-start="true" data-date-today-highlight="true" data-date-toggle-active="true" data-date-start-date="0d" data-date-clear-btn="true" data-date-orientation="bottom" data-date-language="en">
-                                    <f:form.textfield property="validToDateString" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenDatePlaceholder')}" />
-                                    <div class="input-group-addon">
-                                        <core:icon identifier="fa-calendar" />
-                                    </div>
-                                </div>
-                                <span class="help-block"><f:translate key="MashupAdmin_lblMashupTokenDateHint" /></span>
+                                <pre><nose:ticks.datetime ticks="{token.validToTicks}" /></pre>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -68,7 +58,7 @@
                             <div class="col-lg-4 col-lg-offset-4">
                                 <button class="btn btn-primary" type="submit" id="addButton">
                                     <span class="glyphicon glyphicon-plus"></span>
-                                    <span><f:translate key="MashupAdmin_btnCreateMashupToken" /></span>
+                                    <span><f:translate key="Common_btnUpdate" /></span>
                                 </button>
                             </div>
                         </div>
@@ -78,12 +68,9 @@
         </div>
     </div>
 
-<script>
-var GpsnoseMashupAddTokenMaxChars = {addTokenMaxChars};
-</script>
 <f:be.pageRenderer
     includeCssFiles="{ 0: '{f:uri.resource(path: \'Libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.min.css\')}' }"
-    includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/MashupTokennew', 1: '{f:uri.resource(path: \'Libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js\')}' }" />
+    includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/MashupTokenedit' }" />
 
 </f:section>
 

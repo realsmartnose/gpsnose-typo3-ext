@@ -1,8 +1,8 @@
-define(['jquery', 'twbs/bootstrap-datetimepicker', 'maframework'], function($, datepicker) {
+define(['jquery'], function($, datepicker) {
     $(function() {
-        $('#payload').on('input', function() {
+        $('#callbackResponse').on('input propertychange', function() {
             var newValue = $(this).val();
-            var isValid = newValue.length > 0 && newValue.length <= GpsnoseMashupAddTokenMaxChars;
+            var isValid = newValue.length <= GpsnoseMashupCallbackResponseMaxChars;
             $('#addButton').attr('disabled', ! isValid);
             if (isValid) {
                 $(this).closest('.form-group').removeClass('has-error');
@@ -22,7 +22,7 @@ define(['jquery', 'twbs/bootstrap-datetimepicker', 'maframework'], function($, d
         });
 
         $(window).on('load', function() {
-            $('#payload').trigger('input');
+            $('#callbackResponse').trigger('propertychange');
         });
 
     });
