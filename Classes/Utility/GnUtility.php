@@ -18,6 +18,7 @@ use GpsNose\SDK\Framework\GnCache;
 use GpsNose\SDK\Framework\Logging\GnLogConfig;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use GpsNose\SDK\Framework\GnCryptor;
+use GpsNose\SDK\Framework\Logging\GnLogger;
 
 class GnUtility
 {
@@ -199,6 +200,7 @@ class GnUtility
             if ($firstMashup) {
                 return $firstMashup->getCommunityTag();
             }
+            GnLogger::Warning("Misconfiguration: mashup missing!");
             return "";
         }
         return $mashupName;

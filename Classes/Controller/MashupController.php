@@ -21,8 +21,6 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Model\TokenScan;
 use GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Frontend\Page\PageRepository;
-use TYPO3\CMS\Core\Utility\RootlineUtility;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 
 /**

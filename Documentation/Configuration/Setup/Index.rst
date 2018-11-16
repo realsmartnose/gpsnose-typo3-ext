@@ -44,7 +44,8 @@ settings.login.groupId                  int         UID of the fe-group that is 
 settings.login.loginNamePrefix          string      prefix for usernam logged in by GpsNose (if the user called foo,    from constant
                                                     it will be stored as #foo)                                          
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-settings.mashup.activeMashup            string      Defines the name of the active mashup                               from constant
+settings.mashup.activeMashup            string      Defines the name of the active mashup. If the value is empty,       from constant
+                                                    the system will select the first mashup from GpsNose.               
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 settings.mashup.callbackPid             int         UID of the page to use for mashup-callback                          from constant
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------

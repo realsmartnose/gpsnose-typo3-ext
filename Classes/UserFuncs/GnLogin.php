@@ -26,19 +26,14 @@ class GnLogin
                 $mashupRepository = $objectManager->get(MashupRepository::class);
 
                 if ($mashupRepository) {
-                    $communityTag = GnUtility::getGnSettingsMashupName();
-                    if ($communityTag) {
-                        /** @var $mashup \SmartNoses\Gpsnose\Domain\Model\Mashup */
-                        $mashup = $mashupRepository->findByCommunityTag($communityTag);
-                        if ($mashup) {
-                            if (GnUtility::login($mashup, $loginId)) {
-                                GnLogger::Info("Successfully logged in with LoginId:'{$loginId}' @mashup:'{$mashup->getCommunityTag()}'");
-                            } else {
-                                GnLogger::Warning("Failed to login with LoginId:'{$loginId}' @mashup:'{$mashup->getCommunityTag()}'");
-                            }
+                    /** @var $mashup \SmartNoses\Gpsnose\Domain\Model\Mashup */
+                    $mashup = $mashupRepository->findByCommunityTag(GnUtility::getGnSettingsMashupName());
+                    if ($mashup) {
+                        if (GnUtility::login($mashup, $loginId)) {
+                            GnLogger::Info("Successfully logged in with LoginId:'{$loginId}' @mashup:'{$mashup->getCommunityTag()}'");
+                        } else {
+                            GnLogger::Warning("Failed to login with LoginId:'{$loginId}' @mashup:'{$mashup->getCommunityTag()}'");
                         }
-                    } else {
-                        GnLogger::Warning("No Mashup configured!");
                     }
                 }
             } catch (\Exception $e) {
