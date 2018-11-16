@@ -113,7 +113,7 @@ call_user_func(
             ['Api' => 'pageNearbyTracks'],
             ['Api' => 'pageNearbyTracks']
         );
-        
+
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'SmartNoses.Gpsnose',
             'Nearbyevents',
@@ -125,6 +125,13 @@ call_user_func(
             'Pagenearbyevents',
             ['Api' => 'pageNearbyEvents'],
             ['Api' => 'pageNearbyEvents']
+        );
+
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'SmartNoses.Gpsnose',
+            'Mashupcallback',
+            ['Api' => 'mashupCallback'],
+            ['Api' => 'mashupCallback']
         );
 
         // wizards
@@ -364,6 +371,11 @@ call_user_func(
             'fa-check',
             \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
             ['name' => 'check']
+        );
+        $iconRegistry->registerIcon(
+            'fa-chevron-right',
+            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
+            ['name' => 'chevron-right']
         );
 
         // Plugin-Icons

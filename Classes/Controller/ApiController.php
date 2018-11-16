@@ -344,4 +344,17 @@ class ApiController extends BaseController
             'events'
         ));
     }
+
+    /**
+     * mashupCallback
+     *
+     * @return void
+     */
+    public function mashupCallbackAction()
+    {
+        $this->view->assign('post', $_POST);
+        $this->view->setVariablesToRender(array(
+            'post'
+        ));
+    }
 }

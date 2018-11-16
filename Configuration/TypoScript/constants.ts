@@ -2,6 +2,7 @@
 # customsubcategory=javascript=LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:customsubcategory.javascript
 # customsubcategory=css=LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:customsubcategory.css
 # customsubcategory=login=LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:customsubcategory.login
+# customsubcategory=mashup=LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:customsubcategory.mashup
 
 plugin.tx_gpsnose {
 
@@ -53,9 +54,14 @@ plugin.tx_gpsnose {
 
     # cat=plugin.tx_gpsnose/login/030; type=string; label=Loginname prefix for GpsNose-Users
     loginNamePrefix = #
+  }
 
-    # cat=plugin.tx_gpsnose/login/040; type=string; label=Mashup-Community used for login from App
-    loginMashup = 
+  mashup {
+    # cat=plugin.tx_gpsnose/mashup/010; type=string; label=Mashup used for this installation
+    activeMashup =
+
+    # cat=plugin.tx_gpsnose/mashup/020; type=int; label=MashupCallback page-ID
+    callbackPid =
   }
 
   view {

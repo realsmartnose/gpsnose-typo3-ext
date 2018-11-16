@@ -37,14 +37,16 @@ javascript.knockoutVm                   string      Location of knockoutVm.js, i
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 javascript.maframework                  string      Location of maframework.js, if empty, script will not be loaded     EXT:gpsnose/Resources/Public/Mashup/Js/maframework.min.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-login.loginPid                          int         UID of the page where the login-module is placed
+login.loginPid                          int         UID of the page where the login-module is placed                    
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-login.groupId                           int         UID of the fe-group that is used for user logged in by GpsNose
+login.groupId                           int         UID of the fe-group that is used for user logged in by GpsNose      
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 login.loginNamePrefix                   string      prefix for usernam logged in by GpsNose (if the user called foo,    #
                                                     it will be stored as #foo)                                          
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-login.loginMashup                       string      Defines the name of the mashup to use when use "in app login"       
+mashup.activeMashup                     string      Defines the name of the active mashup                               
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+mashup.callbackPid                      int         UID of the page to use for mashup-callback                          
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 view.templateRootPath                   string      Defines the path where the templates are located                    EXT:gpsnose/Resources/Private/Templates/
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
@@ -52,7 +54,7 @@ view.partialRootPath                    string      Defines the path where the p
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 view.layoutRootPath                     string      Defines the path where the layouts are located                      EXT:gpsnose/Resources/Private/Layouts/
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-persistence.storagePid                  int         Sysfolder where all created entries are stored (required!)
+persistence.storagePid                  int         Sysfolder where all created entries are stored (required!)          
 ======================================  ==========  ==================================================================  ====================================================================================
 
 [tsref:plugin.tx_gpsnose]

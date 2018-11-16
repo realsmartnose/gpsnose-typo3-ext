@@ -174,9 +174,6 @@
             <trans-unit id="tt_content.tx_gpsnose_community_tag">
                 <source>Community</source>
             </trans-unit>
-            <trans-unit id="tt_content.tx_gpsnose_mashup">
-                <source>Mashup</source>
-            </trans-unit>
             <trans-unit id="tt_content.tx_gpsnose_mashup_login_acl">
                 <source>Login ACL</source>
             </trans-unit>
@@ -246,6 +243,9 @@
             </trans-unit>
             <trans-unit id="customsubcategory.login">
                 <source>Login</source>
+            </trans-unit>
+            <trans-unit id="customsubcategory.mashup">
+                <source>Mashup</source>
             </trans-unit>
 
             <trans-unit id="tx_scheduler.get_token_scans.name">

@@ -4,6 +4,7 @@ namespace SmartNoses\Gpsnose\Controller;
 use GpsNose\SDK\Mashup\Api\GnApi;
 use GpsNose\SDK\Web\Login\GnAuthentication;
 use GpsNose\SDK\Mashup\Framework\GnUtil;
+use SmartNoses\Gpsnose\Utility\GnUtility;
 
 /**
  * *
@@ -98,7 +99,7 @@ class LoginController extends BaseController
             $this->initFrontend();
 
             /** @var $mashup \SmartNoses\Gpsnose\Domain\Model\Mashup */
-            $mashup = $this->mashupRepository->findByUid($this->contentObj->data['tx_gpsnose_mashup']);
+            $mashup = $this->mashupRepository->findByCommunityTag(GnUtility::getGnSettingsMashupName());
 
             if ($mashup) {
                 $loginId = GnUtil::NewGuid();

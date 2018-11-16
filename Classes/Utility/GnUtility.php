@@ -187,7 +187,7 @@ class GnUtility
      */
     public static function getGnSettingsMashupName()
     {
-        $mashupName = self::getGnSetting()['login.']['loginMashup'];
+        $mashupName = self::getGnSetting()['mashup.']['activeMashup'];
         if (strlen($mashupName) < 1) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             /** @var $mashupRepository MashupRepository */

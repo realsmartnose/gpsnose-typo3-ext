@@ -20,20 +20,6 @@ $fields = array(
             'maxitems' => 1
         )
     ),
-    'tx_gpsnose_mashup' => array(
-        'label' => $languageFile . 'tt_content.tx_gpsnose_mashup',
-        'exclude' => false,
-        'displayCond' => 'FIELD:list_type:IN:gpsnose_loginqrcode',
-        'config' => array(
-            'type' => 'select',
-            'renderType' => 'selectSingle',
-            'foreign_table' => 'tx_gpsnose_domain_model_mashup',
-            'items' => Array(),
-            'size' => 1,
-            'minitems' => 1,
-            'maxitems' => 1
-        )
-    ),
     'tx_gpsnose_mashup_login_option_must_join' => array(
         'label' => $languageFile . 'tt_content.tx_gpsnose_mashup_login_option_must_join',
         'exclude' => false,
@@ -134,18 +120,14 @@ $fields = array(
 
 // Make fields visible in the TCEforms:
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('tt_content', '--div--;LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tt_content.palette_title,
-		--palette--;;tx_gpsnose_community,
-		--palette--;;tx_gpsnose_mashup,
-		--palette--;;tx_gpsnose_login_option_fields,
-		--palette--;;tx_gpsnose_login_acl_fields,
-		--palette--;;tx_gpsnose_login_redirect', 'list', 'after:recursive');
+	--palette--;;tx_gpsnose_community,
+	--palette--;;tx_gpsnose_login_option_fields,
+	--palette--;;tx_gpsnose_login_acl_fields,
+	--palette--;;tx_gpsnose_login_redirect', 'list', 'after:recursive');
 
 // Add the new palette:
 $GLOBALS['TCA']['tt_content']['palettes']['tx_gpsnose_community'] = array(
     'showitem' => 'tx_gpsnose_community_tag'
-);
-$GLOBALS['TCA']['tt_content']['palettes']['tx_gpsnose_mashup'] = array(
-    'showitem' => 'tx_gpsnose_mashup'
 );
 $GLOBALS['TCA']['tt_content']['palettes']['tx_gpsnose_login_redirect'] = array(
     'showitem' => 'tx_gpsnose_mashup_login_redirect'

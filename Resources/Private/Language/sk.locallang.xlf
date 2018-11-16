@@ -6,6 +6,9 @@
 			<trans-unit id="MashupAdmin_btnCreateMashupToken">
 				<source><![CDATA[Create mashup-token]]></source>
 			</trans-unit>
+			<trans-unit id="MashupAdmin_btnMashupCallbackUrlGenerate">
+				<source><![CDATA[Generate]]></source>
+			</trans-unit>
 			<trans-unit id="MashupAdmin_btnMashupToken">
 				<source><![CDATA[Mashup-token]]></source>
 			</trans-unit>

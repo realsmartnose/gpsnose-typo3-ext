@@ -20,6 +20,10 @@ use GpsNose\SDK\Web\Login\GnAuthenticationData;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Model\TokenScan;
 use GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
+use TYPO3\CMS\Frontend\Page\PageRepository;
+use TYPO3\CMS\Core\Utility\RootlineUtility;
+use SmartNoses\Gpsnose\Utility\GnUtility;
 
 /**
  * *
@@ -535,6 +539,21 @@ class MashupController extends BaseController
         $this->view->assign('mashupTokenCallbackUrlMaxChars', 1000);
         $this->view->assign('mashup', $mashup);
         $this->view->assign('visibilities', $this->_visibilities);
+
+        $settings = GnUtility::getGnSetting();
+        if ($settings['mashup.']['callbackPid'] > 0) {
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            /* @var $uriBuilder \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder */
+            $uriBuilder = $objectManager->get(UriBuilder::class);
+            $uri = $uriBuilder->reset()
+                ->setTargetPageUid($settings['mashup.']['callbackPid'])
+                ->setCreateAbsoluteUri(TRUE)
+                ->setArguments([
+                    'type' => $settings['mashup.']['callbackTypeNum']
+                ])
+                ->buildFrontendUri();
+            $this->view->assign('mashupCallbackUrl', $uri);
+        }
     }
 
     /**
@@ -819,6 +838,10 @@ class MashupController extends BaseController
 
         $query = $repository->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(FALSE);
+        $mashupName = GnUtility::getGnSettingsMashupName();
+        if (! GnUtil::IsNullOrEmpty($mashupName)) {
+            $query->matching($query->logicalAnd($query->like('communityTag', '%' . substr($mashupName, 1))));
+        }
         $mashups = $query->execute();
 
         $i = 0;

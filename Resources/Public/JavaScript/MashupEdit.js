@@ -33,9 +33,14 @@ define(['jquery', 'maframework'], function($) {
                 $(this).closest('.form-group').addClass('has-error');
             }
         });
-        $(window).on('load', function() {
-            $(GpsnoseMashupReadyBlock);
-            $('#mashupTokenCallbackUrl').trigger('input');
+
+        $('#generateCallbackUrl').on('click', function() {
+            var callbackUrl = $(this).data('callback-url');
+            if (callbackUrl != '') {
+                $('#mashupTokenCallbackUrl').val(callbackUrl).trigger('input');
+            } else {
+                alert('The mashup-callback-url could not be generated, please set hte mashup.callbackPid in constants');
+            }
         });
 
         $('form').on('submit', function() {
@@ -47,5 +52,11 @@ define(['jquery', 'maframework'], function($) {
             });
             return $return;
         });
+
+        $(window).on('load', function() {
+            $(GpsnoseMashupReadyBlock);
+            $('#mashupTokenCallbackUrl').trigger('input');
+        });
+
     });
 });

@@ -44,7 +44,11 @@ settings.login.groupId                  int         UID of the fe-group that is 
 settings.login.loginNamePrefix          string      prefix for usernam logged in by GpsNose (if the user called foo,    from constant
                                                     it will be stored as #foo)                                          
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-settings.login.loginMashup              string      Defines the name of the mashup to use when use "in app login"       from constant
+settings.mashup.activeMashup            string      Defines the name of the active mashup                               from constant
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.mashup.callbackPid             int         UID of the page to use for mashup-callback                          from constant
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.mashup.callbackTypeNum         int         Page typeNum for the mashup-callback-url page                       10100
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 settings.membersPageSize                int         Page size for members                                               12
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------

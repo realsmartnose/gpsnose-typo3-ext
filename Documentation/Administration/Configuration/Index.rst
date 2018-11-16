@@ -13,9 +13,15 @@ Configuration
 
 - Install the extension with the extension manager
 
- - Edit the extension settings, it is strongly recommended to set the cookie-crypt-password :ts:`cookieCryptPass`!
+  - Edit the extension settings, it is strongly recommended to set the cookie-crypt-password :ts:`cookieCryptPass`!
 
 - Include the static template
+
+- Open the GpsNose-Module
+
+  - Login with the QR-Code-Reader integrated in the GpsNose-App (iOS / Android)
+
+  - Configure new Mashup (see the :ref:`Module-Manuel<module-manual>`)
 
 - Create a sysfolder to store the user data
 
@@ -33,13 +39,7 @@ Configuration
 
   - Insert the login-page-id into :ts:`plugin.tx_gpsnose.login.loginPid`
 
-- Open the GpsNose-Module
-
-  - Login with the QR-Code-Reader integrated in the GpsNose-App (iOS / Android)
-
-  - Configure new Mashup (see the :ref:`Module-Manuel<module-manual>`)
-  
-  - Insert the Mashup-Name (eg. @mysite.com) into :ts:`plugin.tx_gpsnose.login.loginMashup`
+  - Insert the Mashup-Name (eg. @mysite.com) into :ts:`plugin.tx_gpsnose.mashup.activeMashup`
 
 - Insert the plugin "login" on the login-page
 

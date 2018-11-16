@@ -26,7 +26,12 @@ plugin.tx_gpsnose {
       loginPid = {$plugin.tx_gpsnose.login.loginPid}
       groupId = {$plugin.tx_gpsnose.login.groupId}
       loginNamePrefix = {$plugin.tx_gpsnose.login.loginNamePrefix}
-      loginMashup = {$plugin.tx_gpsnose.login.loginMashup}
+    }
+
+    mashup {
+      activeMashup = {$plugin.tx_gpsnose.mashup.activeMashup}
+      callbackPid = {$plugin.tx_gpsnose.mashup.callbackPid}
+      callbackTypeNum = 10100
     }
 
     # max 20
@@ -66,7 +71,9 @@ plugin.tx_gpsnose {
       pageNearbyTracks = 10009
       pageNearbyEvents = 10010
     }
+
   }
+
   view {
     templateRootPaths.0 = EXT:gpsnose/Resources/Private/Templates/
     templateRootPaths.1 = {$plugin.tx_gpsnose.view.templateRootPath}
@@ -75,16 +82,20 @@ plugin.tx_gpsnose {
     layoutRootPaths.0 = EXT:gpsnose/Resources/Private/Layouts/
     layoutRootPaths.1 = {$plugin.tx_gpsnose.view.layoutRootPath}
   }
+
   persistence {
     storagePid = {$plugin.tx_gpsnose.persistence.storagePid}
     #recursive = 1
   }
+
   features {
     #skipDefaultArguments = 1
   }
+
   mvc {
     #callDefaultActionIfActionCantBeResolved = 1
   }
+
 }
 
 
@@ -147,7 +158,7 @@ page {
   }
 }
 
- 
+
 # ajax action page-members
 ajax_gpsnose_pagemembers = PAGE
 ajax_gpsnose_pagemembers {
@@ -162,7 +173,7 @@ ajax_gpsnose_pagemembers {
     no_cache = 1
   }
 }
- 
+
 # ajax action page-news
 ajax_gpsnose_pagenews < ajax_gpsnose_pagemembers
 ajax_gpsnose_pagenews {
@@ -224,4 +235,31 @@ ajax_gpsnose_pagenearbyevents < ajax_gpsnose_pagemembers
 ajax_gpsnose_pagenearbyevents {
   typeNum < plugin.tx_gpsnose.settings.ajax.pageNearbyEvents
   10 < tt_content.list.20.gpsnose_pagenearbyevents
+}
+
+
+# callback page
+gpsnose_callback_page = PAGE
+gpsnose_callback_page {
+  typeNum < plugin.tx_gpsnose.settings.mashup.callbackTypeNum
+  #10 < tt_content.list.20.gpsnose_mashupcallback
+  config {
+    disableAllHeaderCode = 1
+    additionalHeaders = Content-type:application/json
+    xhtml_cleaning = 0
+    admPanel = 0
+    debug = 0
+    no_cache = 1
+  }
+  10 = USER
+  10 {
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+    pluginName = Mashupcallback
+    vendorName = SmartNoses
+    extensionName = Gpsnose
+    controller = Api
+    settings =< plugin.tx_gpsnose.settings
+    persistence =< plugin.tx_gpsnose.persistence
+    view =< plugin.tx_gpsnose.view
+  }
 }
