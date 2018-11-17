@@ -386,7 +386,7 @@ function ImageErrorHandler(obj, errorSrc)
 }
 
 
-if (jQuery === $) {
+if (window.jQuery) {
     $('body').on('click', '[data-popup]', function(e) {
         var link = $(this).attr('href');
         if (! link) link = $(this).data('src');

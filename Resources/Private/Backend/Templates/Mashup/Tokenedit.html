@@ -28,7 +28,7 @@
 
 <f:section name="content">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <f:render partial="FormErrors" arguments="{object : Token}" />
 
             <f:form action="tokenupdate" name="token" object="{token}">
@@ -37,27 +37,27 @@
                     <div class="panel-heading"><nose:community.label tag="{mashup.communityTag}" /></div>
                     <div class="panel-body">
                         <div class="form-group row">
-                            <label class="col-lg-4 control-label"><f:translate key="MashupAdmin_lblMashupTokenValueLabel" /></label>
-                            <div class="col-lg-8">
+                            <label class="col-lg-3 control-label"><f:translate key="MashupAdmin_lblMashupTokenValueLabel" /></label>
+                            <div class="col-lg-9">
                                 <pre>{token.payload}</pre>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-lg-4 control-label"><f:translate key="MashupAdmin_lblMashupTokenDateLabel" /></label>
-                            <div class="col-lg-8">
+                            <label class="col-lg-3 control-label"><f:translate key="MashupAdmin_lblMashupTokenDateLabel" /></label>
+                            <div class="col-lg-9">
                                 <pre><nose:ticks.datetime ticks="{token.validToTicks}" /></pre>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-lg-4 control-label"><f:translate key="MashupAdmin_lblMashupTokenCallbackResponseLabel" /></label>
-                            <div class="col-lg-8">
+                            <label class="col-lg-3 control-label"><f:translate key="MashupAdmin_lblMashupTokenCallbackResponseLabel" /></label>
+                            <div class="col-lg-9">
                                 <f:form.textfield property="callbackResponse" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenCallbackResponsePlaceholder')}" maxlength="{callbackResponseMaxChars}" />
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-lg-4 col-lg-offset-4">
+                            <div class="col-lg-3 col-lg-offset-3">
                                 <button class="btn btn-primary" type="submit" id="addButton">
-                                    <span class="glyphicon glyphicon-plus"></span>
+                                    <core:icon identifier="fa-check" />
                                     <span><f:translate key="Common_btnUpdate" /></span>
                                 </button>
                             </div>

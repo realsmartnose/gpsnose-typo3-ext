@@ -44,7 +44,7 @@
                 <f:if condition="{mashup.subCommunities -> f:count()} >= {mashup.maxSubSites}">
                     <f:then>
                         <div class="alert alert-info">
-                            <span class="glyphicon glyphicon-info-sign"></span>
+                            <core:icon identifier="fa-info-circle" />
                             <span><f:translate key="Common_lblMaxCountReached" /></span>
                         </div>
                     </f:then>
@@ -113,7 +113,7 @@
                 <f:if condition="{mashup.hosts -> f:count()} >= {mashup.maxHosts}">
                     <f:then>
                         <div class="alert alert-info">
-                            <span class="glyphicon glyphicon-info-sign"></span>
+                            <core:icon identifier="fa-info-circle" />
                             <span><f:translate key="Common_lblMaxCountReached" /></span>
                         </div>
                     </f:then>
@@ -167,10 +167,10 @@ var GpsnoseMashupReadyBlock = function() {
     <f:for each="{visibilities}" as="description" key="visibility" iteration="i"><f:if condition="{i.cycle} == 1">changeVisibility('{visibility}', '{description}');</f:if></f:for>
 }
 
-function changeVisibility(newVisibility, description) {{
+function changeVisibility(newVisibility, description) {
     $('#description').text(description);
     $('#visibility').val(newVisibility);
-}}
+}
 </script>
 <f:be.pageRenderer includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/MashupEdit' }" />
 

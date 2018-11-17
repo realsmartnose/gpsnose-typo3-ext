@@ -26,7 +26,6 @@ define(['jquery'], function($) {
     }
 
     $(function() {
-        // Check if logged in
         window.setTimeout(MashupLogin.WaitForLogin, MashupLogin.interval);
     });
 

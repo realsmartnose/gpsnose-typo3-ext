@@ -377,6 +377,11 @@ call_user_func(
             \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
             ['name' => 'chevron-right']
         );
+        $iconRegistry->registerIcon(
+            'fa-info-circle',
+            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
+            ['name' => 'info-circle']
+        );
 
         // Plugin-Icons
         $iconRegistry->registerIcon(

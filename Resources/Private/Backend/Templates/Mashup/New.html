@@ -28,7 +28,7 @@
 
 <f:section name="content">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <f:if condition="{unvalidatedMashups}">
                 <f:then>
                     <div class="panel panel-danger">
@@ -84,11 +84,11 @@ var GpsnoseMashupReadyBlock = function() {
     <f:for each="{visibilities}" as="description" key="visibility" iteration="i"><f:if condition="{i.cycle} == 1">changeVisibility('{visibility}', '{description}');</f:if></f:for>
 }
 
-function changeVisibility(newVisibility, description) {{
+function changeVisibility(newVisibility, description) {
     GpsnoseMashupVisibility = newVisibility;
     $('#description').text(description);
     $('#communityTag').val(GpsnoseMashupVisibility + $('#communityTagField').val());
-}}
+}
 </script>
 <f:be.pageRenderer includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/MashupNew' }" />
 
