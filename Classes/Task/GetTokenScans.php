@@ -25,6 +25,8 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
     public function execute()
     {
         try {
+            GnUtility::applyExtConf();
+
             GnLogConfig::AddListener(new GnLogListener());
             GnCache::$DisableCache = TRUE;
 

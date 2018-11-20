@@ -1,3 +1,7 @@
+1.0.5
+- FIX: Fix translation
+- FIX: Implement the correct cache-type in sheduler-task
+
 1.0.4
 - CHA: Fix style of backend-module
 

@@ -148,7 +148,7 @@
 				<source><![CDATA[Sub Communities]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblSubCommunitiesFail">
-				<source><![CDATA[To add a sub-community, make sure you only use the characters \'0-9 a-z and -\' and a maximum of %max_characters% characters]]></source>
+				<source><![CDATA[To add a sub-community, make sure you only use the characters &apos;0-9 a-z and -&apos; and a maximum of %max_characters% characters]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblSubCommunitiesHint">
 				<source><![CDATA[Enter the name of the new subcommunity here and click add, it will show as community@subcommunity]]></source>
@@ -163,7 +163,7 @@
 				<source><![CDATA[There is already an unvalidated mashup, please remove first the other enrty before you add a new one]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblValidateCommunityMessage">
-				<source><![CDATA[Add the key %key% to your webpage %mashup% then click Validate. The key can be placed into your website\'s default home document as a meta-tag named "gpsnose-validation-key" (and content is the key), or as a file named as the key without any extension or with some of the .txt | .htm | .html extensions. See the Wiki page under http://wiki.gpsnose.com for more details.]]></source>
+				<source><![CDATA[Add the key %key% to your webpage %mashup% then click Validate. The key can be placed into your website&apos;s default home document as a meta-tag named "gpsnose-validation-key" (and content is the key), or as a file named as the key without any extension or with some of the .txt | .htm | .html extensions. See the Wiki page under http://wiki.gpsnose.com for more details.]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblValidationDate">
 				<source><![CDATA[Validation date]]></source>
