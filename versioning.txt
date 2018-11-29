@@ -1,3 +1,6 @@
+1.0.6
+- UPD: Update to GpsNose-SDK 1.0.5
+
 1.0.5
 - FIX: Fix translation
 - FIX: Implement the correct cache-type in sheduler-task

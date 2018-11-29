@@ -394,554 +394,6 @@ var IndexViewModel = (function (_super) {
     }
     return IndexViewModel;
 }(BaseViewModel));
-var CommentDto = (function () {
-    function CommentDto(data) {
-        var _this = this;
-        this.hasText = function () {
-            return _this.Text && _this.Text.length > 0;
-        };
-        if (data)
-            $.extend(this, data);
-        if (data.CreatedByUserName && !this.Creator)
-            this.Creator = data.CreatedByUserName;
-        this.NoseDto = new NoseDto({ "LoginName": this.Creator });
-    }
-    return CommentDto;
-}());
-var NewsDto = (function () {
-    function NewsDto(data) {
-        var _this = this;
-        this.PoiPublished_Name = 34;
-        this.templateName = function () {
-            switch (_this.NewsType) {
-                case NewsType.ProfileAbout:
-                    return "AboutNewsTemplate";
-                case NewsType.ProfileImage:
-                    return "ProfileImageNewsTemplate";
-                case NewsType.NewGuestUser:
-                    return "NewGuestUserNewsTemplate";
-                case NewsType.ProfileActivated:
-                    return "ProfileActivatedTemplate";
-                case NewsType.PhotoBlog:
-                    return "PhotoBlogNewsTemplate";
-                case NewsType.PoI:
-                    return "PoIPublishedNewsTemplate";
-                case NewsType.Tour:
-                    return "TourNewsTemplate";
-                case NewsType.Comment:
-                    return "CommentNewsTemplate";
-                case NewsType.Rating:
-                    return "RatingNewsTemplate";
-                case NewsType.Event:
-                    return "EventNewsTemplate";
-                case NewsType.Mashup:
-                    return "MashupNewsTemplate";
-                default:
-                    return "UnknownTemplate";
-            }
-        };
-        this.thumbUrl = function () {
-            return _this.imageUrl() + _this.Entity.thumbSize;
-        };
-        this.detailInlineUrl = function () {
-            return _this.previewUrl();
-        };
-        this.photoBlogText = function () {
-            if (_this.IsNowDeleted)
-                return GetLangRes("NewsPart_Load_lblBlogWasDeleted", "Impression was deleted");
-            else
-                return _this.Title;
-        };
-        this.commentText = function () {
-            if (_this.IsNowDeleted) {
-                return GetLangRes("NewsPart_Load_lblCommentWasDeleted", "Comment was deleted");
-            }
-            else {
-                if (_this.Description != null && _this.Description != "") {
-                    return _this.Description;
-                }
-                var text = _this.Comment_Text != null ? _this.Comment_Text : "";
-                var mood = _this.Comment_Mood != null ? " " + _this.Comment_Mood : "";
-                return text + mood;
-            }
-        };
-        this.thumbSize = "@400";
-        this.imageUrl = function () {
-            return _this.Entity.imageUrl();
-        };
-        this.previewUrl = function () {
-            return _this.Entity.previewUrl();
-        };
-        this.detailUrl = function () {
-            return _this.Entity.detailUrl();
-        };
-        this.shareUrl = function () {
-            return _this.Entity.shareUrl();
-        };
-        if (data)
-            $.extend(this, data);
-        this.UniqueKey = GetUniqueKey(this.Creator, this.CreationTicks);
-        this.NoseDto = new NoseDto({ "LoginName": this.Creator });
-        this.Entity = new NoseDto({ "LoginName": this.Creator });
-        switch (this.NewsType) {
-            case NewsType.PhotoBlog:
-                this.UniqueKey = GetUniqueKey(this.Creator, this.Impression_CreationTicks);
-                this.Entity = new PhotoBlogDto(this);
-                break;
-            case NewsType.PoI:
-                this.UniqueKey = GetUniqueKey(this.Creator, this.PoiPublished_CreationTicks);
-                this.Entity = new PoiDto(this);
-                break;
-            case NewsType.Tour:
-                this.UniqueKey = GetUniqueKey(this.Creator, this.Track_CreationTicks);
-                this.Entity = new TourDto(this);
-                break;
-            case NewsType.Event:
-                this.UniqueKey = GetUniqueKey(this.Creator, this.Event_CreationTicks);
-                this.Entity = new EventDto(this);
-                break;
-            case NewsType.Comment:
-                this.UniqueKey = this.Comment_CommentItemId;
-                switch (this.Comment_CommentItemType) {
-                    case "PhotoBlog":
-                        this.Entity = new PhotoBlogDto({ "UniqueKey": this.UniqueKey });
-                        break;
-                    case "FavoriteLocation":
-                        this.Entity = new PoiDto({ "UniqueKey": this.UniqueKey });
-                        break;
-                    case "Track":
-                    case "Tour":
-                        this.Entity = new TourDto({
-                            "UniqueKey": this.UniqueKey,
-                            "Latitude": this.Comment_CommentItemLatitude,
-                            "Longitude": this.Comment_CommentItemLongitude
-                        });
-                        break;
-                    case "Community":
-                        this.Entity = new CommunityDto({ "TagName": this.Comment_CommentItemId }, new NoseDto({}));
-                        break;
-                }
-                break;
-            case NewsType.Rating:
-                this.UniqueKey = this.Rating_RatedItemId;
-                switch (this.Rating_RatedItemType) {
-                    case "FavoriteLocation":
-                        this.Entity = new PoiDto({ "UniqueKey": this.UniqueKey });
-                        break;
-                    case "PhotoBlog":
-                        this.Entity = new PhotoBlogDto({ "UniqueKey": this.UniqueKey });
-                        break;
-                    case "Track":
-                    case "Tour":
-                        this.Entity = new TourDto({
-                            "UniqueKey": this.UniqueKey,
-                            "Latitude": this.Rating_RatedItemLatitude,
-                            "Longitude": this.Rating_RatedItemLongitude
-                        });
-                        break;
-                }
-                break;
-            case NewsType.Mashup:
-                this.UniqueKey = this.Mashup_CommunityTag;
-                this.Entity = new CommunityDto({ "TagName": this.Mashup_CommunityTag }, new NoseDto({}));
-                break;
-        }
-    }
-    return NewsDto;
-}());
-var BaseNavigableItem = (function () {
-    function BaseNavigableItem(data) {
-        if (data)
-            $.extend(this, data);
-        if (!this.LoginName && data.Creator) {
-            this.LoginName = data.Creator;
-        }
-        if (this.UniqueKey) {
-            this.LoginName = GetLoginNameFromUniqueKey(this.UniqueKey);
-            this.CreationTicks = GetTicksFromUniqueKey(this.UniqueKey);
-        }
-        else if (this.CreationTicks) {
-            this.UniqueKey = GetUniqueKey(this.LoginName, this.CreationTicks);
-        }
-    }
-    return BaseNavigableItem;
-}());
-var PhotoBlogDto = (function (_super) {
-    __extends(PhotoBlogDto, _super);
-    function PhotoBlogDto(data) {
-        var _this = _super.call(this, data) || this;
-        _this.groupName = ko.observable("");
-        _this.groupCount = ko.observable(1);
-        _this.groupType = ko.observable(GroupTypeEnum.None);
-        _this.isGrouped = ko.observable(false);
-        _this.isLastIncompleteGroup = ko.observable(false);
-        _this.dateString = ko.computed(function () {
-            var date = GetDateFromTicks(_this.CreationTicks);
-            if (_this.groupType() == GroupTypeEnum.ByDay) {
-                return moment(date).format('LL');
-            }
-            else if (_this.groupType() == GroupTypeEnum.ByWeek) {
-                return GetLangRes("Common_lblCalendarWeekFormat", "CW %cw%").replace("%cw%", moment(date).format('w')) + " " + moment(date).format('YYYY');
-            }
-            else if (_this.groupType() == GroupTypeEnum.ByMonth) {
-                return moment(date).format('MMMM YYYY');
-            }
-            return moment(date).format('LLL');
-        });
-        _this.thumbSize = "@400";
-        _this.imageUrl = function () {
-            return gnSettings.BaseDataUrl + "/pbimg/" + encodeURIComponent(_this.UniqueKey);
-        };
-        _this.previewUrl = function () {
-            return "/impression/preview/" + encodeURIComponent(_this.UniqueKey);
-        };
-        _this.detailUrl = function () {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/impression/detail/" + encodeURIComponent(_this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
-        };
-        _this.shareUrl = function () {
-            return gnSettings.BaseUrl + "/impression/detail/" + encodeURIComponent(_this.UniqueKey);
-        };
-        _this.commentItemType = CommentItemType.PhotoBlog;
-        _this.isCommentsAllowed = function () { return true; };
-        _this.isUserAdmin = function (loginName) { return _this.LoginName == loginName; };
-        return _this;
-    }
-    return PhotoBlogDto;
-}(BaseNavigableItem));
-var PoiDto = (function (_super) {
-    __extends(PoiDto, _super);
-    function PoiDto(data) {
-        var _this = _super.call(this, data) || this;
-        _this.thumbSize = "@100";
-        _this.imageUrl = function () {
-            return gnSettings.BaseDataUrl + "/locimg/" + encodeURIComponent(_this.UniqueKey);
-        };
-        _this.previewUrl = function () {
-            return "/poi/preview/" + encodeURIComponent(_this.UniqueKey);
-        };
-        _this.detailUrl = function () {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/poi/detail/" + encodeURIComponent(_this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
-        };
-        _this.shareUrl = function () {
-            return gnSettings.BaseUrl + "/poi/detail/" + encodeURIComponent(_this.UniqueKey);
-        };
-        _this.commentItemType = CommentItemType.FavoriteLocation;
-        _this.isCommentsAllowed = function () { return true; };
-        _this.isUserAdmin = function (loginName) { return _this.LoginName == loginName; };
-        return _this;
-    }
-    return PoiDto;
-}(BaseNavigableItem));
-var TourDto = (function (_super) {
-    __extends(TourDto, _super);
-    function TourDto(data) {
-        var _this = _super.call(this, data) || this;
-        _this.thumbSize = "";
-        _this.imageUrl = function () {
-            return "";
-        };
-        _this.previewUrl = function () {
-            return "/track/preview/" + encodeURIComponent(_this.UniqueKey);
-        };
-        _this.detailUrl = function () {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/track/detail/" + encodeURIComponent(_this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
-        };
-        _this.shareUrl = function () {
-            return gnSettings.BaseUrl + "/track/detail/" + encodeURIComponent(_this.UniqueKey);
-        };
-        _this.commentItemType = CommentItemType.Tour;
-        _this.isCommentsAllowed = function () { return true; };
-        _this.isUserAdmin = function (loginName) { return _this.LoginName == loginName; };
-        if (!_this.StartLatitude && _this.Latitude)
-            _this.StartLatitude = _this.Latitude;
-        if (!_this.StartLongitude && _this.Longitude)
-            _this.StartLongitude = _this.Longitude;
-        if (!_this.StartLatitude && data.Track_StartLatitude)
-            _this.StartLatitude = data.Track_StartLatitude;
-        if (!_this.StartLongitude && data.Track_StartLongitude)
-            _this.StartLongitude = data.Track_StartLongitude;
-        return _this;
-    }
-    return TourDto;
-}(BaseNavigableItem));
-var EventDto = (function (_super) {
-    __extends(EventDto, _super);
-    function EventDto(data) {
-        var _this = _super.call(this, data) || this;
-        _this.thumbSize = "@100";
-        _this.imageUrl = function () {
-            return gnSettings.BaseDataUrl + "/eventsimg/" + encodeURIComponent(_this.UniqueKey);
-        };
-        _this.previewUrl = function () {
-            return "/event/preview/" + encodeURIComponent(_this.UniqueKey);
-        };
-        _this.detailUrl = function () {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/event/detail/" + encodeURIComponent(_this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
-        };
-        _this.shareUrl = function () {
-            return gnSettings.BaseUrl + "/event/detail/" + encodeURIComponent(_this.UniqueKey);
-        };
-        return _this;
-    }
-    return EventDto;
-}(BaseNavigableItem));
-var CommunityDto = (function () {
-    function CommunityDto(data, user) {
-        var _this = this;
-        this.thumbSize = "@100";
-        this.imageUrl = function () {
-            return gnSettings.BaseDataUrl + "/commimg/" + encodeURIComponent(_this.TagName);
-        };
-        this.previewUrl = function () {
-            return "/community/preview?profileTag=" + encodeURIComponent(_this.TagName);
-        };
-        this.detailUrl = function () {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/community/index?profileTag=" + encodeURIComponent(_this.TagName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '&lid=' + gnSettings.LoginId : '');
-        };
-        this.shareUrl = function () {
-            return gnSettings.BaseUrl + "/community/index?profileTag=" + encodeURIComponent(_this.TagName);
-        };
-        this.isLoginNameAdmin = function () {
-            return _this.LoginName == _this.CreatorLoginName || $.inArray(_this.LoginName, _this.Admins) != -1;
-        };
-        this.webMashupUrl = function () {
-            if (_this.TagName.indexOf(".") != -1) {
-                var parts = _this.TagName.substring(1).split("@");
-                if (parts.length > 0) {
-                    return "http://" + parts[0];
-                }
-            }
-            return null;
-        };
-        this.isAclListMembers = function () {
-            return (_this.Acls & CommunityAcl.ListMembers) == CommunityAcl.ListMembers;
-        };
-        this.isMembersListAllowed = function () {
-            return _this.isAclListMembers() || _this.isLoginNameAdmin();
-        };
-        this.isAclMembersInviteMembers = function () {
-            return (_this.Acls & CommunityAcl.MembersInviteMembers) == CommunityAcl.MembersInviteMembers;
-        };
-        this.isInviteMembersAllowed = function () {
-            return (_this.isAclMembersInviteMembers() && (_this.IsInCommunity || _this.NoseDto.IsInCommunity(_this.TagName))) || _this.isLoginNameAdmin();
-        };
-        this.isAclCommentsFromMembers = function () {
-            return (_this.Acls & CommunityAcl.CommentsFromMembers) == CommunityAcl.CommentsFromMembers;
-        };
-        this.commentItemType = CommentItemType.Community;
-        this.isCommentsAllowed = function () { return (_this.isAclCommentsFromMembers() && (_this.IsInCommunity || _this.NoseDto.IsInCommunity(_this.TagName) || !_this.LoginName)) || _this.isLoginNameAdmin(); };
-        this.isUserAdmin = function (loginName) { return _this.LoginName == loginName || $.inArray(loginName, _this.Admins) != -1; };
-        if (data)
-            $.extend(this, data);
-        this.LoginName = user.LoginName;
-        this.NoseDto = new NoseDto(user);
-    }
-    return CommunityDto;
-}());
-var CommunityMemberDto = (function () {
-    function CommunityMemberDto(data) {
-        if (data)
-            $.extend(this, data);
-        this.NoseDto = new NoseDto({ "LoginName": this.LoginName });
-    }
-    return CommunityMemberDto;
-}());
-var EventDateDto = (function () {
-    function EventDateDto(ticks, count) {
-        this.ticks = ticks;
-        this.count = count;
-    }
-    return EventDateDto;
-}());
-var Coordinate = (function () {
-    function Coordinate(data) {
-        this.percentageX = 0;
-        this.percentageY = 0;
-        this.distance = 0;
-        this.ageString = "0m";
-        if (data)
-            $.extend(this, data);
-        this.location = L.latLng(this.lat, this.lon, this.alt);
-    }
-    return Coordinate;
-}());
-var NoseDto = (function (_super) {
-    __extends(NoseDto, _super);
-    function NoseDto(data) {
-        var _this = _super.call(this, data) || this;
-        _this.thumbSize = "@200";
-        _this.imageUrl = function () {
-            return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(_this.LoginName);
-        };
-        _this.previewUrl = function () {
-            return "/nose/preview/" + encodeURIComponent(_this.LoginName);
-        };
-        _this.detailUrl = function () {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
-        };
-        _this.shareUrl = function () {
-            return gnSettings.BaseUrl + "/" + encodeURIComponent(_this.LoginName);
-        };
-        return _this;
-    }
-    NoseDto.prototype.IsInCommunity = function (community) {
-        return this.Communities && $.inArray(community, this.Communities) != -1;
-    };
-    return NoseDto;
-}(BaseNavigableItem));
-var GeoDataItem = (function () {
-    function GeoDataItem() {
-    }
-    return GeoDataItem;
-}());
-var GeoDataProperties = (function () {
-    function GeoDataProperties() {
-    }
-    return GeoDataProperties;
-}());
-var GeoDataGeometry = (function () {
-    function GeoDataGeometry() {
-    }
-    return GeoDataGeometry;
-}());
-var CarouselItemDto = (function () {
-    function CarouselItemDto(title, text) {
-        this.title = ko.observable("");
-        this.text = ko.observable("");
-        this.title(title);
-        this.text(text);
-    }
-    return CarouselItemDto;
-}());
-var NavBarDto = (function () {
-    function NavBarDto(url, text, isActive) {
-        this.url = url;
-        this.text = text;
-        this.isActive = isActive;
-    }
-    return NavBarDto;
-}());
-var UserDto = (function () {
-    function UserDto(data) {
-        this.LoginName = data.LoginName;
-        this.IsActivated = data.IsActivated;
-    }
-    return UserDto;
-}());
-var KeywordDto = (function () {
-    function KeywordDto(name) {
-        var _this = this;
-        this.name = ko.observable("");
-        this.isSelected = ko.observable(false);
-        this.isCommunity = function () {
-            return _this.getIcon() != "";
-        };
-        this.getHtml = function () {
-            var value = _this.name();
-            var icon = _this.getIcon();
-            if (icon != '' && value && value.length > 2) {
-                var com = value.substr(1, value.length);
-                return '<span class="glyphicon glyphicon-' + icon + '"></span><span class="keyword-label">' + com + '</span>';
-            }
-            else {
-                return value;
-            }
-        };
-        this.getIcon = function () {
-            var value = _this.name();
-            if (!value || value.length < 1) {
-                return "";
-            }
-            var icon = "";
-            var firstChar = value.charAt(0);
-            switch (firstChar) {
-                case "@":
-                    icon = "lock";
-                    break;
-                case "*":
-                    icon = "eye-close";
-                    break;
-                case "%":
-                    icon = "globe";
-                    break;
-            }
-            return icon;
-        };
-        this.toggle = function () {
-            _this.isSelected(!_this.isSelected());
-        };
-        this.name(name);
-        this.Community = new CommunityDto({ "TagName": name }, new NoseDto({}));
-    }
-    return KeywordDto;
-}());
-var PageableItem = (function () {
-    function PageableItem(tagName, itemPageUrl, itemPageSize, newItem) {
-        this.items = ko.observableArray();
-        this.itemLastKnownTicks = MAX_DATE_TIME_TICKS;
-        this.hasMoreItems = ko.observable(true);
-        this.itemsRequestActive = ko.observable(false);
-        this.tagName = tagName;
-        this.itemPageUrl = itemPageUrl;
-        this.itemPageSize = itemPageSize;
-        this.newItem = newItem;
-    }
-    PageableItem.prototype.newItem = function (data) { return null; };
-    ;
-    PageableItem.prototype.onAddItems = function () { };
-    ;
-    PageableItem.prototype.addItems = function (data) {
-        if (data == null)
-            return;
-        if (data.length > 0) {
-            this.itemLastKnownTicks = data[data.length - 1].CreationTicks;
-            for (var i in data) {
-                this.items.push(this.newItem(data[i]));
-            }
-            if (data.length % this.itemPageSize != 0)
-                this.hasMoreItems(false);
-        }
-        else {
-            this.hasMoreItems(false);
-        }
-        if (this.onAddItems)
-            this.onAddItems();
-    };
-    ;
-    PageableItem.prototype.pageItems = function () {
-        var _this = this;
-        if (this.itemsRequestActive() || !this.hasMoreItems())
-            return;
-        this.itemsRequestActive(true);
-        $.ajax({
-            type: 'POST',
-            url: this.itemPageUrl,
-            cache: false,
-            data: {
-                lastKnownTicks: this.itemLastKnownTicks,
-                pageSize: this.itemPageSize,
-                community: this.tagName
-            },
-            dataType: 'json',
-            success: function (result) {
-                if (result && result.length > 0) {
-                    _this.addItems(result);
-                }
-                else {
-                    _this.hasMoreItems(false);
-                }
-                _this.itemsRequestActive(false);
-            },
-            error: function (jqxhr) {
-                if (jqxhr.status != 429) {
-                    dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
-                }
-                _this.itemsRequestActive(false);
-            }
-        });
-    };
-    return PageableItem;
-}());
 var NearbyViewModel = (function (_super) {
     __extends(NearbyViewModel, _super);
     function NearbyViewModel(communityDto, user) {
@@ -2862,3 +2314,551 @@ ko.components.register('ma-gpsnose-rating', {
         '</div>' +
         '</div>'
 });
+var BaseNavigableItem = (function () {
+    function BaseNavigableItem(data) {
+        if (data)
+            $.extend(this, data);
+        if (!this.LoginName && data.Creator) {
+            this.LoginName = data.Creator;
+        }
+        if (this.UniqueKey) {
+            this.LoginName = GetLoginNameFromUniqueKey(this.UniqueKey);
+            this.CreationTicks = GetTicksFromUniqueKey(this.UniqueKey);
+        }
+        else if (this.CreationTicks) {
+            this.UniqueKey = GetUniqueKey(this.LoginName, this.CreationTicks);
+        }
+    }
+    return BaseNavigableItem;
+}());
+var CarouselItemDto = (function () {
+    function CarouselItemDto(title, text) {
+        this.title = ko.observable("");
+        this.text = ko.observable("");
+        this.title(title);
+        this.text(text);
+    }
+    return CarouselItemDto;
+}());
+var CommentDto = (function () {
+    function CommentDto(data) {
+        var _this = this;
+        this.hasText = function () {
+            return _this.Text && _this.Text.length > 0;
+        };
+        if (data)
+            $.extend(this, data);
+        if (data.CreatedByUserName && !this.Creator)
+            this.Creator = data.CreatedByUserName;
+        this.NoseDto = new NoseDto({ "LoginName": this.Creator });
+    }
+    return CommentDto;
+}());
+var CommunityDto = (function () {
+    function CommunityDto(data, user) {
+        var _this = this;
+        this.thumbSize = "@100";
+        this.imageUrl = function () {
+            return gnSettings.BaseDataUrl + "/commimg/" + encodeURIComponent(_this.TagName);
+        };
+        this.previewUrl = function () {
+            return "/community/preview?profileTag=" + encodeURIComponent(_this.TagName);
+        };
+        this.detailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/community/index?profileTag=" + encodeURIComponent(_this.TagName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '&lid=' + gnSettings.LoginId : '');
+        };
+        this.shareUrl = function () {
+            return gnSettings.BaseUrl + "/community/index?profileTag=" + encodeURIComponent(_this.TagName);
+        };
+        this.isLoginNameAdmin = function () {
+            return _this.LoginName == _this.CreatorLoginName || $.inArray(_this.LoginName, _this.Admins) != -1;
+        };
+        this.webMashupUrl = function () {
+            if (_this.TagName.indexOf(".") != -1) {
+                var parts = _this.TagName.substring(1).split("@");
+                if (parts.length > 0) {
+                    return "http://" + parts[0];
+                }
+            }
+            return null;
+        };
+        this.isAclListMembers = function () {
+            return (_this.Acls & CommunityAcl.ListMembers) == CommunityAcl.ListMembers;
+        };
+        this.isMembersListAllowed = function () {
+            return _this.isAclListMembers() || _this.isLoginNameAdmin();
+        };
+        this.isAclMembersInviteMembers = function () {
+            return (_this.Acls & CommunityAcl.MembersInviteMembers) == CommunityAcl.MembersInviteMembers;
+        };
+        this.isInviteMembersAllowed = function () {
+            return (_this.isAclMembersInviteMembers() && (_this.IsInCommunity || _this.NoseDto.IsInCommunity(_this.TagName))) || _this.isLoginNameAdmin();
+        };
+        this.isAclCommentsFromMembers = function () {
+            return (_this.Acls & CommunityAcl.CommentsFromMembers) == CommunityAcl.CommentsFromMembers;
+        };
+        this.commentItemType = CommentItemType.Community;
+        this.isCommentsAllowed = function () { return (_this.isAclCommentsFromMembers() && (_this.IsInCommunity || _this.NoseDto.IsInCommunity(_this.TagName) || !_this.LoginName)) || _this.isLoginNameAdmin(); };
+        this.isUserAdmin = function (loginName) { return _this.LoginName == loginName || $.inArray(loginName, _this.Admins) != -1; };
+        if (data)
+            $.extend(this, data);
+        this.LoginName = user.LoginName;
+        this.NoseDto = new NoseDto(user);
+    }
+    return CommunityDto;
+}());
+var CommunityMemberDto = (function () {
+    function CommunityMemberDto(data) {
+        if (data)
+            $.extend(this, data);
+        this.NoseDto = new NoseDto({ "LoginName": this.LoginName });
+    }
+    return CommunityMemberDto;
+}());
+var Coordinate = (function () {
+    function Coordinate(data) {
+        this.percentageX = 0;
+        this.percentageY = 0;
+        this.distance = 0;
+        this.ageString = "0m";
+        if (data)
+            $.extend(this, data);
+        this.location = L.latLng(this.lat, this.lon, this.alt);
+    }
+    return Coordinate;
+}());
+var EventDateDto = (function () {
+    function EventDateDto(ticks, count) {
+        this.ticks = ticks;
+        this.count = count;
+    }
+    return EventDateDto;
+}());
+var EventDto = (function (_super) {
+    __extends(EventDto, _super);
+    function EventDto(data) {
+        var _this = _super.call(this, data) || this;
+        _this.thumbSize = "@100";
+        _this.imageUrl = function () {
+            return gnSettings.BaseDataUrl + "/eventsimg/" + encodeURIComponent(_this.UniqueKey);
+        };
+        _this.previewUrl = function () {
+            return "/event/preview/" + encodeURIComponent(_this.UniqueKey);
+        };
+        _this.detailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/event/detail/" + encodeURIComponent(_this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+        };
+        _this.shareUrl = function () {
+            return gnSettings.BaseUrl + "/event/detail/" + encodeURIComponent(_this.UniqueKey);
+        };
+        return _this;
+    }
+    return EventDto;
+}(BaseNavigableItem));
+var GeoDataGeometry = (function () {
+    function GeoDataGeometry() {
+    }
+    return GeoDataGeometry;
+}());
+var GeoDataItem = (function () {
+    function GeoDataItem() {
+    }
+    return GeoDataItem;
+}());
+var GeoDataProperties = (function () {
+    function GeoDataProperties() {
+    }
+    return GeoDataProperties;
+}());
+var KeywordDto = (function () {
+    function KeywordDto(name) {
+        var _this = this;
+        this.name = ko.observable("");
+        this.isSelected = ko.observable(false);
+        this.isCommunity = function () {
+            return _this.getIcon() != "";
+        };
+        this.getHtml = function () {
+            var value = _this.name();
+            var icon = _this.getIcon();
+            if (icon != '' && value && value.length > 2) {
+                var com = value.substr(1, value.length);
+                return '<span class="glyphicon glyphicon-' + icon + '"></span><span class="keyword-label">' + com + '</span>';
+            }
+            else {
+                return value;
+            }
+        };
+        this.getIcon = function () {
+            var value = _this.name();
+            if (!value || value.length < 1) {
+                return "";
+            }
+            var icon = "";
+            var firstChar = value.charAt(0);
+            switch (firstChar) {
+                case "@":
+                    icon = "lock";
+                    break;
+                case "*":
+                    icon = "eye-close";
+                    break;
+                case "%":
+                    icon = "globe";
+                    break;
+            }
+            return icon;
+        };
+        this.toggle = function () {
+            _this.isSelected(!_this.isSelected());
+        };
+        this.name(name);
+        this.Community = new CommunityDto({ "TagName": name }, new NoseDto({}));
+    }
+    return KeywordDto;
+}());
+var NavBarDto = (function () {
+    function NavBarDto(url, text, isActive) {
+        this.url = url;
+        this.text = text;
+        this.isActive = isActive;
+    }
+    return NavBarDto;
+}());
+var NewsDto = (function () {
+    function NewsDto(data) {
+        var _this = this;
+        this.PoiPublished_Name = 34;
+        this.templateName = function () {
+            switch (_this.NewsType) {
+                case NewsType.ProfileAbout:
+                    return "AboutNewsTemplate";
+                case NewsType.ProfileImage:
+                    return "ProfileImageNewsTemplate";
+                case NewsType.NewGuestUser:
+                    return "NewGuestUserNewsTemplate";
+                case NewsType.ProfileActivated:
+                    return "ProfileActivatedTemplate";
+                case NewsType.PhotoBlog:
+                    return "PhotoBlogNewsTemplate";
+                case NewsType.PoI:
+                    return "PoIPublishedNewsTemplate";
+                case NewsType.Tour:
+                    return "TourNewsTemplate";
+                case NewsType.Comment:
+                    return "CommentNewsTemplate";
+                case NewsType.Rating:
+                    return "RatingNewsTemplate";
+                case NewsType.Event:
+                    return "EventNewsTemplate";
+                case NewsType.Mashup:
+                    return "MashupNewsTemplate";
+                default:
+                    return "UnknownTemplate";
+            }
+        };
+        this.thumbUrl = function () {
+            return _this.imageUrl() + _this.Entity.thumbSize;
+        };
+        this.detailInlineUrl = function () {
+            return _this.previewUrl();
+        };
+        this.photoBlogText = function () {
+            if (_this.IsNowDeleted)
+                return GetLangRes("NewsPart_Load_lblBlogWasDeleted", "Impression was deleted");
+            else
+                return _this.Title;
+        };
+        this.commentText = function () {
+            if (_this.IsNowDeleted) {
+                return GetLangRes("NewsPart_Load_lblCommentWasDeleted", "Comment was deleted");
+            }
+            else {
+                if (_this.Description != null && _this.Description != "") {
+                    return _this.Description;
+                }
+                var text = _this.Comment_Text != null ? _this.Comment_Text : "";
+                var mood = _this.Comment_Mood != null ? " " + _this.Comment_Mood : "";
+                return text + mood;
+            }
+        };
+        this.thumbSize = "@400";
+        this.imageUrl = function () {
+            return _this.Entity.imageUrl();
+        };
+        this.previewUrl = function () {
+            return _this.Entity.previewUrl();
+        };
+        this.detailUrl = function () {
+            return _this.Entity.detailUrl();
+        };
+        this.shareUrl = function () {
+            return _this.Entity.shareUrl();
+        };
+        if (data)
+            $.extend(this, data);
+        this.UniqueKey = GetUniqueKey(this.Creator, this.CreationTicks);
+        this.NoseDto = new NoseDto({ "LoginName": this.Creator });
+        this.Entity = new NoseDto({ "LoginName": this.Creator });
+        switch (this.NewsType) {
+            case NewsType.PhotoBlog:
+                this.UniqueKey = GetUniqueKey(this.Creator, this.Impression_CreationTicks);
+                this.Entity = new PhotoBlogDto(this);
+                break;
+            case NewsType.PoI:
+                this.UniqueKey = GetUniqueKey(this.Creator, this.PoiPublished_CreationTicks);
+                this.Entity = new PoiDto(this);
+                break;
+            case NewsType.Tour:
+                this.UniqueKey = GetUniqueKey(this.Creator, this.Track_CreationTicks);
+                this.Entity = new TourDto(this);
+                break;
+            case NewsType.Event:
+                this.UniqueKey = GetUniqueKey(this.Creator, this.Event_CreationTicks);
+                this.Entity = new EventDto(this);
+                break;
+            case NewsType.Comment:
+                this.UniqueKey = this.Comment_CommentItemId;
+                switch (this.Comment_CommentItemType) {
+                    case "PhotoBlog":
+                        this.Entity = new PhotoBlogDto({ "UniqueKey": this.UniqueKey });
+                        break;
+                    case "FavoriteLocation":
+                        this.Entity = new PoiDto({ "UniqueKey": this.UniqueKey });
+                        break;
+                    case "Track":
+                    case "Tour":
+                        this.Entity = new TourDto({
+                            "UniqueKey": this.UniqueKey,
+                            "Latitude": this.Comment_CommentItemLatitude,
+                            "Longitude": this.Comment_CommentItemLongitude
+                        });
+                        break;
+                    case "Community":
+                        this.Entity = new CommunityDto({ "TagName": this.Comment_CommentItemId }, new NoseDto({}));
+                        break;
+                }
+                break;
+            case NewsType.Rating:
+                this.UniqueKey = this.Rating_RatedItemId;
+                switch (this.Rating_RatedItemType) {
+                    case "FavoriteLocation":
+                        this.Entity = new PoiDto({ "UniqueKey": this.UniqueKey });
+                        break;
+                    case "PhotoBlog":
+                        this.Entity = new PhotoBlogDto({ "UniqueKey": this.UniqueKey });
+                        break;
+                    case "Track":
+                    case "Tour":
+                        this.Entity = new TourDto({
+                            "UniqueKey": this.UniqueKey,
+                            "Latitude": this.Rating_RatedItemLatitude,
+                            "Longitude": this.Rating_RatedItemLongitude
+                        });
+                        break;
+                }
+                break;
+            case NewsType.Mashup:
+                this.UniqueKey = this.Mashup_CommunityTag;
+                this.Entity = new CommunityDto({ "TagName": this.Mashup_CommunityTag }, new NoseDto({}));
+                break;
+        }
+    }
+    return NewsDto;
+}());
+var NoseDto = (function (_super) {
+    __extends(NoseDto, _super);
+    function NoseDto(data) {
+        var _this = _super.call(this, data) || this;
+        _this.thumbSize = "@200";
+        _this.imageUrl = function () {
+            return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(_this.LoginName);
+        };
+        _this.previewUrl = function () {
+            return "/nose/preview/" + encodeURIComponent(_this.LoginName);
+        };
+        _this.detailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+        };
+        _this.shareUrl = function () {
+            return gnSettings.BaseUrl + "/" + encodeURIComponent(_this.LoginName);
+        };
+        return _this;
+    }
+    NoseDto.prototype.IsInCommunity = function (community) {
+        return this.Communities && $.inArray(community, this.Communities) != -1;
+    };
+    return NoseDto;
+}(BaseNavigableItem));
+var PageableItem = (function () {
+    function PageableItem(tagName, itemPageUrl, itemPageSize, newItem) {
+        this.items = ko.observableArray();
+        this.itemLastKnownTicks = MAX_DATE_TIME_TICKS;
+        this.hasMoreItems = ko.observable(true);
+        this.itemsRequestActive = ko.observable(false);
+        this.tagName = tagName;
+        this.itemPageUrl = itemPageUrl;
+        this.itemPageSize = itemPageSize;
+        this.newItem = newItem;
+    }
+    PageableItem.prototype.newItem = function (data) { return null; };
+    ;
+    PageableItem.prototype.onAddItems = function () { };
+    ;
+    PageableItem.prototype.addItems = function (data) {
+        if (data == null)
+            return;
+        if (data.length > 0) {
+            this.itemLastKnownTicks = data[data.length - 1].CreationTicks;
+            for (var i in data) {
+                this.items.push(this.newItem(data[i]));
+            }
+            if (data.length % this.itemPageSize != 0)
+                this.hasMoreItems(false);
+        }
+        else {
+            this.hasMoreItems(false);
+        }
+        if (this.onAddItems)
+            this.onAddItems();
+    };
+    ;
+    PageableItem.prototype.pageItems = function () {
+        var _this = this;
+        if (this.itemsRequestActive() || !this.hasMoreItems())
+            return;
+        this.itemsRequestActive(true);
+        $.ajax({
+            type: 'POST',
+            url: this.itemPageUrl,
+            cache: false,
+            data: {
+                lastKnownTicks: this.itemLastKnownTicks,
+                pageSize: this.itemPageSize,
+                community: this.tagName
+            },
+            dataType: 'json',
+            success: function (result) {
+                if (result && result.length > 0) {
+                    _this.addItems(result);
+                }
+                else {
+                    _this.hasMoreItems(false);
+                }
+                _this.itemsRequestActive(false);
+            },
+            error: function (jqxhr) {
+                if (jqxhr.status != 429) {
+                    dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                }
+                _this.itemsRequestActive(false);
+            }
+        });
+    };
+    return PageableItem;
+}());
+var PhotoBlogDto = (function (_super) {
+    __extends(PhotoBlogDto, _super);
+    function PhotoBlogDto(data) {
+        var _this = _super.call(this, data) || this;
+        _this.groupName = ko.observable("");
+        _this.groupCount = ko.observable(1);
+        _this.groupType = ko.observable(GroupTypeEnum.None);
+        _this.isGrouped = ko.observable(false);
+        _this.isLastIncompleteGroup = ko.observable(false);
+        _this.dateString = ko.computed(function () {
+            var date = GetDateFromTicks(_this.CreationTicks);
+            if (_this.groupType() == GroupTypeEnum.ByDay) {
+                return moment(date).format('LL');
+            }
+            else if (_this.groupType() == GroupTypeEnum.ByWeek) {
+                return GetLangRes("Common_lblCalendarWeekFormat", "CW %cw%").replace("%cw%", moment(date).format('w')) + " " + moment(date).format('YYYY');
+            }
+            else if (_this.groupType() == GroupTypeEnum.ByMonth) {
+                return moment(date).format('MMMM YYYY');
+            }
+            return moment(date).format('LLL');
+        });
+        _this.thumbSize = "@400";
+        _this.imageUrl = function () {
+            return gnSettings.BaseDataUrl + "/pbimg/" + encodeURIComponent(_this.UniqueKey);
+        };
+        _this.previewUrl = function () {
+            return "/impression/preview/" + encodeURIComponent(_this.UniqueKey);
+        };
+        _this.detailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/impression/detail/" + encodeURIComponent(_this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+        };
+        _this.shareUrl = function () {
+            return gnSettings.BaseUrl + "/impression/detail/" + encodeURIComponent(_this.UniqueKey);
+        };
+        _this.commentItemType = CommentItemType.PhotoBlog;
+        _this.isCommentsAllowed = function () { return true; };
+        _this.isUserAdmin = function (loginName) { return _this.LoginName == loginName; };
+        return _this;
+    }
+    return PhotoBlogDto;
+}(BaseNavigableItem));
+var PoiDto = (function (_super) {
+    __extends(PoiDto, _super);
+    function PoiDto(data) {
+        var _this = _super.call(this, data) || this;
+        _this.thumbSize = "@100";
+        _this.imageUrl = function () {
+            return gnSettings.BaseDataUrl + "/locimg/" + encodeURIComponent(_this.UniqueKey);
+        };
+        _this.previewUrl = function () {
+            return "/poi/preview/" + encodeURIComponent(_this.UniqueKey);
+        };
+        _this.detailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/poi/detail/" + encodeURIComponent(_this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+        };
+        _this.shareUrl = function () {
+            return gnSettings.BaseUrl + "/poi/detail/" + encodeURIComponent(_this.UniqueKey);
+        };
+        _this.commentItemType = CommentItemType.FavoriteLocation;
+        _this.isCommentsAllowed = function () { return true; };
+        _this.isUserAdmin = function (loginName) { return _this.LoginName == loginName; };
+        return _this;
+    }
+    return PoiDto;
+}(BaseNavigableItem));
+var TourDto = (function (_super) {
+    __extends(TourDto, _super);
+    function TourDto(data) {
+        var _this = _super.call(this, data) || this;
+        _this.thumbSize = "";
+        _this.imageUrl = function () {
+            return "";
+        };
+        _this.previewUrl = function () {
+            return "/track/preview/" + encodeURIComponent(_this.UniqueKey);
+        };
+        _this.detailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/track/detail/" + encodeURIComponent(_this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+        };
+        _this.shareUrl = function () {
+            return gnSettings.BaseUrl + "/track/detail/" + encodeURIComponent(_this.UniqueKey);
+        };
+        _this.commentItemType = CommentItemType.Tour;
+        _this.isCommentsAllowed = function () { return true; };
+        _this.isUserAdmin = function (loginName) { return _this.LoginName == loginName; };
+        if (!_this.StartLatitude && _this.Latitude)
+            _this.StartLatitude = _this.Latitude;
+        if (!_this.StartLongitude && _this.Longitude)
+            _this.StartLongitude = _this.Longitude;
+        if (!_this.StartLatitude && data.Track_StartLatitude)
+            _this.StartLatitude = data.Track_StartLatitude;
+        if (!_this.StartLongitude && data.Track_StartLongitude)
+            _this.StartLongitude = data.Track_StartLongitude;
+        return _this;
+    }
+    return TourDto;
+}(BaseNavigableItem));
+var UserDto = (function () {
+    function UserDto(data) {
+        this.LoginName = data.LoginName;
+        this.IsActivated = data.IsActivated;
+    }
+    return UserDto;
+}());

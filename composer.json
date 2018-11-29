@@ -1,5 +1,5 @@
 {
     "require": {
-      "smartnoses/gpsnosesdk": "1.0.4"
+      "smartnoses/gpsnosesdk": "1.0.5"
     }
 }

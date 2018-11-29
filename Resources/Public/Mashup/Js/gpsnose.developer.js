@@ -1,3 +1,54 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var BaseNavigableItem = (function () {
+    function BaseNavigableItem(data) {
+        if (data)
+            $.extend(this, data);
+        if (!this.LoginName && data.Creator) {
+            this.LoginName = data.Creator;
+        }
+        if (this.UniqueKey) {
+            this.LoginName = GetLoginNameFromUniqueKey(this.UniqueKey);
+            this.CreationTicks = GetTicksFromUniqueKey(this.UniqueKey);
+        }
+        else if (this.CreationTicks) {
+            this.UniqueKey = GetUniqueKey(this.LoginName, this.CreationTicks);
+        }
+    }
+    return BaseNavigableItem;
+}());
+var NoseDto = (function (_super) {
+    __extends(NoseDto, _super);
+    function NoseDto(data) {
+        var _this = _super.call(this, data) || this;
+        _this.thumbSize = "@200";
+        _this.imageUrl = function () {
+            return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(_this.LoginName);
+        };
+        _this.previewUrl = function () {
+            return "/nose/preview/" + encodeURIComponent(_this.LoginName);
+        };
+        _this.detailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+        };
+        _this.shareUrl = function () {
+            return gnSettings.BaseUrl + "/" + encodeURIComponent(_this.LoginName);
+        };
+        return _this;
+    }
+    NoseDto.prototype.IsInCommunity = function (community) {
+        return this.Communities && $.inArray(community, this.Communities) != -1;
+    };
+    return NoseDto;
+}(BaseNavigableItem));
 var MAX_DATE_TIME_TICKS = "3155378975999999999";
 var MashupFormTypeEnum;
 (function (MashupFormTypeEnum) {
@@ -23,7 +74,7 @@ var MashupAdminViewModel = (function () {
         this.requestActiveUpdateCommunity = ko.observable(false);
         this.requestActiveAddSubCommunity = ko.observable(false);
         this.requestActiveDelSubCommunity = ko.observable(false);
-        this.requestActiveMashupToken = ko.observable(false);
+        this.requestActiveMashupTokenNew = ko.observable(false);
         this.addMaxCount = ko.observable(0);
         this.addMaxChars = ko.observable(0);
         this.privacyDropdownItems = ko.observableArray([]);
@@ -43,6 +94,63 @@ var MashupAdminViewModel = (function () {
         this.createMashupTokenIsValid = ko.observable(false);
         this.createMashupTokenDate = ko.observable("");
         this.createMashupTokenSrc = ko.observable("");
+        this.mashupTokenPageUrl = '/MashupApi/GetMashupTokensPage';
+        this.mashupTokens = ko.observableArray([]);
+        this.mashupTokensPageSize = gnSettings.MashupTokensPageSize;
+        this.mashupTokensLastKnownTicks = "0";
+        this.hasMoreMashupTokens = ko.observable(true);
+        this.mashupTokensRequestActive = ko.observable(false);
+        this.onAddMashupTokens = function () { };
+        this.addMashupTokens = function (data) {
+            if (data == null)
+                return;
+            if (data.length > 0) {
+                for (var i in data) {
+                    var mashupToken = new MashupTokenDto(data[i]);
+                    if (mashupToken.ScannedTicks() > _this.mashupTokensLastKnownTicks)
+                        _this.mashupTokensLastKnownTicks = mashupToken.ScannedTicks();
+                    _this.mashupTokens.push(mashupToken);
+                }
+                if (data.length % _this.mashupTokensPageSize != 0)
+                    _this.hasMoreMashupTokens(false);
+            }
+            else {
+                _this.hasMoreMashupTokens(false);
+            }
+            if (_this.onAddMashupTokens)
+                _this.onAddMashupTokens();
+        };
+        this.pageMashupTokens = function () {
+            if (_this.mashupTokensRequestActive())
+                return;
+            _this.mashupTokensRequestActive(true);
+            $.ajax({
+                type: 'POST',
+                url: _this.mashupTokenPageUrl,
+                cache: false,
+                data: {
+                    appKey: _this.currentMashup().AppKey(),
+                    lastKnownScanTicks: _this.mashupTokensLastKnownTicks,
+                    pageSize: _this.mashupTokensPageSize
+                },
+                dataType: 'json',
+                success: function (result) {
+                    if (result && result.length > 0) {
+                        _this.addMashupTokens(result);
+                    }
+                    else {
+                        _this.hasMoreMashupTokens(false);
+                    }
+                    _this.mashupTokensRequestActive(false);
+                },
+                error: function (jqxhr) {
+                    if (jqxhr.status != 429) {
+                        dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    }
+                    _this.mashupTokensRequestActive(false);
+                }
+            });
+        };
         this.isAddAllowed = ko.computed(function () {
             return _this.ownMashups().length < _this.addMaxCount();
         });
@@ -429,9 +537,9 @@ var MashupAdminViewModel = (function () {
     MashupAdminViewModel.prototype.CreateMashupToken = function () {
         var self = this;
         if (self.createMashupTokenIsValid() && self.currentMashup() != null) {
-            if (self.requestActiveMashupToken())
+            if (self.requestActiveMashupTokenNew())
                 return;
-            self.requestActiveMashupToken(true);
+            self.requestActiveMashupTokenNew(true);
             var ticks = null;
             if (self.createMashupTokenDate() != '') {
                 ticks = GetTicksFromDate(moment.utc(self.createMashupTokenDate()).add(1, "d").toDate());
@@ -440,7 +548,7 @@ var MashupAdminViewModel = (function () {
             var img = new Image();
             img.onload = function () {
                 self.createMashupTokenSrc(src);
-                self.requestActiveMashupToken(false);
+                self.requestActiveMashupTokenNew(false);
             };
             img.src = src;
         }
@@ -513,4 +621,27 @@ var HistoryDto = (function () {
         this.ExQuota = ExQuota;
     }
     return HistoryDto;
+}());
+var MashupTokenDto = (function () {
+    function MashupTokenDto(data) {
+        this.NoseDto = ko.observable();
+        this.Payload = ko.observable("");
+        this.ScannedByLoginName = ko.observable("");
+        this.ScannedLatitude = ko.observable(0.0);
+        this.ScannedLongitude = ko.observable(0.0);
+        this.ScannedTicks = ko.observable("0");
+        this.RecordedTicks = ko.observable("0");
+        this.CallbackResponseHttpCode = ko.observable(0);
+        this.CallbackResponseMessage = ko.observable("");
+        this.Payload(data.Payload);
+        this.ScannedByLoginName(data.ScannedByLoginName);
+        this.ScannedLatitude(data.ScannedLatitude);
+        this.ScannedLongitude(data.ScannedLongitude);
+        this.ScannedTicks(data.ScannedTicks);
+        this.RecordedTicks(data.RecordedTicks);
+        this.CallbackResponseHttpCode(data.CallbackResponseHttpCode);
+        this.CallbackResponseMessage(data.CallbackResponseMessage);
+        this.NoseDto(new NoseDto({ "LoginName": this.ScannedByLoginName() }));
+    }
+    return MashupTokenDto;
 }());

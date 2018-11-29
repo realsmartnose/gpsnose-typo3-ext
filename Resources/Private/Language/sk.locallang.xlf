@@ -6,11 +6,20 @@
 			<trans-unit id="MashupAdmin_btnCreateMashupToken">
 				<source><![CDATA[Create mashup-token]]></source>
 			</trans-unit>
+			<trans-unit id="MashupAdmin_btnCreateNewToken">
+				<source><![CDATA[Create new token]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_btnDownloadMashupToken">
+				<source><![CDATA[Download token]]></source>
+			</trans-unit>
 			<trans-unit id="MashupAdmin_btnMashupCallbackUrlGenerate">
 				<source><![CDATA[Generate]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_btnMashupToken">
 				<source><![CDATA[Mashup-token]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_btnMashupTokenPage">
+				<source><![CDATA[Load page]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_btnRegenerateAppKey">
 				<source><![CDATA[Get new App-Key]]></source>
@@ -85,10 +94,10 @@
 				<source><![CDATA[Enter text for successfully scan token]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrl">
-				<source><![CDATA[Callback url]]></source>
+				<source><![CDATA[Callback POST-back URL]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrlFail">
-				<source><![CDATA[To set a callback url, make sure you entered a valide url (e.g.: http://%mashup_site%/end/point) and use a maximum of %max_characters% characters]]></source>
+				<source><![CDATA[You must enter a valid absolute URL (e.g. http://%mashup_site%/end/point) and use a maximum of %max_characters% characters. This is your optional sync-called callback and you have only 2-3 seconds to complete it; the interface and more details can be found on http://wiki.gpsnose.com]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrlPlaceholder">
 				<source><![CDATA[Enter the Callback URL here (optional)]]></source>
@@ -114,6 +123,12 @@
 			<trans-unit id="MashupAdmin_lblMashupTokenNewTitle">
 				<source><![CDATA[Create mashup-token]]></source>
 			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenPayloadLabel">
+				<source><![CDATA[Payload]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenResponseCodeLabel">
+				<source><![CDATA[Res.]]></source>
+			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenScanDateLabel">
 				<source><![CDATA[Date]]></source>
 			</trans-unit>
@@ -137,6 +152,12 @@
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenValuePlaceholder">
 				<source><![CDATA[Enter token identifier here]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblNoMashupToken">
+				<source><![CDATA[There are no scanned tokens availabel!]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblNoMoreMashupToken">
+				<source><![CDATA[There are no more scanned tokens!]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblQuotaLimit">
 				<source><![CDATA[Quota = %quota%]]></source>

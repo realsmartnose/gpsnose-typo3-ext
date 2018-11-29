@@ -10,7 +10,8 @@
     "EventsPageSize": 12,
     "CommentsPageSize": 12,
     "CommunityMembersPageSize": 12,
-    "NearbyNosesPageSize": 100
+    "NearbyNosesPageSize": 100,
+    "MashupTokensPageSize": 12
 };
 if (window.gn_data !== undefined && window.gn_data.Settings !== undefined && window.gn_data.Settings != null)
     $.extend(gnSettings, window.gn_data.Settings);
