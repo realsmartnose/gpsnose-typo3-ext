@@ -153,6 +153,9 @@
 			<trans-unit id="MashupAdmin_lblMashupTokenValuePlaceholder">
 				<source><![CDATA[Enter token identifier here]]></source>
 			</trans-unit>
+			<trans-unit id="MashupAdmin_lblName">
+				<source><![CDATA[Mashup name]]></source>
+			</trans-unit>
 			<trans-unit id="MashupAdmin_lblNoMashupToken">
 				<source><![CDATA[There are no scanned tokens availabel!]]></source>
 			</trans-unit>
