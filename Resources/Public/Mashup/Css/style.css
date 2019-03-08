@@ -11,7 +11,11 @@
     margin-bottom: 5px;
 }
 
-.ma-gpsnose .ma-popover-image {
+.ma-gpsnose .btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+
+.ma-popover-image {
     width: 248px;
 }
 
@@ -185,10 +189,6 @@
     }
 
 
-.ma-gpsnose .grid {
-    margin: 0 -15px;
-}
-
 .ma-gpsnose .grid-item {
     padding: 0 5px 0 5px;
     margin-bottom: 10px;
@@ -199,10 +199,6 @@
     }
 
 @media (min-width: 1200px) {
-    .ma-gpsnose .grid {
-        margin: 0 -20px;
-    }
-
     .ma-gpsnose .grid-item {
         padding: 0 10px 0 10px;
         margin-bottom: 20px;

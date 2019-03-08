@@ -124,7 +124,7 @@ var MashupAdminViewModel = (function () {
             if (_this.mashupTokensRequestActive())
                 return;
             _this.mashupTokensRequestActive(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: _this.mashupTokenPageUrl,
                 cache: false,
@@ -264,7 +264,7 @@ var MashupAdminViewModel = (function () {
         if (self.requestActiveOwnMashups())
             return;
         self.requestActiveOwnMashups(true);
-        $.ajax({
+        jQuery.ajax({
             type: 'POST',
             url: '/MashupAdmin/GetOwnMashups',
             cache: false,
@@ -302,7 +302,7 @@ var MashupAdminViewModel = (function () {
         });
         if (isUnique) {
             self.requestActiveRegisterCommunity(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: '/MashupAdmin/RegisterCommunityWeb',
                 cache: false,
@@ -338,7 +338,7 @@ var MashupAdminViewModel = (function () {
             return;
         var tag = this.GetCommunityNameFromAdd(this.registerCommunityValue());
         self.requestActiveValidateCommunity(true);
-        $.ajax({
+        jQuery.ajax({
             type: 'POST',
             url: '/MashupAdmin/ValidateCommunityWeb',
             cache: false,
@@ -395,7 +395,7 @@ var MashupAdminViewModel = (function () {
             if (self.requestActiveUpdateCommunity())
                 return;
             self.requestActiveUpdateCommunity(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: '/MashupAdmin/UpdateCommunityWeb',
                 cache: false,
@@ -431,7 +431,7 @@ var MashupAdminViewModel = (function () {
                     return;
                 var tag = self.currentMashup().CommunityTag();
                 self.requestActiveRegenerateAppKey(true);
-                $.ajax({
+                jQuery.ajax({
                     type: 'POST',
                     url: '/MashupAdmin/RegenerateAppKey',
                     cache: false,
@@ -466,7 +466,7 @@ var MashupAdminViewModel = (function () {
             var tag = self.GetCommunityNameFromAdd(self.currentMashup().CommunityTagSufix()) + '@' + self.addSubCommunityValue();
             if (self.currentMashup().SubCommunities().indexOf(tag) < 0) {
                 self.requestActiveAddSubCommunity(true);
-                $.ajax({
+                jQuery.ajax({
                     type: 'POST',
                     url: '/MashupAdmin/AddSubCommunity',
                     cache: false,
@@ -506,7 +506,7 @@ var MashupAdminViewModel = (function () {
             if (self.requestActiveDelSubCommunity())
                 return;
             self.requestActiveDelSubCommunity(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: '/MashupAdmin/DelSubCommunity',
                 cache: false,

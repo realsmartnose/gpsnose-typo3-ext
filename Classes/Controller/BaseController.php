@@ -3,6 +3,8 @@ namespace SmartNoses\Gpsnose\Controller;
 
 use GpsNose\SDK\Mashup\Framework\GnUtil;
 use SmartNoses\Gpsnose\Utility\GnData;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use SmartNoses\Gpsnose\Service\GnCommunityService;
 use SmartNoses\Gpsnose\Utility\GnUtility;
@@ -80,39 +82,39 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected function initFrontend()
     {
         // Add the image-path
-        $this->view->assign('imagePath', $this->frontendController->absRefPrefix . $this->frontendController->tmpl->getFileName($this->settings['resources']['imagePath']));
+        $this->view->assign('imagePath', $this->frontendController->absRefPrefix . $this->getFileNameOrPath($this->settings['resources']['imagePath']));
 
         // Add FrontendCss
-        if ($frontendCss = $this->frontendController->tmpl->getFileName($this->settings['css']['frontendCss'])) {
+        if ($frontendCss = $this->getFileNameOrPath($this->settings['css']['frontendCss'])) {
             $this->frontendController->additionalHeaderData['gpsnose_css_frontendCss'] = '<link rel="stylesheet" type="text/css" href="' . $frontendCss . '" media="all">';
         }
 
         // Add jQuery
-        if ($jquery = $this->frontendController->tmpl->getFileName($this->settings['javascript']['jquery'])) {
+        if ($jquery = $this->getFileNameOrPath($this->settings['javascript']['jquery'])) {
             $this->frontendController->additionalHeaderData['gpsnose_js_jquery'] = '<script src="' . $jquery . '" type="text/javascript"></script>';
         }
         // Add bignumber
-        if ($bignumber = $this->frontendController->tmpl->getFileName($this->settings['javascript']['bignumber'])) {
+        if ($bignumber = $this->getFileNameOrPath($this->settings['javascript']['bignumber'])) {
             $this->frontendController->additionalFooterData['gpsnose_js_bignumber'] = '<script src="' . $bignumber . '" type="text/javascript"></script>';
         }
         // Add moment
-        if ($moment = $this->frontendController->tmpl->getFileName($this->settings['javascript']['moment'])) {
+        if ($moment = $this->getFileNameOrPath($this->settings['javascript']['moment'])) {
             $this->frontendController->additionalFooterData['gpsnose_js_moment'] = '<script src="' . $moment . '" type="text/javascript"></script>';
         }
         // Add numeral
-        if ($numeral = $this->frontendController->tmpl->getFileName($this->settings['javascript']['numeral'])) {
+        if ($numeral = $this->getFileNameOrPath($this->settings['javascript']['numeral'])) {
             $this->frontendController->additionalFooterData['gpsnose_js_numeral'] = '<script src="' . $numeral . '" type="text/javascript"></script>';
         }
         // Add imagesloaded
-        if ($imagesloaded = $this->frontendController->tmpl->getFileName($this->settings['javascript']['imagesloaded'])) {
+        if ($imagesloaded = $this->getFileNameOrPath($this->settings['javascript']['imagesloaded'])) {
             $this->frontendController->additionalFooterData['gpsnose_js_imagesloaded'] = '<script src="' . $imagesloaded . '" type="text/javascript"></script>';
         }
         // Add masonry
-        if ($masonry = $this->frontendController->tmpl->getFileName($this->settings['javascript']['masonry'])) {
+        if ($masonry = $this->getFileNameOrPath($this->settings['javascript']['masonry'])) {
             $this->frontendController->additionalFooterData['gpsnose_js_masonry'] = '<script src="' . $masonry . '" type="text/javascript"></script>';
         }
         // Add knockout
-        if ($knockout = $this->frontendController->tmpl->getFileName($this->settings['javascript']['knockout'])) {
+        if ($knockout = $this->getFileNameOrPath($this->settings['javascript']['knockout'])) {
             $this->frontendController->additionalFooterData['gpsnose_js_knockout'] = '<script src="' . $knockout . '" type="text/javascript"></script>';
         }
 
@@ -133,7 +135,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $gnSettings['CommunityMembersPageSize'] = intval($this->settings['membersPageSize']);
         $gnSettings['NewsPageSize'] = intval($this->settings['newsPageSize']);
         $gnSettings['CommentsPageSize'] = intval($this->settings['commentsPageSize']);
-        $gnSettings['ImagePath'] = $this->frontendController->absRefPrefix . $this->frontendController->tmpl->getFileName($this->settings['resources']['imagePath']);
+        $gnSettings['ImagePath'] = $this->frontendController->absRefPrefix . $this->getFileNameOrPath($this->settings['resources']['imagePath']);
         $currentUser = \GpsNose\SDK\Web\Login\GnAuthentication::CurrentUser();
         if ($currentUser != null) {
             $gnSettings['LoginId'] = $currentUser->LoginId;
@@ -143,13 +145,24 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->frontendController->additionalFooterData['gpsnose_js_gndata'] = '<script type="text/javascript">var gn_data = ' . json_encode(\SmartNoses\Gpsnose\Utility\GnData::$Settings) . ';</script>';
 
         // Add maframework
-        if ($maframework = $this->frontendController->tmpl->getFileName($this->settings['javascript']['maframework'])) {
+        if ($maframework = $this->getFileNameOrPath($this->settings['javascript']['maframework'])) {
             $this->frontendController->additionalFooterData['gpsnose_js_maframework'] = '<script src="' . $maframework . '" type="text/javascript"></script>';
         }
         // Add knockoutVm
-        if ($knockoutVm = $this->frontendController->tmpl->getFileName($this->settings['javascript']['knockoutVm'])) {
+        if ($knockoutVm = $this->getFileNameOrPath($this->settings['javascript']['knockoutVm'])) {
             $this->frontendController->additionalFooterData['gpsnose_js_knockoutVm'] = '<script src="' . $knockoutVm . '" type="text/javascript"></script>';
         }
+    }
+
+    /**
+     * Returns the Path of a file from Resource (ext:...)
+     * @param string $fileName
+     * @return string
+     */
+    private function getFileNameOrPath($fileName)
+    {
+        $file = GeneralUtility::getFileAbsFileName($fileName);
+        return PathUtility::stripPathSitePrefix($file);
     }
 
     /**

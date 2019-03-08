@@ -1,3 +1,16 @@
+1.1.0
+- FIX: Fix missing ImagePath For 9.4+
+- UPD: Update SDK
+
+1.0.9
+- UPD: Add compatibility for Bootstrap 4 II
+
+1.0.8
+- UPD: Add compatibility for Bootstrap 4
+
+1.0.7
+- UPD: Update mashup
+
 1.0.6
 - UPD: Update to GpsNose-SDK 1.0.5
 

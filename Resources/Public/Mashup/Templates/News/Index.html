@@ -28,8 +28,8 @@ Replace {record} with a unique id that identifies the entry
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-news" data-bind="visible:true" style="display: none;">
 
         <div class="btn-group btn-group-xs ma-btn-group" data-bind="attr: { 'data-remove': ! communityEntity.TagName }">
-            <a class="btn btn-default" data-external data-bind="text: communityEntity.TagName, attr: { href: communityEntity.detailUrl() }"></a>
-            <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
+            <a class="btn btn-default btn-outline-secondary" data-external role="button" data-bind="text: communityEntity.TagName, attr: { href: communityEntity.detailUrl() }"></a>
+            <a class="btn btn-primary" tabindex="0" role="button" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
         </div>
 
         <div id="newsContainer" class="row grid">
@@ -39,7 +39,7 @@ Replace {record} with a unique id that identifies the entry
             </div>
         </div>
         <div class="text-center">
-            <div class="btn btn-default btn-lg"
+            <div class="btn btn-default btn-outline-secondary btn-lg" role="button"
                 data-bind="click: function(){ pageNews() }, visible: hasMoreNews(), attr: { disabled: newsRequestActive() }">
                 <div data-bind="visible: ! newsRequestActive()">
                     <span class="glyphicon glyphicon-cloud-download"></span>
@@ -87,8 +87,8 @@ $(document).ready(function() {
 
 <script type="text/html" id="UnknownTemplate">
     <div class="UnknownNews grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="panel panel-default card">
+            <div class="panel-body card-body">
                 <div class="panel-bottom">
                     <div class="text-center">
                         <span data-bind="text: GetLangRes('Home_Index_lblUnknownNews', 'Unknown news')"></span>
@@ -101,11 +101,11 @@ $(document).ready(function() {
 
 <script type="text/html" id="AboutNewsTemplate">
     <div class="AboutNews grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="panel panel-default">
-            <div class="panel-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
+        <div class="panel panel-default card">
+            <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media">
-                    <div class="media-left">
-                        <img class="media-object img-circle media-height" data-bind="attr: { src: $data.thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
+                    <div class="media-left mr-2">
+                        <img class="media-object img-circle rounded-circle media-height" data-bind="attr: { src: $data.thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
                     </div>
                     <div class="media-body">
                         <div>
@@ -126,8 +126,8 @@ $(document).ready(function() {
 
 <script type="text/html" id="ProfileImageNewsTemplate">
     <div class="ProfileImageNews grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="panel panel-default">
-            <div class="panel-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
+        <div class="panel panel-default card">
+            <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
                 <img class="image" data-bind="attr: { src: thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
                 <p data-bind="text: $data.Description"></p>
                 <div class="panel-bottom">
@@ -142,11 +142,11 @@ $(document).ready(function() {
 
 <script type="text/html" id="NewGuestUserNewsTemplate">
     <div class="NewGuestUserNews grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="panel panel-default">
-            <div class="panel-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
+        <div class="panel panel-default card">
+            <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media">
-                    <div class="media-left">
-                        <img class="media-object img-circle media-height" data-bind="attr: { src: $data.thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
+                    <div class="media-left mr-2">
+                        <img class="media-object img-circle rounded-circle media-height" data-bind="attr: { src: $data.thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
                     </div>
                     <div class="media-body">
                         <div>
@@ -167,11 +167,11 @@ $(document).ready(function() {
 
 <script type="text/html" id="ProfileActivatedTemplate">
     <div class="ProfileActivated grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="panel panel-default">
-            <div class="panel-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
+        <div class="panel panel-default card">
+            <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media">
-                    <div class="media-left">
-                        <img class="media-object img-circle media-height" data-bind="attr: { src: $data.thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
+                    <div class="media-left mr-2">
+                        <img class="media-object img-circle rounded-circle media-height" data-bind="attr: { src: $data.thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
                     </div>
                     <div class="media-body">
                         <div>
@@ -192,8 +192,8 @@ $(document).ready(function() {
 
 <script type="text/html" id="PhotoBlogNewsTemplate">
     <div class="PhotoBlogNews grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="panel panel-default">
-            <div class="panel-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
+        <div class="panel panel-default card">
+            <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media">
                     <img class="image" data-bind="attr: { src: $data.thumbUrl() }" onerror="this.style.display='none'" />
                 </div>
@@ -207,7 +207,7 @@ $(document).ready(function() {
                     <div class="media-body">
                         <div class="text-right">
                             <span class="middle" data-bind="text: NoseDto.LoginName"></span>
-                            <img class="img-circle" width="32" data-bind="attr: { src: NoseDto.imageUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
+                            <img class="img-circle rounded-circle" width="32" data-bind="attr: { src: NoseDto.imageUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
                         </div>
                     </div>
                 </div>
@@ -223,11 +223,11 @@ $(document).ready(function() {
 
 <script type="text/html" id="PoIPublishedNewsTemplate">
     <div class="PoIPublishedNews grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="panel panel-default">
-            <div class="panel-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
+        <div class="panel panel-default card">
+            <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media">
-                    <div class="media-left">
-                        <img class="media-object img-rounded media-height" data-bind="attr: { src: thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyImage.png')" />
+                    <div class="media-left mr-2">
+                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyImage.png')" />
                     </div>
                     <div class="media-body">
                         <div class="media-height">
@@ -248,11 +248,11 @@ $(document).ready(function() {
 
 <script type="text/html" id="TourNewsTemplate">
     <div class="TourNews grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="panel panel-default">
-            <div class="panel-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
+        <div class="panel panel-default card">
+            <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media">
-                    <div class="media-left">
-                        <img class="media-object img-rounded media-height" data-bind="attr: { src: gn_data.Settings.ImagePath+'/EmptyTour' + $data.Track_TrackType + '.png' }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyMap.png')" />
+                    <div class="media-left mr-2">
+                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: gn_data.Settings.ImagePath+'/EmptyTour' + $data.Track_TrackType + '.png' }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyMap.png')" />
                     </div>
                     <div class="media-body">
                         <div class="media-height">
@@ -273,11 +273,11 @@ $(document).ready(function() {
 
 <script type="text/html" id="EventNewsTemplate">
     <div class="AboutNews grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="panel panel-default">
-            <div class="panel-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
+        <div class="panel panel-default card">
+            <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media">
-                    <div class="media-left">
-                        <img class="media-object img-rounded media-height" data-bind="attr: { src: $data.thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyImage.png')" />
+                    <div class="media-left mr-2">
+                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: $data.thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyImage.png')" />
                     </div>
                     <div class="media-body">
                         <div>
@@ -299,8 +299,8 @@ $(document).ready(function() {
 
 <script type="text/html" id="CommentNewsTemplate">
     <div class="CommentNews grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="panel panel-default">
-            <div class="panel-body" data-external data-bind="attr: { 'data-src': $data.detailUrl() }">
+        <div class="panel panel-default card">
+            <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.detailUrl() }">
                 <div class="media">
                     <div class="comment-image-container clearfix">
                         <div data-bind="if: Comment_CommentItemType == 'Tour'">
@@ -325,8 +325,8 @@ $(document).ready(function() {
 
 <script type="text/html" id="RatingNewsTemplate">
     <div class="RatingNews grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="panel panel-default">
-            <div class="panel-body" data-external data-bind="attr: { src: thumbUrl(), 'data-src': $data.detailUrl() }">
+        <div class="panel panel-default card">
+            <div class="panel-body card-body" data-external data-bind="attr: { src: thumbUrl(), 'data-src': $data.detailUrl() }">
                 <div class="media">
                     <div class="comment-image-container clearfix">
                         <div data-bind="if: Comment_CommentItemType == 'Tour'">
@@ -354,11 +354,11 @@ $(document).ready(function() {
 
 <script type="text/html" id="MashupNewsTemplate">
     <div class="MashupNews grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="panel panel-default">
-            <div class="panel-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled:$data.IsNowDeleted }">
+        <div class="panel panel-default card">
+            <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.detailUrl(), disabled:$data.IsNowDeleted }">
                 <div class="media">
-                    <div class="media-left">
-                        <img class="media-object img-rounded media-height" data-bind="attr: { src: $data.thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyImage.png')" />
+                    <div class="media-left mr-2">
+                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: $data.thumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyImage.png')" />
                     </div>
                     <div class="media-body">
                         <div class="media-height">

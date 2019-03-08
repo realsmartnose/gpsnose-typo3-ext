@@ -14,19 +14,19 @@
     "MashupTokensPageSize": 12
 };
 if (window.gn_data !== undefined && window.gn_data.Settings !== undefined && window.gn_data.Settings != null)
-    $.extend(gnSettings, window.gn_data.Settings);
+    jQuery.extend(gnSettings, window.gn_data.Settings);
 
 var MAX_DATE_TIME_TICKS = "3155378975999999999";
 
 
 function SwitchLanguage(lang) {
     var url;
-    var form = $('form:has(div:first[role!="dialog"])')[0];
+    var form = jQuery('form:has(div:first[role!="dialog"])')[0];
     if (form == undefined || form.method.toLowerCase() == "get") {
         url = GetLangUrl(window.location.href, lang);
         window.location.href = url;
     } else {
-        $(form).append('<input type="hidden" name="langSwitch" value="true" />');
+        jQuery(form).append('<input type="hidden" name="langSwitch" value="true" />');
         url = GetLangUrl(form.action, lang);
         form.action = url;
         form.submit();
@@ -362,16 +362,16 @@ function IsValidCommunity(community, maxLength)
 function ShowPreviewPageLoad(show)
 {
     if (show) {
-        $('body').addClass('preview-page-load');
+        jQuery('body').addClass('preview-page-load');
     } else {
-        $('body').removeClass('preview-page-load');
+        jQuery('body').removeClass('preview-page-load');
     }
 }
 
 
 function ImageErrorHandler(obj, errorSrc)
 {
-    var $obj = $(obj);
+    var $obj = jQuery(obj);
     var lazy = $obj.data('lazy-img');
     if (lazy && lazy != '') {
         setTimeout(function(){
@@ -388,10 +388,10 @@ function ImageErrorHandler(obj, errorSrc)
 
 
 if (window.jQuery) {
-    $('body').on('click', '[data-popup]', function(e) {
-        var link = $(this).attr('href');
-        if (! link) link = $(this).data('src');
-        if (link && ! $(this).attr('disabled')) {
+    jQuery('body').on('click', '[data-popup]', function(e) {
+        var link = jQuery(this).attr('href');
+        if (! link) link = jQuery(this).data('src');
+        if (link && ! jQuery(this).attr('disabled')) {
             if (window.MA_GPSNOSE_IS_MASHUP != undefined && window.MA_GPSNOSE_IS_MASHUP)
                 window.open(link, '_blank');
             else
@@ -400,32 +400,32 @@ if (window.jQuery) {
         e.preventDefault();
     });
 
-    $('body').on('click', '[data-external]', function(e) {
-        var link = $(this).attr('href');
-        if (! link) link = $(this).data('src');
-        if (link && ! $(this).attr('disabled')) {
+    jQuery('body').on('click', '[data-external]', function(e) {
+        var link = jQuery(this).attr('href');
+        if (! link) link = jQuery(this).data('src');
+        if (link && ! jQuery(this).attr('disabled')) {
             window.open(link, '_blank');
         }
         e.preventDefault();
     });
 
-    $(document).ready(function() {
-        $('[data-remove]').remove();
+    jQuery(document).ready(function() {
+        jQuery('[data-remove]').remove();
     });
 
-    $(document).ajaxComplete(function() {
-        $('[data-remove]').remove();
+    jQuery(document).ajaxComplete(function() {
+        jQuery('[data-remove]').remove();
     });
 
-    if ($.fn.popover) {
-        $(document).popover({
+    if (jQuery.fn.popover) {
+        jQuery(document).popover({
             selector: '[data-popover-img]',
             trigger: 'focus',
             html: true,
-            placement: 'bottom',
+            placement: 'auto',
             content: function () {
-                return '<img class="ma-popover-image" src="'+$(this).data('popover-img')+'" />' +
-                    ($(this).data('popover-text') ? '<p class="text-center">'+$(this).data('popover-text')+'</p>' : '');
+                return '<img class="ma-popover-image" src="'+jQuery(this).data('popover-img')+'" />' +
+                    (jQuery(this).data('popover-text') ? '<p class="text-center">'+jQuery(this).data('popover-text')+'</p>' : '');
             }
         });
     }
@@ -437,7 +437,7 @@ if (window.jQuery) {
  */
 function MasonryStart() {
     if (jQuery().masonry) {
-        $('.grid').masonry({
+        jQuery('.grid').masonry({
             itemSelector: '.grid-item',
             columnWidth: '.grid-sizer',
             percentPosition: true
@@ -447,22 +447,22 @@ function MasonryStart() {
 
 function MasonryReload() {
     if (jQuery().masonry) {
-        $.each($('.grid'), function(index, item) {
-            var instance = $.data($(item), 'masonry');
+        jQuery.each(jQuery('.grid'), function(index, item) {
+            var instance = jQuery.data(jQuery(item), 'masonry');
             if (! instance) {
                 MasonryStart();
             }
-            $(item).masonry('reloadItems');
-            $(item).masonry('layout');
+            jQuery(item).masonry('reloadItems');
+            jQuery(item).masonry('layout');
         });
         /*
-        $.each($('.grid'), function(index, item) {
-            var instance = $.data($(item), 'masonry');
+        jQuery.each(jQuery('.grid'), function(index, item) {
+            var instance = jQuery.data(jQuery(item), 'masonry');
             if (!instance) {
                 MasonryStart();
             } else {
-                $(item).masonry('reloadItems');
-                $(item).masonry('layout');
+                jQuery(item).masonry('reloadItems');
+                jQuery(item).masonry('layout');
             }
         });
         */

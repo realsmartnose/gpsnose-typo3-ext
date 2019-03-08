@@ -33,36 +33,36 @@ var BaseComponentsViewModel = (function () {
 var MAX_DATE_TIME_TICKS = "3155378975999999999";
 ko.bindingHandlers.modal = {
     init: function (element, valueAccessor) {
-        $(element).modal({
+        jQuery(element).modal({
             show: false
         });
         var value = valueAccessor();
         if (typeof (value) === 'function') {
-            $(element).on('hide.bs.modal', function () {
+            jQuery(element).on('hide.bs.modal', function () {
                 value(false);
             });
         }
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-            $(element).modal("destroy");
+            jQuery(element).modal("destroy");
         });
     },
     update: function (element, valueAccessor) {
         var value = valueAccessor();
         if (ko.utils.unwrapObservable(value)) {
-            $(element).modal('show');
+            jQuery(element).modal('show');
         }
         else {
-            $(element).modal('hide');
+            jQuery(element).modal('hide');
         }
     }
 };
 ko.bindingHandlers.enterkey = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
         var callback = valueAccessor();
-        $(element).keypress(function (event) {
+        jQuery(element).keypress(function (event) {
             var keyCode = (event.which ? event.which : event.keyCode);
             if (keyCode === 13) {
-                $(element).blur();
+                jQuery(element).blur();
                 callback.call(viewModel);
                 return false;
             }
@@ -90,9 +90,9 @@ ko.bindingHandlers.bsChecked = {
         ko.bindingHandlers.event.init(element, newValueAccessor, allBindingsAccessor, viewModel, bindingContext);
     },
     update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-        if ($(element).val() == ko.unwrap(valueAccessor())) {
+        if (jQuery(element).val() == ko.unwrap(valueAccessor())) {
             setTimeout(function () {
-                $(element).closest('.btn').button('toggle');
+                jQuery(element).closest('.btn').button('toggle');
             }, 10);
         }
     }
@@ -105,18 +105,18 @@ ko.bindingHandlers.fancyboxAttr = {
         var disabled = allBindings.get('disabled');
         if (!allBindings.get('disabled')) {
             if (external) {
-                $(element).attr('data-external', '');
-                $(element).attr('href', linkableItem.detailUrl());
+                jQuery(element).attr('data-external', '');
+                jQuery(element).attr('href', linkableItem.detailUrl());
             }
             else {
-                $(element).attr('data-fancybox', group);
+                jQuery(element).attr('data-fancybox', group);
                 var type = allBindings.get('fancyboxType');
                 ;
                 if (type) {
-                    $(element).attr('data-type', type);
+                    jQuery(element).attr('data-type', type);
                 }
-                if (!$(element).attr('data-src')) {
-                    $(element).attr('data-src', linkableItem.previewUrl());
+                if (!jQuery(element).attr('data-src')) {
+                    jQuery(element).attr('data-src', linkableItem.previewUrl());
                 }
             }
         }
@@ -144,7 +144,7 @@ var CommunityDetailViewModel = (function (_super) {
                 _this.membersLastJoinTicks = data[data.length - 1].JoinTicks;
                 for (var i in data) {
                     var member = new CommunityMemberDto(data[i]);
-                    member.IsAdmin = member.LoginName == _this.Entity.CreatorLoginName || (_this.Entity.Admins && $.inArray(member.LoginName, _this.Entity.Admins) != -1);
+                    member.IsAdmin = member.LoginName == _this.Entity.CreatorLoginName || (_this.Entity.Admins && jQuery.inArray(member.LoginName, _this.Entity.Admins) != -1);
                     _this.members.push(member);
                 }
                 if (data.length % _this.membersPageSize != 0)
@@ -160,7 +160,7 @@ var CommunityDetailViewModel = (function (_super) {
             if (_this.membersRequestActive() || !_this.hasMoreMembers())
                 return;
             _this.membersRequestActive(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: _this.membersPageUrl,
                 cache: false,
@@ -298,7 +298,7 @@ var IndexViewModel = (function (_super) {
             if (!_this.showNoses() || _this.nosesRequestActive() || !_this.hasMoreNoses())
                 return;
             _this.nosesRequestActive(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: _this.nosePageUrl,
                 cache: false,
@@ -353,7 +353,7 @@ var IndexViewModel = (function (_super) {
             if (!_this.showNews() || _this.newsRequestActive() || !_this.hasMoreNews())
                 return;
             _this.newsRequestActive(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: _this.newsPageUrl,
                 cache: false,
@@ -407,7 +407,7 @@ var NearbyViewModel = (function (_super) {
         _this.Entity = new CommunityDto(communityDto, user);
         _this.pageableNoses = new PageableItem(communityDto.TagName, '/Nearby/Noses', gnSettings.NearbyNosesPageSize, function (data) {
             var nose = new NoseDto(data);
-            nose.IsAdmin = nose.LoginName == _this.Entity.CreatorLoginName || (_this.Entity.Admins && $.inArray(nose.LoginName, _this.Entity.Admins) != -1);
+            nose.IsAdmin = nose.LoginName == _this.Entity.CreatorLoginName || (_this.Entity.Admins && jQuery.inArray(nose.LoginName, _this.Entity.Admins) != -1);
             return nose;
         });
         _this.pageablePois = new PageableItem(communityDto.TagName, '/Nearby/Pois', gnSettings.NearbyPoisPageSize, function (data) {
@@ -499,7 +499,7 @@ var TourDetailViewModel = (function (_super) {
             if (_this.coordinateRequestActive())
                 return;
             _this.coordinateRequestActive(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'GET',
                 url: '/Tour/Coordinates',
                 cache: false,
@@ -1082,7 +1082,7 @@ var UserDetailViewModel = (function (_super) {
             if (_this.photoBlogsRequestActive() || !_this.hasMorePhotoBlogs())
                 return;
             _this.photoBlogsRequestActive(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: '/Nose/Page_Blogs',
                 cache: false,
@@ -1143,7 +1143,7 @@ var UserDetailViewModel = (function (_super) {
             if (_this.poisRequestActive() || !_this.hasMorePois())
                 return;
             _this.poisRequestActive(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: '/Nose/Page_PoIs',
                 cache: false,
@@ -1198,7 +1198,7 @@ var UserDetailViewModel = (function (_super) {
             if (_this.toursRequestActive() || !_this.hasMoreTours())
                 return;
             _this.toursRequestActive(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: '/Nose/Page_Tours',
                 cache: false,
@@ -1253,7 +1253,7 @@ var UserDetailViewModel = (function (_super) {
             if (_this.eventsRequestActive() || !_this.hasMoreEvents())
                 return;
             _this.eventsRequestActive(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: '/Nose/Page_Events',
                 cache: false,
@@ -1443,13 +1443,13 @@ var CommentsViewModel = (function (_super) {
                 _this.hasMoreComments(false);
             }
             if (_this.onChangeComments)
-                _this.onChangeComments($('#commentsContainer'));
+                _this.onChangeComments(jQuery('#commentsContainer'));
         };
         _this.pageComments = function () {
             if (_this.commentsRequestActive() || !_this.hasMoreComments())
                 return;
             _this.commentsRequestActive(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: _this.commentPageUrl,
                 cache: false,
@@ -1495,13 +1495,13 @@ var CommentsViewModel = (function (_super) {
             }
         };
         _this.longComment = function () {
-            $(document).off('gn.dialog.show').on('gn.dialog.show', function () {
+            jQuery(document).off('gn.dialog.show').on('gn.dialog.show', function () {
                 setTimeout(function () {
-                    $('#CommentLongField').select();
+                    jQuery('#CommentLongField').select();
                 }, 500);
             });
             dialog.show(GetLangRes("Common_lblCommentAdd", "Add comment"), '<textarea id="CommentLongField" rows="4" cols="50" maxlength="5000" type="text" class="form-control" placeholder="' + GetLangRes("Common_lblCommentAddHint", "Write comment") + '">' + _this.commentAddText() + '</textarea>', function () {
-                var newVal = String($('#CommentLongField').val());
+                var newVal = String(jQuery('#CommentLongField').val());
                 if (newVal && newVal.length > 0) {
                     var comment = new CommentDto({
                         "Creator": _this.loginName(),
@@ -1512,24 +1512,24 @@ var CommentsViewModel = (function (_super) {
                         dialog.hide();
                         _this.commentAddText("");
                         _this.commentAddMood("");
-                        $('#CommentLongField').val("");
+                        jQuery('#CommentLongField').val("");
                         var tmp = _this.comments();
                         _this.comments([]);
                         _this.comments(tmp);
                         if (_this.onChangeComments)
-                            _this.onChangeComments($('#commentsContainer'));
+                            _this.onChangeComments(jQuery('#commentsContainer'));
                     });
                 }
             });
         };
         _this.editComment = function (comment) {
-            $(document).off('gn.dialog.show').on('gn.dialog.show', function () {
+            jQuery(document).off('gn.dialog.show').on('gn.dialog.show', function () {
                 setTimeout(function () {
-                    $('#CommentEditField').select();
+                    jQuery('#CommentEditField').select();
                 }, 500);
             });
             dialog.show(GetLangRes("Common_lblCommentEdit", "Edit comment"), '<textarea id="CommentEditField" rows="4" cols="50" maxlength="5000" type="text" class="form-control" placeholder="' + GetLangRes("Common_lblCommentEditHint", "Remove comment") + '">' + comment.Text + '</textarea>', function () {
-                var newVal = String($('#CommentEditField').val());
+                var newVal = String(jQuery('#CommentEditField').val());
                 if (newVal && newVal.length > 0) {
                     comment.Text = newVal;
                     _this.saveComment(comment, true, function () {
@@ -1538,7 +1538,7 @@ var CommentsViewModel = (function (_super) {
                         _this.comments([]);
                         _this.comments(tmp);
                         if (_this.onChangeComments)
-                            _this.onChangeComments($('#commentsContainer'));
+                            _this.onChangeComments(jQuery('#commentsContainer'));
                     });
                 }
                 else {
@@ -1560,7 +1560,7 @@ var CommentsViewModel = (function (_super) {
             if (_this.saveCommentRequestActive())
                 return;
             _this.saveCommentRequestActive(true);
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: _this.commentSaveUrl,
                 cache: false,
@@ -1587,7 +1587,7 @@ var CommentsViewModel = (function (_super) {
                         if (comment.Text == null && comment.Mood === null && match) {
                             _this.comments.remove(match);
                             if (_this.onChangeComments)
-                                _this.onChangeComments($('#commentsContainer'));
+                                _this.onChangeComments(jQuery('#commentsContainer'));
                         }
                         else {
                             if (match) {
@@ -1597,7 +1597,7 @@ var CommentsViewModel = (function (_super) {
                             else {
                                 _this.comments.splice(0, 0, comment);
                                 if (_this.onChangeComments)
-                                    _this.onChangeComments($('#commentsContainer'));
+                                    _this.onChangeComments(jQuery('#commentsContainer'));
                             }
                         }
                         if (onSuccess)
@@ -1704,7 +1704,7 @@ ko.components.register('ma-gpsnose-comments', {
         '</div>' +
         '</form>' +
         '<div id="moods-dialog" data-bind="foreach: moods" style="display:none;" class="moods-dialog">' +
-        '<div class="btn btn-default" data-bind="text: $data, click: function() { if (jQuery().fancybox) $.fancybox.close(true); $parent.commentAddMood($data); }"></div>' +
+        '<div class="btn btn-default" data-bind="text: $data, click: function() { if (jQuery().fancybox) jQuery.fancybox.close(true); $parent.commentAddMood($data); }"></div>' +
         '</div>' +
         '</div>' +
         '<div data-bind="if: comments().length == 0">' +
@@ -1732,7 +1732,7 @@ ko.components.register('ma-gpsnose-comments', {
         '<span aria-hidden="true" class="glyphicon glyphicon-user"></span>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnShowProfile\', \'Show profile\')"></span>' +
         '</a>' +
-        '<div class="btn btn-default" data-bind="visible: $data.hasText(), click: function() { if (! $parent.saveCommentRequestActive()) { if (jQuery().fancybox) $.fancybox.close(true); $parent.editComment($data); } }, attr: { \'disabled\': $parent.saveCommentRequestActive(), \'data-remove\': $parent.loginName() != $data.Creator, title: GetLangRes(\'Common_btnEdit\', \'Edit\') }">' +
+        '<div class="btn btn-default" data-bind="visible: $data.hasText(), click: function() { if (! $parent.saveCommentRequestActive()) { if (jQuery().fancybox) jQuery.fancybox.close(true); $parent.editComment($data); } }, attr: { \'disabled\': $parent.saveCommentRequestActive(), \'data-remove\': $parent.loginName() != $data.Creator, title: GetLangRes(\'Common_btnEdit\', \'Edit\') }">' +
         '<span aria-hidden="true" class="glyphicon glyphicon-edit"></span>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnEdit\', \'Edit\')"></span>' +
         '</div>' +
@@ -1777,17 +1777,17 @@ var DialogViewModel = (function () {
             _this.hasOkCallback(okCallback != null);
             _this.showDialog(title.length > 0 || message.length > 0);
             _this.okClicked(false);
-            $(document).trigger('gn.dialog.show');
+            jQuery(document).trigger('gn.dialog.show');
         };
         this.hide = function () {
             _this.showDialog(false);
-            $(document).trigger('gn.dialog.hide');
+            jQuery(document).trigger('gn.dialog.hide');
         };
         this.clickOkButton = function () {
             _this.okClicked(true);
             if (_this.okCallback)
                 _this.okCallback();
-            $(document).trigger('gn.dialog.click.ok');
+            jQuery(document).trigger('gn.dialog.click.ok');
         };
         this.hasTitle = function () {
             return _this.title() != null || _this.title().length > 0;
@@ -1798,7 +1798,7 @@ var DialogViewModel = (function () {
             if (keyword.isCommunity) {
                 var msg = GetLangRes("Common_lblJoinCommunityAreYouSure", "Would you like to join the community %community%?").replace("%community%", keyword.getHtml());
                 dialog.show(GetLangRes("Common_lblJoinTitle", "Join a community"), msg, function () {
-                    $.ajax({
+                    jQuery.ajax({
                         type: 'POST',
                         url: '/WebApi/JoinCommunity',
                         cache: false,
@@ -1829,7 +1829,7 @@ var DialogViewModel = (function () {
             if (keyword.isCommunity) {
                 var msg = GetLangRes("Common_lblLeaveCommunityAreYouSure", "Would you like to leave the community %community%?").replace("%community%", keyword.getHtml());
                 dialog.show(GetLangRes("Common_lblLeaveTitle", "Leave community"), msg, function () {
-                    $.ajax({
+                    jQuery.ajax({
                         type: 'POST',
                         url: '/WebApi/LeaveCommunity',
                         cache: false,
@@ -1954,7 +1954,7 @@ var KeepAliveViewModel = (function () {
         this.StartInterval(interval);
     }
     KeepAliveViewModel.prototype.IsStillLoggedIn = function (onFinish) {
-        $.ajax({
+        jQuery.ajax({
             type: 'POST',
             url: '/Login/IsStillLoggedIn',
             cache: false,
@@ -2131,7 +2131,7 @@ ko.components.register('ma-gpsnose-moods-control', {
         '</div>' +
         '<input type="hidden" name="Mood" data-bind="value: selectedMood()" />' +
         '<div data-bind="foreach: moods, attr: { \'id\': \'moods-dialog-\' + moodIndex() }" style="display: none;" class="moods-dialog">' +
-        '<div class="btn btn-default" data-bind="text: $data, css: { active: $data == $parent.selectedMood() }, click: function() { $parent.selectedMood($data); $.fancybox.close(true); }"></div>' +
+        '<div class="btn btn-default" data-bind="text: $data, css: { active: $data == $parent.selectedMood() }, click: function() { $parent.selectedMood($data); jQuery.fancybox.close(true); }"></div>' +
         '</div>' +
         '</div>'
 });
@@ -2170,7 +2170,7 @@ var NavbarViewModel = (function (_super) {
             dialog.show(GetLangRes("Common_activationRequired", "Validation required"), GetLangRes("Common_lblActivationRequired", "To use this functionality, it is required to validate your account, please validate your account in the GpsNose-App!"), null);
         }
         else {
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 url: '/WebApi/SendMail',
                 cache: false,
@@ -2273,7 +2273,7 @@ ko.components.register('ma-gpsnose-navbar', {
         '</div>' +
         '<div class="poke-moods-dialog">' +
         '<div id="poke-moods-dialog" data-bind="foreach: pokeMoods" style="display:none;" class="moods-dialog">' +
-        '<div class="btn btn-default" data-bind="text: $data, click: function() { $.fancybox.getInstance(\'close\'); $parent.sendPoke($data, gn_data.User || {}); }"></div>' +
+        '<div class="btn btn-default" data-bind="text: $data, click: function() { jQuery.fancybox.getInstance(\'close\'); $parent.sendPoke($data, gn_data.User || {}); }"></div>' +
         '</div>' +
         '</div>' +
         '</nav>'
@@ -2317,7 +2317,7 @@ ko.components.register('ma-gpsnose-rating', {
 var BaseNavigableItem = (function () {
     function BaseNavigableItem(data) {
         if (data)
-            $.extend(this, data);
+            jQuery.extend(this, data);
         if (!this.LoginName && data.Creator) {
             this.LoginName = data.Creator;
         }
@@ -2347,7 +2347,7 @@ var CommentDto = (function () {
             return _this.Text && _this.Text.length > 0;
         };
         if (data)
-            $.extend(this, data);
+            jQuery.extend(this, data);
         if (data.CreatedByUserName && !this.Creator)
             this.Creator = data.CreatedByUserName;
         this.NoseDto = new NoseDto({ "LoginName": this.Creator });
@@ -2371,7 +2371,7 @@ var CommunityDto = (function () {
             return gnSettings.BaseUrl + "/community/index?profileTag=" + encodeURIComponent(_this.TagName);
         };
         this.isLoginNameAdmin = function () {
-            return _this.LoginName == _this.CreatorLoginName || $.inArray(_this.LoginName, _this.Admins) != -1;
+            return _this.LoginName == _this.CreatorLoginName || jQuery.inArray(_this.LoginName, _this.Admins) != -1;
         };
         this.webMashupUrl = function () {
             if (_this.TagName.indexOf(".") != -1) {
@@ -2399,9 +2399,9 @@ var CommunityDto = (function () {
         };
         this.commentItemType = CommentItemType.Community;
         this.isCommentsAllowed = function () { return (_this.isAclCommentsFromMembers() && (_this.IsInCommunity || _this.NoseDto.IsInCommunity(_this.TagName) || !_this.LoginName)) || _this.isLoginNameAdmin(); };
-        this.isUserAdmin = function (loginName) { return _this.LoginName == loginName || $.inArray(loginName, _this.Admins) != -1; };
+        this.isUserAdmin = function (loginName) { return _this.LoginName == loginName || jQuery.inArray(loginName, _this.Admins) != -1; };
         if (data)
-            $.extend(this, data);
+            jQuery.extend(this, data);
         this.LoginName = user.LoginName;
         this.NoseDto = new NoseDto(user);
     }
@@ -2410,7 +2410,7 @@ var CommunityDto = (function () {
 var CommunityMemberDto = (function () {
     function CommunityMemberDto(data) {
         if (data)
-            $.extend(this, data);
+            jQuery.extend(this, data);
         this.NoseDto = new NoseDto({ "LoginName": this.LoginName });
     }
     return CommunityMemberDto;
@@ -2422,7 +2422,7 @@ var Coordinate = (function () {
         this.distance = 0;
         this.ageString = "0m";
         if (data)
-            $.extend(this, data);
+            jQuery.extend(this, data);
         this.location = L.latLng(this.lat, this.lon, this.alt);
     }
     return Coordinate;
@@ -2596,7 +2596,7 @@ var NewsDto = (function () {
             return _this.Entity.shareUrl();
         };
         if (data)
-            $.extend(this, data);
+            jQuery.extend(this, data);
         this.UniqueKey = GetUniqueKey(this.Creator, this.CreationTicks);
         this.NoseDto = new NoseDto({ "LoginName": this.Creator });
         this.Entity = new NoseDto({ "LoginName": this.Creator });
@@ -2686,7 +2686,7 @@ var NoseDto = (function (_super) {
         return _this;
     }
     NoseDto.prototype.IsInCommunity = function (community) {
-        return this.Communities && $.inArray(community, this.Communities) != -1;
+        return this.Communities && jQuery.inArray(community, this.Communities) != -1;
     };
     return NoseDto;
 }(BaseNavigableItem));
@@ -2728,7 +2728,7 @@ var PageableItem = (function () {
         if (this.itemsRequestActive() || !this.hasMoreItems())
             return;
         this.itemsRequestActive(true);
-        $.ajax({
+        jQuery.ajax({
             type: 'POST',
             url: this.itemPageUrl,
             cache: false,
