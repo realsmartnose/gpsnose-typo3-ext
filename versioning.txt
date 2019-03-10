@@ -1,6 +1,7 @@
 1.1.0
 - FIX: Fix missing ImagePath For 9.4+
 - UPD: Update SDK
+- ADD: Add GnMappingService for GIP
 
 1.0.9
 - UPD: Add compatibility for Bootstrap 4 II
