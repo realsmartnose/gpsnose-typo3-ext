@@ -1,7 +1,10 @@
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -11,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 var BaseNavigableItem = (function () {
     function BaseNavigableItem(data) {
         if (data)
-            $.extend(this, data);
+            jQuery.extend(this, data);
         if (!this.LoginName && data.Creator) {
             this.LoginName = data.Creator;
         }
@@ -29,206 +32,212 @@ var NoseDto = (function (_super) {
     __extends(NoseDto, _super);
     function NoseDto(data) {
         var _this = _super.call(this, data) || this;
-        _this.thumbSize = "@200";
-        _this.imageUrl = function () {
+        _this.IsInCommunity = function (community) {
+            return _this.Communities && jQuery.inArray(community, _this.Communities) != -1;
+        };
+        _this.ThumbSize = "@200";
+        _this.ImageUrl = function () {
             return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(_this.LoginName);
         };
-        _this.previewUrl = function () {
+        _this.PreviewUrl = function () {
             return "/nose/preview/" + encodeURIComponent(_this.LoginName);
         };
-        _this.detailUrl = function () {
+        _this.DetailUrl = function () {
             return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
         };
-        _this.shareUrl = function () {
+        _this.ShareUrl = function () {
             return gnSettings.BaseUrl + "/" + encodeURIComponent(_this.LoginName);
         };
         return _this;
     }
-    NoseDto.prototype.IsInCommunity = function (community) {
-        return this.Communities && $.inArray(community, this.Communities) != -1;
-    };
     return NoseDto;
 }(BaseNavigableItem));
 var MAX_DATE_TIME_TICKS = "3155378975999999999";
 var MashupFormTypeEnum;
 (function (MashupFormTypeEnum) {
-    MashupFormTypeEnum[MashupFormTypeEnum["none"] = 0] = "none";
-    MashupFormTypeEnum[MashupFormTypeEnum["add"] = 1] = "add";
-    MashupFormTypeEnum[MashupFormTypeEnum["edit"] = 2] = "edit";
-    MashupFormTypeEnum[MashupFormTypeEnum["detail"] = 3] = "detail";
-    MashupFormTypeEnum[MashupFormTypeEnum["mashupToken"] = 4] = "mashupToken";
+    MashupFormTypeEnum[MashupFormTypeEnum["None"] = 0] = "None";
+    MashupFormTypeEnum[MashupFormTypeEnum["Add"] = 1] = "Add";
+    MashupFormTypeEnum[MashupFormTypeEnum["Edit"] = 2] = "Edit";
+    MashupFormTypeEnum[MashupFormTypeEnum["Detail"] = 3] = "Detail";
+    MashupFormTypeEnum[MashupFormTypeEnum["MashupToken"] = 4] = "MashupToken";
 })(MashupFormTypeEnum || (MashupFormTypeEnum = {}));
 var MashupAdminViewModel = (function () {
     function MashupAdminViewModel(params) {
         var _this = this;
-        this.ownMashups = ko.observableArray([]);
-        this.currentMashup = ko.observable();
-        this.mashupTokenCallbackUrlValue = ko.observable('n/a');
-        this.mashupTokenCallbackUrlMaxChars = ko.observable(0);
-        this.mashupTokenCallbackUrlIsValid = ko.observable(false);
-        this.formType = ko.observable(MashupFormTypeEnum.none);
-        this.requestActiveOwnMashups = ko.observable(false);
-        this.requestActiveRegisterCommunity = ko.observable(false);
-        this.requestActiveValidateCommunity = ko.observable(false);
-        this.requestActiveRegenerateAppKey = ko.observable(false);
-        this.requestActiveUpdateCommunity = ko.observable(false);
-        this.requestActiveAddSubCommunity = ko.observable(false);
-        this.requestActiveDelSubCommunity = ko.observable(false);
-        this.requestActiveMashupTokenNew = ko.observable(false);
-        this.addMaxCount = ko.observable(0);
-        this.addMaxChars = ko.observable(0);
-        this.privacyDropdownItems = ko.observableArray([]);
-        this.privacyLabel = ko.observable("");
-        this.privacyIndex = ko.observable(-1);
-        this.registerCommunityValue = ko.observable("");
-        this.registerCommunityIsValid = ko.observable(false);
-        this.addSubCommunityValue = ko.observable("");
-        this.addSubCommunityMaxChars = ko.observable(0);
-        this.addSubCommunityIsValid = ko.observable(false);
-        this.hosts = ko.observableArray([]);
-        this.addHostValue = ko.observable("");
-        this.addHostMaxChars = ko.observable(0);
-        this.addHostIsValid = ko.observable(false);
-        this.createMashupTokenValue = ko.observable("");
-        this.createMashupTokenMaxChars = ko.observable(0);
-        this.createMashupTokenIsValid = ko.observable(false);
-        this.createMashupTokenDate = ko.observable("");
-        this.createMashupTokenSrc = ko.observable("");
-        this.mashupTokenPageUrl = '/MashupApi/GetMashupTokensPage';
-        this.mashupTokens = ko.observableArray([]);
-        this.mashupTokensPageSize = gnSettings.MashupTokensPageSize;
-        this.mashupTokensLastKnownTicks = "0";
-        this.hasMoreMashupTokens = ko.observable(true);
-        this.mashupTokensRequestActive = ko.observable(false);
-        this.onAddMashupTokens = function () { };
-        this.addMashupTokens = function (data) {
-            if (data == null)
-                return;
-            if (data.length > 0) {
-                for (var i in data) {
-                    var mashupToken = new MashupTokenDto(data[i]);
-                    if (mashupToken.ScannedTicks() > _this.mashupTokensLastKnownTicks)
-                        _this.mashupTokensLastKnownTicks = mashupToken.ScannedTicks();
-                    _this.mashupTokens.push(mashupToken);
-                }
-                if (data.length % _this.mashupTokensPageSize != 0)
-                    _this.hasMoreMashupTokens(false);
-            }
-            else {
-                _this.hasMoreMashupTokens(false);
-            }
-            if (_this.onAddMashupTokens)
-                _this.onAddMashupTokens();
-        };
-        this.pageMashupTokens = function () {
-            if (_this.mashupTokensRequestActive())
-                return;
-            _this.mashupTokensRequestActive(true);
-            jQuery.ajax({
-                type: 'POST',
-                url: _this.mashupTokenPageUrl,
-                cache: false,
-                data: {
-                    appKey: _this.currentMashup().AppKey(),
-                    lastKnownScanTicks: _this.mashupTokensLastKnownTicks,
-                    pageSize: _this.mashupTokensPageSize
-                },
-                dataType: 'json',
-                success: function (result) {
-                    if (result && result.length > 0) {
-                        _this.addMashupTokens(result);
-                    }
-                    else {
-                        _this.hasMoreMashupTokens(false);
-                    }
-                    _this.mashupTokensRequestActive(false);
-                },
-                error: function (jqxhr) {
-                    if (jqxhr.status != 429) {
-                        dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
-                    }
-                    _this.mashupTokensRequestActive(false);
-                }
-            });
-        };
-        this.isAddAllowed = ko.computed(function () {
-            return _this.ownMashups().length < _this.addMaxCount();
+        this.OwnMashups = ko.observableArray([]);
+        this.CurrentMashup = ko.observable();
+        this.MashupTokenCallbackUrlValue = ko.observable('n/a');
+        this.MashupTokenCallbackUrlMaxChars = ko.observable(0);
+        this.MashupTokenCallbackUrlIsValid = ko.observable(false);
+        this.FormType = ko.observable(MashupFormTypeEnum.None);
+        this.RequestActiveOwnMashups = ko.observable(false);
+        this.RequestActiveRegisterCommunity = ko.observable(false);
+        this.RequestActiveValidateCommunity = ko.observable(false);
+        this.RequestActiveRegenerateAppKey = ko.observable(false);
+        this.RequestActiveUpdateCommunity = ko.observable(false);
+        this.RequestActiveAddSubCommunity = ko.observable(false);
+        this.RequestActiveDelSubCommunity = ko.observable(false);
+        this.RequestActiveMashupTokenNew = ko.observable(false);
+        this.AddMaxCount = ko.observable(0);
+        this.AddMaxChars = ko.observable(0);
+        this.PrivacyDropdownItems = ko.observableArray([]);
+        this.PrivacyLabel = ko.observable("");
+        this.PrivacyIndex = ko.observable(-1);
+        this.RegisterCommunityValue = ko.observable("");
+        this.RegisterCommunityIsValid = ko.observable(false);
+        this.AddSubCommunityValue = ko.observable("");
+        this.AddSubCommunityMaxChars = ko.observable(0);
+        this.AddSubCommunityIsValid = ko.observable(false);
+        this.Hosts = ko.observableArray([]);
+        this.AddHostValue = ko.observable("");
+        this.AddHostMaxChars = ko.observable(0);
+        this.AddHostIsValid = ko.observable(false);
+        this.CreateMashupTokenValue = ko.observable("");
+        this.CreateMashupTokenMaxChars = ko.observable(0);
+        this.CreateMashupTokenIsValid = ko.observable(false);
+        this.CreateMashupTokenDate = ko.observable("");
+        this.CreateMashupTokenSrc = ko.observable("");
+        this.MashupTokenPageUrl = '/MashupApi/GetMashupTokensPage';
+        this.MashupTokens = ko.observableArray([]);
+        this.MashupTokensPageSize = gnSettings.MashupTokensPageSize;
+        this.MashupTokensLastKnownTicks = "0";
+        this.HasMoreMashupTokens = ko.observable(true);
+        this.MashupTokensRequestActive = ko.observable(false);
+        this.IsAddAllowed = ko.computed(function () {
+            return _this.OwnMashups().length < _this.AddMaxCount();
         });
-        this.isAddSubCommunityAllowed = ko.computed(function () {
-            return _this.currentMashup() != null && _this.currentMashup().SubCommunities().length < _this.currentMashup().MaxSubSites();
+        this.IsAddSubCommunityAllowed = ko.computed(function () {
+            return _this.CurrentMashup() != null && _this.CurrentMashup().SubCommunities().length < _this.CurrentMashup().MaxSubSites();
         });
-        this.isAddHostAllowed = ko.computed(function () {
-            return _this.currentMashup() != null && _this.hosts().length < _this.currentMashup().MaxHosts();
+        this.IsAddHostAllowed = ko.computed(function () {
+            return _this.CurrentMashup() != null && _this.Hosts().length < _this.CurrentMashup().MaxHosts();
         });
-        this.onEditMashup = function (mashupDto) { };
-        this.onDetailMashup = function (mashupDto) { };
-        this.onMashupToken = function (mashupDto) { };
-        this.addMaxCount(params.MaxMashups ? params.MaxMashups : 1);
-        this.addMaxChars(100);
-        this.addSubCommunityMaxChars(20);
-        this.addHostMaxChars(100);
-        this.createMashupTokenMaxChars(200);
-        this.mashupTokenCallbackUrlMaxChars(1000);
-        this.privacyDropdownItems.push('%' + GetLangRes('Common_lblCommunityPublic', 'Public'));
-        this.privacyDropdownItems.push('@' + GetLangRes('Common_lblCommunityClosed', 'Closed'));
-        this.privacyDropdownItems.push('*' + GetLangRes('Common_lblCommunityPrivate', 'Private'));
-        this.privacyIndex.subscribe(function (newValue) {
-            _this.privacyLabel(_this.privacyDropdownItems()[newValue]);
+        this.AddMaxCount(params.MaxMashups ? params.MaxMashups : 1);
+        this.AddMaxChars(100);
+        this.AddSubCommunityMaxChars(20);
+        this.AddHostMaxChars(100);
+        this.CreateMashupTokenMaxChars(200);
+        this.MashupTokenCallbackUrlMaxChars(1000);
+        this.PrivacyDropdownItems.push('%' + GetLangRes('Common_lblCommunityPublic', 'Public'));
+        this.PrivacyDropdownItems.push('@' + GetLangRes('Common_lblCommunityClosed', 'Closed'));
+        this.PrivacyDropdownItems.push('*' + GetLangRes('Common_lblCommunityPrivate', 'Private'));
+        this.PrivacyIndex.subscribe(function (newValue) {
+            _this.PrivacyLabel(_this.PrivacyDropdownItems()[newValue]);
         });
-        this.privacyIndex(0);
-        this.registerCommunityValue.subscribe(function (newValue) {
-            var isValid = IsValidDomain(newValue, _this.addMaxChars());
-            _this.registerCommunityIsValid(isValid);
-            _this.currentMashup(null);
+        this.PrivacyIndex(0);
+        this.RegisterCommunityValue.subscribe(function (newValue) {
+            var isValid = IsValidDomain(newValue, _this.AddMaxChars());
+            _this.RegisterCommunityIsValid(isValid);
+            _this.CurrentMashup(null);
         });
-        this.addSubCommunityValue.subscribe(function (newValue) {
-            var isValid = IsValidCommunity(newValue, _this.addSubCommunityMaxChars());
-            _this.addSubCommunityIsValid(isValid);
+        this.AddSubCommunityValue.subscribe(function (newValue) {
+            var isValid = IsValidCommunity(newValue, _this.AddSubCommunityMaxChars());
+            _this.AddSubCommunityIsValid(isValid);
         });
-        this.addHostValue.subscribe(function (newValue) {
-            var isValid = IsValidDomain(newValue, _this.addHostMaxChars());
-            _this.addHostIsValid(isValid);
+        this.AddHostValue.subscribe(function (newValue) {
+            var isValid = IsValidDomain(newValue, _this.AddHostMaxChars());
+            _this.AddHostIsValid(isValid);
         });
-        this.createMashupTokenValue.subscribe(function (newValue) {
-            var isValid = newValue.length > 0 && newValue.length <= _this.createMashupTokenMaxChars();
-            _this.createMashupTokenIsValid(isValid);
-            _this.createMashupTokenSrc("");
+        this.CreateMashupTokenValue.subscribe(function (newValue) {
+            var isValid = newValue.length > 0 && newValue.length <= _this.CreateMashupTokenMaxChars();
+            _this.CreateMashupTokenIsValid(isValid);
+            _this.CreateMashupTokenSrc("");
         });
-        this.createMashupTokenDate.subscribe(function (newValue) {
-            _this.createMashupTokenSrc("");
+        this.CreateMashupTokenDate.subscribe(function (newValue) {
+            _this.CreateMashupTokenSrc("");
         });
-        this.mashupTokenCallbackUrlValue.subscribe(function (newValue) {
-            var domain = _this.currentMashup() ? _this.currentMashup().CommunityTagSufix() : null;
-            var isValid = newValue.length == 0 || IsValidUrl(newValue, _this.mashupTokenCallbackUrlMaxChars(), domain);
-            _this.mashupTokenCallbackUrlIsValid(isValid);
+        this.MashupTokenCallbackUrlValue.subscribe(function (newValue) {
+            var domain = _this.CurrentMashup() ? _this.CurrentMashup().CommunityTagSufix() : null;
+            var isValid = newValue.length == 0 || IsValidUrl(newValue, _this.MashupTokenCallbackUrlMaxChars(), domain);
+            _this.MashupTokenCallbackUrlIsValid(isValid);
         });
     }
+    MashupAdminViewModel.prototype.OnAddMashupTokens = function () { };
+    ;
+    MashupAdminViewModel.prototype.AddMashupTokens = function (data) {
+        if (data == null)
+            return;
+        if (data.length > 0) {
+            for (var i in data) {
+                var mashupToken = new MashupTokenDto(data[i]);
+                if (mashupToken.ScannedTicks() > this.MashupTokensLastKnownTicks)
+                    this.MashupTokensLastKnownTicks = mashupToken.ScannedTicks();
+                this.MashupTokens.push(mashupToken);
+            }
+            if (data.length % this.MashupTokensPageSize != 0)
+                this.HasMoreMashupTokens(false);
+        }
+        else {
+            this.HasMoreMashupTokens(false);
+        }
+        if (this.OnAddMashupTokens)
+            this.OnAddMashupTokens();
+    };
+    ;
+    MashupAdminViewModel.prototype.PageMashupTokens = function () {
+        var _this = this;
+        if (this.MashupTokensRequestActive())
+            return;
+        this.MashupTokensRequestActive(true);
+        jQuery.ajax({
+            type: 'POST',
+            url: this.MashupTokenPageUrl,
+            cache: false,
+            data: {
+                appKey: this.CurrentMashup().AppKey(),
+                lastKnownScanTicks: this.MashupTokensLastKnownTicks,
+                pageSize: this.MashupTokensPageSize
+            },
+            dataType: 'json',
+            success: function (result) {
+                if (result && result.length > 0) {
+                    _this.AddMashupTokens(result);
+                }
+                else {
+                    _this.HasMoreMashupTokens(false);
+                }
+                _this.MashupTokensRequestActive(false);
+            },
+            error: function (jqxhr) {
+                if (jqxhr.status != 429) {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                }
+                _this.MashupTokensRequestActive(false);
+            }
+        });
+    };
+    MashupAdminViewModel.prototype.OnEditMashup = function (mashupDto) { };
+    ;
     MashupAdminViewModel.prototype.EditMashup = function (mashup) {
-        this.currentMashup(mashup);
-        this.formType(MashupFormTypeEnum.edit);
-        this.mashupTokenCallbackUrlValue(mashup.MashupTokenCallbackUrl());
-        this.addHostValue('');
-        this.hosts(mashup.Hosts().slice(0));
-        if (this.onEditMashup) {
-            this.onEditMashup(mashup);
+        this.CurrentMashup(mashup);
+        this.FormType(MashupFormTypeEnum.Edit);
+        this.MashupTokenCallbackUrlValue(mashup.MashupTokenCallbackUrl());
+        this.AddHostValue('');
+        this.Hosts(mashup.Hosts().slice(0));
+        if (this.OnEditMashup) {
+            this.OnEditMashup(mashup);
         }
     };
+    MashupAdminViewModel.prototype.OnDetailMashup = function (mashupDto) { };
+    ;
     MashupAdminViewModel.prototype.DetailMashup = function (mashup) {
-        this.currentMashup(mashup);
-        this.formType(MashupFormTypeEnum.detail);
-        if (this.onDetailMashup) {
-            this.onDetailMashup(mashup);
+        this.CurrentMashup(mashup);
+        this.FormType(MashupFormTypeEnum.Detail);
+        if (this.OnDetailMashup) {
+            this.OnDetailMashup(mashup);
         }
     };
+    MashupAdminViewModel.prototype.OnMashupToken = function (mashupDto) { };
+    ;
     MashupAdminViewModel.prototype.MashupToken = function (mashup) {
-        this.currentMashup(mashup);
-        this.formType(MashupFormTypeEnum.mashupToken);
-        if (this.onMashupToken) {
-            this.onMashupToken(mashup);
+        this.CurrentMashup(mashup);
+        this.FormType(MashupFormTypeEnum.MashupToken);
+        if (this.OnMashupToken) {
+            this.OnMashupToken(mashup);
         }
     };
     MashupAdminViewModel.prototype.GetCommunityNameFromAdd = function (sufix) {
-        return this.GetCommunityPrefix(this.privacyDropdownItems()[this.privacyIndex()]) + sufix;
+        return this.GetCommunityPrefix(this.PrivacyDropdownItems()[this.PrivacyIndex()]) + sufix;
     };
     MashupAdminViewModel.prototype.GetCommunityHtml = function (value, additionalClass) {
         var icon = "";
@@ -261,9 +270,9 @@ var MashupAdminViewModel = (function () {
     };
     MashupAdminViewModel.prototype.GetOwnMashups = function () {
         var self = this;
-        if (self.requestActiveOwnMashups())
+        if (self.RequestActiveOwnMashups())
             return;
-        self.requestActiveOwnMashups(true);
+        self.RequestActiveOwnMashups(true);
         jQuery.ajax({
             type: 'POST',
             url: '/MashupAdmin/GetOwnMashups',
@@ -271,37 +280,37 @@ var MashupAdminViewModel = (function () {
             data: {},
             dataType: 'json',
             success: function (result) {
-                self.requestActiveOwnMashups(false);
+                self.RequestActiveOwnMashups(false);
                 if (result.ErrorCode > 0) {
-                    dialog.show(GetLangRes("Common_lblError", "Error"), result.Message, null);
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), result.Message, null);
                 }
                 else {
                     ko.utils.arrayForEach(result, function (item, index) {
-                        self.ownMashups.push(new MashupDto(item));
+                        self.OwnMashups.push(new MashupDto(item));
                     });
                 }
             },
             error: function () {
-                self.requestActiveOwnMashups(false);
-                dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
+                self.RequestActiveOwnMashups(false);
+                dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
             }
         });
     };
     MashupAdminViewModel.prototype.RegisterCommunity = function () {
         var self = this;
-        if (self.requestActiveRegisterCommunity())
+        if (self.RequestActiveRegisterCommunity())
             return;
-        self.currentMashup(null);
-        var tag = this.GetCommunityNameFromAdd(this.registerCommunityValue());
+        self.CurrentMashup(null);
+        var tag = this.GetCommunityNameFromAdd(this.RegisterCommunityValue());
         var isUnique = true;
-        ko.utils.arrayForEach(self.ownMashups(), function (item, index) {
+        ko.utils.arrayForEach(self.OwnMashups(), function (item, index) {
             var com = item.CommunityTagSufix();
-            if (com == self.registerCommunityValue()) {
+            if (com == self.RegisterCommunityValue()) {
                 isUnique = false;
             }
         });
         if (isUnique) {
-            self.requestActiveRegisterCommunity(true);
+            self.RequestActiveRegisterCommunity(true);
             jQuery.ajax({
                 type: 'POST',
                 url: '/MashupAdmin/RegisterCommunityWeb',
@@ -311,33 +320,33 @@ var MashupAdminViewModel = (function () {
                 },
                 dataType: 'json',
                 success: function (result) {
-                    self.requestActiveRegisterCommunity(false);
+                    self.RequestActiveRegisterCommunity(false);
                     if (result.ErrorCode > 0) {
-                        dialog.show(GetLangRes("Common_lblError", "Error"), result.Message, null);
+                        dialog.Show(GetLangRes("Common_lblError", "Error"), result.Message, null);
                     }
                     else {
-                        self.currentMashup(new MashupDto({
+                        self.CurrentMashup(new MashupDto({
                             "CommunityTag": tag,
                             "ValidationKey": result.ValidationKey
                         }));
                     }
                 },
                 error: function () {
-                    self.requestActiveRegisterCommunity(false);
-                    dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
+                    self.RequestActiveRegisterCommunity(false);
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
                 }
             });
         }
         else {
-            dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblDuplicateItem", "There is already an entry with the same name!"), null);
+            dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblDuplicateItem", "There is already an entry with the same name!"), null);
         }
     };
     MashupAdminViewModel.prototype.ValidateCommunity = function () {
         var self = this;
-        if (self.requestActiveValidateCommunity())
+        if (self.RequestActiveValidateCommunity())
             return;
-        var tag = this.GetCommunityNameFromAdd(this.registerCommunityValue());
-        self.requestActiveValidateCommunity(true);
+        var tag = this.GetCommunityNameFromAdd(this.RegisterCommunityValue());
+        self.RequestActiveValidateCommunity(true);
         jQuery.ajax({
             type: 'POST',
             url: '/MashupAdmin/ValidateCommunityWeb',
@@ -347,90 +356,90 @@ var MashupAdminViewModel = (function () {
             },
             dataType: "json",
             success: function (result) {
-                self.requestActiveValidateCommunity(false);
+                self.RequestActiveValidateCommunity(false);
                 if (result.ErrorCode > 0) {
-                    dialog.show(GetLangRes("Common_lblError", "Error"), result.Message, null);
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), result.Message, null);
                 }
                 else {
-                    var currentMashup = self.currentMashup();
-                    if (currentMashup != null) {
-                        currentMashup.AppKey(result.AppKey);
-                        currentMashup.ValidationTicks(GetTicksFromDate(new Date()));
-                        self.ownMashups.push(currentMashup);
+                    var CurrentMashup = self.CurrentMashup();
+                    if (CurrentMashup != null) {
+                        CurrentMashup.AppKey(result.AppKey);
+                        CurrentMashup.ValidationTicks(GetTicksFromDate(new Date()));
+                        self.OwnMashups.push(CurrentMashup);
                     }
-                    self.formType(MashupFormTypeEnum.none);
-                    self.registerCommunityValue("");
-                    self.currentMashup(null);
+                    self.FormType(MashupFormTypeEnum.None);
+                    self.RegisterCommunityValue("");
+                    self.CurrentMashup(null);
                 }
             },
             error: function () {
-                self.requestActiveValidateCommunity(false);
-                dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
+                self.RequestActiveValidateCommunity(false);
+                dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
             }
         });
     };
     MashupAdminViewModel.prototype.AddHost = function () {
-        if (this.currentMashup() != null) {
-            if (this.hosts().indexOf(this.addHostValue()) < 0) {
-                var refs = this.hosts().slice(0);
-                refs.push(this.addHostValue());
-                this.hosts(refs);
-                this.addHostValue('');
+        if (this.CurrentMashup() != null) {
+            if (this.Hosts().indexOf(this.AddHostValue()) < 0) {
+                var refs = this.Hosts().slice(0);
+                refs.push(this.AddHostValue());
+                this.Hosts(refs);
+                this.AddHostValue('');
             }
             else {
-                dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblDuplicateItem", "There is already an entry with the same name!"), null);
+                dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblDuplicateItem", "There is already an entry with the same name!"), null);
             }
         }
     };
     MashupAdminViewModel.prototype.RemoveHost = function (value) {
-        if (this.currentMashup() != null) {
-            var refs = this.hosts().slice(0);
+        if (this.CurrentMashup() != null) {
+            var refs = this.Hosts().slice(0);
             refs.splice(refs.indexOf(value), 1);
-            this.hosts(refs);
+            this.Hosts(refs);
         }
     };
     MashupAdminViewModel.prototype.UpdateCommunity = function () {
-        if (this.currentMashup() != null) {
+        if (this.CurrentMashup() != null) {
             var self = this;
-            if (self.requestActiveUpdateCommunity())
+            if (self.RequestActiveUpdateCommunity())
                 return;
-            self.requestActiveUpdateCommunity(true);
+            self.RequestActiveUpdateCommunity(true);
             jQuery.ajax({
                 type: 'POST',
                 url: '/MashupAdmin/UpdateCommunityWeb',
                 cache: false,
                 data: {
-                    tag: self.currentMashup().CommunityTag(),
-                    hosts: this.hosts().slice(0),
-                    mashupTokenCallbackUrl: self.mashupTokenCallbackUrlValue()
+                    tag: self.CurrentMashup().CommunityTag(),
+                    hosts: this.Hosts().slice(0),
+                    mashupTokenCallbackUrl: self.MashupTokenCallbackUrlValue()
                 },
                 dataType: 'json',
                 success: function (result) {
-                    self.requestActiveUpdateCommunity(false);
-                    if (self.currentMashup()) {
-                        self.currentMashup().Hosts([]);
-                        self.currentMashup().Hosts(self.hosts().slice(0));
-                        self.currentMashup().MashupTokenCallbackUrl(self.mashupTokenCallbackUrlValue());
+                    self.RequestActiveUpdateCommunity(false);
+                    if (self.CurrentMashup()) {
+                        self.CurrentMashup().Hosts([]);
+                        self.CurrentMashup().Hosts(self.Hosts().slice(0));
+                        self.CurrentMashup().MashupTokenCallbackUrl(self.MashupTokenCallbackUrlValue());
                     }
-                    self.addHostValue("");
+                    self.AddHostValue("");
                 },
                 error: function () {
-                    self.requestActiveUpdateCommunity(false);
-                    dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
+                    self.RequestActiveUpdateCommunity(false);
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
                 }
             });
         }
     };
     MashupAdminViewModel.prototype.RegenerateAppKey = function () {
         var _this = this;
-        if (this.currentMashup() != null) {
-            dialog.show(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
-                dialog.hide();
+        if (this.CurrentMashup() != null) {
+            dialog.Show(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
+                dialog.Hide();
                 var self = _this;
-                if (self.requestActiveRegenerateAppKey())
+                if (self.RequestActiveRegenerateAppKey())
                     return;
-                var tag = self.currentMashup().CommunityTag();
-                self.requestActiveRegenerateAppKey(true);
+                var tag = self.CurrentMashup().CommunityTag();
+                self.RequestActiveRegenerateAppKey(true);
                 jQuery.ajax({
                     type: 'POST',
                     url: '/MashupAdmin/RegenerateAppKey',
@@ -440,32 +449,32 @@ var MashupAdminViewModel = (function () {
                     },
                     dataType: 'json',
                     success: function (result) {
-                        self.requestActiveRegenerateAppKey(false);
+                        self.RequestActiveRegenerateAppKey(false);
                         if (result.ErrorCode > 0) {
-                            dialog.show(GetLangRes("Common_lblError", "Error"), result.Message, null);
+                            dialog.Show(GetLangRes("Common_lblError", "Error"), result.Message, null);
                         }
                         else {
-                            if (self.currentMashup()) {
-                                self.currentMashup().AppKey(result.AppKey);
+                            if (self.CurrentMashup()) {
+                                self.CurrentMashup().AppKey(result.AppKey);
                             }
                         }
                     },
                     error: function () {
-                        self.requestActiveRegenerateAppKey(false);
-                        dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
+                        self.RequestActiveRegenerateAppKey(false);
+                        dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
                     }
                 });
             });
         }
     };
     MashupAdminViewModel.prototype.AddSubCommunity = function () {
-        if (this.currentMashup() != null) {
+        if (this.CurrentMashup() != null) {
             var self = this;
-            if (self.requestActiveAddSubCommunity())
+            if (self.RequestActiveAddSubCommunity())
                 return;
-            var tag = self.GetCommunityNameFromAdd(self.currentMashup().CommunityTagSufix()) + '@' + self.addSubCommunityValue();
-            if (self.currentMashup().SubCommunities().indexOf(tag) < 0) {
-                self.requestActiveAddSubCommunity(true);
+            var tag = self.GetCommunityNameFromAdd(self.CurrentMashup().CommunityTagSufix()) + '@' + self.AddSubCommunityValue();
+            if (self.CurrentMashup().SubCommunities().indexOf(tag) < 0) {
+                self.RequestActiveAddSubCommunity(true);
                 jQuery.ajax({
                     type: 'POST',
                     url: '/MashupAdmin/AddSubCommunity',
@@ -475,37 +484,37 @@ var MashupAdminViewModel = (function () {
                     },
                     dataType: 'json',
                     success: function (result) {
-                        self.requestActiveAddSubCommunity(false);
+                        self.RequestActiveAddSubCommunity(false);
                         if (result.ErrorCode > 0) {
-                            dialog.show(GetLangRes("Common_lblError", "Error"), result.Message, null);
+                            dialog.Show(GetLangRes("Common_lblError", "Error"), result.Message, null);
                         }
                         else {
-                            var data = self.currentMashup().SubCommunities().slice(0);
+                            var data = self.CurrentMashup().SubCommunities().slice(0);
                             data.push(tag);
-                            self.currentMashup().SubCommunities([]);
-                            self.currentMashup().SubCommunities(data);
-                            self.addSubCommunityValue("");
+                            self.CurrentMashup().SubCommunities([]);
+                            self.CurrentMashup().SubCommunities(data);
+                            self.AddSubCommunityValue("");
                         }
                     },
                     error: function () {
-                        self.requestActiveAddSubCommunity(false);
-                        dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
+                        self.RequestActiveAddSubCommunity(false);
+                        dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
                     }
                 });
             }
             else {
-                dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblDuplicateItem", "There is already an entry with the same name!"), null);
+                dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblDuplicateItem", "There is already an entry with the same name!"), null);
             }
         }
     };
     MashupAdminViewModel.prototype.DelSubCommunity = function (tag) {
         var _this = this;
-        dialog.show(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
-            dialog.hide();
+        dialog.Show(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
+            dialog.Hide();
             var self = _this;
-            if (self.requestActiveDelSubCommunity())
+            if (self.RequestActiveDelSubCommunity())
                 return;
-            self.requestActiveDelSubCommunity(true);
+            self.RequestActiveDelSubCommunity(true);
             jQuery.ajax({
                 type: 'POST',
                 url: '/MashupAdmin/DelSubCommunity',
@@ -515,45 +524,45 @@ var MashupAdminViewModel = (function () {
                 },
                 dataType: 'json',
                 success: function (result) {
-                    self.requestActiveDelSubCommunity(false);
+                    self.RequestActiveDelSubCommunity(false);
                     if (result.ErrorCode > 0) {
-                        dialog.show(GetLangRes("Common_lblError", "Error"), result.Message, null);
+                        dialog.Show(GetLangRes("Common_lblError", "Error"), result.Message, null);
                     }
                     else {
-                        var data = self.currentMashup().SubCommunities().slice(0);
+                        var data = self.CurrentMashup().SubCommunities().slice(0);
                         data.splice(data.indexOf(tag), 1);
-                        self.currentMashup().SubCommunities([]);
-                        self.currentMashup().SubCommunities(data);
-                        self.addSubCommunityValue("");
+                        self.CurrentMashup().SubCommunities([]);
+                        self.CurrentMashup().SubCommunities(data);
+                        self.AddSubCommunityValue("");
                     }
                 },
                 error: function () {
-                    self.requestActiveDelSubCommunity(false);
-                    dialog.show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
+                    self.RequestActiveDelSubCommunity(false);
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
                 }
             });
         });
     };
     MashupAdminViewModel.prototype.CreateMashupToken = function () {
         var self = this;
-        if (self.createMashupTokenIsValid() && self.currentMashup() != null) {
-            if (self.requestActiveMashupTokenNew())
+        if (self.CreateMashupTokenIsValid() && self.CurrentMashup() != null) {
+            if (self.RequestActiveMashupTokenNew())
                 return;
-            self.requestActiveMashupTokenNew(true);
+            self.RequestActiveMashupTokenNew(true);
             var ticks = null;
-            if (self.createMashupTokenDate() != '') {
-                ticks = GetTicksFromDate(moment.utc(self.createMashupTokenDate()).add(1, "d").toDate());
+            if (self.CreateMashupTokenDate() != '') {
+                ticks = GetTicksFromDate(moment.utc(self.CreateMashupTokenDate()).add(1, "d").toDate());
             }
-            var src = "/MashupApi/GenerateQrTokenForMashup?appKey=" + self.currentMashup().AppKey() + "&tag=" + encodeURI(self.currentMashup().CommunityTag()) + "&payload=" + encodeURI(self.createMashupTokenValue()) + (ticks != null ? '&validToTicks=' + ticks : '');
+            var src = "/MashupApi/GenerateQrTokenForMashup?appKey=" + self.CurrentMashup().AppKey() + "&tag=" + encodeURI(self.CurrentMashup().CommunityTag()) + "&payload=" + encodeURI(self.CreateMashupTokenValue()) + (ticks != null ? '&validToTicks=' + ticks : '');
             var img = new Image();
             img.onload = function () {
-                self.createMashupTokenSrc(src);
-                self.requestActiveMashupTokenNew(false);
+                self.CreateMashupTokenSrc(src);
+                self.RequestActiveMashupTokenNew(false);
             };
             img.src = src;
         }
         else {
-            self.createMashupTokenSrc("");
+            self.CreateMashupTokenSrc("");
         }
     };
     return MashupAdminViewModel;
@@ -645,3 +654,4 @@ var MashupTokenDto = (function () {
     }
     return MashupTokenDto;
 }());
+//# sourceMappingURL=gpsnose.developer.js.map

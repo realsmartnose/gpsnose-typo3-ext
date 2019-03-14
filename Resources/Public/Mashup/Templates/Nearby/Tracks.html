@@ -28,12 +28,12 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.6">
+<div class="ma-gpsnose" data-gn-version="1.0.7">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-tracks" data-bind="visible:true" style="display:none;">
 
         <div class="btn-group btn-group-xs ma-btn-group">
-            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.detailUrl() }"></a>
+            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.DetailUrl() }"></a>
             <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
         </div>
 
@@ -41,7 +41,7 @@ Replace {record} with a unique id that identifies the entry
             <div class="alert alert-info">
                 <span class="glyphicon glyphicon-info-sign"></span>
                 <span data-bind="text: ' ' + GetLangRes('Common_loginRequired', 'Please login first.')"></span>
-                <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.getLoginUrl(gn_data.Settings.LoginUrl); }">
+                <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.GetLoginUrl(gn_data.Settings.LoginUrl); }">
                     <span class="glyphicon glyphicon-user"></span>
                     <span data-bind="text: ' ' + GetLangRes('Common_btnLogin', 'Login')"></span>
                 </button>
@@ -49,11 +49,11 @@ Replace {record} with a unique id that identifies the entry
         </div>
         <div data-bind="if: gn_data.User.LoginName">
             <div class="grid">
-                <div class="tracks" id="tracksContainer" data-bind="if: pageableTracks.items().length > 0">
+                <div class="tracks" id="tracksContainer" data-bind="if: PageableTracks.Items().length > 0">
                     <div class="grid-sizer col-lg-4 col-sm-6 col-xs-12"></div>
-                    <div data-bind="foreach: pageableTracks.items()">
+                    <div data-bind="foreach: PageableTracks.Items()">
                         <div class="grid-item col-lg-4 col-sm-6 col-xs-12">
-                            <div data-external data-bind="attr: { 'data-src': $data.detailUrl() }">
+                            <div data-external data-bind="attr: { 'data-src': $data.DetailUrl() }">
                                 <div class="outer">
                                     <div class="media">
                                         <div class="media-left">
@@ -80,19 +80,19 @@ Replace {record} with a unique id that identifies the entry
                 </div>
             </div>
 
-            <div class="alert alert-info" data-bind="visible: pageableTracks.items().length == 0 && ! pageableTracks.itemsRequestActive()">
+            <div class="alert alert-info" data-bind="visible: PageableTracks.Items().length == 0 && ! PageableTracks.ItemsRequestActive()">
                 <span class="glyphicon glyphicon-info-sign"></span>
                 <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoTracks', 'Currently there are no Tracks around')"></span>
             </div>
 
             <div class="text-center">
 
-                <div class="btn btn-default btn-lg" data-bind="click: function(){ pageableTracks.pageItems() }, visible: pageableTracks.hasMoreItems(), attr: { disabled: pageableTracks.itemsRequestActive() }">
-                    <div data-bind="visible: ! pageableTracks.itemsRequestActive()">
+                <div class="btn btn-default btn-lg" data-bind="click: function(){ PageableTracks.PageItems() }, visible: PageableTracks.HasMoreItems(), attr: { disabled: PageableTracks.ItemsRequestActive() }">
+                    <div data-bind="visible: ! PageableTracks.ItemsRequestActive()">
                         <span class="glyphicon glyphicon-cloud-download"></span>
                         <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
                     </div>
-                    <div data-bind="visible: pageableTracks.itemsRequestActive()">
+                    <div data-bind="visible: PageableTracks.ItemsRequestActive()">
                         <span class="glyphicon glyphicon-repeat gly-spin"></span>
                         <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
                     </div>
@@ -110,8 +110,8 @@ var MA_GPSNOSE_IS_MASHUP = true;
 $(document).ready(function() {
     if (! gn_data.User) gn_data.User = {};
     var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
-    vm.pageableTracks.itemPageUrl = gn_data.Settings.NearbyTracksPageUrl;
-    vm.pageableTracks.onAddItems = function() {
+    vm.PageableTracks.ItemPageUrl = gn_data.Settings.NearbyTracksPageUrl;
+    vm.PageableTracks.OnAddItems = function() {
         $('#ma-gpsnose-{record} .grid').imagesLoaded(function() {
             MasonryReload();
         });
@@ -120,9 +120,9 @@ $(document).ready(function() {
     ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
 
     if (gn_data.Tracks) {
-        vm.pageableTracks.addItems(gn_data.Tracks);
+        vm.PageableTracks.AddItems(gn_data.Tracks);
     } else if (gn_data.User.LoginName) {
-        vm.pageableTracks.pageItems();
+        vm.PageableTracks.PageItems();
     }
 });
 </script>

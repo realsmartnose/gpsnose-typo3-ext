@@ -30,12 +30,12 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.6">
+<div class="ma-gpsnose" data-gn-version="1.0.7">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-impressions" data-bind="visible:true" style="display:none;">
 
         <div class="btn-group btn-group-xs ma-btn-group">
-            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.detailUrl() }"></a>
+            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.DetailUrl() }"></a>
             <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
         </div>
 
@@ -43,7 +43,7 @@ $(document).ready(function() {
             <div class="alert alert-info">
                 <span class="glyphicon glyphicon-info-sign"></span>
                 <span data-bind="text: ' ' + GetLangRes('Common_loginRequired', 'Please login first.')"></span>
-                <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.getLoginUrl(gn_data.Settings.LoginUrl); }">
+                <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.GetLoginUrl(gn_data.Settings.LoginUrl); }">
                     <span class="glyphicon glyphicon-user"></span>
                     <span data-bind="text: ' ' + GetLangRes('Common_btnLogin', 'Login')"></span>
                 </button>
@@ -51,14 +51,14 @@ $(document).ready(function() {
         </div>
         <div data-bind="if: gn_data.User.LoginName">
             <div class="grid">
-                <div class="impressions" id="impressionsContainer" data-bind="if: pageableImpressions.items().length > 0">
+                <div class="impressions" id="impressionsContainer" data-bind="if: PageableImpressions.Items().length > 0">
                     <div class="grid-sizer col-lg-3 col-md-4 col-sm-6 col-xs-12"></div>
-                    <div data-bind="foreach: pageableImpressions.items()">
+                    <div data-bind="foreach: PageableImpressions.Items()">
                         <div class="grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <div data-external data-bind="attr: { 'data-src': $data.detailUrl() }">
+                            <div data-external data-bind="attr: { 'data-src': $data.DetailUrl() }">
                                 <div class="outer">
                                     <div class="img-container">
-                                        <img class="img" data-bind="attr: { src: $data.imageUrl() + '@400' }" onerror="this.style.display='none'" />
+                                        <img class="img" data-bind="attr: { src: $data.ImageUrl() + '@400' }" onerror="this.style.display='none'" />
                                     </div>
                                     <div class="media">
                                         <div class="media-body" data-bind="text: $data.Text"></div>
@@ -67,7 +67,7 @@ $(document).ready(function() {
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-xs-7" data-bind="text: $data.dateString()"></div>
+                                        <div class="col-xs-7" data-bind="text: $data.DateString()"></div>
                                         <div class="col-xs-5 text-right" data-bind="text: GetDistanceString($data)"></div>
                                     </div>
                                 </div>
@@ -77,19 +77,19 @@ $(document).ready(function() {
                 </div>
             </div>
 
-            <div class="alert alert-info" data-bind="visible: pageableImpressions.items().length == 0 && ! pageableImpressions.itemsRequestActive()">
+            <div class="alert alert-info" data-bind="visible: PageableImpressions.Items().length == 0 && ! PageableImpressions.ItemsRequestActive()">
                 <span class="glyphicon glyphicon-info-sign"></span>
                 <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoImpressions', 'Currently there are no Impressions around')"></span>
             </div>
 
             <div class="text-center">
 
-                <div class="btn btn-default btn-lg" data-bind="click: function(){ pageableImpressions.pageItems() }, visible: pageableImpressions.hasMoreItems(), attr: { disabled: pageableImpressions.itemsRequestActive() }">
-                    <div data-bind="visible: ! pageableImpressions.itemsRequestActive()">
+                <div class="btn btn-default btn-lg" data-bind="click: function(){ PageableImpressions.PageItems() }, visible: PageableImpressions.HasMoreItems(), attr: { disabled: PageableImpressions.ItemsRequestActive() }">
+                    <div data-bind="visible: ! PageableImpressions.ItemsRequestActive()">
                         <span class="glyphicon glyphicon-cloud-download"></span>
                         <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
                     </div>
-                    <div data-bind="visible: pageableImpressions.itemsRequestActive()">
+                    <div data-bind="visible: PageableImpressions.ItemsRequestActive()">
                         <span class="glyphicon glyphicon-repeat gly-spin"></span>
                         <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
                     </div>
@@ -107,8 +107,8 @@ var MA_GPSNOSE_IS_MASHUP = true;
 $(document).ready(function() {
     if (! gn_data.User) gn_data.User = {};
     var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
-    vm.pageableImpressions.itemPageUrl = gn_data.Settings.NearbyImpressionsPageUrl;
-    vm.pageableImpressions.onAddItems = function() {
+    vm.PageableImpressions.ItemPageUrl = gn_data.Settings.NearbyImpressionsPageUrl;
+    vm.PageableImpressions.OnAddItems = function() {
         $('#ma-gpsnose-{record} .grid').imagesLoaded(function() {
             MasonryReload();
         });
@@ -117,9 +117,9 @@ $(document).ready(function() {
     ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
 
     if (gn_data.Impressions) {
-        vm.pageableImpressions.addItems(gn_data.Impressions);
+        vm.PageableImpressions.AddItems(gn_data.Impressions);
     } else if (gn_data.User.LoginName) {
-        vm.pageableImpressions.pageItems();
+        vm.PageableImpressions.PageItems();
     }
 });
 </script>

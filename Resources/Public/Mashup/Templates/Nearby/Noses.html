@@ -28,12 +28,12 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.6">
+<div class="ma-gpsnose" data-gn-version="1.0.7">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-noses" data-bind="visible:true" style="display:none;">
 
         <div class="btn-group btn-group-xs ma-btn-group">
-            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.detailUrl() }"></a>
+            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.DetailUrl() }"></a>
             <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
         </div>
 
@@ -41,18 +41,18 @@ Replace {record} with a unique id that identifies the entry
             <div class="alert alert-info">
                 <span class="glyphicon glyphicon-info-sign"></span>
                 <span data-bind="text: ' ' + GetLangRes('Common_loginRequired', 'Please login first.')"></span>
-                <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.getLoginUrl(gn_data.Settings.LoginUrl); }">
+                <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.GetLoginUrl(gn_data.Settings.LoginUrl); }">
                     <span class="glyphicon glyphicon-user"></span>
                     <span data-bind="text: ' ' + GetLangRes('Common_btnLogin', 'Login')"></span>
                 </button>
             </div>
         </div>
         <div data-bind="if: gn_data.User.LoginName">
-            <div class="row publishers" data-bind="foreach: pageableNoses.items">
+            <div class="row publishers" data-bind="foreach: PageableNoses.Items">
                 <div class="grid-item col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                    <div class="outer" data-external="true" data-bind="attr: { 'data-src': $data.detailUrl() }">
+                    <div class="outer" data-external="true" data-bind="attr: { 'data-src': $data.DetailUrl() }">
                         <div class="thumbnail">
-                            <img data-bind="attr: { src: $data.imageUrl() + '@200' }" onerror="this.src=window.gn_data.Settings.ImagePath+'/EmptyUser.png'" />
+                            <img data-bind="attr: { src: $data.ImageUrl() + '@200' }" onerror="this.src=window.gn_data.Settings.ImagePath+'/EmptyUser.png'" />
                             <div data-bind="if: $data.IsAdmin">
                                 <img class="ma-crown" data-bind="attr: { src: window.gn_data.Settings.ImagePath + '/IcActionCrown.png'}" />
                             </div>
@@ -68,19 +68,19 @@ Replace {record} with a unique id that identifies the entry
                 </div>
             </div>
 
-            <div class="alert alert-info" data-bind="visible: pageableNoses.items().length == 0 && ! pageableNoses.itemsRequestActive()">
+            <div class="alert alert-info" data-bind="visible: PageableNoses.Items().length == 0 && ! PageableNoses.ItemsRequestActive()">
                 <span class="glyphicon glyphicon-info-sign"></span>
                 <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoNoses', 'Currently there are no other Noses around')"></span>
             </div>
 
             <div class="text-center">
 
-                <div class="btn btn-default btn-lg" data-bind="click: function(){ pageableNoses.pageItems() }, visible: pageableNoses.hasMoreItems(), attr: { disabled: pageableNoses.itemsRequestActive() }">
-                    <div data-bind="visible: ! pageableNoses.itemsRequestActive()">
+                <div class="btn btn-default btn-lg" data-bind="click: function(){ PageableNoses.PageItems() }, visible: PageableNoses.HasMoreItems(), attr: { disabled: PageableNoses.ItemsRequestActive() }">
+                    <div data-bind="visible: ! PageableNoses.ItemsRequestActive()">
                         <span class="glyphicon glyphicon-cloud-download"></span>
                         <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
                     </div>
-                    <div data-bind="visible: pageableNoses.itemsRequestActive()">
+                    <div data-bind="visible: PageableNoses.ItemsRequestActive()">
                         <span class="glyphicon glyphicon-repeat gly-spin"></span>
                         <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
                     </div>
@@ -98,13 +98,13 @@ var MA_GPSNOSE_IS_MASHUP = true;
 $(document).ready(function() {
     if (! gn_data.User) gn_data.User = {};
     var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
-    vm.pageableNoses.itemPageUrl = gn_data.Settings.NearbyNosesPageUrl;
+    vm.PageableNoses.ItemPageUrl = gn_data.Settings.NearbyNosesPageUrl;
     ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
 
     if (gn_data.Noses) {
-        vm.pageableNoses.addItems(gn_data.Noses);
+        vm.PageableNoses.AddItems(gn_data.Noses);
     } else if (gn_data.User.LoginName) {
-        vm.pageableNoses.pageItems();
+        vm.PageableNoses.PageItems();
     }
 });
 </script>

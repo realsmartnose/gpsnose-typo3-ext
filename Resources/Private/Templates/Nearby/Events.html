@@ -30,12 +30,12 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.6">
+<div class="ma-gpsnose" data-gn-version="1.0.7">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-events" data-bind="visible:true" style="display:none;">
 
         <div class="btn-group btn-group-xs ma-btn-group">
-            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.detailUrl() }"></a>
+            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.DetailUrl() }"></a>
             <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
         </div>
 
@@ -43,7 +43,7 @@ $(document).ready(function() {
             <div class="alert alert-info">
                 <span class="glyphicon glyphicon-info-sign"></span>
                 <span data-bind="text: ' ' + GetLangRes('Common_loginRequired', 'Please login first.')"></span>
-                <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.getLoginUrl(gn_data.Settings.LoginUrl); }">
+                <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.GetLoginUrl(gn_data.Settings.LoginUrl); }">
                     <span class="glyphicon glyphicon-user"></span>
                     <span data-bind="text: ' ' + GetLangRes('Common_btnLogin', 'Login')"></span>
                 </button>
@@ -51,15 +51,15 @@ $(document).ready(function() {
         </div>
         <div data-bind="if: gn_data.User.LoginName">
             <div class="grid">
-                <div class="events" id="eventsContainer" data-bind="if: pageableEvents.items().length > 0">
+                <div class="events" id="eventsContainer" data-bind="if: PageableEvents.Items().length > 0">
                     <div class="grid-sizer col-lg-4 col-sm-6 col-xs-12"></div>
-                    <div data-bind="foreach: pageableEvents.items()">
+                    <div data-bind="foreach: PageableEvents.Items()">
                         <div class="grid-item col-lg-4 col-sm-6 col-xs-12">
-                            <div data-external data-bind="attr: { 'data-src': $data.detailUrl() }">
+                            <div data-external data-bind="attr: { 'data-src': $data.DetailUrl() }">
                                 <div class="outer">
                                     <div class="media">
                                         <div class="media-left">
-                                            <img class="media-object img-rounded media-height" data-bind="attr: { src: $data.imageUrl() }" onerror="ImageErrorHandler(this, window.gn_data.Settings.ImagePath+'/EmptyImage.png')" />
+                                            <img class="media-object img-rounded media-height" data-bind="attr: { src: $data.ImageUrl() }" onerror="ImageErrorHandler(this, window.gn_data.Settings.ImagePath+'/EmptyImage.png')" />
                                         </div>
                                         <div class="media-body">
                                             <div class="media-height">
@@ -80,19 +80,19 @@ $(document).ready(function() {
                 </div>
             </div>
 
-            <div class="alert alert-info" data-bind="visible: pageableEvents.items().length == 0 && ! pageableEvents.itemsRequestActive()">
+            <div class="alert alert-info" data-bind="visible: PageableEvents.Items().length == 0 && ! PageableEvents.ItemsRequestActive()">
                 <span class="glyphicon glyphicon-info-sign"></span>
                 <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoEvents', 'Currently there are no Events around')"></span>
             </div>
 
             <div class="text-center">
 
-                <div class="btn btn-default btn-lg" data-bind="click: function(){ pageableEvents.pageItems() }, visible: pageableEvents.hasMoreItems(), attr: { disabled: pageableEvents.itemsRequestActive() }">
-                    <div data-bind="visible: ! pageableEvents.itemsRequestActive()">
+                <div class="btn btn-default btn-lg" data-bind="click: function(){ PageableEvents.PageItems() }, visible: PageableEvents.HasMoreItems(), attr: { disabled: PageableEvents.ItemsRequestActive() }">
+                    <div data-bind="visible: ! PageableEvents.ItemsRequestActive()">
                         <span class="glyphicon glyphicon-cloud-download"></span>
                         <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
                     </div>
-                    <div data-bind="visible: pageableEvents.itemsRequestActive()">
+                    <div data-bind="visible: PageableEvents.ItemsRequestActive()">
                         <span class="glyphicon glyphicon-repeat gly-spin"></span>
                         <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
                     </div>
@@ -110,8 +110,8 @@ var MA_GPSNOSE_IS_MASHUP = true;
 $(document).ready(function() {
     if (! gn_data.User) gn_data.User = {};
     var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
-    vm.pageableEvents.itemPageUrl = gn_data.Settings.NearbyEventsPageUrl;
-    vm.pageableEvents.onAddItems = function() {
+    vm.PageableEvents.ItemPageUrl = gn_data.Settings.NearbyEventsPageUrl;
+    vm.PageableEvents.OnAddItems = function() {
         $('#ma-gpsnose-{record} .grid').imagesLoaded(function() {
             MasonryReload();
         });
@@ -120,9 +120,9 @@ $(document).ready(function() {
     ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
 
     if (gn_data.Events) {
-        vm.pageableEvents.addItems(gn_data.Events);
+        vm.PageableEvents.AddItems(gn_data.Events);
     } else if (gn_data.User.LoginName) {
-        vm.pageableEvents.pageItems();
+        vm.PageableEvents.PageItems();
     }
 });
 </script>
