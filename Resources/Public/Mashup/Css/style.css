@@ -4,8 +4,11 @@
     margin-bottom: 15px; }
   .ma-gpsnose .btn:not(:disabled):not(.disabled) {
     cursor: pointer; }
-  .ma-gpsnose .ma-popover-image {
-    width: 248px; }
+  .ma-gpsnose .btn-xs, .ma-gpsnose .btn-group-xs > .btn {
+    padding: 1px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px; }
   .ma-gpsnose .ma-gpsnose-action-icon {
     width: 24px;
     height: 24px; }
@@ -227,5 +230,9 @@
     margin: 0 5px 5px 0;
     padding: 8px;
     float: left; }
+
+/* Has to be here, in BS4 the popover is inside body... */
+.ma-popover-image {
+  width: 248px; }
 
 /*# sourceMappingURL=style.css.map */
