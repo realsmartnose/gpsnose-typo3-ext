@@ -9,21 +9,22 @@ class ReplaceViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
-    protected $escapeOutput = false;
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = FALSE;
 
     /**
-     *
      * @return void
      */
     public function initializeArguments()
     {
-        $this->registerArgument('value', 'string', 'value', true, '');
-        $this->registerArgument('search', 'string', 'search for', true, '');
-        $this->registerArgument('replace', 'string', 'replace with', true, '');
+        $this->registerArgument('value', 'string', 'value', TRUE, '');
+        $this->registerArgument('search', 'string', 'search for', TRUE, '');
+        $this->registerArgument('replace', 'string', 'replace with', TRUE, '');
     }
 
     /**
-     *
      * @param array $arguments
      * @param \Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext

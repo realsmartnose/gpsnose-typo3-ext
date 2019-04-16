@@ -10,21 +10,22 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 class LabelViewHelper extends AbstractViewHelper
 {
 
-    protected $escapeOutput = false;
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = FALSE;
 
     /**
-     *
      * @return void
      */
     public function initializeArguments()
     {
-        $this->registerArgument('tag', 'string', 'name of the community', true, '');
-        $this->registerArgument('size', 'string', 'size of the icon (default, small, large)', false, 'small');
-        $this->registerArgument('icon-type', 'string', 'Icon-type (fa, bs3, none)', false, 'fa');
+        $this->registerArgument('tag', 'string', 'name of the community', TRUE, '');
+        $this->registerArgument('size', 'string', 'size of the icon (default, small, large)', FALSE, 'small');
+        $this->registerArgument('icon-type', 'string', 'Icon-type (fa, bs3, none)', FALSE, 'fa');
     }
 
     /**
-     *
      * @return string
      */
     public function render()

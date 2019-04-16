@@ -15,6 +15,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems;
 use GpsNose\SDK\Mashup\Framework\GnSettings;
+use GpsNose\SDK\Mashup\Model\GnMashupTokenOptions;
 use GpsNose\SDK\Mashup\Api\GnApi;
 use GpsNose\SDK\Web\Login\GnAuthenticationData;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -41,14 +42,13 @@ use SmartNoses\Gpsnose\Utility\GnUtility;
  */
 class MashupController extends BaseController
 {
-
     /**
      * persistenceManager
      *
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
      * @inject
      */
-    protected $persistenceManager = null;
+    protected $persistenceManager = NULL;
 
     /**
      * mashupRepository
@@ -56,42 +56,45 @@ class MashupController extends BaseController
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
      * @inject
      */
-    protected $mashupRepository = null;
+    protected $mashupRepository = NULL;
 
     /**
-     * mashupRepository
+     * tokenRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\TokenRepository
      * @inject
      */
-    protected $tokenRepository = null;
+    protected $tokenRepository = NULL;
 
     /**
-     *
+     * frontendUserGroupRepository
+     * 
+     * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserGroupRepository
+     * @inject
+     */
+    protected $frontendUserGroupRepository = NULL;
+
+    /**
      * @var \GpsNose\SDK\Mashup\Api\GnApi
      */
     protected $_gnApi;
 
     /**
-     *
      * @var string
      */
     protected $_loginId;
 
     /**
-     *
      * @var \GpsNose\SDK\Web\Login\GnPrincipal
      */
     protected $_currentUser;
 
     /**
-     *
      * @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin
      */
     protected $_gnLoginApi;
 
     /**
-     *
      * @var array
      */
     protected $_visibilities = [
@@ -110,7 +113,7 @@ class MashupController extends BaseController
         $this->_gnApi = new GnApi();
 
         $this->_currentUser = GnAuthentication::CurrentUser();
-        if ($this->_currentUser != null) {
+        if ($this->_currentUser != NULL) {
             $this->_loginId = $this->_currentUser->LoginId;
         }
     }
@@ -120,29 +123,32 @@ class MashupController extends BaseController
      */
     private function AssureLoggedIn()
     {
-        if ($this->_currentUser != null) {
+        if ($this->_currentUser != NULL) {
             if (GnUtil::IsNullOrEmpty($this->extConf['backendLockedUser']) || $this->extConf['backendLockedUser'] == $this->_currentUser->LoginName) {
                 $this->_gnLoginApi = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId, "");
             } else {
                 $this->addFlashMessage("The module is locked to the user '{$this->extConf['backendLockedUser']}'", '', FlashMessage::WARNING, TRUE);
                 GnAuthentication::Logout();
-                $this->_gnLoginApi = null;
+                $this->_gnLoginApi = NULL;
                 $this->redirect('login');
             }
         } else {
-            $this->_gnLoginApi = null;
+            $this->_gnLoginApi = NULL;
             $this->redirect('login');
         }
     }
 
     /**
      * RefreshMashups
+     *
+     * @param \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin $gnLoginApiForAdmin
      */
-    private function RefreshMashups(GnLoginApiAdmin $gnLoginApiForAdmin = null)
+    private function RefreshMashups(GnLoginApiAdmin $gnLoginApiForAdmin = NULL)
     {
         try {
-            if ($gnLoginApiForAdmin == null) {
-                if ($this->_currentUser != null) {
+            /** @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin $gnLoginApiForAdmin  */
+            if ($gnLoginApiForAdmin == NULL) {
+                if ($this->_currentUser != NULL) {
                     // Verifie the user
                     $gnLoginApiForAdmin = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId, "");
                     $gnLoginApiForAdmin->GetVerified();
@@ -156,7 +162,7 @@ class MashupController extends BaseController
                 foreach ($ownMashups as $mashup) {
                     // Try to find the existing entry
                     $mashupDto = $this->mashupRepository->findByCommunityTag($mashup->CommunityTag);
-                    if ($mashupDto == null) {
+                    if ($mashupDto == NULL) {
                         $mashupDto = new Mashup();
                     }
 
@@ -170,16 +176,25 @@ class MashupController extends BaseController
                     $mashupDto->setMaxHosts($mashup->MaxHosts);
                     $mashupDto->setMashupTokenCallbackUrl($mashup->MashupTokenCallbackUrl ?: '');
 
+                    // Add the FrontendUserGroup
+                    $this->frontendUserGroupRepository->addIfNotExistByTitle($mashup->CommunityTag);
+
                     // Handle SubCommunities
                     if (is_array($mashup->SubCommunities)) {
                         foreach ($mashup->SubCommunities as $subCommunity) {
                             $t = $mashupDto->findSubCommunityByName($subCommunity) ?: new SubCommunity();
                             $t->setName($subCommunity);
                             $mashupDto->addSubCommunity($t);
+
+                            // Add the FrontendUserGroup
+                            $this->frontendUserGroupRepository->addIfNotExistByTitle($subCommunity);
                         }
                         // Remove items not in result
                         foreach ($mashupDto->getSubCommunities() as $subCommunityDto) {
-                            if (! in_array($subCommunityDto->getName(), $mashup->SubCommunities)) {
+                            if (!in_array($subCommunityDto->getName(), $mashup->SubCommunities)) {
+                                // Remove the FrontendUserGroup
+                                $this->frontendUserGroupRepository->removeByTitle($subCommunityDto->getName());
+
                                 $mashupDto->removeSubCommunity($subCommunityDto);
                             }
                         }
@@ -194,7 +209,7 @@ class MashupController extends BaseController
                         }
                         // Remove items not in result
                         foreach ($mashupDto->getHosts() as $hostDto) {
-                            if (! in_array($hostDto->getDomain(), $mashup->Hosts)) {
+                            if (!in_array($hostDto->getDomain(), $mashup->Hosts)) {
                                 $mashupDto->removeHost($hostDto);
                             }
                         }
@@ -238,7 +253,7 @@ class MashupController extends BaseController
                         }
                     }
                 }
-                if ($remove && ! GnUtil::IsNullOrEmpty($mashupDto->getAppKey())) {
+                if ($remove && !GnUtil::IsNullOrEmpty($mashupDto->getAppKey())) {
                     $this->mashupRepository->remove($mashupDto);
                 }
             }
@@ -257,23 +272,23 @@ class MashupController extends BaseController
     public function startAction()
     {
         $arguments = [];
-        if ($this->_currentUser != null) {
+        if ($this->_currentUser != NULL) {
             // Assure loggedin
             $this->AssureLoggedIn();
 
             // Verifie the user
             $gnLoginApiForAdmin = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId, "");
             $gnLogin = $gnLoginApiForAdmin->GetVerified();
-            if ($gnLogin != null && $gnLoginApiForAdmin->getIsLoggedIn()) {
+            if ($gnLogin != NULL && $gnLoginApiForAdmin->getIsLoggedIn()) {
                 $this->RefreshMashups($gnLoginApiForAdmin);
                 $arguments = [
-                    "norefresh" => true
+                    "norefresh" => TRUE
                 ];
             } else {
                 GnAuthentication::Logout();
             }
         }
-        $this->redirect('login', null, null, $arguments);
+        $this->redirect('login', NULL, NULL, $arguments);
     }
 
     /**
@@ -283,11 +298,11 @@ class MashupController extends BaseController
      */
     public function loginAction()
     {
-        if ($this->_currentUser != null) {
+        if ($this->_currentUser != NULL) {
             // Assure loggedin
             $this->AssureLoggedIn();
 
-            if (! $this->request->hasArgument("norefresh")) {
+            if (!$this->request->hasArgument("norefresh")) {
                 // refresh mashup
                 $this->RefreshMashups();
             }
@@ -304,31 +319,31 @@ class MashupController extends BaseController
     /**
      * action loginVerifie
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
     public function loginVerifieAction(ServerRequestInterface $request, ResponseInterface $response)
     {
         $data = $request->getParsedBody();
 
-        $isOk = false;
+        $isOk = FALSE;
         if ($data["LoginId"]) {
             $loginId = $data["LoginId"];
             $gnLoginApiForAdmin = $this->_gnApi->GetLoginApiForAdmin($loginId, "");
             $gnLogin = $gnLoginApiForAdmin->GetVerified();
-            if ($gnLogin != null && $gnLoginApiForAdmin->getIsLoggedIn()) {
+            if ($gnLogin != NULL && $gnLoginApiForAdmin->getIsLoggedIn()) {
                 $gnAuthData = new GnAuthenticationData();
                 $gnAuthData->LoginId = $loginId;
                 $gnAuthData->LoginName = $gnLogin->LoginName;
                 $gnAuthData->ProfileTags = $gnLogin->Communities;
                 GnAuthentication::Login($gnAuthData);
-                $isOk = true;
+                $isOk = TRUE;
             }
         }
 
-        $response->getBody()->write(json_encode((object) [
+        $response->getBody()->write(json_encode((object)[
             "IsOk" => $isOk
         ]));
 
@@ -338,24 +353,24 @@ class MashupController extends BaseController
     /**
      * action keepAlive
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
     public function keepAliveAction(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $isOk = false;
+        $isOk = FALSE;
         $this->_currentUser = GnAuthentication::CurrentUser();
         if ($this->_currentUser) {
             $gnLoginApiForAdmin = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId, "");
             $gnLogin = $gnLoginApiForAdmin->GetVerified();
-            if ($gnLogin != null && $gnLoginApiForAdmin->getIsLoggedIn()) {
-                $isOk = true;
+            if ($gnLogin != NULL && $gnLoginApiForAdmin->getIsLoggedIn()) {
+                $isOk = TRUE;
             }
         }
 
-        $response->getBody()->write(json_encode((object) [
+        $response->getBody()->write(json_encode((object)[
             "IsOk" => $isOk
         ]));
 
@@ -396,7 +411,7 @@ class MashupController extends BaseController
         $this->AssureLoggedIn();
 
         $gnLogin = $this->_gnLoginApi->GetVerified();
-        if ($gnLogin != null && $this->_gnLoginApi->getIsLoggedIn()) {
+        if ($gnLogin != NULL && $this->_gnLoginApi->getIsLoggedIn()) {
             // Refresh Mashups
             $this->RefreshMashups($this->_gnLoginApi);
 
@@ -462,7 +477,7 @@ class MashupController extends BaseController
         $this->AssureLoggedIn();
 
         $gnLogin = $this->_gnLoginApi->GetVerified();
-        if ($gnLogin != null && $this->_gnLoginApi->getIsLoggedIn()) {
+        if ($gnLogin != NULL && $this->_gnLoginApi->getIsLoggedIn()) {
             // Get the validation key
             try {
                 $adminApi = $this->_gnLoginApi->GetAdminApi();
@@ -491,7 +506,7 @@ class MashupController extends BaseController
     /**
      * action create
      *
-     * @param Mashup $newMashup
+     * @param Mashup $mashup
      * @return void
      */
     public function validateAction(Mashup $mashup)
@@ -499,7 +514,7 @@ class MashupController extends BaseController
         $this->AssureLoggedIn();
 
         $gnLogin = $this->_gnLoginApi->GetVerified();
-        if ($gnLogin != null && $this->_gnLoginApi->getIsLoggedIn()) {
+        if ($gnLogin != NULL && $this->_gnLoginApi->getIsLoggedIn()) {
             try {
                 // Get the validation key
                 $adminApi = $this->_gnLoginApi->GetAdminApi();
@@ -541,14 +556,14 @@ class MashupController extends BaseController
         $settings = GnUtility::getGnSetting();
         if ($settings['mashup.']['callbackPid'] > 0) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /* @var $uriBuilder \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder */
+            /** @var $uriBuilder \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder */
             $uriBuilder = $objectManager->get(UriBuilder::class);
             $uri = $uriBuilder->reset()
                 ->setTargetPageUid($settings['mashup.']['callbackPid'])
                 ->setCreateAbsoluteUri(TRUE)
                 ->setArguments([
-                'type' => $settings['mashup.']['callbackTypeNum']
-            ])
+                    'type' => $settings['mashup.']['callbackTypeNum']
+                ])
                 ->buildFrontendUri();
             $this->view->assign('mashupCallbackUrl', $uri);
         }
@@ -565,15 +580,15 @@ class MashupController extends BaseController
 
         $newSubCommunity = $mashup->getVisibility() . $mashup->getCommunityTagSufix() . '@' . $mashup->getTempSubCommunity();
 
-        $addItem = true;
+        $addItem = TRUE;
         foreach ($mashup->getSubCommunities() as $subCommunity) {
             if ($subCommunity->getName() === $newSubCommunity) {
-                $addItem = false;
+                $addItem = FALSE;
             }
         }
         if ($addItem) {
             $gnLogin = $this->_gnLoginApi->GetVerified();
-            if ($gnLogin != null && $this->_gnLoginApi->getIsLoggedIn()) {
+            if ($gnLogin != NULL && $this->_gnLoginApi->getIsLoggedIn()) {
                 try {
                     // Add the SubCommunity
                     $adminApi = $this->_gnLoginApi->GetAdminApi();
@@ -583,6 +598,9 @@ class MashupController extends BaseController
                     $subCommunity->setName($newSubCommunity);
                     $mashup->addSubCommunity($subCommunity);
                     $this->mashupRepository->update($mashup);
+
+                    // Add the FrontendUserGroup
+                    $this->frontendUserGroupRepository->addIfNotExistByTitle($subCommunity->getName());
 
                     $this->addFlashMessage('Successfully created new Subcommunity', 'Success', FlashMessage::OK, TRUE);
                 } catch (\Exception $e) {
@@ -596,7 +614,7 @@ class MashupController extends BaseController
             $this->addFlashMessage('The SubCommunity already exists', 'Error', FlashMessage::ERROR, TRUE);
         }
 
-        $this->redirect('edit', null, null, [
+        $this->redirect('edit', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -612,13 +630,16 @@ class MashupController extends BaseController
         $this->AssureLoggedIn();
 
         $gnLogin = $this->_gnLoginApi->GetVerified();
-        if ($gnLogin != null && $this->_gnLoginApi->getIsLoggedIn()) {
+        if ($gnLogin != NULL && $this->_gnLoginApi->getIsLoggedIn()) {
             try {
                 $adminApi = $this->_gnLoginApi->GetAdminApi();
                 $adminApi->DelSubCommunity($subCommunity->getName());
 
                 $mashup->removeSubCommunity($subCommunity);
                 $this->mashupRepository->update($mashup);
+
+                // Remove the FrontendUserGroup
+                $this->frontendUserGroupRepository->removeByTitle($subCommunity->getName());
 
                 $this->addFlashMessage('SubCommunity successfully removed', '', FlashMessage::OK, TRUE);
             } catch (\Exception $e) {
@@ -629,7 +650,7 @@ class MashupController extends BaseController
             $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
         }
 
-        $this->redirect('edit', null, null, [
+        $this->redirect('edit', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -647,19 +668,19 @@ class MashupController extends BaseController
 
         $hosts = [];
         $i = 0;
-        $addItem = true;
+        $addItem = TRUE;
         foreach ($mashup->getHosts() as $host) {
             $hosts[$i] = $host->getDomain();
             if ($host->getDomain() === $newHost) {
-                $addItem = false;
+                $addItem = FALSE;
             }
-            $i ++;
+            $i++;
         }
         $hosts[$i] = $newHost;
 
         if ($addItem) {
             $gnLogin = $this->_gnLoginApi->GetVerified();
-            if ($gnLogin != null && $this->_gnLoginApi->getIsLoggedIn()) {
+            if ($gnLogin != NULL && $this->_gnLoginApi->getIsLoggedIn()) {
                 try {
                     // Add the Host
                     $adminApi = $this->_gnLoginApi->GetAdminApi();
@@ -682,7 +703,7 @@ class MashupController extends BaseController
             $this->addFlashMessage('The Host already exists', 'Error', FlashMessage::ERROR, TRUE);
         }
 
-        $this->redirect('edit', null, null, [
+        $this->redirect('edit', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -698,14 +719,14 @@ class MashupController extends BaseController
         $this->AssureLoggedIn();
 
         $gnLogin = $this->_gnLoginApi->GetVerified();
-        if ($gnLogin != null && $this->_gnLoginApi->getIsLoggedIn()) {
+        if ($gnLogin != NULL && $this->_gnLoginApi->getIsLoggedIn()) {
             try {
                 $hosts = [];
                 $i = 0;
                 foreach ($mashup->getHosts() as $mHost) {
                     if ($mHost->getDomain() !== $host->getDomain()) {
                         $hosts[$i] = $mHost->getDomain();
-                        $i ++;
+                        $i++;
                     }
                 }
                 $adminApi = $this->_gnLoginApi->GetAdminApi();
@@ -723,7 +744,7 @@ class MashupController extends BaseController
             $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
         }
 
-        $this->redirect('edit', null, null, [
+        $this->redirect('edit', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -739,11 +760,11 @@ class MashupController extends BaseController
         $this->AssureLoggedIn();
 
         $gnLogin = $this->_gnLoginApi->GetVerified();
-        if ($gnLogin != null && $this->_gnLoginApi->getIsLoggedIn()) {
+        if ($gnLogin != NULL && $this->_gnLoginApi->getIsLoggedIn()) {
             try {
                 $adminApi = $this->_gnLoginApi->GetAdminApi();
                 $appKey = $adminApi->RegenerateAppKey($mashup->getCommunityTag());
-                if (! GnUtil::IsNullOrEmpty($appKey)) {
+                if (!GnUtil::IsNullOrEmpty($appKey)) {
                     $mashup->setAppKey($appKey);
                     $this->mashupRepository->update($mashup);
                     $this->addFlashMessage('Mashup successfully updated', '', FlashMessage::OK, TRUE);
@@ -756,7 +777,7 @@ class MashupController extends BaseController
             $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
         }
 
-        $this->redirect('edit', null, null, [
+        $this->redirect('edit', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -772,13 +793,13 @@ class MashupController extends BaseController
         $this->AssureLoggedIn();
 
         $gnLogin = $this->_gnLoginApi->GetVerified();
-        if ($gnLogin != null && $this->_gnLoginApi->getIsLoggedIn()) {
+        if ($gnLogin != NULL && $this->_gnLoginApi->getIsLoggedIn()) {
             try {
                 $hosts = [];
                 $i = 0;
                 foreach ($mashup->getHosts() as $host) {
                     $hosts[$i] = $host->getDomain();
-                    $i ++;
+                    $i++;
                 }
                 $adminApi = $this->_gnLoginApi->GetAdminApi();
                 $adminApi->UpdateCommunityWeb($mashup->getCommunityTag(), $hosts, $mashup->getMashupTokenCallbackUrl());
@@ -794,7 +815,7 @@ class MashupController extends BaseController
             $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
         }
 
-        $this->redirect('edit', null, null, [
+        $this->redirect('edit', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -837,19 +858,19 @@ class MashupController extends BaseController
         $query = $repository->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(FALSE);
         $mashupName = GnUtility::getGnSettingsMashupName();
-        if (! GnUtil::IsNullOrEmpty($mashupName)) {
+        if (!GnUtil::IsNullOrEmpty($mashupName)) {
             $query->matching($query->logicalAnd($query->like('communityTag', '%' . substr($mashupName, 1))));
         }
         $mashups = $query->execute();
 
         $i = 0;
         foreach ($mashups as $mashup) {
-            $conf['items'][$i ++] = [
+            $conf['items'][$i++] = [
                 $mashup->getCommunityTag(),
                 $mashup->getCommunityTag()
             ];
             foreach ($mashup->getSubCommunities() as $subCommunity) {
-                $conf['items'][$i ++] = [
+                $conf['items'][$i++] = [
                     $subCommunity->getName(),
                     $subCommunity->getName()
                 ];
@@ -860,6 +881,7 @@ class MashupController extends BaseController
     /**
      * action tokenlist
      *
+     * @param Mashup $mashup
      * @return void
      */
     public function tokenlistAction(Mashup $mashup)
@@ -872,6 +894,7 @@ class MashupController extends BaseController
     /**
      * action tokenshow
      *
+     * @param Token $token
      * @param Mashup $mashup
      * @return void
      */
@@ -879,17 +902,15 @@ class MashupController extends BaseController
     {
         $this->AssureLoggedIn();
 
-        if ($token->getValidToTicks() == "") {
-            $token->setValidToTicks("0");
-        }
+        $token->setCheckboxByOption();
 
         $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $this->_currentUser->LoginId);
         $gnLogin = $gnLoginApi->GetVerified();
-        if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
+        if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
             try {
                 $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
-
-                $this->view->assign('qr_code_image', base64_encode($mashupTokensApi->GenerateQrTokenForMashup($token->getPayload(), $token->getValidToTicks())));
+                $qr_code_image = $mashupTokensApi->GenerateQrTokenForMashup($token->getPayload(), intval($token->getValidUntilTicks()), $token->getValuePerUnit(), $token->getLabel(), $token->getOptions());
+                $this->view->assign('qr_code_image', base64_encode($qr_code_image));
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
             }
@@ -914,28 +935,46 @@ class MashupController extends BaseController
 
         try {
             $updateCount = 0;
-            $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), null, null);
+            $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, NULL);
             $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
             /** @var $mashupToken \GpsNose\SDK\Mashup\Model\GnMashupToken */
             foreach ($mashupTokensApi->GetMashupTokensPage($mashup->getCommunityTag(), $mashup->getLatestTokenScanTicks(), 50) as $mashupToken) {
                 $tokenDto = $mashup->findTokenByPayload($mashupToken->Payload);
-                if ($tokenDto == null) {
+                if ($tokenDto == NULL) {
                     $tokenDto = new Token();
                     $tokenDto->setPayload($mashupToken->Payload);
-                    $tokenDto->setValidToTicks("0");
+                    $tokenDto->setCallbackResponse('');
+                    $tokenDto->setOptions(GnMashupTokenOptions::NoOptions);
+                    $tokenDto->setValidUntilTicks($mashupToken->ValidUntilTicks ?: 0);
+                    $tokenDto->setLabel($mashupToken->Label ?: '');
+                    $tokenDto->setValuePerUnit($mashupToken->ValuePerUnit ?: 0);
+                    $tokenDto->setCreationTicks($mashupToken->CreationTicks ?: '0');
+                    $tokenDto->setCreatedByLoginName($mashupToken->CreatedByLoginName ?: '');
                 }
 
                 $tokenScan = $tokenDto->findTokenScanByUserAndTicks($mashupToken->ScannedByLoginName, $mashupToken->ScannedTicks);
-                if ($tokenScan == null) {
+                if ($tokenScan == NULL) {
                     $tokenScan = new TokenScan();
                     $tokenScan->setScannedByLoginName($mashupToken->ScannedByLoginName);
                     $tokenScan->setScannedTicks($mashupToken->ScannedTicks);
+                    $tokenScan->setRecordedTicks($mashupToken->RecordedTicks);
                     $tokenScan->setScannedLatitude($mashupToken->ScannedLatitude);
                     $tokenScan->setScannedLongitude($mashupToken->ScannedLongitude);
                     $tokenScan->setCallbackResponseHttpCode($mashupToken->CallbackResponseHttpCode);
                     $tokenScan->setCallbackResponseMessage($mashupToken->CallbackResponseMessage ?: '');
+                    $tokenScan->setBatchCompleted($mashupToken->IsBatchCompleted ?: FALSE);
+                    $tokenScan->setAmount($mashupToken->Amount ?: 0);
+                    $tokenScan->setComment($mashupToken->Comment ?: '');
+                    $tokenScan->setGpsSharingWanted($mashupToken->IsGpsSharingWanted ?: FALSE);
+                    $tokenScan->setValidUntilTicks($mashupToken->ValidUntilTicks ?: 0);
+                    $tokenScan->setLabel($mashupToken->Label ?: '');
+                    $tokenScan->setValuePerUnit($mashupToken->ValuePerUnit ?: 0);
+                    $tokenScan->setCreationTicks($mashupToken->CreationTicks ?: '0');
+                    $tokenScan->setCreatedByLoginName($mashupToken->CreatedByLoginName ?: '');
+                    $tokenScan->setBatchCreationTicks($mashupToken->BatchCreationTicks ?: '');
+
                     $tokenDto->addTokenScan($tokenScan);
-                    $updateCount ++;
+                    $updateCount++;
                 }
 
                 $mashup->addToken($tokenDto);
@@ -952,7 +991,7 @@ class MashupController extends BaseController
             throw $e;
         }
 
-        $this->redirect('tokenlist', null, null, [
+        $this->redirect('tokenlist', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -960,21 +999,21 @@ class MashupController extends BaseController
     /**
      * action tokennew
      *
+     * @param Mashup $mashup
      * @return void
      */
     public function tokennewAction(Mashup $mashup)
     {
         $this->AssureLoggedIn();
 
-        $this->view->assign('addTokenMaxChars', 200);
-        $this->view->assign('callbackResponseMaxChars', 100);
+        $this->setSettingsForToken();
         $this->view->assign('mashup', $mashup);
     }
 
     /**
      * action tokencreate
      *
-     * @param Mashup $newMashup
+     * @param Token $newToken
      * @return void
      */
     public function tokencreateAction(Token $newToken)
@@ -983,21 +1022,17 @@ class MashupController extends BaseController
 
         $mashup = $newToken->getMashup();
 
+        $newToken->mapDataFromInput();
+
         $existingToken = $mashup->findTokenByPayload($newToken->getPayload());
-        if ($existingToken != null) {
+        if ($existingToken != NULL) {
             $this->addFlashMessage('Token allready exist', 'Warning', FlashMessage::WARNING, TRUE);
-            $this->redirect('tokenshow', null, null, [
+            $this->redirect('tokenshow', NULL, NULL, [
                 'mashup' => $mashup,
                 'token' => $existingToken
             ]);
             return;
         } else {
-            if ($newToken->getValidToDateString() !== "") {
-                $date = new \DateTime($newToken->getValidToDateString());
-                $newToken->setValidToTicks((string) GnUtil::TicksFromDate($date->add(new \DateInterval('PT23H59M59S'))));
-            } else {
-                $newToken->setValidToTicks("0");
-            }
             $mashup->addToken($newToken);
             $this->mashupRepository->update($mashup);
             $this->persistenceManager->persistAll();
@@ -1005,7 +1040,7 @@ class MashupController extends BaseController
             $this->addFlashMessage('The object was created successfully', '', FlashMessage::OK, TRUE);
         }
 
-        $this->redirect('tokenshow', null, null, [
+        $this->redirect('tokenshow', NULL, NULL, [
             'mashup' => $mashup,
             'token' => $newToken
         ]);
@@ -1014,13 +1049,23 @@ class MashupController extends BaseController
     /**
      * action tokenedit
      *
+     * @param Token $token
+     * @param Mashup $mashup
      * @return void
      */
     public function tokeneditAction(Token $token, Mashup $mashup)
     {
         $this->AssureLoggedIn();
 
-        $this->view->assign('callbackResponseMaxChars', 100);
+        $token->setCheckboxByOption();
+
+        if (!GnUtil::IsNullOrEmpty($token->getValidUntilTicks())) {
+            $validUntilDate = GnUtil::DateFromTicks($token->getValidUntilTicks());
+            $token->setValidUntilDateString($validUntilDate->format("Y-m-d"));
+        }
+
+        $this->setSettingsForToken();
+
         $this->view->assign('mashup', $mashup);
         $this->view->assign('token', $token);
     }
@@ -1028,12 +1073,14 @@ class MashupController extends BaseController
     /**
      * action tokencreate
      *
-     * @param Mashup $newMashup
+     * @param Token $token
      * @return void
      */
     public function tokenupdateAction(Token $token)
     {
         $this->AssureLoggedIn();
+
+        $token->mapDataFromInput();
 
         $mashup = $token->getMashup();
         $mashup->addToken($token);
@@ -1042,7 +1089,7 @@ class MashupController extends BaseController
 
         $this->addFlashMessage('The object was updated successfully', '', FlashMessage::OK, TRUE);
 
-        $this->redirect('tokenshow', null, null, [
+        $this->redirect('tokenshow', NULL, NULL, [
             'mashup' => $mashup,
             'token' => $token
         ]);
@@ -1068,8 +1115,18 @@ class MashupController extends BaseController
             $this->addFlashMessage('The object was deleted successfully', '', FlashMessage::OK, TRUE);
         }
 
-        $this->redirect('tokenlist', null, null, [
+        $this->redirect('tokenlist', NULL, NULL, [
             'mashup' => $mashup
         ]);
+    }
+
+    /**
+     * Set the settings for Token to the view
+     */
+    private function setSettingsForToken()
+    {
+        $this->view->assign('TokenPayloadMaxChars', 50);
+        $this->view->assign('TokenLabelMaxChars', 100);
+        $this->view->assign('TokenCallbackResponseMaxChars', 100);
     }
 }

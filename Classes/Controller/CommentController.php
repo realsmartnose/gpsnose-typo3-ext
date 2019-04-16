@@ -22,14 +22,13 @@ use GpsNose\SDK\Mashup\Model\GnCommentItemType;
  */
 class CommentController extends BaseController
 {
-
     /**
      * mashupRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
      * @inject
      */
-    protected $mashupRepository = null;
+    protected $mashupRepository = NULL;
 
     /**
      * CommentController __construct
@@ -54,7 +53,7 @@ class CommentController extends BaseController
 
         $pageSize = $this->settings['commentsPageSize'];
         $commentService = new GnCommentService();
-        $comments = $commentService->GetCommentsPage(GnCommentItemType::Community, $communityTag, null, $pageSize);
+        $comments = $commentService->GetCommentsPage(GnCommentItemType::Community, $communityTag, NULL, $pageSize);
         $this->view->assign('comments', json_encode($comments));
 
         // Add Community

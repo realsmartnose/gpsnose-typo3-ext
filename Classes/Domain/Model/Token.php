@@ -1,6 +1,9 @@
 <?php
 namespace SmartNoses\Gpsnose\Domain\Model;
 
+use GpsNose\SDK\Mashup\Model\GnMashupTokenOptions;
+use GpsNose\SDK\Mashup\Framework\GnUtil;
+
 /**
  * *
  *
@@ -19,50 +22,91 @@ namespace SmartNoses\Gpsnose\Domain\Model;
  */
 class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
-
     /**
-     * mashup
-     *
      * @var \SmartNoses\Gpsnose\Domain\Model\Mashup
      */
-    protected $mashup = null;
+    protected $mashup = NULL;
 
     /**
-     * payload
-     *
      * @var string
      * @validate NotEmpty
      */
     protected $payload = '';
 
     /**
-     * validToTicks
-     *
-     * @var string
+     * @var int
      */
-    protected $validToTicks = '0';
+    protected $options = GnMashupTokenOptions::NoOptions;
 
     /**
-     * validToDateString
-     *
+     * @var float
+     */
+    protected $valuePerUnit = 0.0;
+
+    /**
+     * @var string
+     */
+    protected $label = '';
+
+    /**
+     * @var string
+     */
+    protected $validUntilTicks = '0';
+
+    /**
+     * @var string
+     */
+    protected $creationTicks = '0';
+
+    /**
+     * @var string
+     */
+    protected $createdByLoginName = '';
+
+    /**
+     * @var string
+     */
+    protected $callbackResponse = '';
+
+    // //////////////////////////
+    // ///// NOT persisted /////
+    // //////////////////////////
+
+    /**
      * @var string
      */
     protected $validToDateString = '';
 
     /**
-     * callbackResponse
-     *
      * @var string
      */
-    protected $callbackResponse = '';
+    protected $validUntilDateString = '';
 
     /**
-     * tokenScans
-     *
+     * @var bool
+     */
+    protected $batchScanning = FALSE;
+
+    /**
+     * @var bool
+     */
+    protected $canSelectAmount = FALSE;
+
+    /**
+     * @var bool
+     */
+    protected $canComment = FALSE;
+
+    /**
+     * @var bool
+     */
+    protected $askGpsSharing = FALSE;
+
+    /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\TokenScan>
      * @cascade remove
      */
-    protected $tokenScans = null;
+    protected $tokenScans = NULL;
 
     /**
      * __construct
@@ -87,7 +131,46 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
+     * Set the booleans by option
+     */
+    public function setCheckboxByOption()
+    {
+        $options = $this->getOptions();
+        $this->setBatchScanning(($options & GnMashupTokenOptions::BatchScanning) == GnMashupTokenOptions::BatchScanning);
+        $this->setCanSelectAmount(($options & GnMashupTokenOptions::CanSelectAmount) == GnMashupTokenOptions::CanSelectAmount);
+        $this->setCanComment(($options & GnMashupTokenOptions::CanComment) == GnMashupTokenOptions::CanComment);
+        $this->setAskGpsSharing(($options & GnMashupTokenOptions::AskGpsSharing) == GnMashupTokenOptions::AskGpsSharing);
+    }
+
+    /**
+     * Map data from request
+     */
+    public function mapDataFromInput()
+    {
+        $options = GnMashupTokenOptions::NoOptions;
+        if ($this->isBatchScanning()) {
+            $options += GnMashupTokenOptions::BatchScanning;
+        }
+        if ($this->isCanSelectAmount()) {
+            $options += GnMashupTokenOptions::CanSelectAmount;
+        }
+        if ($this->isCanComment()) {
+            $options += GnMashupTokenOptions::CanComment;
+        }
+        if ($this->getAskGpsSharing()) {
+            $options += GnMashupTokenOptions::AskGpsSharing;
+        }
+        $this->setOptions($options);
+
+        if (!GnUtil::IsNullOrEmpty($this->getValidUntilDateString())) {
+            $validUntilDate = new \DateTime($this->getValidUntilDateString());
+            $this->setValidUntilTicks((string)GnUtil::TicksFromDate($validUntilDate->add(new \DateInterval('PT23H59M59S'))));
+        } else {
+            $this->setValidUntilTicks("");
+        }
+    }
+
+    /**
      * @return \SmartNoses\Gpsnose\Domain\Model\Mashup
      */
     public function getMashup()
@@ -96,7 +179,6 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
      * @param \SmartNoses\Gpsnose\Domain\Model\Mashup $mashup
      */
     public function setMashup($mashup)
@@ -105,7 +187,6 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
      * @return string
      */
     public function getPayload()
@@ -114,7 +195,6 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
      * @param string $payload
      */
     public function setPayload($payload)
@@ -123,43 +203,182 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
+     * @return int
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param int $options
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * @return int
+     */
+    public function getValuePerUnit()
+    {
+        return $this->valuePerUnit;
+    }
+
+    /**
+     * @param int $valuePerUnit
+     */
+    public function setValuePerUnit($valuePerUnit)
+    {
+        $this->valuePerUnit = $valuePerUnit;
+    }
+
+    /**
      * @return string
      */
-    public function getValidToTicks()
+    public function getLabel()
     {
-        return $this->validToTicks;
+        return $this->label;
     }
 
     /**
-     *
-     * @param string $validToTicks
+     * @param string $label
      */
-    public function setValidToTicks($validToTicks)
+    public function setLabel($label)
     {
-        $this->validToTicks = $validToTicks;
+        $this->label = $label;
     }
 
     /**
-     *
      * @return string
      */
-    public function getValidToDateString()
+    public function getValidUntilTicks()
     {
-        return $this->validToDateString;
+        return $this->validUntilTicks;
     }
 
     /**
-     *
-     * @param string $validToDateString
+     * @param string $validUntilTicks
      */
-    public function setValidToDateString($validToDateString)
+    public function setValidUntilTicks($validUntilTicks)
     {
-        $this->validToDateString = $validToDateString;
+        $this->validUntilTicks = $validUntilTicks;
     }
 
     /**
-     *
+     * @return string
+     */
+    public function getCreationTicks()
+    {
+        return $this->creationTicks;
+    }
+
+    /**
+     * @param string $creationTicks
+     */
+    public function setCreationTicks($creationTicks)
+    {
+        $this->creationTicks = $creationTicks;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatedByLoginName()
+    {
+        return $this->createdByLoginName;
+    }
+
+    /**
+     * @param string $createdByLoginName
+     */
+    public function setCreatedByLoginName($createdByLoginName)
+    {
+        $this->createdByLoginName = $createdByLoginName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBatchScanning()
+    {
+        return $this->batchScanning;
+    }
+
+    /**
+     * @param bool $batchScanning
+     */
+    public function setBatchScanning($batchScanning)
+    {
+        $this->batchScanning = $batchScanning;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCanSelectAmount()
+    {
+        return $this->canSelectAmount;
+    }
+
+    /**
+     * @param bool $canSelectAmount
+     */
+    public function setCanSelectAmount($canSelectAmount)
+    {
+        $this->canSelectAmount = $canSelectAmount;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCanComment()
+    {
+        return $this->canComment;
+    }
+
+    /**
+     * @param bool $canComment
+     */
+    public function setCanComment($canComment)
+    {
+        $this->canComment = $canComment;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAskGpsSharing()
+    {
+        return $this->askGpsSharing;
+    }
+
+    /**
+     * @param bool $askGpsSharing 
+     */
+    public function setAskGpsSharing(bool $askGpsSharing)
+    {
+        $this->askGpsSharing = $askGpsSharing;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValidUntilDateString()
+    {
+        return $this->validUntilDateString;
+    }
+
+    /**
+     * @param string $validUntilDateString
+     */
+    public function setValidUntilDateString($validUntilDateString)
+    {
+        $this->validUntilDateString = $validUntilDateString;
+    }
+
+    /**
      * @return string
      */
     public function getCallbackResponse()
@@ -168,7 +387,6 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
      * @param string $callbackResponse
      */
     public function setCallbackResponse($callbackResponse)
@@ -212,7 +430,8 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Return a TokenScan
      *
-     * @param string $payload
+     * @param string $user
+     * @param string $ticks
      * @return \SmartNoses\Gpsnose\Domain\Model\TokenScan | NULL
      */
     public function findTokenScanByUserAndTicks(string $user, string $ticks)
@@ -223,7 +442,7 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
                 return $tokenScan;
             }
         }
-        return null;
+        return NULL;
     }
 
     /**
@@ -246,7 +465,7 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the TokenScans
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\TokenScan> $mashupTokenScans
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\TokenScan> $tokenScans
      * @return void
      */
     public function setTokenScan(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $tokenScans)

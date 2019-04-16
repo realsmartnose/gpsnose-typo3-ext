@@ -19,7 +19,6 @@ namespace SmartNoses\Gpsnose\Domain\Model;
  */
 class SubCommunity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
-
     /**
      * name
      *

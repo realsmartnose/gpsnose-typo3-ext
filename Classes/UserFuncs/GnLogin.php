@@ -6,14 +6,19 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 use GpsNose\SDK\Framework\Logging\GnLogger;
+
 $file = __DIR__ . '/../../_dev.php';
 if (file_exists($file)) {
-    include ($file);
+    include($file);
 }
 
 class GnLogin
 {
-
+    /**
+     * @param  mixed $content
+     * @param  mixed $conf
+     * @return string
+     */
     public function login($content, $conf)
     {
         $loginId = $_GET["gnlid"];

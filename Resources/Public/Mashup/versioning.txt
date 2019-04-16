@@ -1,3 +1,6 @@
+1.0.8
+- FIX: Fix member-template
+
 1.0.7
 - CHA: Change the coding-style
 

@@ -19,23 +19,22 @@ namespace SmartNoses\Gpsnose\Domain\Repository;
  */
 class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository
 {
-
     /**
-     * Finds the user matching the given Loginname
+     * Finds the user matching the given GpsNose-Loginname
      *
      * @param string $loginname
      *            Loginname in GpsNose
-     *            
-     * @return NULL|\SmartNoses\Gpsnose\Domain\Model\FrontendUser|object
+     *
+     * @return \SmartNoses\Gpsnose\Domain\Model\FrontendUser
      */
-    public function findByLoginName($loginname)
+    public function findByGpsnoseLoginName($loginname)
     {
         $query = $this->createQuery();
 
         $querySettings = $query->getQuerySettings();
-        $querySettings->setRespectStoragePage(false);
-        $querySettings->setRespectSysLanguage(false);
-        $querySettings->setIgnoreEnableFields(true);
+        $querySettings->setRespectStoragePage(FALSE);
+        $querySettings->setRespectSysLanguage(FALSE);
+        $querySettings->setIgnoreEnableFields(TRUE);
         $querySettings->setEnableFieldsToBeIgnored([
             'disabled'
         ]);

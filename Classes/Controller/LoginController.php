@@ -24,14 +24,13 @@ use SmartNoses\Gpsnose\Utility\GnUtility;
  */
 class LoginController extends BaseController
 {
-
     /**
      * mashupRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
      * @inject
      */
-    protected $mashupRepository = null;
+    protected $mashupRepository = NULL;
 
     /**
      * frontendUserRepository
@@ -39,28 +38,24 @@ class LoginController extends BaseController
      * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository
      * @inject
      */
-    protected $frontendUserRepository = null;
+    protected $frontendUserRepository = NULL;
 
     /**
-     *
      * @var \GpsNose\SDK\Mashup\Api\GnApi
      */
     protected $_gnApi;
 
     /**
-     *
      * @var string
      */
     protected $_loginId;
 
     /**
-     *
      * @var \GpsNose\SDK\Web\Login\GnPrincipal
      */
     protected $_currentUser;
 
     /**
-     *
      * @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser
      */
     protected $_gnLoginApi;
@@ -75,7 +70,7 @@ class LoginController extends BaseController
         $this->_gnApi = new GnApi();
 
         $this->_currentUser = GnAuthentication::CurrentUser();
-        if ($this->_currentUser != null) {
+        if ($this->_currentUser != NULL) {
             $this->_loginId = $this->_currentUser->LoginId;
         }
     }
@@ -123,4 +118,3 @@ class LoginController extends BaseController
         }
     }
 }
-

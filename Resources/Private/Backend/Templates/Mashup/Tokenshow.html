@@ -14,6 +14,9 @@
     <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-default">
         <core:icon identifier="fa-chevron-left" /> <f:translate key="Common_btnBackToList" />
     </f:link.action>
+    <f:link.action action="tokenedit" arguments="{token : token, mashup : mashup}" class="btn btn-default">
+        <core:icon identifier="fa-edit" /> <f:translate key="Common_btnEdit" />
+    </f:link.action>
     <f:link.action action="tokenshow" arguments="{token : token, mashup : mashup}" class="btn btn-default">
         <core:icon identifier="fa-refresh" /> <f:translate key="Common_btnRefresh" />
     </f:link.action>
@@ -34,20 +37,60 @@
     </div>
     <table class="table">
         <tr>
-            <td class="col-xs-4"><f:translate key="MashupAdmin_lblMashupTokenValueLabel" /></td>
-            <td class="col-xs-8"><pre style="white-space:pre-wrap; word-wrap:break-word">{token.payload}</pre></td>
+            <td class="col-xs-4"><f:translate key="MashupAdmin_lblMashupTokenPayloadLabel" /></td>
+            <td class="col-xs-8">{token.payload}</td>
         </tr>
-        <tr>
-            <td><f:translate key="MashupAdmin_lblMashupTokenDateLabel" /></td>
-            <td><nose:ticks.datetime ticks="{token.validToTicks}" /></td>
-        </tr>
-        <tr>
-            <td><f:translate key="MashupAdmin_lblMashupTokenCallbackResponseLabel" /></td>
-            <td>
-                <f:if condition="{token.callbackResponse} == ''">-</f:if>
-                {token.callbackResponse}
-            </td>
-        </tr>
+        <f:if condition="{token.label} != ''">
+            <tr>
+                <td><f:translate key="MashupAdmin_lblMashupTokenLabelLabel" /></td>
+                <td><pre style="white-space:pre-wrap; word-wrap:break-word">{token.label}</pre></td>
+            </tr>
+        </f:if>
+        <f:if condition="{token.valuePerUnit} > 0">
+            <tr>
+                <td><f:translate key="MashupAdmin_lblMashupTokenValuePerUnitLabel" /></td>
+                <td>{token.valuePerUnit}</td>
+            </tr>
+        </f:if>
+        <f:if condition="{token.validUntilTicks} > 0">
+            <tr>
+                <td><f:translate key="MashupAdmin_lblMashupTokenValidUntilDateLabel" /></td>
+                <td><nose:ticks.datetime ticks="{token.validUntilTicks}" /> (UTC)</td>
+            </tr>
+        </f:if>
+        <f:if condition="{token.options} > 0">
+            <tr>
+                <td><f:translate key="MashupAdmin_lblMashupTokenOptions" /></td>
+                <td>
+                    <f:if condition="{token.batchScanning}">
+                        <div>
+                            <f:translate key="MashupAdmin_lblMashupTokenOptionsBatchScanning" />
+                        </div>
+                    </f:if>
+                    <f:if condition="{token.canSelectAmount}">
+                        <div>
+                            <f:translate key="MashupAdmin_lblMashupTokenOptionsCanSelectAmount" />
+                        </div>
+                    </f:if>
+                    <f:if condition="{token.canComment}">
+                        <div>
+                            <f:translate key="MashupAdmin_lblMashupTokenOptionsCanComment" />
+                        </div>
+                    </f:if>
+                    <f:if condition="{token.canComment}">
+                        <div>
+                            <f:translate key="MashupAdmin_lblMashupTokenOptionsAskGpsSharing" />
+                        </div>
+                    </f:if>
+                </td>
+            </tr>
+        </f:if>
+        <f:if condition="{token.callbackResponse} != ''">
+            <tr>
+                <td><f:translate key="MashupAdmin_lblMashupTokenCallbackResponseLabel" /></td>
+                <td>{token.callbackResponse}</td>
+            </tr>
+        </f:if>
         <tr>
             <td><f:translate key="MashupAdmin_lblMashupTokenImageLabel" /></td>
             <td>

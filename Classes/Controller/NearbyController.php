@@ -22,7 +22,6 @@ use SmartNoses\Gpsnose\Utility\GnData;
  */
 class NearbyController extends BaseController
 {
-
     /**
      * NearbyController __construct
      */
@@ -47,7 +46,7 @@ class NearbyController extends BaseController
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyNosesPageSize'];
             $nearbyService = new GnNearbyService();
-            $noses = $nearbyService->GetNosesAroundPage($communityTag, null, $pageSize);
+            $noses = $nearbyService->GetNosesAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('noses', json_encode($noses));
         }
 
@@ -76,7 +75,7 @@ class NearbyController extends BaseController
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyImpressionsPageSize'];
             $nearbyService = new GnNearbyService();
-            $impressions = $nearbyService->GetImpressionsAroundPage($communityTag, null, $pageSize);
+            $impressions = $nearbyService->GetImpressionsAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('impressions', json_encode($impressions));
         }
 
@@ -105,7 +104,7 @@ class NearbyController extends BaseController
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyPoisPageSize'];
             $nearbyService = new GnNearbyService();
-            $pois = $nearbyService->GetPoisAroundPage($communityTag, null, $pageSize);
+            $pois = $nearbyService->GetPoisAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('pois', json_encode($pois));
         }
 
@@ -134,7 +133,7 @@ class NearbyController extends BaseController
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyTracksPageSize'];
             $nearbyService = new GnNearbyService();
-            $tracks = $nearbyService->GetTracksAroundPage($communityTag, null, $pageSize);
+            $tracks = $nearbyService->GetTracksAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('tracks', json_encode($tracks));
         }
 
@@ -163,7 +162,7 @@ class NearbyController extends BaseController
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyEventsPageSize'];
             $nearbyService = new GnNearbyService();
-            $events = $nearbyService->GetEventsAroundPage($communityTag, null, $pageSize);
+            $events = $nearbyService->GetEventsAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('events', json_encode($events));
         }
 

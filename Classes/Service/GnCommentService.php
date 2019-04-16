@@ -11,7 +11,9 @@ use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 
 class GnCommentService extends GnBaseService
 {
-
+    /**
+     * @var string
+     */
     private $_cacheGroup = 'CommentsPage';
 
     /**
@@ -23,20 +25,19 @@ class GnCommentService extends GnBaseService
     }
 
     /**
-     *
      * @param string $commentTicks
      * @param string $text
      * @param int $itemType
      * @param string $itemKey
-     * @param boolean $isUpdate
+     * @param bool $isUpdate
      * @return string
      */
-    public function SaveComment(string $commentTicks, string $text, int $itemType = GnCommentItemType::Community, string $itemKey = null, bool $isUpdate = false)
+    public function SaveComment(string $commentTicks, string $text, int $itemType = GnCommentItemType::Community, string $itemKey = NULL, bool $isUpdate = FALSE)
     {
         try {
             if ($itemKey) {
                 $visibility = substr($itemKey, 0, 1);
-                list ($community) = explode('@', substr($itemKey, 1));
+                list($community) = explode('@', substr($itemKey, 1));
                 $community = $visibility . $community;
             }
 
@@ -49,7 +50,7 @@ class GnCommentService extends GnBaseService
                     $currentUser = GnAuthentication::CurrentUser();
                     $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
                     $gnLogin = $gnLoginApi->GetVerified();
-                    if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
+                    if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: Should we reset the cache for all pages of comments?
                         if ($isUpdate) {
                             $result = $gnLoginApi->GetCommentsApi()->UpdateComment($commentTicks, $text, $itemType, $itemKey);
@@ -73,18 +74,22 @@ class GnCommentService extends GnBaseService
     /**
      * Get page of comments for a community
      *
+     * @param int $commentType
+     * @param string $itemKey
+     * @param int $lastKnownTicks
+     * @param int $pageSize
      * @return \GpsNose\SDK\Mashup\Model\GnComment[]
      */
-    public function GetCommentsPage(int $commentType = GnCommentItemType::Community, string $itemKey, int $lastKnownTicks = null, int $pageSize = null)
+    public function GetCommentsPage(int $commentType = GnCommentItemType::Community, string $itemKey, int $lastKnownTicks = NULL, int $pageSize = NULL)
     {
         try {
             if ($itemKey) {
                 $visibility = substr($itemKey, 0, 1);
-                list ($community) = explode('@', substr($itemKey, 1));
+                list($community) = explode('@', substr($itemKey, 1));
                 $community = $visibility . $community;
             }
 
-            if ($lastKnownTicks == null) {
+            if ($lastKnownTicks == NULL) {
                 $lastKnownTicks = GnSettings::FAR_FUTURE_TICKS;
             }
 

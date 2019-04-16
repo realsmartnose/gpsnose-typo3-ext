@@ -26,7 +26,7 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.7">
+<div class="ma-gpsnose" data-gn-version="1.0.8">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-members" data-bind="visible:true" style="display:none;">
 
@@ -35,7 +35,7 @@ $(document).ready(function() {
             <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
         </div>
 
-        <div class="row publishers" data-bind="foreach: members">
+        <div class="row publishers" data-bind="foreach: Members">
             <div class="grid-item col-lg-2 col-md-3 col-sm-4 col-xs-6">
                 <div class="outer" data-external="true" data-bind="attr: { 'data-src': $data.NoseDto.DetailUrl() }">
                     <div class="thumbnail">
@@ -53,12 +53,12 @@ $(document).ready(function() {
         </div>
         <div class="text-center">
 
-            <div class="btn btn-default btn-lg" data-bind="click: function(){ pageMembers() }, visible: hasMoreMembers(), attr: { disabled: membersRequestActive() }">
-                <div data-bind="visible: ! membersRequestActive()">
+            <div class="btn btn-default btn-lg" data-bind="click: function(){ pageMembers() }, visible: HasMoreMembers(), attr: { disabled: MembersRequestActive() }">
+                <div data-bind="visible: ! MembersRequestActive()">
                     <span class="glyphicon glyphicon-cloud-download"></span>
                     <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
                 </div>
-                <div data-bind="visible: membersRequestActive()">
+                <div data-bind="visible: MembersRequestActive()">
                     <span class="glyphicon glyphicon-repeat gly-spin"></span>
                     <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
                 </div>
@@ -66,7 +66,7 @@ $(document).ready(function() {
 
         </div>
 
-        <div class="alert alert-info" data-bind="visible: members().length == 0 && ! membersRequestActive()">
+        <div class="alert alert-info" data-bind="visible: Members().length == 0 && ! MembersRequestActive()">
             <span class="glyphicon glyphicon-info-sign"></span>
             <span data-bind="text: ' ' + GetLangRes('Community_lblMembersNoEntryMessage', 'There are no members in this community currently.')"></span>
         </div>
@@ -80,14 +80,14 @@ var MA_GPSNOSE_IS_MASHUP = true;
 $(document).ready(function() {
     if (! gn_data.User) gn_data.User = {};
     var vm = new CommunityDetailViewModel(gn_data.Community, gn_data.User);
-    vm.membersPageUrl = gn_data.Settings.MembersPageUrl;
+    vm.MembersPageUrl = gn_data.Settings.MembersPageUrl;
     ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
 
     // Add first Page of Members
     if (gn_data.Members) {
-        vm.addMembers(gn_data.Members);
+        vm.AddMembers(gn_data.Members);
     } else {
-        vm.pageMembers();
+        vm.PageMembers();
     }
 });
 </script>

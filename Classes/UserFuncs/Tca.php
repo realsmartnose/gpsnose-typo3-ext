@@ -3,9 +3,14 @@ namespace SmartNoses\Gpsnose\UserFuncs;
 
 class Tca
 {
-
+    /**
+     * @param  mixed $PA
+     * @param  mixed $fObj
+     * @return string
+     */
     public function showInformation($PA, $fObj)
     {
+        $message = '';
         $message .= '<div class="typo3-messages">';
         $message .= '<div class="alert alert-info">';
         $message .= '<div class="media">';

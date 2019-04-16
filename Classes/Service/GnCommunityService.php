@@ -8,7 +8,6 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class GnCommunityService extends GnBaseService
 {
-
     /**
      * GnCommunityService __construct
      */
@@ -20,13 +19,14 @@ class GnCommunityService extends GnBaseService
     /**
      * Get Community
      *
+     * @param string $communityTag
      * @return \GpsNose\SDK\Mashup\Model\GnComment
      */
     public function GetCommunity(string $communityTag)
     {
         try {
             $visibility = substr($communityTag, 0, 1);
-            list ($community) = explode('@', substr($communityTag, 1));
+            list($community) = explode('@', substr($communityTag, 1));
             $community = $visibility . $community;
 
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -51,13 +51,14 @@ class GnCommunityService extends GnBaseService
     /**
      * Get Community Join QR-Code
      *
+     * @param string $communityTag
      * @return mixed
      */
     public function GetQrCodeJoinImage(string $communityTag)
     {
         try {
             $visibility = substr($communityTag, 0, 1);
-            list ($community) = explode('@', substr($communityTag, 1));
+            list($community) = explode('@', substr($communityTag, 1));
             $community = $visibility . $community;
 
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);

@@ -61,6 +61,14 @@ var MashupFormTypeEnum;
     MashupFormTypeEnum[MashupFormTypeEnum["Detail"] = 3] = "Detail";
     MashupFormTypeEnum[MashupFormTypeEnum["MashupToken"] = 4] = "MashupToken";
 })(MashupFormTypeEnum || (MashupFormTypeEnum = {}));
+var GnMashupTokenOptions;
+(function (GnMashupTokenOptions) {
+    GnMashupTokenOptions[GnMashupTokenOptions["NoOptions"] = 0] = "NoOptions";
+    GnMashupTokenOptions[GnMashupTokenOptions["BatchScanning"] = 1] = "BatchScanning";
+    GnMashupTokenOptions[GnMashupTokenOptions["CanSelectAmount"] = 2] = "CanSelectAmount";
+    GnMashupTokenOptions[GnMashupTokenOptions["CanComment"] = 4] = "CanComment";
+    GnMashupTokenOptions[GnMashupTokenOptions["AskGpsSharing"] = 8] = "AskGpsSharing";
+})(GnMashupTokenOptions || (GnMashupTokenOptions = {}));
 var MashupAdminViewModel = (function () {
     function MashupAdminViewModel(params) {
         var _this = this;
@@ -92,11 +100,53 @@ var MashupAdminViewModel = (function () {
         this.AddHostValue = ko.observable("");
         this.AddHostMaxChars = ko.observable(0);
         this.AddHostIsValid = ko.observable(false);
-        this.CreateMashupTokenValue = ko.observable("");
-        this.CreateMashupTokenMaxChars = ko.observable(0);
-        this.CreateMashupTokenIsValid = ko.observable(false);
+        this.CreateMashupTokenPayload = ko.observable("");
+        this.CreateMashupTokenMaxPayloadChars = ko.observable(0);
+        this.CreateMashupTokenLabel = ko.observable("");
+        this.CreateMashupTokenMaxLabelChars = ko.observable(0);
+        this.CreateMashupTokenValuePerUnit = ko.observable("");
         this.CreateMashupTokenDate = ko.observable("");
         this.CreateMashupTokenSrc = ko.observable("");
+        this.CreateMashupTokenPayloadIsValid = ko.computed(function () {
+            var payload = _this.CreateMashupTokenPayload();
+            return payload.length > 0 && payload.length <= _this.CreateMashupTokenMaxPayloadChars();
+        });
+        this.CreateMashupTokenLabelIsValid = ko.computed(function () {
+            var label = _this.CreateMashupTokenLabel();
+            return label.length > 0 && label.length <= _this.CreateMashupTokenMaxLabelChars();
+        });
+        this.CreateMashupTokenValuePerUnitIsValid = ko.computed(function () {
+            var valuePerUnit = _this.CreateMashupTokenValuePerUnit();
+            return /^\d{0,6}(\.\d{1,3})?$/.test(valuePerUnit);
+        });
+        this.CreateMashupTokenIsValid = ko.computed(function () {
+            return _this.CreateMashupTokenPayloadIsValid() && _this.CreateMashupTokenLabelIsValid() && _this.CreateMashupTokenValuePerUnitIsValid();
+        });
+        this.CreateMashupTokenBatchScanning = ko.observable(false);
+        this.CreateMashupTokenCanSelectAmount = ko.observable(false);
+        this.CreateMashupTokenCanComment = ko.observable(false);
+        this.CreateMashupTokenAskGpsSharing = ko.observable(false);
+        this.CreateMashupTokenOptions = ko.computed({
+            owner: this,
+            read: function () {
+                var isBatchScanning = _this.CreateMashupTokenBatchScanning();
+                var isCanSelectAmount = _this.CreateMashupTokenCanSelectAmount();
+                var isCanComment = _this.CreateMashupTokenCanComment();
+                var isAskGpsSharing = _this.CreateMashupTokenAskGpsSharing();
+                var num = GnMashupTokenOptions.NoOptions;
+                num += isBatchScanning ? GnMashupTokenOptions.BatchScanning : 0;
+                num += isCanSelectAmount ? GnMashupTokenOptions.CanSelectAmount : 0;
+                num += isCanComment ? GnMashupTokenOptions.CanComment : 0;
+                num += isAskGpsSharing ? GnMashupTokenOptions.AskGpsSharing : 0;
+                return num;
+            },
+            write: function (value) {
+                _this.CreateMashupTokenBatchScanning((value & GnMashupTokenOptions.BatchScanning) == GnMashupTokenOptions.BatchScanning);
+                _this.CreateMashupTokenCanSelectAmount((value & GnMashupTokenOptions.CanSelectAmount) == GnMashupTokenOptions.CanSelectAmount);
+                _this.CreateMashupTokenCanComment((value & GnMashupTokenOptions.CanComment) == GnMashupTokenOptions.CanComment);
+                _this.CreateMashupTokenAskGpsSharing((value & GnMashupTokenOptions.AskGpsSharing) == GnMashupTokenOptions.AskGpsSharing);
+            }
+        });
         this.MashupTokenPageUrl = '/MashupApi/GetMashupTokensPage';
         this.MashupTokens = ko.observableArray([]);
         this.MashupTokensPageSize = gnSettings.MashupTokensPageSize;
@@ -116,7 +166,8 @@ var MashupAdminViewModel = (function () {
         this.AddMaxChars(100);
         this.AddSubCommunityMaxChars(20);
         this.AddHostMaxChars(100);
-        this.CreateMashupTokenMaxChars(200);
+        this.CreateMashupTokenMaxPayloadChars(50);
+        this.CreateMashupTokenMaxLabelChars(150);
         this.MashupTokenCallbackUrlMaxChars(1000);
         this.PrivacyDropdownItems.push('%' + GetLangRes('Common_lblCommunityPublic', 'Public'));
         this.PrivacyDropdownItems.push('@' + GetLangRes('Common_lblCommunityClosed', 'Closed'));
@@ -138,12 +189,13 @@ var MashupAdminViewModel = (function () {
             var isValid = IsValidDomain(newValue, _this.AddHostMaxChars());
             _this.AddHostIsValid(isValid);
         });
-        this.CreateMashupTokenValue.subscribe(function (newValue) {
-            var isValid = newValue.length > 0 && newValue.length <= _this.CreateMashupTokenMaxChars();
-            _this.CreateMashupTokenIsValid(isValid);
+        this.CreateMashupTokenPayload.subscribe(function (newValue) {
             _this.CreateMashupTokenSrc("");
         });
         this.CreateMashupTokenDate.subscribe(function (newValue) {
+            _this.CreateMashupTokenSrc("");
+        });
+        this.CreateMashupTokenOptions.subscribe(function (newValue) {
             _this.CreateMashupTokenSrc("");
         });
         this.MashupTokenCallbackUrlValue.subscribe(function (newValue) {
@@ -549,11 +601,22 @@ var MashupAdminViewModel = (function () {
             if (self.RequestActiveMashupTokenNew())
                 return;
             self.RequestActiveMashupTokenNew(true);
-            var ticks = null;
-            if (self.CreateMashupTokenDate() != '') {
-                ticks = GetTicksFromDate(moment.utc(self.CreateMashupTokenDate()).add(1, "d").toDate());
+            var params = {};
+            params['appKey'] = self.CurrentMashup().AppKey();
+            params['tag'] = self.CurrentMashup().CommunityTag();
+            params['payload'] = self.CreateMashupTokenPayload();
+            params['label'] = self.CreateMashupTokenLabel();
+            params['valuePerUnit'] = self.CreateMashupTokenValuePerUnit();
+            if (self.CreateMashupTokenOptions() > GnMashupTokenOptions.NoOptions) {
+                params['options'] = self.CreateMashupTokenOptions();
             }
-            var src = "/MashupApi/GenerateQrTokenForMashup?appKey=" + self.CurrentMashup().AppKey() + "&tag=" + encodeURI(self.CurrentMashup().CommunityTag()) + "&payload=" + encodeURI(self.CreateMashupTokenValue()) + (ticks != null ? '&validToTicks=' + ticks : '');
+            if (self.CreateMashupTokenDate() != '') {
+                params['validToTicks'] = GetTicksFromDate(moment.utc(self.CreateMashupTokenDate()).add(1, "d").toDate());
+            }
+            var queryString = Object.keys(params).map(function (key) {
+                return key + '=' + encodeURIComponent(params[key]);
+            }).join('&');
+            var src = "/MashupApi/GenerateQrTokenForMashup?" + queryString;
             var img = new Image();
             img.onload = function () {
                 self.CreateMashupTokenSrc(src);

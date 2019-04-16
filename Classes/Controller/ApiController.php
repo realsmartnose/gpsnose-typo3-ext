@@ -4,6 +4,7 @@ namespace SmartNoses\Gpsnose\Controller;
 use SmartNoses\Gpsnose\Service\GnNearbyService;
 use SmartNoses\Gpsnose\Service\GnCommentService;
 use GpsNose\SDK\Mashup\Framework\GnUtil;
+use GpsNose\SDK\Mashup\Model\GnMashupTokenOptions;
 use SmartNoses\Gpsnose\Service\GnMemberService;
 use SmartNoses\Gpsnose\Service\GnNewsService;
 use SmartNoses\Gpsnose\Utility\GnUtility;
@@ -33,15 +34,12 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
  */
 class ApiController extends BaseController
 {
-
     /**
-     *
      * @var \TYPO3\CMS\Extbase\Mvc\View\JsonView
      */
     protected $view;
 
     /**
-     *
      * @var string
      */
     protected $defaultViewObjectName = \TYPO3\CMS\Extbase\Mvc\View\JsonView::class;
@@ -52,7 +50,7 @@ class ApiController extends BaseController
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
      * @inject
      */
-    protected $mashupRepository = null;
+    protected $mashupRepository = NULL;
 
     /**
      * frontendUserRepository
@@ -60,7 +58,7 @@ class ApiController extends BaseController
      * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository
      * @inject
      */
-    protected $frontendUserRepository = null;
+    protected $frontendUserRepository = NULL;
 
     /**
      * ApiController __construct
@@ -84,12 +82,12 @@ class ApiController extends BaseController
 
         $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
         if ($lastKnownTicks < 1) {
-            $lastKnownTicks = null;
+            $lastKnownTicks = NULL;
         }
 
         $communityTag = $_POST['community'];
 
-        if (! GnUtil::IsNullOrEmpty($communityTag)) {
+        if (!GnUtil::IsNullOrEmpty($communityTag)) {
             $memberService = new GnMemberService();
             $this->view->assign('members', $memberService->GetMembersPage($communityTag, $lastKnownTicks, $pageSize));
             $this->view->setVariablesToRender(array(
@@ -112,12 +110,12 @@ class ApiController extends BaseController
 
         $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
         if ($lastKnownTicks < 1) {
-            $lastKnownTicks = null;
+            $lastKnownTicks = NULL;
         }
 
         $communityTag = $_POST['community'];
 
-        if (! GnUtil::IsNullOrEmpty($communityTag)) {
+        if (!GnUtil::IsNullOrEmpty($communityTag)) {
             $newsService = new GnNewsService();
             $this->view->assign('news', $newsService->GetNewsPage($communityTag, $lastKnownTicks, $pageSize));
             $this->view->setVariablesToRender(array(
@@ -140,14 +138,14 @@ class ApiController extends BaseController
 
         $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
         if ($lastKnownTicks < 1) {
-            $lastKnownTicks = null;
+            $lastKnownTicks = NULL;
         }
 
         $communityTag = $_POST['uniqueKey'];
 
         $itemType = $_POST['itemType'];
 
-        if (! GnUtil::IsNullOrEmpty($communityTag)) {
+        if (!GnUtil::IsNullOrEmpty($communityTag)) {
             $commentService = new GnCommentService();
             $this->view->assign('comments', $commentService->GetCommentsPage($itemType, $communityTag, $lastKnownTicks, $pageSize));
             $this->view->setVariablesToRender(array(
@@ -170,7 +168,7 @@ class ApiController extends BaseController
         $creationTicks = $_POST['creationTicks'];
         $isUpdate = filter_var($_POST['isUpdate'], FILTER_VALIDATE_BOOLEAN);
 
-        if (! GnUtil::IsNullOrEmpty($uniqueKey)) {
+        if (!GnUtil::IsNullOrEmpty($uniqueKey)) {
             $commentService = new GnCommentService();
             $this->view->assign('result', $commentService->SaveComment($creationTicks, $text, $itemType, $uniqueKey, $isUpdate));
             $this->view->setVariablesToRender(array(
@@ -194,7 +192,7 @@ class ApiController extends BaseController
 
             $verified = GnUtility::login($mashup, $loginId);
         }
-        $this->view->assign('verified', (object) [
+        $this->view->assign('verified', (object)[
             'IsOk' => $verified
         ]);
         $this->view->setVariablesToRender(array(
@@ -216,14 +214,14 @@ class ApiController extends BaseController
 
         $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
         if ($lastKnownTicks < 1) {
-            $lastKnownTicks = null;
+            $lastKnownTicks = NULL;
         }
 
         $communityTag = $_POST['community'];
 
-        if ($this->isUserLoggedIn() && ! GnUtil::IsNullOrEmpty($communityTag)) {
+        if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
             $nearbyService = new GnNearbyService();
-            $this->view->assign('noses', $nearbyService->GetNosesAroundPage($communityTag, null, $pageSize));
+            $this->view->assign('noses', $nearbyService->GetNosesAroundPage($communityTag, NULL, $pageSize));
         } else {
             $this->view->assign('noses', []);
         }
@@ -246,14 +244,14 @@ class ApiController extends BaseController
 
         $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
         if ($lastKnownTicks < 1) {
-            $lastKnownTicks = null;
+            $lastKnownTicks = NULL;
         }
 
         $communityTag = $_POST['community'];
 
-        if ($this->isUserLoggedIn() && ! GnUtil::IsNullOrEmpty($communityTag)) {
+        if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
             $nearbyService = new GnNearbyService();
-            $this->view->assign('impressions', $nearbyService->GetImpressionsAroundPage($communityTag, null, $pageSize));
+            $this->view->assign('impressions', $nearbyService->GetImpressionsAroundPage($communityTag, NULL, $pageSize));
         } else {
             $this->view->assign('impressions', []);
         }
@@ -276,14 +274,14 @@ class ApiController extends BaseController
 
         $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
         if ($lastKnownTicks < 1) {
-            $lastKnownTicks = null;
+            $lastKnownTicks = NULL;
         }
 
         $communityTag = $_POST['community'];
 
-        if ($this->isUserLoggedIn() && ! GnUtil::IsNullOrEmpty($communityTag)) {
+        if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
             $nearbyService = new GnNearbyService();
-            $this->view->assign('pois', $nearbyService->GetPoisAroundPage($communityTag, null, $pageSize));
+            $this->view->assign('pois', $nearbyService->GetPoisAroundPage($communityTag, NULL, $pageSize));
         } else {
             $this->view->assign('pois', []);
         }
@@ -306,14 +304,14 @@ class ApiController extends BaseController
 
         $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
         if ($lastKnownTicks < 1) {
-            $lastKnownTicks = null;
+            $lastKnownTicks = NULL;
         }
 
         $communityTag = $_POST['community'];
 
-        if ($this->isUserLoggedIn() && ! GnUtil::IsNullOrEmpty($communityTag)) {
+        if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
             $nearbyService = new GnNearbyService();
-            $this->view->assign('tracks', $nearbyService->GetTracksAroundPage($communityTag, null, $pageSize));
+            $this->view->assign('tracks', $nearbyService->GetTracksAroundPage($communityTag, NULL, $pageSize));
         } else {
             $this->view->assign('tracks', []);
         }
@@ -336,14 +334,14 @@ class ApiController extends BaseController
 
         $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
         if ($lastKnownTicks < 1) {
-            $lastKnownTicks = null;
+            $lastKnownTicks = NULL;
         }
 
         $communityTag = $_POST['community'];
 
-        if ($this->isUserLoggedIn() && ! GnUtil::IsNullOrEmpty($communityTag)) {
+        if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
             $nearbyService = new GnNearbyService();
-            $this->view->assign('events', $nearbyService->GetEventsAroundPage($communityTag, null, $pageSize));
+            $this->view->assign('events', $nearbyService->GetEventsAroundPage($communityTag, NULL, $pageSize));
         } else {
             $this->view->assign('events', []);
         }
@@ -370,28 +368,62 @@ class ApiController extends BaseController
                     $payload = GeneralUtility::_POST("payload");
                     $user = GeneralUtility::_POST("user");
                     $ticks = GeneralUtility::_POST("ticks");
+
+                    // TODO: What are the props?
+                    $recorded = GeneralUtility::_POST("recorded");
+
                     $lat = GeneralUtility::_POST("lat");
                     $lon = GeneralUtility::_POST("lon");
 
+                    // TODO: What are the props?
+                    $isBatchCompleted = boolval(GeneralUtility::_POST("isBatchCompleted"));
+                    $amount = GeneralUtility::_POST("amount") + 0;
+                    $comment = GeneralUtility::_POST("comment") ?: '';
+                    $isGpsSharingWanted = boolval(GeneralUtility::_POST("isGpsSharingWanted"));
+                    $label = GeneralUtility::_POST("label") ?: '';
+                    $validUntilTicks = GeneralUtility::_POST("validto") ?: 0;
+                    $valuePerUnit = GeneralUtility::_POST("valperu") ?: 0.0;
+                    $creationTicks = GeneralUtility::_POST("creation") ?: 0;
+                    $createdByLoginName = GeneralUtility::_POST("creator") ?: '';
+                    $batchCreationTicks = GeneralUtility::_POST("batchCreationTicks") ?: 0;
+
                     if ($payload && $user && $ticks && $lat && $lon) {
                         $tokenDto = $mashup->findTokenByPayload($payload);
-                        if ($tokenDto == null) {
+                        if ($tokenDto == NULL) {
                             $tokenDto = new Token();
                             $tokenDto->setPayload($payload);
-                            $tokenDto->setValidToTicks('0');
                             $tokenDto->setCallbackResponse('');
+                            $tokenDto->setOptions(GnMashupTokenOptions::NoOptions);
+                            $tokenDto->setValuePerUnit($valuePerUnit);
+                            $tokenDto->setLabel($label);
+                            $tokenDto->setValidUntilTicks($validUntilTicks);
+                            $tokenDto->setCreationTicks($creationTicks);
+                            $tokenDto->setCreatedByLoginName($createdByLoginName);
                         }
                         $message = $tokenDto->getCallbackResponse();
 
+                        /* @val $tokenScan \SmartNoses\Gpsnose\Domain\Model\TokenScan */
                         $tokenScan = $tokenDto->findTokenScanByUserAndTicks($user, $ticks);
-                        if ($tokenScan == null) {
+                        if ($tokenScan == NULL) {
                             $tokenScan = new TokenScan();
                             $tokenScan->setScannedByLoginName($user);
                             $tokenScan->setScannedTicks($ticks);
+                            $tokenScan->setRecordedTicks($recorded);
                             $tokenScan->setScannedLatitude($lat);
                             $tokenScan->setScannedLongitude($lon);
                             $tokenScan->setCallbackResponseHttpCode(200);
                             $tokenScan->setCallbackResponseMessage($message);
+                            $tokenScan->setBatchCompleted($isBatchCompleted);
+                            $tokenScan->setAmount($amount);
+                            $tokenScan->setComment($comment);
+                            $tokenScan->setGpsSharingWanted($isGpsSharingWanted);
+                            $tokenScan->setValuePerUnit($valuePerUnit);
+                            $tokenScan->setLabel($label);
+                            $tokenScan->setValidUntilTicks($validUntilTicks);
+                            $tokenScan->setCreationTicks($creationTicks);
+                            $tokenScan->setCreatedByLoginName($createdByLoginName);
+                            $tokenScan->setBatchCreationTicks($batchCreationTicks);
+
                             $tokenDto->addTokenScan($tokenScan);
                             $mashup->addToken($tokenDto);
                             $this->mashupRepository->update($mashup);

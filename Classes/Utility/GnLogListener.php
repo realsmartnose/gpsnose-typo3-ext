@@ -8,9 +8,7 @@ use GpsNose\SDK\Framework\Logging\GnILogListener;
 
 class GnLogListener implements GnILogListener
 {
-
     /**
-     *
      * @var \TYPO3\CMS\Core\Log\Logger
      */
     private $logger;
@@ -21,11 +19,10 @@ class GnLogListener implements GnILogListener
     }
 
     /**
-     *
      * {@inheritdoc}
      * @see \GpsNose\SDK\Framework\Logging\GnILogListener::WriteToLog()
      */
-    public function WriteToLog(int $level = GnLogLevel::Off, string $message = null)
+    public function WriteToLog(int $level = GnLogLevel::Off, string $message = NULL)
     {
         switch ($level) {
 
@@ -66,7 +63,7 @@ class GnLogListener implements GnILogListener
      * @param string $message
      * @param int $level
      */
-    private function WriteSystemLog(string $message = null, int $level = 0)
+    private function WriteSystemLog(string $message = NULL, int $level = 0)
     {
         $message = str_replace('%', '%%', $message);
         if ($GLOBALS['BE_USER']) {

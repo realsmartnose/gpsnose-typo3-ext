@@ -102,20 +102,20 @@
 			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrlPlaceholder">
 				<source><![CDATA[Enter the Callback URL here (optional)]]></source>
 			</trans-unit>
-			<trans-unit id="MashupAdmin_lblMashupTokenDateHint">
-				<source><![CDATA[Set the date until the token should be valid, empty means, it will remain until the eternity]]></source>
-			</trans-unit>
-			<trans-unit id="MashupAdmin_lblMashupTokenDateLabel">
-				<source><![CDATA[Expiration date]]></source>
-			</trans-unit>
-			<trans-unit id="MashupAdmin_lblMashupTokenDatePlaceholder">
-				<source><![CDATA[Valid until]]></source>
-			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenEditTitle">
 				<source><![CDATA[Edit mashup-token]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenImageLabel">
 				<source><![CDATA[Token]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenLabelHint">
+				<source><![CDATA[The label is required and a maximun of %max_characters% characters is allowed.]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenLabelLabel">
+				<source><![CDATA[Label]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenLabelPlaceholder">
+				<source><![CDATA[Enter label here]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenListTitle">
 				<source><![CDATA[Mashup-token admin]]></source>
@@ -123,8 +123,32 @@
 			<trans-unit id="MashupAdmin_lblMashupTokenNewTitle">
 				<source><![CDATA[Create mashup-token]]></source>
 			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenOptions">
+				<source><![CDATA[Options]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenOptionsAskGpsSharing">
+				<source><![CDATA[Ask for GPS-Sharing]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenOptionsBatchScanning">
+				<source><![CDATA[Batch-scanning]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenOptionsCanComment">
+				<source><![CDATA[Can comment]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenOptionsCanSelectAmount">
+				<source><![CDATA[Can select amount]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenOptionsNone">
+				<source><![CDATA[None]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenPayloadHint">
+				<source><![CDATA[The identifier is required and a maximum of %max_characters% characters is allowed]]></source>
+			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenPayloadLabel">
-				<source><![CDATA[Payload]]></source>
+				<source><![CDATA[Token identifier]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenPayloadPlaceholder">
+				<source><![CDATA[Enter token identifier here]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenResponseCodeLabel">
 				<source><![CDATA[Res.]]></source>
@@ -144,14 +168,20 @@
 			<trans-unit id="MashupAdmin_lblMashupTokenTitle">
 				<source><![CDATA[Mashup-token]]></source>
 			</trans-unit>
-			<trans-unit id="MashupAdmin_lblMashupTokenValueHint">
-				<source><![CDATA[To create a mashup-token, make sure you use a maximum of %max_characters% characters for the identifier]]></source>
+			<trans-unit id="MashupAdmin_lblMashupTokenValidUntilDateHint">
+				<source><![CDATA[Set the date until the token should be valid, empty means, it will remain until the eternity]]></source>
 			</trans-unit>
-			<trans-unit id="MashupAdmin_lblMashupTokenValueLabel">
-				<source><![CDATA[Token identifier]]></source>
+			<trans-unit id="MashupAdmin_lblMashupTokenValidUntilDateLabel">
+				<source><![CDATA[Expiration date]]></source>
 			</trans-unit>
-			<trans-unit id="MashupAdmin_lblMashupTokenValuePlaceholder">
-				<source><![CDATA[Enter token identifier here]]></source>
+			<trans-unit id="MashupAdmin_lblMashupTokenValidUntilDatePlaceholder">
+				<source><![CDATA[Expiration date]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenValuePerUnitLabel">
+				<source><![CDATA[Value per unit]]></source>
+			</trans-unit>
+			<trans-unit id="MashupAdmin_lblMashupTokenValuePerUnitPlaceholder">
+				<source><![CDATA[Value per unit (eg.: 2.45)]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblName">
 				<source><![CDATA[Mashup name]]></source>
@@ -242,6 +272,9 @@
 			</trans-unit>
 			<trans-unit id="Common_btnOk">
 				<source><![CDATA[Ok]]></source>
+			</trans-unit>
+			<trans-unit id="Common_btnOpen">
+				<source><![CDATA[Open]]></source>
 			</trans-unit>
 			<trans-unit id="Common_btnRefresh">
 				<source><![CDATA[Refresh]]></source>

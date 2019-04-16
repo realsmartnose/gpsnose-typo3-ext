@@ -19,51 +19,92 @@ namespace SmartNoses\Gpsnose\Domain\Model;
  */
 class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
-
     /**
-     * scannedByLoginName
-     *
      * @var string
      */
     protected $scannedByLoginName = '';
 
     /**
-     * scannedTicks
-     *
      * @var string
      */
     protected $scannedTicks = '0';
 
     /**
-     * scannedLatitude
-     *
+     * @var string
+     */
+    protected $recordedTicks = '0';
+
+    /**
      * @var float
      */
     protected $scannedLatitude = 0.0;
 
     /**
-     * scannedLongitude
-     *
      * @var float
      */
     protected $scannedLongitude = 0.0;
 
     /**
-     * callbackResponseHttpCode
-     *
      * @var int
      */
     protected $callbackResponseHttpCode = 0;
 
     /**
-     * callbackResponseMessage
-     *
      * @var string
      */
-    protected $callbackResponseMessage = "";
+    protected $callbackResponseMessage = '';
 
     /**
-     *
+     * @var bool
+     */
+    protected $isBatchCompleted = FALSE;
+
+    /**
+     * @var int
+     */
+    protected $amount = 0;
+
+    /**
+     * @var string
+     */
+    protected $comment = '';
+
+    /**
+     * @var bool
+     */
+    protected $isGpsSharingWanted = FALSE;
+
+    /**
+     * @var float
+     */
+    protected $valuePerUnit = 0.0;
+
+    /**
+     * @var string
+     */
+    protected $label = '';
+
+    /**
+     * @var string
+     */
+    protected $validUntilTicks = '0';
+
+    /**
+     * @var string
+     */
+    protected $creationTicks = '0';
+
+    /**
+     * @var string
+     */
+    protected $createdByLoginName = '';
+
+    /**
+     * @var string
+     */
+    protected $batchCreationTicks = '0';
+
+    /**
      * @return string
      */
     public function getScannedByLoginName()
@@ -72,7 +113,6 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
      * @param string $scannedByLoginName
      */
     public function setScannedByLoginName($scannedByLoginName)
@@ -81,7 +121,6 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
      * @return string
      */
     public function getScannedTicks()
@@ -90,7 +129,6 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
      * @param string $scannedTicks
      */
     public function setScannedTicks($scannedTicks)
@@ -99,8 +137,23 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
-     * @return number
+     * @return string
+     */
+    public function getRecordedTicks()
+    {
+        return $this->recordedTicks;
+    }
+
+    /**
+     * @param string $recordedTicks
+     */
+    public function setRecordedTicks($recordedTicks)
+    {
+        $this->recordedTicks = $recordedTicks;
+    }
+
+    /**
+     * @return float
      */
     public function getScannedLatitude()
     {
@@ -108,8 +161,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
-     * @param number $scannedLatitude
+     * @param float $scannedLatitude
      */
     public function setScannedLatitude($scannedLatitude)
     {
@@ -117,8 +169,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
-     * @return number
+     * @return float
      */
     public function getScannedLongitude()
     {
@@ -126,8 +177,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
-     * @param number $scannedLongitude
+     * @param float $scannedLongitude
      */
     public function setScannedLongitude($scannedLongitude)
     {
@@ -135,8 +185,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
-     * @return number
+     * @return float
      */
     public function getCallbackResponseHttpCode()
     {
@@ -144,8 +193,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
-     * @param number $callbackResponseHttpCode
+     * @param float $callbackResponseHttpCode
      */
     public function setCallbackResponseHttpCode($callbackResponseHttpCode)
     {
@@ -153,7 +201,6 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
      * @return string
      */
     public function getCallbackResponseMessage()
@@ -162,11 +209,180 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
      * @param string $callbackResponseMessage
      */
     public function setCallbackResponseMessage($callbackResponseMessage)
     {
         $this->callbackResponseMessage = $callbackResponseMessage;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBatchCompleted()
+    {
+        return $this->isBatchCompleted;
+    }
+
+    /**
+     * @param bool $isBatchCompleted
+     */
+    public function setBatchCompleted($isBatchCompleted)
+    {
+        $this->isBatchCompleted = $isBatchCompleted;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param int $amount
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @param string $comment
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGpsSharingWanted()
+    {
+        return $this->isGpsSharingWanted;
+    }
+
+    /**
+     * @param bool $isGpsSharingWanted
+     */
+    public function setGpsSharingWanted($isGpsSharingWanted)
+    {
+        $this->isGpsSharingWanted = $isGpsSharingWanted;
+    }
+
+    /**
+     * @return float
+     */
+    public function getValuePerUnit()
+    {
+        return $this->valuePerUnit;
+    }
+
+    /**
+     * @param float $valuePerUnit
+     * @return self
+     */
+    public function setValuePerUnit($valuePerUnit)
+    {
+        $this->valuePerUnit = $valuePerUnit;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * @param string $label
+     * @return self
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValidUntilTicks()
+    {
+        return $this->validUntilTicks;
+    }
+
+    /**
+     * @param string $validUntilTicks
+     * @return self
+     */
+    public function setValidUntilTicks($validUntilTicks)
+    {
+        $this->validUntilTicks = $validUntilTicks;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreationTicks()
+    {
+        return $this->creationTicks;
+    }
+
+    /**
+     * @param string $creationTicks
+     * @return self
+     */
+    public function setCreationTicks($creationTicks)
+    {
+        $this->creationTicks = $creationTicks;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatedByLoginName()
+    {
+        return $this->createdByLoginName;
+    }
+
+    /**
+     * @param string $createdByLoginName
+     * @return self
+     */
+    public function setCreatedByLoginName($createdByLoginName)
+    {
+        $this->createdByLoginName = $createdByLoginName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBatchCreationTicks()
+    {
+        return $this->batchCreationTicks;
+    }
+
+    /**
+     * @param string $batchCreationTicks 
+     */
+    public function setBatchCreationTicks(string $batchCreationTicks)
+    {
+        $this->batchCreationTicks = $batchCreationTicks;
     }
 }

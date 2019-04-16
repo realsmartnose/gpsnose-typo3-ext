@@ -142,8 +142,26 @@
             <trans-unit id="tx_gpsnose_domain_model_token.payload">
                 <source>Payload</source>
             </trans-unit>
-            <trans-unit id="tx_gpsnose_domain_model_token.valid_to_ticks">
-                <source>Valid to ticks</source>
+            <trans-unit id="tx_gpsnose_domain_model_token.label">
+                <source>Label</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_token.value_per_unit">
+                <source>Value per unit</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_token.valid_until_ticks">
+                <source>Valid until ticks</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_token.creation_ticks">
+                <source>Creation ticks</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_token.created_by_login_name">
+                <source>Created by login name</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_token.token_scans">
+                <source>Scanned tokens</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_token.options">
+                <source>Options</source>
             </trans-unit>
             <trans-unit id="tx_gpsnose_domain_model_token.callback_response">
                 <source>Callback response</source>
@@ -158,6 +176,9 @@
             <trans-unit id="tx_gpsnose_domain_model_tokenscan.scanned_ticks">
                 <source>Scanned ticks</source>
             </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.recorded_ticks">
+                <source>Recorded ticks</source>
+            </trans-unit>
             <trans-unit id="tx_gpsnose_domain_model_tokenscan.scanned_latitude">
                 <source>Scanned latitude</source>
             </trans-unit>
@@ -169,6 +190,36 @@
             </trans-unit>
             <trans-unit id="tx_gpsnose_domain_model_tokenscan.callback_response_message">
                 <source>Callback response message</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.is_batch_completed">
+                <source>Is batch completed</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.amount">
+                <source>Amount</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.comment">
+                <source>Comment</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.is_gps_sharing_wanted">
+                <source>Is gps-sharing wanted</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.label">
+                <source>Label</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.value_per_unit">
+                <source>Value per unit</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.valid_until_ticks">
+                <source>Valid until ticks</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.creation_ticks">
+                <source>Creation ticks</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.created_by_login_name">
+                <source>Created by login name</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_domain_model_tokenscan.batch_creation_ticks">
+                <source>Batch creation ticks</source>
             </trans-unit>
 
             <trans-unit id="tt_content.palette_title">

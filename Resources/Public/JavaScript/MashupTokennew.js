@@ -1,14 +1,32 @@
 define(['jquery', 'twbs/bootstrap-datetimepicker', 'maframework'], function($, datepicker) {
-    $('#payload').on('input', function() {
-        var newValue = $(this).val();
-        var isValid = newValue.length > 0 && newValue.length <= GpsnoseMashupAddTokenMaxChars;
-        $('#addButton').attr('disabled', ! isValid);
-        if (isValid) {
-            $(this).closest('.form-group').removeClass('has-error');
-        } else {
-            $(this).closest('.form-group').addClass('has-error');
-        }
+    $('#payload, #label, #valuePerUnit').on('input', function() {
+        validate();
     });
+
+    function validate() {
+        var $payload = $('#payload');
+        var payloadIsValid = $payload.val().length > 0 && $payload.val().length <= GpsnoseMashupTokenPayloadMaxChars;
+        validateClass($payload, payloadIsValid);
+
+        var $label = $('#label');
+        var labelIsValid = $label.val().length > 0 && $label.val().length <= GpsnoseMashupTokenLabelMaxChars;
+        validateClass($label, labelIsValid);
+
+        var $vpu = $('#valuePerUnit');
+        var vpuIsValid = /^\d{0,6}(\.\d{1,3})?$/.test($vpu.val());
+        validateClass($vpu, vpuIsValid);
+
+        var isValid = payloadIsValid && labelIsValid && vpuIsValid;
+        $('#addButton').attr('disabled', ! isValid);
+    }
+
+    function validateClass($obj, isValid) {
+        if (isValid) {
+        	$obj.closest('.form-group').removeClass('has-error');
+        } else {
+        	$obj.closest('.form-group').addClass('has-error');
+        }
+    }
 
     $('form').on('submit', function() {
         $return = true;
@@ -20,5 +38,5 @@ define(['jquery', 'twbs/bootstrap-datetimepicker', 'maframework'], function($, d
         return $return;
     });
 
-    $('#payload').trigger('input');
+    validate();
 });

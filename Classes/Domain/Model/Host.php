@@ -19,7 +19,6 @@ namespace SmartNoses\Gpsnose\Domain\Model;
  */
 class Host extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
-
     /**
      * domain
      *

@@ -7,7 +7,7 @@ return [
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
         'sortby' => 'sorting',
-        'versioningWS' => true,
+        'versioningWS' => TRUE,
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
@@ -31,7 +31,7 @@ return [
     ],
     'columns' => [
         'sys_language_uid' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'select',
@@ -40,7 +40,7 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages',
-                        - 1,
+                        -1,
                         'flags-multiple'
                     ]
                 ],
@@ -49,7 +49,7 @@ return [
         ],
         'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
@@ -78,7 +78,7 @@ return [
             ]
         ],
         'hidden' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
@@ -90,7 +90,7 @@ return [
             ]
         ],
         'starttime' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
             'config' => [
@@ -101,7 +101,7 @@ return [
             ]
         ],
         'endtime' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
             'config' => [
@@ -115,7 +115,7 @@ return [
             ]
         ],
         'community_tag' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.community_tag',
             'config' => [
                 'type' => 'input',
@@ -124,7 +124,7 @@ return [
             ]
         ],
         'validation_key' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.validation_key',
             'config' => [
                 'type' => 'input',
@@ -133,7 +133,7 @@ return [
             ]
         ],
         'app_key' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.app_key',
             'config' => [
                 'type' => 'input',
@@ -142,7 +142,7 @@ return [
             ]
         ],
         'validation_ticks' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.validation_ticks',
             'config' => [
                 'type' => 'input',
@@ -151,7 +151,7 @@ return [
             ]
         ],
         'max_calls_daily' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.max_calls_daily',
             'config' => [
                 'type' => 'input',
@@ -160,7 +160,7 @@ return [
             ]
         ],
         'max_calls_monthly' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.max_calls_monthly',
             'config' => [
                 'type' => 'input',
@@ -169,7 +169,7 @@ return [
             ]
         ],
         'max_sub_sites' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.max_sub_sites',
             'config' => [
                 'type' => 'input',
@@ -178,7 +178,7 @@ return [
             ]
         ],
         'max_hosts' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.max_hosts',
             'config' => [
                 'type' => 'input',
@@ -187,7 +187,7 @@ return [
             ]
         ],
         'mashup_token_callback_url' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.mashup_token_callback_url',
             'config' => [
                 'type' => 'input',
@@ -196,7 +196,7 @@ return [
             ]
         ],
         'sub_communities' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.sub_communities',
             'config' => [
                 'type' => 'inline',
@@ -213,7 +213,7 @@ return [
             ]
         ],
         'hosts' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.hosts',
             'config' => [
                 'type' => 'inline',
@@ -230,7 +230,7 @@ return [
             ]
         ],
         'call_history' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.call_history',
             'config' => [
                 'type' => 'inline',
@@ -247,7 +247,7 @@ return [
             ]
         ],
         'exceeded_quota_history' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.exceeded_quota_history',
             'config' => [
                 'type' => 'inline',
@@ -264,7 +264,7 @@ return [
             ]
         ],
         'tokens' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.tokens',
             'config' => [
                 'type' => 'inline',

@@ -5,7 +5,7 @@ use SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository;
 use GpsNose\SDK\Mashup\Framework\GnUtil;
 use GpsNose\SDK\Mashup\Api\GnApi;
 use SmartNoses\Gpsnose\Domain\Model\FrontendUser;
-use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository;
+use SmartNoses\Gpsnose\Domain\Repository\FrontendUserGroupRepository;
 use GpsNose\SDK\Web\Login\GnAuthenticationData;
 use GpsNose\SDK\Web\Login\GnAuthentication;
 use SmartNoses\Gpsnose\Domain\Model\Mashup;
@@ -22,7 +22,6 @@ use GpsNose\SDK\Framework\Logging\GnLogger;
 
 class GnUtility
 {
-
     /**
      * Use the settings in the ext-conf to set cache/debug
      */
@@ -31,10 +30,10 @@ class GnUtility
         GnLogConfig::AddListener(new GnLogListener());
 
         $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['gpsnose'], [
-            'allowed_classes' => false
+            'allowed_classes' => FALSE
         ]);
 
-        if (! empty($extConf['cacheType'])) {
+        if (!empty($extConf['cacheType'])) {
             switch ($extConf['cacheType']) {
                 case 'typo3':
                     // Set the TYPO3-CacheHandler
@@ -61,12 +60,12 @@ class GnUtility
      *
      * @param Mashup $mashup
      * @param string $loginId
-     * @return boolean
+     * @return bool
      */
     public static function login(Mashup $mashup, string $loginId)
     {
         $verified = FALSE;
-        if ($mashup && ! GnUtil::IsNullOrEmpty($loginId)) {
+        if ($mashup && !GnUtil::IsNullOrEmpty($loginId)) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             /** @var $frontendUserRepository \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository */
             $frontendUserRepository = $objectManager->get(FrontendUserRepository::class);
@@ -83,8 +82,8 @@ class GnUtility
                 $querySettings->setRespectStoragePage(FALSE);
                 $frontendUserRepository->setDefaultQuerySettings($querySettings);
 
-                $frontendUser = $frontendUserRepository->findByLoginName($gnLogin->LoginName);
-                if (! $frontendUser) {
+                $frontendUser = $frontendUserRepository->findByGpsnoseLoginName($gnLogin->LoginName);
+                if (!$frontendUser) {
                     $frontendUser = new FrontendUser();
                     $isNewUser = TRUE;
                 }
@@ -98,15 +97,26 @@ class GnUtility
                 $frontendUser->setGpsnoseLatitude($gnLogin->Latitude);
                 $frontendUser->setGpsnoseLongitude($gnLogin->Longitude);
                 $frontendUser->setEmail($gnLogin->Email ?: '');
-                $newPassword = GnUtil::NewGuid();
-                $frontendUser->setPassword($newPassword);
+                if (GnUtil::IsNullOrEmpty($frontendUser->getPassword())) {
+                    $frontendUser->setPassword(GnUtil::NewGuid());
+                }
 
+                /** @var $userGroupRepository \SmartNoses\Gpsnose\Domain\Repository\FrontendUserGroupRepository */
+                $userGroupRepository = $objectManager->get(FrontendUserGroupRepository::class);
                 // Add UserGroup
                 if ($gnSettings['login.']['groupId'] > 0) {
-                    $userGroupRepository = $objectManager->get(FrontendUserGroupRepository::class);
                     $userGroup = $userGroupRepository->findByUid($gnSettings['login.']['groupId']);
                     if ($userGroup) {
                         $frontendUser->addUsergroup($userGroup);
+                    }
+                }
+                // Add the UserGroups named by Communities
+                if (count($gnLogin->Communities) > 0) {
+                    foreach ($gnLogin->Communities as $value) {
+                        $userGroup = $userGroupRepository->findByTitle($value);
+                        if ($userGroup) {
+                            $frontendUser->addUsergroup($userGroup);
+                        }
                     }
                 }
 
@@ -116,7 +126,7 @@ class GnUtility
                     $frontendUserRepository->update($frontendUser);
                 }
                 $objectManager->get(PersistenceManager::class)->persistAll();
-                $verified = self::loginUser($frontendUser->getUsername(), $newPassword);
+                $verified = self::loginUser($frontendUser->getUsername());
 
                 $gnAuthData = new GnAuthenticationData();
                 $gnAuthData->LoginId = $loginId;
@@ -132,10 +142,9 @@ class GnUtility
      * Login the fe-user by Loginname / Password
      *
      * @param string $username
-     * @param string $password
-     * @return boolean
+     * @return bool
      */
-    private static function loginUser($username, $password)
+    private static function loginUser($username)
     {
         $frontendController = $GLOBALS['TSFE'];
         $frontendController->fe_user->checkPid = '';
@@ -209,7 +218,7 @@ class GnUtility
     /**
      * Checks if the user is logged in
      *
-     * @return boolean
+     * @return bool
      */
     public static function isUserLoggedIn()
     {
@@ -217,9 +226,7 @@ class GnUtility
     }
 
     /**
-     * Checks if the user is logged in
-     *
-     * @return boolean
+     * Logoff the user
      */
     public static function logoffUser()
     {

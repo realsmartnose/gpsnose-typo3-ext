@@ -14,6 +14,9 @@
     <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-default">
         <core:icon identifier="fa-chevron-left" /> <f:translate key="Common_btnBackToList" />
     </f:link.action>
+    <f:link.action action="tokenshow" arguments="{token : token, mashup : mashup}" class="btn btn-default">
+        <core:icon identifier="fa-folder-open" /> <f:translate key="Common_btnOpen" />
+    </f:link.action>
     <f:link.action action="tokenedit" arguments="{token : token, mashup : mashup}" class="btn btn-default">
         <core:icon identifier="fa-refresh" /> <f:translate key="Common_btnRefresh" />
     </f:link.action>
@@ -36,24 +39,81 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading"><nose:community.label tag="{mashup.communityTag}" /></div>
                     <div class="panel-body">
+
                         <div class="form-group row">
-                            <label class="col-lg-3 control-label"><f:translate key="MashupAdmin_lblMashupTokenValueLabel" /></label>
+                            <label class="col-lg-3 control-label"><f:translate key="MashupAdmin_lblMashupTokenPayloadLabel" /></label>
                             <div class="col-lg-9">
                                 <pre>{token.payload}</pre>
                             </div>
                         </div>
+
                         <div class="form-group row">
-                            <label class="col-lg-3 control-label"><f:translate key="MashupAdmin_lblMashupTokenDateLabel" /></label>
+                            <label class="col-lg-3 control-label"><f:translate key="MashupAdmin_lblMashupTokenLabelLabel" /></label>
                             <div class="col-lg-9">
-                                <pre><nose:ticks.datetime ticks="{token.validToTicks}" /></pre>
+                                <f:form.textarea property="label" class="form-control" rows="3" id="label" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenLabelPlaceholder')}" />
+                                <span class="help-block"><nose:string.replace value="{f:translate(key: 'MashupAdmin_lblMashupTokenLabelHint')}" search="%max_characters%" replace="{TokenLabelMaxChars}" /></span>
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label class="col-lg-3 control-label"><f:translate key="MashupAdmin_lblMashupTokenValuePerUnitLabel" /></label>
+                            <div class="col-lg-9">
+                                <f:form.textfield property="valuePerUnit" class="form-control" id="valuePerUnit" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenValuePerUnitPlaceholder')}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-lg-3 control-label"><f:translate key="MashupAdmin_lblMashupTokenValidUntilDateLabel" /></label>
+                            <div class="col-lg-9">
+                                <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-week-start="true" data-date-today-highlight="true" data-date-toggle-active="true" data-date-start-date="0d" data-date-clear-btn="true" data-date-orientation="bottom" data-date-language="en">
+                                    <f:form.textfield property="validUntilDateString" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenValidUntilDatePlaceholder')}" />
+                                    <div class="input-group-addon">
+                                        <core:icon identifier="fa-calendar" />
+                                    </div>
+                                </div>
+                                <span class="help-block"><f:translate key="MashupAdmin_lblMashupTokenValidUntilDateHint" /></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-3">
+                                <label class="control-label"><f:translate key="MashupAdmin_lblMashupTokenOptions" /></label>
+                            </div>
+                            <div class="col-lg-9">
+                                <div>
+                                    <label class="checkbox-inline">
+                                        <f:form.checkbox property="batchScanning" value="1" />
+                                        <span><f:translate key="MashupAdmin_lblMashupTokenOptionsBatchScanning" /></span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="checkbox-inline">
+                                        <f:form.checkbox property="canSelectAmount" value="1" />
+                                        <span><f:translate key="MashupAdmin_lblMashupTokenOptionsCanSelectAmount" /></span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="checkbox-inline">
+                                        <f:form.checkbox property="canComment" value="1" />
+                                        <span><f:translate key="MashupAdmin_lblMashupTokenOptionsCanComment" /></span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="checkbox-inline">
+                                        <f:form.checkbox property="askGpsSharing" value="1" />
+                                        <span><f:translate key="MashupAdmin_lblMashupTokenOptionsAskGpsSharing" /></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label class="col-lg-3 control-label"><f:translate key="MashupAdmin_lblMashupTokenCallbackResponseLabel" /></label>
                             <div class="col-lg-9">
-                                <f:form.textfield property="callbackResponse" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenCallbackResponsePlaceholder')}" maxlength="{callbackResponseMaxChars}" />
+                                <f:form.textfield property="callbackResponse" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenCallbackResponsePlaceholder')}" maxlength="{TokenCallbackResponseMaxChars}" />
                             </div>
                         </div>
+
                         <div class="form-group row">
                             <div class="col-lg-3 col-lg-offset-3">
                                 <button class="btn btn-primary" type="submit" id="addButton">
@@ -62,15 +122,19 @@
                                 </button>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </f:form>
         </div>
     </div>
 
+<script>
+    var GpsnoseMashupTokenLabelMaxChars = {TokenLabelMaxChars};
+</script>
 <f:be.pageRenderer
     includeCssFiles="{ 0: '{f:uri.resource(path: \'Libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.min.css\')}' }"
-    includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/MashupTokenedit' }" />
+    includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/MashupTokenedit', 1: '{f:uri.resource(path: \'Libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js\')}' }" />
 
 </f:section>
 

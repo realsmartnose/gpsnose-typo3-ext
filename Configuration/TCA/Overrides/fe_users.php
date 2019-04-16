@@ -49,6 +49,7 @@ $temporaryColumns = [
         'label' => $languageFile . 'fe_users.gpsnose_latitude',
         'config' => [
             'type' => 'input',
+            'default' => '0.0',
             'size' => 20,
             'max' => 50,
             'eval' => 'num'
@@ -58,6 +59,7 @@ $temporaryColumns = [
         'label' => $languageFile . 'fe_users.gpsnose_longitude',
         'config' => [
             'type' => 'input',
+            'default' => '0.0',
             'size' => 20,
             'max' => 50,
             'eval' => 'num'
@@ -66,12 +68,8 @@ $temporaryColumns = [
 ];
 
 ExtensionManagementUtility::addTCAcolumns('fe_users', $temporaryColumns);
-ExtensionManagementUtility::addToAllTCAtypes('fe_users', 'gpsnose_loginname', '', 'after:username');
-ExtensionManagementUtility::addToAllTCAtypes('fe_users', 'gpsnose_is_activated', '', 'after:gpsnose_loginname');
-ExtensionManagementUtility::addToAllTCAtypes('fe_users', 'gpsnose_fullname', '', 'after:gpsnose_is_activated');
-ExtensionManagementUtility::addToAllTCAtypes('fe_users', 'gpsnose_communities', '', 'after:gpsnose_fullname');
-ExtensionManagementUtility::addToAllTCAtypes('fe_users', 'gpsnose_is_safe_mode', '', 'after:gpsnose_communities');
-ExtensionManagementUtility::addToAllTCAtypes('fe_users', 'gpsnose_latitude', '', 'after:gpsnose_is_safe_mode');
-ExtensionManagementUtility::addToAllTCAtypes('fe_users', 'gpsnose_longitude', '', 'after:gpsnose_latitude');
-ExtensionManagementUtility::addToAllTCAtypes('fe_users', '--div--;' . $languageFile . 'fe_users.palette_title
-	gpsnose_loginname, gpsnose_is_activated, gpsnose_fullname, gpsnose_communities, gpsnose_is_safe_mode, gpsnose_latitude, gpsnose_longitude');
+ExtensionManagementUtility::addToAllTCAtypes('fe_users',
+    '--div--;' . $languageFile . 'fe_users.palette_title;;;;1-1-1, gpsnose_loginname, gpsnose_is_activated, gpsnose_fullname, gpsnose_communities, gpsnose_is_safe_mode, gpsnose_latitude, gpsnose_longitude',
+    '',
+    'after:usergroup'
+);

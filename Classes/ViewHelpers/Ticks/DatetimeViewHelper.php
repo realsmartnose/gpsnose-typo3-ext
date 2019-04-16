@@ -8,20 +8,21 @@ use GpsNose\SDK\Mashup\Framework\GnUtil;
 class DatetimeViewHelper extends AbstractViewHelper
 {
 
-    protected $escapeOutput = false;
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = FALSE;
 
     /**
-     *
      * @return void
      */
     public function initializeArguments()
     {
-        $this->registerArgument('ticks', 'string', 'tick to transfer', true, '');
-        $this->registerArgument('format', 'string', 'format of the date (default Y-m-d H:i)', false, 'Y-m-d H:i');
+        $this->registerArgument('ticks', 'string', 'tick to transfer', TRUE, '');
+        $this->registerArgument('format', 'string', 'format of the date (default Y-m-d H:i)', FALSE, 'Y-m-d H:i');
     }
 
     /**
-     *
      * @return string
      */
     public function render()

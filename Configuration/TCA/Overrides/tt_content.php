@@ -1,5 +1,5 @@
 <?php
-if (! defined('TYPO3_MODE')) {
+if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
@@ -9,7 +9,7 @@ $languageFile = 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:';
 $fields = array(
     'tx_gpsnose_community_tag' => array(
         'label' => $languageFile . 'tt_content.tx_gpsnose_community_tag',
-        'exclude' => false,
+        'exclude' => FALSE,
         'displayCond' => 'FIELD:list_type:IN:gpsnose_members,gpsnose_news,gpsnose_commentscommunity,gpsnose_nearbynoses,gpsnose_nearbyimpressions,gpsnose_nearbypois,gpsnose_nearbytracks,gpsnose_nearbyevents',
         'config' => array(
             'type' => 'select',
@@ -22,7 +22,7 @@ $fields = array(
     ),
     'tx_gpsnose_mashup_login_option_must_join' => array(
         'label' => $languageFile . 'tt_content.tx_gpsnose_mashup_login_option_must_join',
-        'exclude' => false,
+        'exclude' => FALSE,
         'displayCond' => 'FIELD:list_type:IN:gpsnose_loginqrcode',
         'config' => array(
             'type' => 'check',
@@ -35,7 +35,7 @@ $fields = array(
     ),
     'tx_gpsnose_mashup_login_option_needs_activation' => array(
         'label' => $languageFile . 'tt_content.tx_gpsnose_mashup_login_option_needs_activation',
-        'exclude' => false,
+        'exclude' => FALSE,
         'displayCond' => 'FIELD:list_type:IN:gpsnose_loginqrcode',
         'config' => array(
             'type' => 'check',
@@ -48,11 +48,11 @@ $fields = array(
     ),
     'tx_gpsnose_mashup_login_acl' => array(
         'label' => $languageFile . 'tt_content.tx_gpsnose_mashup_login_acl',
-        'exclude' => false,
+        'exclude' => FALSE,
         'displayCond' => 'FIELD:list_type:IN:gpsnose_loginqrcode',
         'config' => array(
             'type' => 'check',
-            'items' => Array(
+            'items' => array(
                 array(
                     $languageFile . 'tt_content.tx_gpsnose_mashup_login_acl.I.FullName',
                     ''
@@ -78,7 +78,7 @@ $fields = array(
         )
     ),
     'tx_gpsnose_mashup_login_acl_help' => array(
-        'exclude' => false,
+        'exclude' => FALSE,
         'displayCond' => 'FIELD:list_type:IN:gpsnose_loginqrcode',
         'config' => array(
             'type' => 'user',
@@ -90,23 +90,23 @@ $fields = array(
     ),
     'tx_gpsnose_mashup_login_redirect' => array(
         'label' => $languageFile . 'tt_content.tx_gpsnose_mashup_login_redirect',
-        'exclude' => false,
+        'exclude' => FALSE,
         'displayCond' => 'FIELD:list_type:IN:gpsnose_loginqrcode',
         'config' => array(
             'type' => 'select',
             'renderType' => 'selectTree',
             'foreign_table' => 'pages',
             'foreign_table_where' => 'ORDER BY pages.sorting',
-            'items' => Array(),
+            'items' => array(),
             'size' => 10,
             'behaviour' => [
-                'allowLanguageSynchronization' => true
+                'allowLanguageSynchronization' => TRUE
             ],
             'treeConfig' => [
                 'parentField' => 'pid',
                 'appearance' => [
-                    'expandAll' => true,
-                    'showHeader' => true
+                    'expandAll' => TRUE,
+                    'showHeader' => TRUE
                 ]
             ],
             'minitems' => 0,
@@ -138,6 +138,3 @@ $GLOBALS['TCA']['tt_content']['palettes']['tx_gpsnose_login_option_fields'] = ar
 $GLOBALS['TCA']['tt_content']['palettes']['tx_gpsnose_login_acl_fields'] = array(
     'showitem' => 'tx_gpsnose_mashup_login_acl, tx_gpsnose_mashup_login_acl_help'
 );
-
-
-

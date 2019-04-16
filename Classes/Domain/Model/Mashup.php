@@ -19,7 +19,6 @@ namespace SmartNoses\Gpsnose\Domain\Model;
  */
 class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
-
     /**
      * communityTag
      *
@@ -90,7 +89,7 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\SubCommunity>
      * @cascade remove
      */
-    protected $subCommunities = null;
+    protected $subCommunities = NULL;
 
     /**
      * hosts
@@ -98,7 +97,7 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\Host>
      * @cascade remove
      */
-    protected $hosts = null;
+    protected $hosts = NULL;
 
     /**
      * callHistory
@@ -106,7 +105,7 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\History>
      * @cascade remove
      */
-    protected $callHistory = null;
+    protected $callHistory = NULL;
 
     /**
      * exceededQuotaHistory
@@ -114,7 +113,7 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\History>
      * @cascade remove
      */
-    protected $exceededQuotaHistory = null;
+    protected $exceededQuotaHistory = NULL;
 
     /**
      * tokens
@@ -122,10 +121,9 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\Token>
      * @cascade remove
      */
-    protected $tokens = null;
+    protected $tokens = NULL;
 
     /**
-     *
      * @var string
      */
     protected $tempSubCommunity = '';
@@ -141,7 +139,6 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
      * @var string
      */
     protected $tempHost = '';
@@ -157,7 +154,6 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     *
      * @var string
      */
     protected $visibility = '';
@@ -208,11 +204,21 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->communityTag;
     }
 
+    /**
+     * Get Community Tag Prefix
+     * 
+     * @return string
+     */
     public function getCommunityTagPrefix()
     {
         return substr($this->communityTag, 0, 1);
     }
 
+    /**
+     * Get Community Tag Sufix
+     * 
+     * @return string
+     */
     public function getCommunityTagSufix()
     {
         return substr($this->communityTag, 1);
@@ -446,14 +452,14 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param string $name
      * @return \SmartNoses\Gpsnose\Domain\Model\SubCommunity | NULL
      */
-    public function findSubCommunityByName(string $name = null)
+    public function findSubCommunityByName(string $name = NULL)
     {
         foreach ($this->subCommunities as $subCommunity) {
             if ($subCommunity->getName() === $name) {
                 return $subCommunity;
             }
         }
-        return null;
+        return NULL;
     }
 
     /**
@@ -506,14 +512,14 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param string $domain
      * @return \SmartNoses\Gpsnose\Domain\Model\Host | NULL
      */
-    public function findHostByDomain(string $domain = null)
+    public function findHostByDomain(string $domain = NULL)
     {
         foreach ($this->hosts as $host) {
             if ($host->getDomain() === $domain) {
                 return $host;
             }
         }
-        return null;
+        return NULL;
     }
 
     /**
@@ -566,14 +572,14 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param string $ticks
      * @return \SmartNoses\Gpsnose\Domain\Model\History | NULL
      */
-    public function findCallHistoryByTicks(string $ticks = null)
+    public function findCallHistoryByTicks(string $ticks = NULL)
     {
         foreach ($this->callHistory as $callHistory) {
             if ($callHistory->getTicks() === $ticks) {
                 return $callHistory;
             }
         }
-        return null;
+        return NULL;
     }
 
     /**
@@ -626,14 +632,14 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param string $ticks
      * @return \SmartNoses\Gpsnose\Domain\Model\History | NULL
      */
-    public function findExceededQuotaHistoryByTicks(string $ticks = null)
+    public function findExceededQuotaHistoryByTicks(string $ticks = NULL)
     {
         foreach ($this->exceededQuotaHistory as $exceededQuotaHistory) {
             if ($exceededQuotaHistory->getTicks() === $ticks) {
                 return $exceededQuotaHistory;
             }
         }
-        return null;
+        return NULL;
     }
 
     /**
@@ -686,14 +692,14 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param string $payload
      * @return \SmartNoses\Gpsnose\Domain\Model\Token | NULL
      */
-    public function findTokenByPayload(string $payload = null)
+    public function findTokenByPayload(string $payload = NULL)
     {
         foreach ($this->tokens as $token) {
             if ($token->getPayload() === $payload) {
                 return $token;
             }
         }
-        return null;
+        return NULL;
     }
 
     /**

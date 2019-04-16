@@ -8,9 +8,10 @@ use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use SmartNoses\Gpsnose\Service\GnCommunityService;
 use SmartNoses\Gpsnose\Utility\GnUtility;
+
 $file = __DIR__ . '/../../_dev.php';
 if (file_exists($file)) {
-    include ($file);
+    include($file);
 }
 
 /**
@@ -31,7 +32,6 @@ if (file_exists($file)) {
  */
 class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
-
     /**
      * Property for accessing TypoScriptFrontendController centrally
      *
@@ -40,7 +40,6 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected $frontendController;
 
     /**
-     *
      * @var int
      */
     protected const MAX_DATE_TIME_TICKS = 3155378975999999999;
@@ -57,7 +56,10 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         GnUtility::applyExtConf();
     }
 
-    protected function SetCommunity(string $communityTag = null)
+    /**
+     * @param string $communityTag
+     */
+    protected function SetCommunity(string $communityTag = NULL)
     {
         if ($communityTag) {
             $communityService = new GnCommunityService();
@@ -123,7 +125,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $user = array();
         $user['LoginName'] = $fe_user['gpsnose_loginname'];
         $user['IsActivated'] = $fe_user['gpsnose_is_activated'];
-        if (! GnUtil::IsNullOrEmpty($fe_user['gpsnose_communities'])) {
+        if (!GnUtil::IsNullOrEmpty($fe_user['gpsnose_communities'])) {
             $user['Communities'] = explode(",", $fe_user['gpsnose_communities']);
         }
         GnData::$Settings['User'] = $user;
@@ -137,7 +139,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $gnSettings['CommentsPageSize'] = intval($this->settings['commentsPageSize']);
         $gnSettings['ImagePath'] = $this->frontendController->absRefPrefix . $this->getFileNameOrPath($this->settings['resources']['imagePath']);
         $currentUser = \GpsNose\SDK\Web\Login\GnAuthentication::CurrentUser();
-        if ($currentUser != null) {
+        if ($currentUser != NULL) {
             $gnSettings['LoginId'] = $currentUser->LoginId;
         }
         GnData::$Settings['Settings'] = $gnSettings;
@@ -178,7 +180,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * Checks if the user is logged in
      *
-     * @return boolean
+     * @return bool
      */
     protected function isUserLoggedIn()
     {
@@ -188,7 +190,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * Checks if the user is logged in
      *
-     * @return boolean
+     * @return bool
      */
     protected function logoffUser()
     {
@@ -198,7 +200,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * Redirect to a page with given id
      *
-     * @param integer $pageId
+     * @param int $pageId
      *
      * @return void
      */

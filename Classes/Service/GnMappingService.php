@@ -9,7 +9,6 @@ use GpsNose\SDK\Mashup\Api\Modules\GnMappingApi;
 
 class GnMappingService extends GnBaseService
 {
-
     /**
      * GnMappingService __construct
      */
@@ -23,14 +22,14 @@ class GnMappingService extends GnBaseService
      *
      * @param string $communityTag
      * @param string $gip
-     * @return \GpsNose\SDK\Mashup\Framework\GnMapRectangle|NULL
+     * @return \GpsNose\SDK\Mashup\Framework\GnMapRectangle
      */
     public function GetMapRectangleFromGip(string $communityTag, string $gip)
     {
         try {
             if ($communityTag) {
                 $visibility = substr($communityTag, 0, 1);
-                list ($community) = explode('@', substr($communityTag, 1));
+                list($community) = explode('@', substr($communityTag, 1));
                 $community = $visibility . $community;
             }
 
@@ -40,7 +39,7 @@ class GnMappingService extends GnBaseService
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
-                    /* @var $gnLoginApi \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser */
+                    /** @var $gnLoginApi \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser */
                     $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey());
                     return $gnLoginApi->GetGnMappingApi()->GetLatLonRectangleFromGIp($gip);
                 }
@@ -48,7 +47,7 @@ class GnMappingService extends GnBaseService
         } catch (\Exception $e) {
             GnLogger::Error($e->getMessage());
         }
-        return null;
+        return NULL;
     }
 
     /**
@@ -65,7 +64,7 @@ class GnMappingService extends GnBaseService
         try {
             if ($communityTag) {
                 $visibility = substr($communityTag, 0, 1);
-                list ($community) = explode('@', substr($communityTag, 1));
+                list($community) = explode('@', substr($communityTag, 1));
                 $community = $visibility . $community;
             }
 
@@ -75,7 +74,7 @@ class GnMappingService extends GnBaseService
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
-                    /* @var $gnLoginApi \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser */
+                    /** @var $gnLoginApi \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser */
                     $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey());
                     return $gnLoginApi->GetGnMappingApi()->GetGipFromLatLon($lat, $lon, ($zoom > GnMappingApi::MAX_ZOOM || $zoom < 1 ? GnMappingApi::MAX_ZOOM : $zoom));
                 }

@@ -6,7 +6,7 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'versioningWS' => true,
+        'versioningWS' => TRUE,
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
@@ -30,7 +30,7 @@ return [
     ],
     'columns' => [
         'sys_language_uid' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'select',
@@ -39,7 +39,7 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages',
-                        - 1,
+                        -1,
                         'flags-multiple'
                     ]
                 ],
@@ -48,7 +48,7 @@ return [
         ],
         'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
@@ -77,7 +77,7 @@ return [
             ]
         ],
         'hidden' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
@@ -89,7 +89,7 @@ return [
             ]
         ],
         'starttime' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
             'config' => [
@@ -100,7 +100,7 @@ return [
             ]
         ],
         'endtime' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
             'config' => [
@@ -114,7 +114,7 @@ return [
             ]
         ],
         'domain' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_host.domain',
             'config' => [
                 'type' => 'input',

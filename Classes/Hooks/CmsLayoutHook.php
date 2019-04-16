@@ -19,7 +19,10 @@ use TYPO3\CMS\Core\Imaging\Icon;
  */
 class CmsLayoutHook
 {
-
+    /**
+     * @param mixed $params
+     * @param mixed $parentObject
+     */
     public function addPluginIcon($params, $parentObject)
     {
         if ($params[0] != 'tt_content') {

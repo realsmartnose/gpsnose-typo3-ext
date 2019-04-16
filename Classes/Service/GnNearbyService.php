@@ -10,7 +10,6 @@ use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 
 class GnNearbyService extends GnBaseService
 {
-
     /**
      * GnNearbyService __construct
      */
@@ -22,18 +21,21 @@ class GnNearbyService extends GnBaseService
     /**
      * Get page of nearby members
      *
+     * @param string $communityTag
+     * @param int $lastKnownTicks
+     * @param int $pageSize
      * @return \GpsNose\SDK\Mashup\Model\GnNose[]
      */
-    public function GetNosesAroundPage(string $communityTag, int $lastKnownTicks = null, int $pageSize = null)
+    public function GetNosesAroundPage(string $communityTag, int $lastKnownTicks = NULL, int $pageSize = NULL)
     {
         try {
             if ($communityTag) {
                 $visibility = substr($communityTag, 0, 1);
-                list ($community) = explode('@', substr($communityTag, 1));
+                list($community) = explode('@', substr($communityTag, 1));
                 $community = $visibility . $community;
             }
 
-            if ($lastKnownTicks == null) {
+            if ($lastKnownTicks == NULL) {
                 $lastKnownTicks = GnSettings::FAR_FUTURE_TICKS;
             }
 
@@ -46,7 +48,7 @@ class GnNearbyService extends GnBaseService
                     $currentUser = GnAuthentication::CurrentUser();
                     $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
                     $gnLogin = $gnLoginApi->GetVerified();
-                    if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
+                    if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
                         $items = $gnLoginApi->GetNearbyApi()->GetNosesAround($communityTag);
                     } else {
@@ -66,18 +68,21 @@ class GnNearbyService extends GnBaseService
     /**
      * Get page of nearby impressions
      *
+     * @param string $communityTag
+     * @param int $lastKnownTicks
+     * @param int $pageSize
      * @return \GpsNose\SDK\Mashup\Model\CreatedEntities\GnImpression[]
      */
-    public function GetImpressionsAroundPage(string $communityTag, int $lastKnownTicks = null, int $pageSize = null)
+    public function GetImpressionsAroundPage(string $communityTag, int $lastKnownTicks = NULL, int $pageSize = NULL)
     {
         try {
             if ($communityTag) {
                 $visibility = substr($communityTag, 0, 1);
-                list ($community) = explode('@', substr($communityTag, 1));
+                list($community) = explode('@', substr($communityTag, 1));
                 $community = $visibility . $community;
             }
 
-            if ($lastKnownTicks == null) {
+            if ($lastKnownTicks == NULL) {
                 $lastKnownTicks = GnSettings::FAR_FUTURE_TICKS;
             }
 
@@ -90,7 +95,7 @@ class GnNearbyService extends GnBaseService
                     $currentUser = GnAuthentication::CurrentUser();
                     $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
                     $gnLogin = $gnLoginApi->GetVerified();
-                    if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
+                    if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
                         $items = $gnLoginApi->GetNearbyApi()->GetImpressionsAround($communityTag);
                     } else {
@@ -110,18 +115,21 @@ class GnNearbyService extends GnBaseService
     /**
      * Get page of nearby pois
      *
-     * @return \GpsNose\SDK\Mashup\Model\CreatedEntities\GnPoi[]
+     * @param string $communityTag
+     * @param int $lastKnownTicks
+     * @param int $pageSize
+     * @return array(\GpsNose\SDK\Mashup\Model\CreatedEntities\GnPoi)
      */
-    public function GetPoisAroundPage(string $communityTag, int $lastKnownTicks = null, int $pageSize = null)
+    public function GetPoisAroundPage(string $communityTag, int $lastKnownTicks = NULL, int $pageSize = NULL)
     {
         try {
             if ($communityTag) {
                 $visibility = substr($communityTag, 0, 1);
-                list ($community) = explode('@', substr($communityTag, 1));
+                list($community) = explode('@', substr($communityTag, 1));
                 $community = $visibility . $community;
             }
 
-            if ($lastKnownTicks == null) {
+            if ($lastKnownTicks == NULL) {
                 $lastKnownTicks = GnSettings::FAR_FUTURE_TICKS;
             }
 
@@ -134,7 +142,7 @@ class GnNearbyService extends GnBaseService
                     $currentUser = GnAuthentication::CurrentUser();
                     $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
                     $gnLogin = $gnLoginApi->GetVerified();
-                    if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
+                    if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
                         $items = $gnLoginApi->GetNearbyApi()->GetPoIsAround($communityTag);
                     } else {
@@ -154,18 +162,21 @@ class GnNearbyService extends GnBaseService
     /**
      * Get page of nearby tracks
      *
-     * @return \GpsNose\SDK\Mashup\Model\CreatedEntities\GnTrack[]
+     * @param string $communityTag
+     * @param int $lastKnownTicks
+     * @param int $pageSize
+     * @return array(\GpsNose\SDK\Mashup\Model\CreatedEntities\GnTrack)
      */
-    public function GetTracksAroundPage(string $communityTag, int $lastKnownTicks = null, int $pageSize = null)
+    public function GetTracksAroundPage(string $communityTag, int $lastKnownTicks = NULL, int $pageSize = NULL)
     {
         try {
             if ($communityTag) {
                 $visibility = substr($communityTag, 0, 1);
-                list ($community) = explode('@', substr($communityTag, 1));
+                list($community) = explode('@', substr($communityTag, 1));
                 $community = $visibility . $community;
             }
 
-            if ($lastKnownTicks == null) {
+            if ($lastKnownTicks == NULL) {
                 $lastKnownTicks = GnSettings::FAR_FUTURE_TICKS;
             }
 
@@ -178,7 +189,7 @@ class GnNearbyService extends GnBaseService
                     $currentUser = GnAuthentication::CurrentUser();
                     $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
                     $gnLogin = $gnLoginApi->GetVerified();
-                    if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
+                    if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
                         $items = $gnLoginApi->GetNearbyApi()->GetTracksAround($communityTag);
                     } else {
@@ -198,18 +209,21 @@ class GnNearbyService extends GnBaseService
     /**
      * Get page of nearby events
      *
-     * @return \GpsNose\SDK\Mashup\Model\CreatedEntities\GnEvent[]
+     * @param string $communityTag
+     * @param int $lastKnownTicks
+     * @param int $pageSize
+     * @return array(\GpsNose\SDK\Mashup\Model\CreatedEntities\GnEvent)
      */
-    public function GetEventsAroundPage(string $communityTag, int $lastKnownTicks = null, int $pageSize = null)
+    public function GetEventsAroundPage(string $communityTag, int $lastKnownTicks = NULL, int $pageSize = NULL)
     {
         try {
             if ($communityTag) {
                 $visibility = substr($communityTag, 0, 1);
-                list ($community) = explode('@', substr($communityTag, 1));
+                list($community) = explode('@', substr($communityTag, 1));
                 $community = $visibility . $community;
             }
 
-            if ($lastKnownTicks == null) {
+            if ($lastKnownTicks == NULL) {
                 $lastKnownTicks = GnSettings::FAR_FUTURE_TICKS;
             }
 
@@ -222,7 +236,7 @@ class GnNearbyService extends GnBaseService
                     $currentUser = GnAuthentication::CurrentUser();
                     $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
                     $gnLogin = $gnLoginApi->GetVerified();
-                    if ($gnLogin != null && $gnLoginApi->getIsLoggedIn()) {
+                    if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
                         $items = $gnLoginApi->GetNearbyApi()->GetEventsAround($communityTag);
                     } else {

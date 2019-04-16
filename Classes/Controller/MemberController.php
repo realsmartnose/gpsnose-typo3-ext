@@ -22,14 +22,13 @@ use SmartNoses\Gpsnose\Utility\GnData;
  */
 class MemberController extends BaseController
 {
-
     /**
      * mashupRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
      * @inject
      */
-    protected $mashupRepository = null;
+    protected $mashupRepository = NULL;
 
     /**
      * MemberController __construct
@@ -54,7 +53,7 @@ class MemberController extends BaseController
 
         $pageSize = $this->settings['membersPageSize'];
         $memberService = new GnMemberService();
-        $members = $memberService->GetMembersPage($communityTag, null, $pageSize);
+        $members = $memberService->GetMembersPage($communityTag, NULL, $pageSize);
         $this->view->assign('members', json_encode($members));
 
         // Add Settings

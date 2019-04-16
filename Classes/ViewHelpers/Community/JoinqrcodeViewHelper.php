@@ -11,19 +11,20 @@ use GpsNose\SDK\Mashup\Api\GnApi;
 class JoinqrcodeViewHelper extends AbstractViewHelper
 {
 
-    protected $escapeOutput = false;
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = FALSE;
 
     /**
-     *
      * @return void
      */
     public function initializeArguments()
     {
-        $this->registerArgument('tag', 'string', 'name of the community', true, '');
+        $this->registerArgument('tag', 'string', 'name of the community', TRUE, '');
     }
 
     /**
-     *
      * @return string
      */
     public function render()

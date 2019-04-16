@@ -22,7 +22,6 @@ use SmartNoses\Gpsnose\Service\GnNewsService;
  */
 class NewsController extends BaseController
 {
-
     /**
      * NewsController __construct
      */
@@ -46,7 +45,7 @@ class NewsController extends BaseController
 
         $pageSize = $this->settings['newsPageSize'];
         $newsService = new GnNewsService();
-        $news = $newsService->GetNewsPage($communityTag, null, $pageSize);
+        $news = $newsService->GetNewsPage($communityTag, NULL, $pageSize);
         $this->view->assign('news', json_encode($news));
 
         // Add Settings

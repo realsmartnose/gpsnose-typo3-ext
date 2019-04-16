@@ -9,7 +9,6 @@ use GpsNose\SDK\Framework\Logging\GnLogger;
 
 class GnNewsService extends GnBaseService
 {
-
     /**
      * GnNewsService __construct
      */
@@ -21,18 +20,21 @@ class GnNewsService extends GnBaseService
     /**
      * Get page of news
      *
-     * @return \GpsNose\SDK\Mashup\Model\GnNews[]
+     * @param string $communityTag
+     * @param int $lastKnownTicks
+     * @param int $pageSize
+     * @return array(\GpsNose\SDK\Mashup\Model\GnNews)
      */
-    public function GetNewsPage(string $communityTag, int $lastKnownTicks = null, int $pageSize = null)
+    public function GetNewsPage(string $communityTag, int $lastKnownTicks = NULL, int $pageSize = NULL)
     {
         try {
             if ($communityTag) {
                 $visibility = substr($communityTag, 0, 1);
-                list ($community) = explode('@', substr($communityTag, 1));
+                list($community) = explode('@', substr($communityTag, 1));
                 $community = $visibility . $community;
             }
 
-            if ($lastKnownTicks == null) {
+            if ($lastKnownTicks == NULL) {
                 $lastKnownTicks = GnSettings::FAR_FUTURE_TICKS;
             }
 

@@ -125,17 +125,35 @@ ko.bindingHandlers.fancyboxAttr = {
         }
     }
 };
+ko.extenders.numeric = function (target, digits) {
+    var result = ko.computed({
+        read: target,
+        write: function (newValue) {
+            var current = target(), roundingMultiplier = Math.pow(10, digits), newValueAsNum = isNaN(newValue) ? 0 : +newValue, valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
+            if (valueToWrite !== current) {
+                target(valueToWrite);
+            }
+            else {
+                if (newValue !== current) {
+                    target.notifySubscribers(valueToWrite);
+                }
+            }
+        }
+    });
+    result(target());
+    return result;
+};
 var CommunityDetailViewModel = (function (_super) {
     __extends(CommunityDetailViewModel, _super);
     function CommunityDetailViewModel(communityDto, user) {
         var _this = _super.call(this) || this;
-        _this.membersPageUrl = '/Community/Page_Members';
-        _this.members = ko.observableArray();
-        _this.membersPageSize = gnSettings.CommunityMembersPageSize;
-        _this.membersLastJoinTicks = MAX_DATE_TIME_TICKS;
-        _this.hasMoreMembers = ko.observable(true);
-        _this.membersRequestActive = ko.observable(false);
-        _this.membersRequestActive.subscribe(function (newValue) {
+        _this.MembersPageUrl = '/Community/Page_Members';
+        _this.Members = ko.observableArray();
+        _this.MembersPageSize = gnSettings.CommunityMembersPageSize;
+        _this.MembersLastJoinTicks = MAX_DATE_TIME_TICKS;
+        _this.HasMoreMembers = ko.observable(true);
+        _this.MembersRequestActive = ko.observable(false);
+        _this.MembersRequestActive.subscribe(function (newValue) {
             ShowPreviewPageLoad(newValue);
         });
         _this.TagName = communityDto.TagName;
@@ -147,57 +165,57 @@ var CommunityDetailViewModel = (function (_super) {
         var comm = new KeywordDto(this.TagName);
         return comm.GetHtml();
     };
-    CommunityDetailViewModel.prototype.onAddMembers = function (data) { };
+    CommunityDetailViewModel.prototype.OnAddMembers = function (data) { };
     ;
-    CommunityDetailViewModel.prototype.addMembers = function (data) {
+    CommunityDetailViewModel.prototype.AddMembers = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
-            this.membersLastJoinTicks = data[data.length - 1].JoinTicks;
+            this.MembersLastJoinTicks = data[data.length - 1].JoinTicks;
             for (var i in data) {
                 var member = new CommunityMemberDto(data[i]);
                 member.IsAdmin = member.LoginName == this.Entity.CreatorLoginName || (this.Entity.Admins && jQuery.inArray(member.LoginName, this.Entity.Admins) != -1);
-                this.members.push(member);
+                this.Members.push(member);
             }
-            if (data.length % this.membersPageSize != 0)
-                this.hasMoreMembers(false);
+            if (data.length % this.MembersPageSize != 0)
+                this.HasMoreMembers(false);
         }
         else {
-            this.hasMoreMembers(false);
+            this.HasMoreMembers(false);
         }
-        if (this.onAddMembers)
-            this.onAddMembers(data);
+        if (this.OnAddMembers)
+            this.OnAddMembers(data);
     };
     ;
-    CommunityDetailViewModel.prototype.pageMembers = function () {
+    CommunityDetailViewModel.prototype.PageMembers = function () {
         var _this = this;
-        if (this.membersRequestActive() || !this.hasMoreMembers())
+        if (this.MembersRequestActive() || !this.HasMoreMembers())
             return;
-        this.membersRequestActive(true);
+        this.MembersRequestActive(true);
         jQuery.ajax({
             type: 'POST',
-            url: this.membersPageUrl,
+            url: this.MembersPageUrl,
             cache: false,
             data: {
-                lastKnownTicks: this.membersLastJoinTicks,
+                lastKnownTicks: this.MembersLastJoinTicks,
                 profileTag: this.TagName,
-                pageSize: this.membersPageSize
+                pageSize: this.MembersPageSize
             },
             dataType: 'json',
             success: function (result) {
                 if (result && result.length > 0) {
-                    _this.addMembers(result);
+                    _this.AddMembers(result);
                 }
                 else {
-                    _this.hasMoreMembers(false);
+                    _this.HasMoreMembers(false);
                 }
-                _this.membersRequestActive(false);
+                _this.MembersRequestActive(false);
             },
             error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                _this.membersRequestActive(false);
+                _this.MembersRequestActive(false);
             }
         });
     };
@@ -1284,27 +1302,64 @@ var GipViewModel = (function (_super) {
     __extends(GipViewModel, _super);
     function GipViewModel() {
         var _this = _super.call(this) || this;
-        _this.IsGipRequest = true;
         _this.CacheGip = new Array();
-        _this.Gip = ko.observable('');
         _this.Rectangle = ko.observable(null);
-        _this.Latitude = ko.observable(0.0);
-        _this.Longitude = ko.observable(0.0);
-        _this.Zoom = ko.observable(28);
+        _this.Gip = ko.observable(null);
+        _this.IsGipAutoUpdate = ko.observable(false);
+        _this.SearchQuery = ko.observable(null);
+        _this.Latitude = ko.observable(0.0).extend({ numeric: 5 });
+        _this.Longitude = ko.observable(0.0).extend({ numeric: 5 });
+        _this.Zoom = ko.observable(12);
+        _this.ZoomPreview = ko.observable(12);
+        _this.PreventZoomInOnRefresh = ko.observable(false);
         _this.RequestActive = ko.observable(false);
         _this.ShareUrl = ko.computed(function () {
             return "https://www.gpsnose.com/gip/" + _this.Gip();
         });
-        _this.Gip.subscribe(function (newValue) {
-            _this.GetMapRectFromGip();
+        _this.Warning = ko.observable(null);
+        _this.HasWarning = ko.computed(function () {
+            return _this.Warning() != null;
         });
-        _this.Rectangle.subscribe(function (newValue) {
-            if (_this.OnRefresh)
-                _this.OnRefresh();
+        _this.Gip.subscribe(function (newValue) {
+            var allowedString = newValue.replace(/[^0-9A-HYJKWMNXPR-VZ.]+/ig, '');
+            if (allowedString != newValue) {
+                _this.Gip(allowedString);
+            }
+            else if (_this.IsGipAutoUpdate() || (_this.Latitude() == 0 && _this.Longitude() == 0)) {
+                _this.GetMapRectFromGip();
+            }
+        });
+        _this.Zoom.subscribe(function (newValue) {
+            if (newValue < 2) {
+                _this.Zoom(2);
+            }
+            else if (newValue > 28) {
+                _this.Zoom(28);
+            }
+            else {
+                _this.PreventZoomInOnRefresh(false);
+            }
+            _this.ZoomPreview(newValue);
+            _this.GetGipFromLatLng();
+        });
+        _this.Rectangle.subscribe(function (rect) {
+            _this.Latitude(rect.Center.Latitude);
+            _this.Longitude(rect.Center.Longitude);
+            _this.Zoom(rect.Zoom);
+            if (_this.OnRefresh) {
+                _this.OnRefresh(_this.PreventZoomInOnRefresh());
+            }
+        });
+        _this.IsGipAutoUpdate.subscribe(function (newValue) {
+            if (newValue) {
+                _this.GetMapRectFromGip();
+            }
         });
         return _this;
     }
-    GipViewModel.prototype.OnRefresh = function () { };
+    GipViewModel.prototype.OnSearch = function (query) { };
+    ;
+    GipViewModel.prototype.OnRefresh = function (preventZoomIn) { };
     ;
     GipViewModel.prototype.GetGpxBox = function () {
         var rect = this.Rectangle();
@@ -1328,37 +1383,80 @@ var GipViewModel = (function (_super) {
     ;
     GipViewModel.prototype.GetMapRectFromGip = function () {
         var _this = this;
-        var gipTrimmed = this.Gip().replace(/\.$/, "");
-        var bub = this.CacheGip.filter(function (elem) {
-            return elem[0] == gipTrimmed;
-        });
-        if (bub[0]) {
-            this.Rectangle(bub[0][1]);
-            return;
+        var gipTrimmed = this.Gip() ? this.Gip().replace(/\.$/, "") : null;
+        if (!gipTrimmed || gipTrimmed.length < 1) {
+            this.UseUserLocation();
         }
+        else {
+            var bub = this.CacheGip.filter(function (elem) {
+                return elem[0] == gipTrimmed;
+            });
+            if (bub[0]) {
+                this.Rectangle(bub[0][1]);
+                return;
+            }
+            if (this.RequestActive())
+                return;
+            this.RequestActive(true);
+            jQuery.ajax({
+                type: 'POST',
+                url: '/Gip/GetRectFromGip',
+                cache: false,
+                data: {
+                    gip: gipTrimmed
+                },
+                dataType: 'json',
+                success: function (result) {
+                    if (result && result.Center) {
+                        _this.CacheGip.push([gipTrimmed, result]);
+                        _this.Rectangle(result);
+                    }
+                    _this.RequestActive(false);
+                },
+                error: function (jqxhr) {
+                    _this.RequestActive(false);
+                    _this.UseUserLocation();
+                }
+            });
+        }
+    };
+    GipViewModel.prototype.GetGipFromLatLng = function () {
+        var _this = this;
         if (this.RequestActive())
             return;
         this.RequestActive(true);
         jQuery.ajax({
             type: 'POST',
-            url: '/Gip/GetMapRectangleFromGip',
-            cache: true,
+            url: '/Gip/GetGipFromLatLng',
+            cache: false,
             data: {
-                gip: gipTrimmed
+                lat: this.Latitude(),
+                lon: this.Longitude(),
+                zoom: this.Zoom()
             },
             dataType: 'json',
             success: function (result) {
-                _this.CacheGip.push([gipTrimmed, result]);
-                _this.Rectangle(result);
+                if (result && result.Rect) {
+                    _this.Rectangle(result.Rect);
+                    _this.Gip(result.Gip);
+                }
                 _this.RequestActive(false);
             },
             error: function (jqxhr) {
-                if (jqxhr.status != 429) {
-                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
-                }
                 _this.RequestActive(false);
+                _this.UseUserLocation();
             }
         });
+    };
+    GipViewModel.prototype.UseUserLocation = function () {
+        if (this.UserLocationCallback) {
+            this.UserLocationCallback();
+        }
+    };
+    GipViewModel.prototype.Search = function () {
+        if (this.OnSearch) {
+            this.OnSearch(this.SearchQuery());
+        }
     };
     return GipViewModel;
 }(BaseViewModel));
@@ -1606,7 +1704,7 @@ var Coordinate = (function () {
         this.AgeString = "0m";
         if (data)
             jQuery.extend(this, data);
-        this.Location = L.latLng(this.Lat, this.Lon, this.Alt);
+        this.Location = L.latLng(this.lat, this.lon, this.alt);
     }
     return Coordinate;
 }());
@@ -1652,6 +1750,11 @@ var GeoDataProperties = (function () {
     function GeoDataProperties() {
     }
     return GeoDataProperties;
+}());
+var GnGip = (function () {
+    function GnGip() {
+    }
+    return GnGip;
 }());
 var GnMapPoint = (function () {
     function GnMapPoint(Latitude, Longitude) {
@@ -2127,40 +2230,40 @@ var TourDetailViewModel = (function (_super) {
         _this.ALTITUDE_UNKNOWN = 0x8000;
         _this.ALTITUDE_FROM_MISSING_QUADRANT = 0x8001;
         _this.ALTITUDE_SEA_LEVEL = 0.001;
-        _this.currentTourIndex = ko.observable(-1);
-        _this.tourItems = ko.observableArray([]);
-        _this.coordinates = ko.observableArray([]);
-        _this.niceTourCoordinates = ko.observableArray([]);
-        _this.elevationMax = ko.observable(0);
-        _this.elevationMaxString = ko.computed(function () {
-            return _this.elevationMax() != 0 ? Math.round(_this.elevationMax()) + "m" : "";
+        _this.CurrentTourIndex = ko.observable(-1);
+        _this.TourItems = ko.observableArray([]);
+        _this.Coordinates = ko.observableArray([]);
+        _this.NiceTourCoordinates = ko.observableArray([]);
+        _this.ElevationMax = ko.observable(0);
+        _this.ElevationMaxString = ko.computed(function () {
+            return _this.ElevationMax() != 0 ? Math.round(_this.ElevationMax()) + "m" : "";
         });
-        _this.elevationMin = ko.observable(0);
-        _this.elevationMinString = ko.computed(function () {
-            return _this.elevationMin() != 0 ? Math.round(_this.elevationMin()) + "m" : "";
+        _this.ElevationMin = ko.observable(0);
+        _this.ElevationMinString = ko.computed(function () {
+            return _this.ElevationMin() != 0 ? Math.round(_this.ElevationMin()) + "m" : "";
         });
-        _this.metaElapsedTime = ko.observable(0);
-        _this.metaDistanceTravelled = ko.observable(0);
-        _this.metaAverageSpeed = ko.observable(0);
-        _this.metaElevationUp = ko.observable(0);
-        _this.metaElevationDown = ko.observable(0);
-        _this.metaEffectiveDistance = ko.observable(0);
-        _this.coordinateRequestActive = ko.observable(false);
+        _this.MetaElapsedTime = ko.observable(0);
+        _this.MetaDistanceTravelled = ko.observable(0);
+        _this.MetaAverageSpeed = ko.observable(0);
+        _this.MetaElevationUp = ko.observable(0);
+        _this.MetaElevationDown = ko.observable(0);
+        _this.MetaEffectiveDistance = ko.observable(0);
+        _this.CoordinateRequestActive = ko.observable(false);
         _this.cWidth = 3000;
         _this.cHeight = 1000;
         _this.cMargin = 5;
-        _this.elevationCanvasIdentifier = ko.observable(null);
-        _this.elevationMousemoveIndex = ko.observable(-1);
-        _this.elevationClickedIndex = ko.observable(-1);
+        _this.ElevationCanvasIdentifier = ko.observable(null);
+        _this.ElevationMousemoveIndex = ko.observable(-1);
+        _this.ElevationClickedIndex = ko.observable(-1);
         _this.UniqueKey = tourDto.UniqueKey || "";
         _this.LoginName = GetLoginNameFromUniqueKey(_this.UniqueKey);
         _this.CreationTicks = GetTicksFromUniqueKey(_this.UniqueKey);
         _this.Entity = tourDto;
         _this.NoseDto = new NoseDto({ "LoginName": _this.LoginName });
-        _this.elevationMousemoveIndex.subscribe(function (newValue) {
+        _this.ElevationMousemoveIndex.subscribe(function (newValue) {
             _this.DrawElevation();
         });
-        _this.elevationClickedIndex.subscribe(function (newValue) {
+        _this.ElevationClickedIndex.subscribe(function (newValue) {
             _this.DrawElevation();
         });
         if (_this.Entity && _this.Entity.GeoData) {
@@ -2182,7 +2285,7 @@ var TourDetailViewModel = (function (_super) {
                     }
                 }
             }
-            ko.utils.arrayPushAll(_this.tourItems(), items.sort(function (a, b) {
+            ko.utils.arrayPushAll(_this.TourItems(), items.sort(function (a, b) {
                 if (a.CreationTicks < b.CreationTicks) {
                     return -1;
                 }
@@ -2195,19 +2298,19 @@ var TourDetailViewModel = (function (_super) {
         return _this;
     }
     TourDetailViewModel.prototype.UpdateMetaInformations = function () {
-        this.metaElapsedTime(this.getElapsedTime());
-        this.metaDistanceTravelled(this.getDistanceTravelled());
-        this.metaAverageSpeed(this.getAverageSpeed());
-        this.metaElevationUp(this.getElevationUp());
-        this.metaElevationDown(this.getElevationDown());
-        this.metaEffectiveDistance(this.getEffectiveDistance());
+        this.MetaElapsedTime(this.GetElapsedTime());
+        this.MetaDistanceTravelled(this.GetDistanceTravelled());
+        this.MetaAverageSpeed(this.GetAverageSpeed());
+        this.MetaElevationUp(this.GetElevationUp());
+        this.MetaElevationDown(this.GetElevationDown());
+        this.MetaEffectiveDistance(this.GetEffectiveDistance());
     };
-    TourDetailViewModel.prototype.onLoadCoordinates = function () { };
-    TourDetailViewModel.prototype.loadCoordinates = function () {
+    TourDetailViewModel.prototype.OnLoadCoordinates = function () { };
+    TourDetailViewModel.prototype.LoadCoordinates = function () {
         var _this = this;
-        if (this.coordinateRequestActive())
+        if (this.CoordinateRequestActive())
             return;
-        this.coordinateRequestActive(true);
+        this.CoordinateRequestActive(true);
         jQuery.ajax({
             type: 'GET',
             url: '/Tour/Coordinates',
@@ -2221,25 +2324,25 @@ var TourDetailViewModel = (function (_super) {
                     for (var _i = 0, result_1 = result; _i < result_1.length; _i++) {
                         var r = result_1[_i];
                         var c = new Coordinate(r);
-                        if (c.Type == CoordinateTypeEnum.Touch)
-                            _this.coordinates.push(c);
+                        if (c.type == CoordinateTypeEnum.Touch)
+                            _this.Coordinates.push(c);
                     }
                 }
                 _this.DrawElevation();
-                _this.onLoadCoordinates();
+                _this.OnLoadCoordinates();
                 _this.UpdateMetaInformations();
-                _this.coordinateRequestActive(false);
+                _this.CoordinateRequestActive(false);
             },
             error: function () {
                 dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorLoadCoordinates", "Coordinates cannot be loaded!"), null);
-                _this.coordinateRequestActive(false);
+                _this.CoordinateRequestActive(false);
             }
         });
     };
     ;
     TourDetailViewModel.prototype.DrawElevation = function () {
         var _this = this;
-        var identifier = this.elevationCanvasIdentifier() || '';
+        var identifier = this.ElevationCanvasIdentifier() || '';
         var canvas = $(identifier)[0];
         if (canvas.getContext) {
             canvas.width = this.cWidth + (2 * this.cMargin);
@@ -2251,20 +2354,20 @@ var TourDetailViewModel = (function (_super) {
             ctx.lineWidth = 10;
             ctx.strokeStyle = '#dddddd';
             ctx.stroke();
-            var totalDistanceTravelled = this.getDistanceTravelled();
-            var coordinates_2 = this.AnyCoordinatesWithAlt(this.niceTourCoordinates()) ? this.niceTourCoordinates() : this.coordinates();
-            var startTicks = coordinates_2[0].Ticks;
+            var totalDistanceTravelled = this.GetDistanceTravelled();
+            var coordinates_2 = this.AnyCoordinatesWithAlt(this.NiceTourCoordinates()) ? this.NiceTourCoordinates() : this.Coordinates();
+            var startTicks = coordinates_2[0].ticks;
             var minAlt = this.ALTITUDE_UNKNOWN;
             var maxAlt = 0;
             for (var _i = 0, coordinates_1 = coordinates_2; _i < coordinates_1.length; _i++) {
                 var coordinate = coordinates_1[_i];
-                if (minAlt > coordinate.Alt && coordinate.Alt != 0)
-                    minAlt = coordinate.Alt;
-                if (maxAlt < coordinate.Alt && coordinate.Alt != this.ALTITUDE_UNKNOWN && coordinate.Alt != this.ALTITUDE_FROM_MISSING_QUADRANT)
-                    maxAlt = coordinate.Alt;
+                if (minAlt > coordinate.alt && coordinate.alt != 0)
+                    minAlt = coordinate.alt;
+                if (maxAlt < coordinate.alt && coordinate.alt != this.ALTITUDE_UNKNOWN && coordinate.alt != this.ALTITUDE_FROM_MISSING_QUADRANT)
+                    maxAlt = coordinate.alt;
             }
-            this.elevationMin(minAlt);
-            this.elevationMax(maxAlt);
+            this.ElevationMin(minAlt);
+            this.ElevationMax(maxAlt);
             for (var i = Math.floor(minAlt / 100) + 1; i < Math.floor(maxAlt / 100); i++) {
                 var oneMeter = this.cHeight / Math.abs(maxAlt - minAlt);
                 var vertical = this.cHeight - ((i * 100 - minAlt) * oneMeter);
@@ -2288,26 +2391,26 @@ var TourDetailViewModel = (function (_super) {
                 var coordinate = coordinates_2[i];
                 var lineX = this.cMargin;
                 if (lastCoordinateModel != null) {
-                    if (coordinate.Alt == 0 || coordinate.Alt == this.ALTITUDE_UNKNOWN)
-                        coordinate.Alt = lastCoordinateModel.Alt;
+                    if (coordinate.alt == 0 || coordinate.alt == this.ALTITUDE_UNKNOWN)
+                        coordinate.alt = lastCoordinateModel.alt;
                     distanceTravelled += Math.abs(coordinate.Location.distanceTo(lastCoordinateModel.Location));
                     lineX += (this.cWidth / totalDistanceTravelled) * distanceTravelled;
-                    coordinate.AgeString = GetAgeString(startTicks, coordinate.Ticks, true, true);
+                    coordinate.AgeString = GetAgeString(startTicks, coordinate.ticks, true, true);
                 }
-                var lineY = this.cHeight - ((this.cHeight / (maxAlt - minAlt)) * (coordinate.Alt - minAlt)) + this.cMargin;
+                var lineY = this.cHeight - ((this.cHeight / (maxAlt - minAlt)) * (coordinate.alt - minAlt)) + this.cMargin;
                 if (lastCoordinateModel != null)
                     ctx.lineTo(lineX, lineY);
                 else
                     ctx.moveTo(lineX, lineY);
-                if (i == this.elevationClickedIndex()) {
+                if (i == this.ElevationClickedIndex()) {
                     clickedX = lineX;
                     clickedY = lineY;
-                    clickedAlt = coordinate.Alt;
+                    clickedAlt = coordinate.alt;
                 }
-                if (i == this.elevationMousemoveIndex()) {
+                if (i == this.ElevationMousemoveIndex()) {
                     moveX = lineX;
                     moveY = lineY;
-                    moveAlt = coordinate.Alt;
+                    moveAlt = coordinate.alt;
                 }
                 coordinate.Distance = distanceTravelled;
                 coordinate.PercentageX = distanceTravelled > 0 ? distanceTravelled / totalDistanceTravelled : 0;
@@ -2324,14 +2427,14 @@ var TourDetailViewModel = (function (_super) {
             }
             $(identifier).off();
             $(identifier).on('mouseout', function (e) {
-                _this.onElevationMouseOut();
-                _this.elevationMousemoveIndex(-1);
+                _this.OnElevationMouseOut();
+                _this.ElevationMousemoveIndex(-1);
             });
             $(identifier).on('mousemove', function (e) {
-                _this.handleElevationEvent(coordinates_2, e);
+                _this.HandleElevationEvent(coordinates_2, e);
             });
             $(identifier).on('click', function (e) {
-                _this.handleElevationEvent(coordinates_2, e);
+                _this.HandleElevationEvent(coordinates_2, e);
             });
         }
     };
@@ -2352,10 +2455,10 @@ var TourDetailViewModel = (function (_super) {
             ctx.fill();
         }
     };
-    TourDetailViewModel.prototype.onElevationMouseMove = function (coordinate) { };
-    TourDetailViewModel.prototype.onElevationMouseOut = function () { };
-    TourDetailViewModel.prototype.onElevationClick = function (coordinate) { };
-    TourDetailViewModel.prototype.handleElevationEvent = function (coordinates, e) {
+    TourDetailViewModel.prototype.OnElevationMouseMove = function (coordinate) { };
+    TourDetailViewModel.prototype.OnElevationMouseOut = function () { };
+    TourDetailViewModel.prototype.OnElevationClick = function (coordinate) { };
+    TourDetailViewModel.prototype.HandleElevationEvent = function (coordinates, e) {
         e.preventDefault();
         e.stopPropagation();
         var eventType = e.type;
@@ -2374,12 +2477,12 @@ var TourDetailViewModel = (function (_super) {
             if (clickedIndex >= 0) {
                 var currentCoordinate = coordinates[clickedIndex];
                 if (eventType == "click") {
-                    this.elevationClickedIndex(clickedIndex);
-                    this.onElevationClick(currentCoordinate);
+                    this.ElevationClickedIndex(clickedIndex);
+                    this.OnElevationClick(currentCoordinate);
                 }
                 else if (eventType == "mousemove") {
-                    this.elevationMousemoveIndex(clickedIndex);
-                    this.onElevationMouseMove(currentCoordinate);
+                    this.ElevationMousemoveIndex(clickedIndex);
+                    this.OnElevationMouseMove(currentCoordinate);
                 }
             }
         }
@@ -2391,26 +2494,26 @@ var TourDetailViewModel = (function (_super) {
     TourDetailViewModel.prototype.AnyCoordinatesWithAlt = function (coordinates) {
         for (var _i = 0, coordinates_3 = coordinates; _i < coordinates_3.length; _i++) {
             var coordinate = coordinates_3[_i];
-            if (coordinate.Alt != this.ALTITUDE_UNKNOWN && coordinate.Alt != this.ALTITUDE_FROM_MISSING_QUADRANT)
+            if (coordinate.alt != this.ALTITUDE_UNKNOWN && coordinate.alt != this.ALTITUDE_FROM_MISSING_QUADRANT)
                 return true;
         }
         return false;
     };
-    TourDetailViewModel.prototype.getElapsedTime = function () {
-        var coordinates = this.coordinates();
+    TourDetailViewModel.prototype.GetElapsedTime = function () {
+        var coordinates = this.Coordinates();
         if (coordinates.length > 0) {
             var firstCoordinateModel = coordinates[0];
             var lastCoordinateModel = coordinates[coordinates.length - 1];
             if (firstCoordinateModel != null && lastCoordinateModel != null) {
-                var msElapsed = GetDateFromTicks(lastCoordinateModel.Ticks).getTime() - GetDateFromTicks(firstCoordinateModel.Ticks).getTime();
+                var msElapsed = GetDateFromTicks(lastCoordinateModel.ticks).getTime() - GetDateFromTicks(firstCoordinateModel.ticks).getTime();
                 return Math.floor(Math.abs(msElapsed / 1000));
             }
         }
         return 0;
     };
-    TourDetailViewModel.prototype.getDistanceTravelled = function () {
+    TourDetailViewModel.prototype.GetDistanceTravelled = function () {
         var distanceTravelled = 0.0;
-        var coordinates = this.niceTourCoordinates().length > 0 ? this.niceTourCoordinates() : this.coordinates();
+        var coordinates = this.NiceTourCoordinates().length > 0 ? this.NiceTourCoordinates() : this.Coordinates();
         var lastCoordinateModel = null;
         for (var _i = 0, coordinates_4 = coordinates; _i < coordinates_4.length; _i++) {
             var coordinate = coordinates_4[_i];
@@ -2421,39 +2524,39 @@ var TourDetailViewModel = (function (_super) {
         }
         return distanceTravelled;
     };
-    TourDetailViewModel.prototype.getElevationUp = function () {
-        return this.getElevation(+1, 0);
+    TourDetailViewModel.prototype.GetElevationUp = function () {
+        return this.GetElevation(+1, 0);
     };
-    TourDetailViewModel.prototype.getElevationDown = function () {
-        return this.getElevation(-1, 0);
+    TourDetailViewModel.prototype.GetElevationDown = function () {
+        return this.GetElevation(-1, 0);
     };
-    TourDetailViewModel.prototype.getElevation = function (direction, minSlopePercentage) {
+    TourDetailViewModel.prototype.GetElevation = function (direction, minSlopePercentage) {
         var elevation = 0;
-        if (this.niceTourCoordinates().length > 0) {
-            elevation = this.getElevationFromCoordinates(this.niceTourCoordinates(), direction, minSlopePercentage);
+        if (this.NiceTourCoordinates().length > 0) {
+            elevation = this.GetElevationFromCoordinates(this.NiceTourCoordinates(), direction, minSlopePercentage);
         }
         if (elevation < 1) {
-            elevation = this.getElevationFromCoordinates(this.coordinates(), direction, minSlopePercentage);
+            elevation = this.GetElevationFromCoordinates(this.Coordinates(), direction, minSlopePercentage);
         }
         return elevation;
     };
-    TourDetailViewModel.prototype.getElevationFromCoordinates = function (coordinateModels, direction, minSlopePercentage) {
+    TourDetailViewModel.prototype.GetElevationFromCoordinates = function (coordinateModels, direction, minSlopePercentage) {
         var hasAltitude = false;
         var elevation = 0;
         if (coordinateModels != null) {
             var lastCoordinateModel = null;
             for (var _i = 0, coordinateModels_1 = coordinateModels; _i < coordinateModels_1.length; _i++) {
                 var coordinateModel = coordinateModels_1[_i];
-                if (Math.abs(coordinateModel.Alt) > this.ALTITUDE_SEA_LEVEL && coordinateModel.Alt != this.ALTITUDE_UNKNOWN) {
+                if (Math.abs(coordinateModel.alt) > this.ALTITUDE_SEA_LEVEL && coordinateModel.alt != this.ALTITUDE_UNKNOWN) {
                     hasAltitude = true;
                 }
                 if (lastCoordinateModel == null) {
                     lastCoordinateModel = coordinateModel;
                 }
-                else if (Math.abs(lastCoordinateModel.Alt) > this.ALTITUDE_SEA_LEVEL && Math.abs(coordinateModel.Alt) > this.ALTITUDE_SEA_LEVEL &&
-                    lastCoordinateModel.Alt != this.ALTITUDE_UNKNOWN && coordinateModel.Alt != this.ALTITUDE_UNKNOWN) {
+                else if (Math.abs(lastCoordinateModel.alt) > this.ALTITUDE_SEA_LEVEL && Math.abs(coordinateModel.alt) > this.ALTITUDE_SEA_LEVEL &&
+                    lastCoordinateModel.alt != this.ALTITUDE_UNKNOWN && coordinateModel.alt != this.ALTITUDE_UNKNOWN) {
                     var useBySlope = false;
-                    var elevationDiff = coordinateModel.Alt - lastCoordinateModel.Alt;
+                    var elevationDiff = coordinateModel.alt - lastCoordinateModel.alt;
                     if (minSlopePercentage > 0) {
                         var distance = Math.abs(lastCoordinateModel.Location.distanceTo(coordinateModel.Location));
                         if (distance > 0) {
@@ -2475,22 +2578,22 @@ var TourDetailViewModel = (function (_super) {
         }
         return hasAltitude ? elevation : -1;
     };
-    TourDetailViewModel.prototype.getEffectiveDistance = function () {
-        var distance = this.getDistanceTravelled();
-        var upUnit = Math.floor(Math.max(this.getElevation(+1, 0), 0.0) / 100.0);
+    TourDetailViewModel.prototype.GetEffectiveDistance = function () {
+        var distance = this.GetDistanceTravelled();
+        var upUnit = Math.floor(Math.max(this.GetElevation(+1, 0), 0.0) / 100.0);
         if (upUnit >= 1) {
             distance += upUnit * 1000;
         }
-        var downUnit = Math.floor(Math.max(this.getElevation(-1, 20), 0.0) / 150.0);
+        var downUnit = Math.floor(Math.max(this.GetElevation(-1, 20), 0.0) / 150.0);
         if (downUnit >= 1) {
             distance += downUnit * 1000;
         }
         return distance;
     };
-    TourDetailViewModel.prototype.getAverageSpeed = function () {
+    TourDetailViewModel.prototype.GetAverageSpeed = function () {
         var speed = 0.0;
-        var elapsedTime = this.getElapsedTime();
-        var distanceTravelled = this.getDistanceTravelled();
+        var elapsedTime = this.GetElapsedTime();
+        var distanceTravelled = this.GetDistanceTravelled();
         if (elapsedTime > 0 && distanceTravelled > 0) {
             speed = (distanceTravelled / elapsedTime) * 3.6;
         }

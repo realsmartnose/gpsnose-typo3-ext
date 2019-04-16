@@ -19,51 +19,42 @@ namespace SmartNoses\Gpsnose\Domain\Model;
  */
 class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
 {
-
     /**
-     *
      * @var string
      */
     protected $gpsnoseLoginname = '';
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
-    protected $gpsnoseIsActivated = NULL;
+    protected $gpsnoseIsActivated = FALSE;
 
     /**
-     *
      * @var string
      */
     protected $gpsnoseFullname = NULL;
 
     /**
-     *
      * @var string
      */
     protected $gpsnoseCommunities = NULL;
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
-    protected $gpsnoseIsSafeMode = NULL;
+    protected $gpsnoseIsSafeMode = FALSE;
 
     /**
-     *
-     * @var double
+     * @var float
      */
-    protected $gpsnoseLatitude = NULL;
+    protected $gpsnoseLatitude = 0.0;
 
     /**
-     *
-     * @var double
+     * @var float
      */
-    protected $gpsnoseLongitude = NULL;
+    protected $gpsnoseLongitude = 0.0;
 
     /**
-     *
      * @return string
      */
     public function getGpsnoseLoginname()
@@ -72,7 +63,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
      * @param string $gpsnoseLoginname
      */
     public function setGpsnoseLoginname($gpsnoseLoginname)
@@ -81,8 +71,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function isGpsnoseIsActivated()
     {
@@ -90,8 +79,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
-     * @param boolean $gpsnoseIsActivated
+     * @param bool $gpsnoseIsActivated
      */
     public function setGpsnoseIsActivated($gpsnoseIsActivated)
     {
@@ -99,7 +87,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
      * @return string
      */
     public function getGpsnoseFullname()
@@ -108,7 +95,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
      * @param string $gpsnoseFullname
      */
     public function setGpsnoseFullname($gpsnoseFullname)
@@ -117,7 +103,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
      * @return string
      */
     public function getGpsnoseCommunities()
@@ -126,7 +111,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
      * @param string $gpsnoseCommunities
      */
     public function setGpsnoseCommunities($gpsnoseCommunities)
@@ -135,8 +119,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function isGpsnoseIsSafeMode()
     {
@@ -144,8 +127,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
-     * @param boolean $gpsnoseIsSafeMode
+     * @param bool $gpsnoseIsSafeMode
      */
     public function setGpsnoseIsSafeMode($gpsnoseIsSafeMode)
     {
@@ -153,8 +135,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
-     * @return number
+     * @return float
      */
     public function getGpsnoseLatitude()
     {
@@ -162,8 +143,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
-     * @param number $gpsnoseLatitude
+     * @param float $gpsnoseLatitude
      */
     public function setGpsnoseLatitude($gpsnoseLatitude)
     {
@@ -171,8 +151,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
-     * @return number
+     * @return float
      */
     public function getGpsnoseLongitude()
     {
@@ -180,8 +159,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     *
-     * @param number $gpsnoseLongitude
+     * @param float $gpsnoseLongitude
      */
     public function setGpsnoseLongitude($gpsnoseLongitude)
     {

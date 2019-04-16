@@ -8,7 +8,6 @@ use GpsNose\SDK\Web\Login\GnAuthentication;
 
 class GnBaseService
 {
-
     /**
      * Property for accessing TypoScriptFrontendController centrally
      *
@@ -17,25 +16,21 @@ class GnBaseService
     protected $frontendController;
 
     /**
-     *
      * @var \GpsNose\SDK\Mashup\Api\GnApi
      */
     protected $_gnApi;
 
     /**
-     *
      * @var string
      */
     protected $_loginId;
 
     /**
-     *
      * @var \GpsNose\SDK\Web\Login\GnPrincipal
      */
     protected $_currentUser;
 
     /**
-     *
      * @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser
      */
     protected $_gnLoginApi;
@@ -51,7 +46,7 @@ class GnBaseService
         GnLogConfig::AddListener(new GnLogListener());
 
         $this->_currentUser = GnAuthentication::CurrentUser();
-        if ($this->_currentUser != null) {
+        if ($this->_currentUser != NULL) {
             $this->_loginId = $this->_currentUser->LoginId;
         }
     }
@@ -59,7 +54,7 @@ class GnBaseService
     /**
      * Checks if the user is logged in
      *
-     * @return boolean
+     * @return bool
      */
     protected function isUserLoggedIn()
     {
@@ -67,9 +62,7 @@ class GnBaseService
     }
 
     /**
-     * Checks if the user is logged in
-     *
-     * @return boolean
+     * Logoff the user
      */
     protected function logoffUser()
     {

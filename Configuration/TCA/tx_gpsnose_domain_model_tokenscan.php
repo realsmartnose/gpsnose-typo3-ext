@@ -7,7 +7,7 @@ return [
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
         'sortby' => 'sorting',
-        'versioningWS' => true,
+        'versioningWS' => TRUE,
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
@@ -17,21 +17,21 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime'
         ],
-        'searchFields' => 'scanned_by_login_name,scanned_ticks,scanned_latitude,scanned_longitude,callback_response_http_code,callback_response_message,token',
+        'searchFields' => 'scanned_by_login_name,scanned_ticks,recorded_ticks,scanned_latitude,scanned_longitude,callback_response_http_code,callback_response_message,is_batch_completed,amount,comment,is_gps_sharing_wanted,value_per_unit,label,valid_until_ticks,creation_ticks,created_by_login_name,batch_creation_ticks,token',
         'iconfile' => 'EXT:gpsnose/Resources/Public/Icons/tx_gpsnose_domain_model_tokenscan.gif',
         'readOnly' => 1
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, scanned_by_login_name, scanned_ticks, scanned_latitude, scanned_longitude, callback_response_http_code, callback_response_message, token'
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, scanned_by_login_name, scanned_ticks, recorded_ticks, scanned_latitude, scanned_longitude, callback_response_http_code, callback_response_message, is_batch_completed, amount, comment, is_gps_sharing_wanted, value_per_unit, label, valid_until_ticks, creation_ticks, created_by_login_name, batch_creation_ticks, token'
     ],
     'types' => [
         '1' => [
-            'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, scanned_by_login_name, scanned_ticks, scanned_latitude, scanned_longitude, callback_response_http_code, callback_response_message, token, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'
+            'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, scanned_by_login_name, scanned_ticks, recorded_ticks, scanned_latitude, scanned_longitude, callback_response_http_code, callback_response_message, is_batch_completed, amount, comment, is_gps_sharing_wanted, value_per_unit, label, valid_until_ticks, creation_ticks, created_by_login_name, batch_creation_ticks, token, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'
         ]
     ],
     'columns' => [
         'sys_language_uid' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'select',
@@ -40,7 +40,7 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages',
-                        - 1,
+                        -1,
                         'flags-multiple'
                     ]
                 ],
@@ -49,7 +49,7 @@ return [
         ],
         'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
@@ -78,7 +78,7 @@ return [
             ]
         ],
         'hidden' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
@@ -90,7 +90,7 @@ return [
             ]
         ],
         'starttime' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
             'config' => [
@@ -101,7 +101,7 @@ return [
             ]
         ],
         'endtime' => [
-            'exclude' => true,
+            'exclude' => TRUE,
             'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
             'config' => [
@@ -114,8 +114,9 @@ return [
                 ]
             ]
         ],
+
         'scanned_by_login_name' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.scanned_by_login_name',
             'config' => [
                 'type' => 'input',
@@ -124,7 +125,7 @@ return [
             ]
         ],
         'scanned_ticks' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.scanned_ticks',
             'config' => [
                 'type' => 'input',
@@ -132,8 +133,17 @@ return [
                 'eval' => 'trim'
             ]
         ],
+        'recorded_ticks' => [
+            'exclude' => FALSE,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.recorded_ticks',
+            'config' => [
+                'type' => 'input',
+                'size' => 20,
+                'eval' => 'trim'
+            ]
+        ],
         'scanned_latitude' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.scanned_latitude',
             'config' => [
                 'type' => 'input',
@@ -142,7 +152,7 @@ return [
             ]
         ],
         'scanned_longitude' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.scanned_longitude',
             'config' => [
                 'type' => 'input',
@@ -151,7 +161,7 @@ return [
             ]
         ],
         'callback_response_http_code' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.callback_response_http_code',
             'config' => [
                 'type' => 'input',
@@ -160,11 +170,110 @@ return [
             ]
         ],
         'callback_response_message' => [
-            'exclude' => false,
+            'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.callback_response_message',
             'config' => [
+                'type' => 'text',
+                'cols' => 40,
+                'rows' => 3,
+                'eval' => 'trim'
+            ]
+        ],
+        'is_batch_completed' => [
+            'exclude' => TRUE,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.is_batch_completed',
+            'config' => [
+                'type' => 'check',
+                'items' => [
+                    '1' => [
+                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled'
+                    ]
+                ]
+            ]
+        ],
+        'amount' => [
+            'exclude' => FALSE,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.amount',
+            'config' => [
                 'type' => 'input',
-                'size' => 1000,
+                'size' => 10,
+                'eval' => 'int'
+            ]
+        ],
+        'comment' => [
+            'exclude' => FALSE,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.comment',
+            'config' => [
+                'type' => 'text',
+                'cols' => 40,
+                'rows' => 3,
+                'eval' => 'trim'
+            ]
+        ],
+        'is_gps_sharing_wanted' => [
+            'exclude' => TRUE,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.is_gps_sharing_wanted',
+            'config' => [
+                'type' => 'check',
+                'items' => [
+                    '1' => [
+                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled'
+                    ]
+                ]
+            ]
+        ],
+        'value_per_unit' => [
+            'exclude' => FALSE,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.value_per_unit',
+            'config' => [
+                'type' => 'input',
+                'size' => 20,
+                'eval' => 'double2'
+            ]
+        ],
+        'label' => [
+            'exclude' => FALSE,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.label',
+            'config' => [
+                'type' => 'text',
+                'cols' => 40,
+                'rows' => 3,
+                'eval' => 'trim'
+            ]
+        ],
+        'valid_until_ticks' => [
+            'exclude' => FALSE,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.valid_until_ticks',
+            'config' => [
+                'type' => 'input',
+                'size' => 20,
+                'eval' => 'trim'
+            ]
+        ],
+        'creation_ticks' => [
+            'exclude' => FALSE,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.creation_ticks',
+            'config' => [
+                'type' => 'input',
+                'size' => 20,
+                'eval' => 'trim'
+            ]
+        ],
+        'created_by_login_name' => [
+            'exclude' => FALSE,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.created_by_login_name',
+            'config' => [
+                'type' => 'input',
+                'size' => 13,
+                'eval' => 'trim'
+            ]
+        ],
+        'batch_creation_ticks' => [
+            'exclude' => FALSE,
+            'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan.batch_creation_ticks',
+            'config' => [
+                'type' => 'input',
+                'size' => 20,
                 'eval' => 'trim'
             ]
         ],

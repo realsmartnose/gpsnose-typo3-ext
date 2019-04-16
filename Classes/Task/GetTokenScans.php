@@ -3,13 +3,14 @@ namespace SmartNoses\Gpsnose\Task;
 
 $file = __DIR__ . '/../../_dev.php';
 if (file_exists($file)) {
-    include ($file);
+    include($file);
 }
 
 use GpsNose\SDK\Framework\GnCache;
 use GpsNose\SDK\Framework\Logging\GnLogConfig;
 use GpsNose\SDK\Framework\Logging\GnLogger;
 use GpsNose\SDK\Mashup\Api\GnApi;
+use GpsNose\SDK\Mashup\Model\GnMashupTokenOptions;
 use SmartNoses\Gpsnose\Utility\GnLogListener;
 use SmartNoses\Gpsnose\Domain\Model\Token;
 use SmartNoses\Gpsnose\Domain\Model\TokenScan;
@@ -21,7 +22,6 @@ use SmartNoses\Gpsnose\Utility\GnUtility;
 
 class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
 {
-
     public function execute()
     {
         try {
@@ -42,28 +42,46 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                 if ($mashup) {
                     $gnApi = new GnApi();
 
-                    $gnLoginApi = $gnApi->GetLoginApiForEndUser($mashup->getAppKey(), null, "en");
+                    $gnLoginApi = $gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, 'en');
                     $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
 
                     $mashupTokens = $mashupTokensApi->GetMashupTokensPage($mashup->getCommunityTag(), $mashup->getLatestTokenScanTicks(), 50);
 
                     if (is_array($mashupTokens)) {
-                        /** @var $mashupToken GnMashupToken */
+                        /** @var $mashupToken \GpsNose\SDK\Mashup\Model\GnMashupToken */
                         foreach ($mashupTokens as $mashupToken) {
                             $tokenDto = $mashup->findTokenByPayload($mashupToken->Payload);
-                            if ($tokenDto == null) {
+                            if ($tokenDto == NULL) {
                                 $tokenDto = new Token();
                                 $tokenDto->setPayload($mashupToken->Payload);
-                                $tokenDto->setValidToTicks("0");
+                                $tokenDto->setCallbackResponse('');
+                                $tokenDto->setOptions(GnMashupTokenOptions::NoOptions);
+                                $tokenDto->setValidUntilTicks($mashupToken->ValidUntilTicks ?: 0);
+                                $tokenDto->setLabel($mashupToken->Label ?: '');
+                                $tokenDto->setValuePerUnit($mashupToken->ValuePerUnit ?: 0);
+                                $tokenDto->setCreationTicks($mashupToken->CreationTicks ?: '0');
+                                $tokenDto->setCreatedByLoginName($mashupToken->CreatedByLoginName ?: '');
                             }
 
                             $tokenScan = $tokenDto->findTokenScanByUserAndTicks($mashupToken->ScannedByLoginName, $mashupToken->ScannedTicks);
-                            if ($tokenScan == null) {
+                            if ($tokenScan == NULL) {
                                 $tokenScan = new TokenScan();
                                 $tokenScan->setScannedByLoginName($mashupToken->ScannedByLoginName);
                                 $tokenScan->setScannedTicks($mashupToken->ScannedTicks);
+                                $tokenScan->setRecordedTicks($mashupToken->RecordedTicks);
                                 $tokenScan->setScannedLatitude($mashupToken->ScannedLatitude);
                                 $tokenScan->setScannedLongitude($mashupToken->ScannedLongitude);
+                                $tokenScan->setBatchCompleted($mashupToken->IsBatchCompleted);
+                                $tokenScan->setAmount($mashupToken->Amount);
+                                $tokenScan->setComment($mashupToken->Comment ?: '');
+                                $tokenScan->setGpsSharingWanted($mashupToken->IsGpsSharingWanted);
+                                $tokenScan->setValidUntilTicks($mashupToken->ValidUntilTicks ?: 0);
+                                $tokenScan->setLabel($mashupToken->Label ?: '');
+                                $tokenScan->setValuePerUnit($mashupToken->ValuePerUnit ?: 0);
+                                $tokenScan->setCreationTicks($mashupToken->CreationTicks ?: '0');
+                                $tokenScan->setCreatedByLoginName($mashupToken->CreatedByLoginName ?: '');
+                                $tokenScan->setBatchCreationTicks($mashupToken->BatchCreationTicks ?: '');
+
                                 $tokenDto->addTokenScan($tokenScan);
                             }
 
@@ -73,11 +91,11 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                         $persistenceManager->persistAll();
                     }
                 }
-                return true;
+                return TRUE;
             }
         } catch (\Exception $e) {
-            GnLogger::Error("Exception:" . $e->getMessage());
+            GnLogger::Error('Exception:' . $e->getMessage());
         }
-        return false;
+        return FALSE;
     }
 }

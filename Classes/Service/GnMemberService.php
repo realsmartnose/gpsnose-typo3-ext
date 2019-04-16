@@ -9,7 +9,6 @@ use GpsNose\SDK\Framework\Logging\GnLogger;
 
 class GnMemberService extends GnBaseService
 {
-
     /**
      * GnMemberService __construct
      */
@@ -21,18 +20,21 @@ class GnMemberService extends GnBaseService
     /**
      * Get page of members
      *
+     * @param string $communityTag
+     * @param int $lastKnownTicks
+     * @param int $pageSize
      * @return \GpsNose\SDK\Mashup\Model\GnMember[]
      */
-    public function GetMembersPage(string $communityTag, int $lastKnownTicks = null, int $pageSize = null)
+    public function GetMembersPage(string $communityTag, int $lastKnownTicks = NULL, int $pageSize = NULL)
     {
         try {
             if ($communityTag) {
                 $visibility = substr($communityTag, 0, 1);
-                list ($community) = explode('@', substr($communityTag, 1));
+                list($community) = explode('@', substr($communityTag, 1));
                 $community = $visibility . $community;
             }
 
-            if ($lastKnownTicks == null) {
+            if ($lastKnownTicks == NULL) {
                 $lastKnownTicks = GnSettings::FAR_FUTURE_TICKS;
             }
 
