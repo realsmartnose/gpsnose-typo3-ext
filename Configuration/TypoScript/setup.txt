@@ -107,11 +107,6 @@ config.tx_extbase {
         tableName = fe_users
       }
     }
-    SmartNoses\Gpsnose\Domain\Model\FrontendUserGroup {
-      mapping {
-        tableName = fe_groups
-      }
-    }
   }
 }
 

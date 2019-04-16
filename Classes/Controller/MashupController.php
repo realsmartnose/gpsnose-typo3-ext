@@ -23,6 +23,7 @@ use SmartNoses\Gpsnose\Domain\Model\TokenScan;
 use GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use SmartNoses\Gpsnose\Utility\GnUtility;
+use GpsNose\SDK\Framework\Logging\GnLogger;
 
 /**
  * *
@@ -261,6 +262,7 @@ class MashupController extends BaseController
             $this->addFlashMessage('Mashup communities successfully refreshed', '', FlashMessage::OK, TRUE);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+            GnLogger::LogException($e);
         }
     }
 
@@ -493,6 +495,7 @@ class MashupController extends BaseController
                 $this->cacheService->clearPageCache();
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                GnLogger::LogException($e);
             }
 
             // Redirect to list
@@ -526,6 +529,7 @@ class MashupController extends BaseController
                 $this->addFlashMessage('Mashup successfully validated', '', FlashMessage::OK, TRUE);
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                GnLogger::LogException($e);
             }
 
             // Redirect to list
@@ -605,6 +609,7 @@ class MashupController extends BaseController
                     $this->addFlashMessage('Successfully created new Subcommunity', 'Success', FlashMessage::OK, TRUE);
                 } catch (\Exception $e) {
                     $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                    GnLogger::LogException($e);
                 }
             } else {
                 GnAuthentication::Logout();
@@ -644,6 +649,7 @@ class MashupController extends BaseController
                 $this->addFlashMessage('SubCommunity successfully removed', '', FlashMessage::OK, TRUE);
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                GnLogger::LogException($e);
             }
         } else {
             GnAuthentication::Logout();
@@ -694,6 +700,7 @@ class MashupController extends BaseController
                     $this->addFlashMessage('Successfully added new Host', 'Success', FlashMessage::OK, TRUE);
                 } catch (\Exception $e) {
                     $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                    GnLogger::LogException($e);
                 }
             } else {
                 GnAuthentication::Logout();
@@ -738,6 +745,7 @@ class MashupController extends BaseController
                 $this->addFlashMessage('Host successfully removed', '', FlashMessage::OK, TRUE);
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                GnLogger::LogException($e);
             }
         } else {
             GnAuthentication::Logout();
@@ -771,6 +779,7 @@ class MashupController extends BaseController
                 }
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                GnLogger::LogException($e);
             }
         } else {
             GnAuthentication::Logout();
@@ -809,6 +818,7 @@ class MashupController extends BaseController
                 $this->addFlashMessage('Mashup successfully updated', '', FlashMessage::OK, TRUE);
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                GnLogger::LogException($e);
             }
         } else {
             GnAuthentication::Logout();
@@ -913,6 +923,7 @@ class MashupController extends BaseController
                 $this->view->assign('qr_code_image', base64_encode($qr_code_image));
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                GnLogger::LogException($e);
             }
         } else {
             GnAuthentication::Logout();
@@ -988,6 +999,7 @@ class MashupController extends BaseController
             }
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+            GnLogger::LogException($e);
             throw $e;
         }
 

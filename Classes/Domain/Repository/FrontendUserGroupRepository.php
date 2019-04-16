@@ -1,7 +1,9 @@
 <?php
 namespace SmartNoses\Gpsnose\Domain\Repository;
 
-use SmartNoses\Gpsnose\Domain\Model\FrontendUserGroup;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup;
 
 /**
  * *
@@ -19,27 +21,37 @@ use SmartNoses\Gpsnose\Domain\Model\FrontendUserGroup;
 /**
  * The repository for feugroups
  */
-class FrontendUserGroupRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository
+class FrontendUserGroupRepository
 {
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository
+     */
+    protected $repository = NULL;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->repository = $objectManager->get(\TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository::class);
+    }
+
     /**
      * Finds the user matching the given GpsNose-Loginname
      *
      * @param string $title
      *            Title of the FrontendUserGroup
      *
-     * @return \SmartNoses\Gpsnose\Domain\Model\FrontendUserGroup
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup
      */
     public function findByTitle($title)
     {
-        $query = $this->createQuery();
+        $query = $this->repository->createQuery();
 
         $querySettings = $query->getQuerySettings();
         $querySettings->setRespectStoragePage(FALSE);
         $querySettings->setRespectSysLanguage(FALSE);
-        $querySettings->setIgnoreEnableFields(TRUE);
-        $querySettings->setEnableFieldsToBeIgnored([
-            'disabled'
-        ]);
 
         $object = $query->matching($query->equals('title', $title))
             ->execute()
@@ -54,7 +66,7 @@ class FrontendUserGroupRepository extends \TYPO3\CMS\Extbase\Domain\Repository\F
      * @param string $title
      *            Title of the FrontendUserGroup
      * 
-     * @return \SmartNoses\Gpsnose\Domain\Model\FrontendUserGroup
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup
      */
     public function addIfNotExistByTitle($title)
     {
@@ -62,7 +74,7 @@ class FrontendUserGroupRepository extends \TYPO3\CMS\Extbase\Domain\Repository\F
             $userGroup = new FrontendUserGroup();
             $userGroup->setTitle($title);
             $userGroup->setDescription("Created by GpsNose");
-            $this->add($userGroup);
+            $this->repository->add($userGroup);
         }
         return $userGroup;
     }
@@ -79,7 +91,7 @@ class FrontendUserGroupRepository extends \TYPO3\CMS\Extbase\Domain\Repository\F
     {
         $userGroup = $this->findByTitle($title);
         if ($userGroup) {
-            $this->remove($userGroup);
+            $this->repository->remove($userGroup);
         }
     }
 }

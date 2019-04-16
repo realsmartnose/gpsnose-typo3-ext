@@ -1,3 +1,6 @@
+1.1.4
+- FIX: Fix backend
+
 1.1.3
 - ADD: Mashup-Tokens extensions: GnMashupTokenOptions, GnMashupToken, API-calls extensions
 - UPD: Update SDK

@@ -19,4 +19,24 @@ namespace SmartNoses\Gpsnose\Domain\Model;
  */
 class FrontendUserGroup extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup
 {
+    /**
+     * @var string
+     */
+    protected $gpsnoseName = NULL;
+
+    /**
+     * @return mixed
+     */
+    public function getGpsnoseName()
+    {
+        return $this->gpsnoseName;
+    }
+
+    /**
+     * @param mixed $gpsnoseName 
+     */
+    public function setGpsnoseName($gpsnoseName)
+    {
+        $this->gpsnoseName = $gpsnoseName;
+    }
 }
