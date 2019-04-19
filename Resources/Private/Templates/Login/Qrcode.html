@@ -10,7 +10,7 @@
 <f:section name="pre">
 
 <script>
-var tLoginVerifyUrl = $('<textarea />').html('{f:uri.action(action: 'loginVerifie', controller: 'Api', pageType: '{settings.ajax.loginVerifie}', arguments: {mashup : mashup, loginId:'{login_id}'})}').text();
+var tLoginVerifyUrl = $('<textarea />').html("{f:uri.action(action: 'loginVerifie', controller: 'Api', pageType: '{settings.ajax.loginVerifie}', arguments: {mashup : mashup, loginId:'{login_id}'})}").text();
 var tReturnUrl = '{return_url}';
 var tQrCodeImage = '{qr_code_image}';
 $(document).ready(function() {

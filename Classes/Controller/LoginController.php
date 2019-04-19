@@ -83,17 +83,18 @@ class LoginController extends BaseController
     public function qrcodeAction()
     {
         $this->contentObj = $this->configurationManager->getContentObject();
+        $redirectPid = $this->contentObj->data['tx_gpsnose_mashup_login_redirect'];
 
         if ($this->isUserLoggedIn()) {
             if (isset($_GET['returnUrl'])) {
                 $this->redirectToUri($_GET['returnUrl']);
             } else {
-                $this->redirectToPage($this->contentObj->data['tx_gpsnose_mashup_login_redirect']);
+                $this->redirectToPage($redirectPid);
             }
         } else {
             $this->initFrontend();
 
-            /** @var $mashup \SmartNoses\Gpsnose\Domain\Model\Mashup */
+            /** @var \SmartNoses\Gpsnose\Domain\Model\Mashup */
             $mashup = $this->mashupRepository->findByCommunityTag(GnUtility::getGnSettingsMashupName());
 
             if ($mashup) {
@@ -114,6 +115,13 @@ class LoginController extends BaseController
 
             if (isset($_GET["returnUrl"])) {
                 $this->view->assign('return_url', $_GET["returnUrl"]);
+            } else if(intval($redirectPid) > 0) {
+                $uri = $this->uriBuilder
+                    ->reset()
+                    ->setTargetPageUid($redirectPid)
+                    ->setCreateAbsoluteUri(TRUE)
+                    ->build();
+                $this->view->assign('return_url', $uri);
             }
         }
     }
