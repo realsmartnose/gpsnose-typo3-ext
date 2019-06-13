@@ -23,6 +23,9 @@ Links
 :Git Repository:
 	https://github.com/realsmartnose/gpsnose-typo3-ext
 
+:YouTube:
+    https://www.youtube.com/channel/UC-9ReOZqODwwW-R0jmfTVOA
+
 :Contact:
 	`@realsmartnose <https://twitter.com/realsmartnose>`__
 

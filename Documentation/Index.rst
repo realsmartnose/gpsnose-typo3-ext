@@ -24,7 +24,7 @@ GpsNose
 		en
 
 	:Description:
-		Extension to integrate GpsNose into TPO3
+		Extension to integrate GpsNose into TYPO3 - GpsNose connects anonymous people to the real world using the web and mobiles
 
 	:Keywords:
 		community,gpsnose.com,comment,members,news

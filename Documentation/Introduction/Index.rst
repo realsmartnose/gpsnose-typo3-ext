@@ -17,6 +17,11 @@ List members, news, comments or let the user login as a frontend-user with the i
 
 All you have to do, install the plugin, configure it, it's that easy ;)
 
+Here's a tutorial, spoken in german, english subtitles are available:
+
+https://youtu.be/ef2E_jQJIZ4
+
+
 Screenshots
 -----------
 

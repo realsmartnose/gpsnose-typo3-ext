@@ -1,3 +1,6 @@
+1.1.6
+- FIX: Fix the documentation
+
 1.1.5
 - FIX: Fix redirect after login
 
