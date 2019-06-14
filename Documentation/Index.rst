@@ -24,7 +24,7 @@ GpsNose
 		en
 
 	:Description:
-		Extension to integrate GpsNose into TYPO3 - GpsNose connects anonymous people to the real world using the web and mobiles
+		Manual covering TYPO3 extension gpsnose - GpsNose connects anonymous people to the real world using the web and mobiles
 
 	:Keywords:
 		community,gpsnose.com,comment,members,news
@@ -33,10 +33,10 @@ GpsNose
 		2018
 
 	:Author:
-		Dev2
+		smart.nose
 
 	:Email:
-		info@gpsnose.com
+		dev@gpsnose.com
 
 	:License:
 		This document is published under the Open Publication License
