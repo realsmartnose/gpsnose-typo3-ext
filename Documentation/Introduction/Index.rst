@@ -19,7 +19,7 @@ All you have to do, install the plugin, configure it, it's that easy ;)
 
 Here's a tutorial in german (english subtitles are available):
 
-<https://www.youtube.com/watch?v=ef2E_jQJIZ4&t=66s>
+.. youtube:: ef2E_jQJIZ4
 
 
 
