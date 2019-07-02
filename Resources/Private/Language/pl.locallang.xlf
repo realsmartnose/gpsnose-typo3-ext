@@ -109,7 +109,7 @@
 				<source><![CDATA[Token]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenLabelHint">
-				<source><![CDATA[The label is required and a maximun of %max_characters% characters is allowed.]]></source>
+				<source><![CDATA[There is a maximun of %max_characters% characters allowed for the label.]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenLabelLabel">
 				<source><![CDATA[Label]]></source>

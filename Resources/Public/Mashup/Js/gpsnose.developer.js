@@ -113,7 +113,7 @@ var MashupAdminViewModel = (function () {
         });
         this.CreateMashupTokenLabelIsValid = ko.computed(function () {
             var label = _this.CreateMashupTokenLabel();
-            return label.length > 0 && label.length <= _this.CreateMashupTokenMaxLabelChars();
+            return label.length <= _this.CreateMashupTokenMaxLabelChars();
         });
         this.CreateMashupTokenValuePerUnitIsValid = ko.computed(function () {
             var valuePerUnit = _this.CreateMashupTokenValuePerUnit();
@@ -296,22 +296,22 @@ var MashupAdminViewModel = (function () {
         var firstChar = this.GetCommunityPrefix(value);
         switch (firstChar) {
             case "@":
-                icon = "lock";
+                icon = "lock fas fa-lock";
                 break;
             case "*":
-                icon = "eye-close";
+                icon = "eye-close fas fa-eye-slash";
                 break;
             case "%":
-                icon = "globe";
+                icon = "globe fas fa-globe-americas";
                 break;
         }
         additionalClass = additionalClass ? ' ' + additionalClass : '';
         if (icon != "" && value && value.length > 2) {
             var com = value.substr(1, value.length);
-            return '<span class="glyphicon glyphicon-' + icon + '"></span><span class="keyword-label' + additionalClass + '"> ' + com + '</span>';
+            return '<span class="glyphicon glyphicon-' + icon + '"></span> <span class="keyword-label' + additionalClass + '"> ' + com + '</span>';
         }
         else {
-            return '<span class="glyphicon glyphicon-globe"></span><span class="keyword-label' + additionalClass + '"> ' + value + '</span>';
+            return '<span class="glyphicon glyphicon-globe fas fa-globe-americas"></span> <span class="keyword-label' + additionalClass + '"> ' + value + '</span>';
         }
     };
     MashupAdminViewModel.prototype.GetCommunityPrefix = function (value) {

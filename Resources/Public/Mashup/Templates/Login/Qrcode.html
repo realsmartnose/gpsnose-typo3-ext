@@ -14,7 +14,7 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.8">
+<div class="ma-gpsnose" data-gn-version="1.0.9">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-login" data-bind="visible:true" style="display:none;">
 
@@ -22,7 +22,7 @@ Replace {record} with a unique id that identifies the entry
             <div class="col-md-3">
                 <div class="alert alert-info">
                     <h4>
-                        <span aria-hidden="true" class="glyphicon glyphicon-info-sign"></span>
+                        <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                         <span data-bind="text: ' ' + GetLangRes('Account_Login_lblTitle', 'Login')"></span>
                     </h4>
                     <span data-bind="text: GetLangRes('Account_Login_lblLoginText', 'To login, scan this QR code using your mobile GpsNose app please')"></span>
@@ -33,7 +33,7 @@ Replace {record} with a unique id that identifies the entry
                 <img class="ma-qrcode-image" data-bind="attr: { src: gn_data.Settings.QrCodeImage }, visible: gn_data.Settings.QrCodeImage" />
 
                 <div class="alert alert-danger" data-bind="visible: ! gn_data.Settings.QrCodeImage">
-                    <span aria-hidden="true" class="glyphicon glyphicon-info-sign"></span>
+                    <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                     <span data-bind="text: ' ' + GetLangRes('Common_lblUnknownError', 'An unknown error is occured!')"></span>
                 </div>
 

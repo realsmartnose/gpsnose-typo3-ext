@@ -28,28 +28,28 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.8">
+<div class="ma-gpsnose" data-gn-version="1.0.9">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-noses" data-bind="visible:true" style="display:none;">
 
         <div class="btn-group btn-group-xs ma-btn-group">
-            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.DetailUrl() }"></a>
+            <a class="btn btn-default btn-outline-secondary" data-external data-bind="html: Entity.DisplayName(), attr: { href: Entity.DetailUrl() }"></a>
             <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
         </div>
 
         <div data-bind="if: ! gn_data.User.LoginName">
             <div class="alert alert-info">
-                <span class="glyphicon glyphicon-info-sign"></span>
+                <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                 <span data-bind="text: ' ' + GetLangRes('Common_loginRequired', 'Please login first.')"></span>
                 <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.GetLoginUrl(gn_data.Settings.LoginUrl); }">
-                    <span class="glyphicon glyphicon-user"></span>
+                    <i class="glyphicon glyphicon-user fas fa-user"></i>
                     <span data-bind="text: ' ' + GetLangRes('Common_btnLogin', 'Login')"></span>
                 </button>
             </div>
         </div>
         <div data-bind="if: gn_data.User.LoginName">
             <div class="row publishers" data-bind="foreach: PageableNoses.Items">
-                <div class="grid-item col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="grid-item col-lg-2 col-md-3 col-sm-4 col-xs-6 col-6">
                     <div class="outer" data-external="true" data-bind="attr: { 'data-src': $data.DetailUrl() }">
                         <div class="thumbnail">
                             <img data-bind="attr: { src: $data.ImageUrl() + '@200' }" onerror="this.src=window.gn_data.Settings.ImagePath+'/EmptyUser.png'" />
@@ -59,8 +59,8 @@ Replace {record} with a unique id that identifies the entry
                             <div class="loginname">
                                 <div data-bind="text: $data.LoginName"></div>
                                 <div class="row">
-                                    <div class="col-xs-7 text-left" data-bind="text: GetAgeStringFromTicks($data.CreationTicks)"></div>
-                                    <div class="col-xs-5 text-right" data-bind="text: GetDistanceString($data)"></div>
+                                    <div class="col-xs-8 col-8 text-left" data-bind="text: GetAgeStringFromTicks($data.CreationTicks)"></div>
+                                    <div class="col-xs-4 col-4 text-right" data-bind="text: GetDistanceString($data)"></div>
                                 </div>
                             </div>
                         </div>
@@ -69,19 +69,19 @@ Replace {record} with a unique id that identifies the entry
             </div>
 
             <div class="alert alert-info" data-bind="visible: PageableNoses.Items().length == 0 && ! PageableNoses.ItemsRequestActive()">
-                <span class="glyphicon glyphicon-info-sign"></span>
+                <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                 <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoNoses', 'Currently there are no other Noses around')"></span>
             </div>
 
             <div class="text-center">
 
-                <div class="btn btn-default btn-lg" data-bind="click: function(){ PageableNoses.PageItems() }, visible: PageableNoses.HasMoreItems(), attr: { disabled: PageableNoses.ItemsRequestActive() }">
+                <div class="btn btn-default btn-outline-secondary btn-lg" data-bind="click: function(){ PageableNoses.PageItems() }, visible: PageableNoses.HasMoreItems(), attr: { disabled: PageableNoses.ItemsRequestActive() }">
                     <div data-bind="visible: ! PageableNoses.ItemsRequestActive()">
-                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <i class="glyphicon glyphicon-cloud-download fas fa-cloud-download-alt"></i>
                         <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
                     </div>
                     <div data-bind="visible: PageableNoses.ItemsRequestActive()">
-                        <span class="glyphicon glyphicon-repeat gly-spin"></span>
+                        <i class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></i>
                         <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
                     </div>
                 </div>

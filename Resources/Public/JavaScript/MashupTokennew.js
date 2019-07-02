@@ -9,7 +9,7 @@ define(['jquery', 'twbs/bootstrap-datetimepicker', 'maframework'], function($, d
         validateClass($payload, payloadIsValid);
 
         var $label = $('#label');
-        var labelIsValid = $label.val().length > 0 && $label.val().length <= GpsnoseMashupTokenLabelMaxChars;
+        var labelIsValid = $label.val().length <= GpsnoseMashupTokenLabelMaxChars;
         validateClass($label, labelIsValid);
 
         var $vpu = $('#valuePerUnit');

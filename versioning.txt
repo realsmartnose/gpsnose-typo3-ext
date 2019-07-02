@@ -1,3 +1,6 @@
+1.5.1
+- ADD: Add support for Bootstrap4
+
 1.5.0
 - FIX: Fix composer.json
 

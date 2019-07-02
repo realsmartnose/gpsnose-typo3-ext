@@ -27,17 +27,17 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.8">
+<div class="ma-gpsnose" data-gn-version="1.0.9">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-members" data-bind="visible:true" style="display:none;">
 
         <div class="btn-group btn-group-xs ma-btn-group">
-            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.DetailUrl() }"></a>
+            <a class="btn btn-default btn-outline-secondary" data-external data-bind="html: Entity.DisplayName(), attr: { href: Entity.DetailUrl() }"></a>
             <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
         </div>
 
         <div class="row publishers" data-bind="foreach: Members">
-            <div class="grid-item col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <div class="grid-item col-lg-2 col-md-3 col-sm-4 col-xs-6 col-6">
                 <div class="outer" data-external="true" data-bind="attr: { 'data-src': $data.NoseDto.DetailUrl() }">
                     <div class="thumbnail">
                         <img data-bind="attr: { src: $data.NoseDto.ImageUrl() + '@200' }" onerror="this.src=window.gn_data.Settings.ImagePath+'/EmptyUser.png'" />
@@ -54,13 +54,13 @@ Replace {record} with a unique id that identifies the entry
         </div>
         <div class="text-center">
 
-            <div class="btn btn-default btn-lg" data-bind="click: function(){ pageMembers() }, visible: HasMoreMembers(), attr: { disabled: MembersRequestActive() }">
+            <div class="btn btn-default btn-outline-secondary btn-lg" data-bind="click: function(){ pageMembers() }, visible: HasMoreMembers(), attr: { disabled: MembersRequestActive() }">
                 <div data-bind="visible: ! MembersRequestActive()">
-                    <span class="glyphicon glyphicon-cloud-download"></span>
+                    <i class="glyphicon glyphicon-cloud-download fas fa-cloud-download-alt"></i>
                     <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
                 </div>
                 <div data-bind="visible: MembersRequestActive()">
-                    <span class="glyphicon glyphicon-repeat gly-spin"></span>
+                    <i class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></i>
                     <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
                 </div>
             </div>
@@ -68,7 +68,7 @@ Replace {record} with a unique id that identifies the entry
         </div>
 
         <div class="alert alert-info" data-bind="visible: Members().length == 0 && ! MembersRequestActive()">
-            <span class="glyphicon glyphicon-info-sign"></span>
+            <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
             <span data-bind="text: ' ' + GetLangRes('Community_lblMembersNoEntryMessage', 'There are no members in this community currently.')"></span>
         </div>
 

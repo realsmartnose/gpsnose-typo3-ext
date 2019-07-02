@@ -5,7 +5,7 @@ define(['jquery'], function($, datepicker) {
 
     function validate() {
         var $label = $('#label');
-        var labelIsValid = $label.val().length > 0 && $label.val().length <= GpsnoseMashupTokenLabelMaxChars;
+        var labelIsValid = $label.val().length <= GpsnoseMashupTokenLabelMaxChars;
         validateClass($label, labelIsValid);
 
         var $vpu = $('#valuePerUnit');

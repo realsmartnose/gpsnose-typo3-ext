@@ -30,55 +30,55 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.8">
+<div class="ma-gpsnose" data-gn-version="1.0.9">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-pois" data-bind="visible:true" style="display:none;">
 
         <div class="btn-group btn-group-xs ma-btn-group">
-            <a class="btn btn-default" data-external data-bind="text: Entity.TagName, attr: { href: Entity.DetailUrl() }"></a>
+            <a class="btn btn-default btn-outline-secondary" data-external data-bind="html: Entity.DisplayName(), attr: { href: Entity.DetailUrl() }"></a>
             <a class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
         </div>
 
         <div data-bind="if: ! gn_data.User.LoginName">
             <div class="alert alert-info">
-                <span class="glyphicon glyphicon-info-sign"></span>
+                <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                 <span data-bind="text: ' ' + GetLangRes('Common_loginRequired', 'Please login first.')"></span>
                 <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.GetLoginUrl(gn_data.Settings.LoginUrl); }">
-                    <span class="glyphicon glyphicon-user"></span>
+                    <i class="glyphicon glyphicon-user fas fa-user"></i>
                     <span data-bind="text: ' ' + GetLangRes('Common_btnLogin', 'Login')"></span>
                 </button>
             </div>
         </div>
         <div data-bind="if: gn_data.User.LoginName">
-            <div class="grid">
-                <div class="pois" id="poisContainer" data-bind="if: PageablePois.Items().length > 0">
-                    <div class="grid-sizer col-lg-3 col-md-4 col-sm-6 col-xs-12"></div>
-                    <div data-bind="foreach: PageablePois.Items">
-                        <div class="grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <div data-external data-bind="attr: { 'data-src': $data.DetailUrl() }">
-                                <div class="outer">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <img class="media-object img-rounded media-height" data-bind="attr: { src: $data.ImageUrl() + '@100' }" onerror="ImageErrorHandler(this, window.gn_data.Settings.ImagePath+'/EmptyImage.png')" />
-                                        </div>
-                                        <div class="media-body">
-                                            <div class="media-height">
-                                                <h4 class="media-heading" data-bind="text: $data.Name"></h4>
-                                                <span data-bind="text: $data.Address"></span>
-                                                <div class="keywords-small">
-                                                    <ma-gpsnose-keywords params="keywordString: $data.Keywords"></ma-gpsnose-keywords>
-                                                </div>
-                                                <div class="clearfix"></div>
+            <div class="grid" data-bind="PageablePois.Items().length > 0">
+                <div class="pois" id="poisContainer" data-bind="foreach: PageablePois.Items()">
+                    <!-- ko if: ($index() === 0) -->
+                    <div class="grid-sizer col-lg-4 col-sm-6"></div>
+                    <!-- /ko -->
+                    <div class="grid-item col-lg-4 col-sm-6">
+                        <div data-external data-bind="attr: { 'data-src': $data.DetailUrl() }">
+                            <div class="outer">
+                                <div class="media mb-2">
+                                    <div class="media-left mr-2">
+                                        <img class="media-object img-rounded media-height" data-bind="attr: { src: $data.ImageUrl() + '@100' }" onerror="ImageErrorHandler(this, window.gn_data.Settings.ImagePath+'/EmptyImage.png')" />
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="media-height">
+                                            <h4 class="media-heading" data-bind="text: $data.Name"></h4>
+                                            <span data-bind="text: $data.Address"></span>
+                                            <div class="keywords-small">
+                                                <ma-gpsnose-keywords params="keywordString: $data.Keywords"></ma-gpsnose-keywords>
                                             </div>
+                                            <div class="clearfix"></div>
                                         </div>
                                     </div>
-                                    <div class="text-center">
-                                        <ma-gpsnose-rating params="percent: $data.RatingAvgPercent, count: $data.RatingCount, imagePath: gn_data.Settings.ImagePath"></ma-gpsnose-rating>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-9" data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></div>
-                                        <div class="col-xs-3 text-right" data-bind="text: GetDistanceString($data)"></div>
-                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <ma-gpsnose-rating params="percent: $data.RatingAvgPercent, count: $data.RatingCount, imagePath: gn_data.Settings.ImagePath"></ma-gpsnose-rating>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-8 col-8" data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></div>
+                                    <div class="col-xs-4 col-4 text-right" data-bind="text: GetDistanceString($data)"></div>
                                 </div>
                             </div>
                         </div>
@@ -87,19 +87,19 @@ $(document).ready(function() {
             </div>
 
             <div class="alert alert-info" data-bind="visible: PageablePois.Items().length == 0 && ! PageablePois.ItemsRequestActive()">
-                <span class="glyphicon glyphicon-info-sign"></span>
+                <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                 <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoPois', 'Currently there are no Pois around')"></span>
             </div>
 
             <div class="text-center">
 
-                <div class="btn btn-default btn-lg" data-bind="click: function(){ PageablePois.PageItems() }, visible: PageablePois.HasMoreItems(), attr: { disabled: PageablePois.ItemsRequestActive() }">
+                <div class="btn btn-default btn-outline-secondary btn-lg" data-bind="click: function(){ PageablePois.PageItems() }, visible: PageablePois.HasMoreItems(), attr: { disabled: PageablePois.ItemsRequestActive() }">
                     <div data-bind="visible: ! PageablePois.ItemsRequestActive()">
-                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <i class="glyphicon glyphicon-cloud-download fas fa-cloud-download-alt"></i>
                         <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
                     </div>
                     <div data-bind="visible: PageablePois.ItemsRequestActive()">
-                        <span class="glyphicon glyphicon-repeat gly-spin"></span>
+                        <i class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></i>
                         <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
                     </div>
                 </div>

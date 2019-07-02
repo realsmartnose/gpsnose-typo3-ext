@@ -2,6 +2,7 @@
     "BaseUrl": "https://www.gpsnose.com",
     "BaseDataUrl": "http://data.gpsnose.com",
     "ImagePath":"/Content/Mashup/Images",
+    "MashupsPageSize": 12,
     "NosesPageSize": 12,
     "NewsPageSize": 12,
     "PhotoBlogsPageSize": 10,

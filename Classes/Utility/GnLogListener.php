@@ -65,18 +65,27 @@ class GnLogListener implements GnILogListener
      */
     private function WriteSystemLog(string $message = NULL, int $level = 0)
     {
-        $message = str_replace('%', '%%', $message);
         if ($GLOBALS['BE_USER']) {
             try {
                 $GLOBALS['BE_USER']->simplelog($message, 'gpsnose', $level);
             } catch (\Exception $e1) {
-                $GLOBALS['BE_USER']->simplelog(utf8_encode($message), 'gpsnose', $level);
+                $message = str_replace('%', '%%', $message);
+                try {
+                    $GLOBALS['BE_USER']->simplelog($message, 'gpsnose', $level);
+                } catch (\Exception $e1) {
+                    $GLOBALS['BE_USER']->simplelog(utf8_encode($message), 'gpsnose', $level);
+                }
             }
         } else {
             try {
                 GeneralUtility::sysLog($message, 'gpsnose', $level);
             } catch (\Exception $e1) {
-                GeneralUtility::sysLog(utf8_encode($message), 'gpsnose', $level);
+                $message = str_replace('%', '%%', $message);
+                try {
+                    GeneralUtility::sysLog($message, 'gpsnose', $level);
+                } catch (\Exception $e1) {
+                    GeneralUtility::sysLog(utf8_encode($message), 'gpsnose', $level);
+                }
             }
         }
     }

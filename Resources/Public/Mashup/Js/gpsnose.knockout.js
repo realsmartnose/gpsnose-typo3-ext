@@ -162,8 +162,7 @@ var CommunityDetailViewModel = (function (_super) {
         return _this;
     }
     CommunityDetailViewModel.prototype.DisplayName = function () {
-        var comm = new KeywordDto(this.TagName);
-        return comm.GetHtml();
+        return this.Entity.DisplayName();
     };
     CommunityDetailViewModel.prototype.OnAddMembers = function (data) { };
     ;
@@ -174,7 +173,7 @@ var CommunityDetailViewModel = (function (_super) {
             this.MembersLastJoinTicks = data[data.length - 1].JoinTicks;
             for (var i in data) {
                 var member = new CommunityMemberDto(data[i]);
-                member.IsAdmin = member.LoginName == this.Entity.CreatorLoginName || (this.Entity.Admins && jQuery.inArray(member.LoginName, this.Entity.Admins) != -1);
+                member.IsAdmin = member.LoginName == this.Entity.CreatorLoginName() || (this.Entity.Admins() && jQuery.inArray(member.LoginName, this.Entity.Admins()) != -1);
                 this.Members.push(member);
             }
             if (data.length % this.MembersPageSize != 0)
@@ -230,36 +229,40 @@ var CarouselViewModel = (function (_super) {
         _this.Slides = ko.observableArray();
         _this.IsHidden(params && params.isHidden);
         _this.HasCarousel(params && params.hasCarousel);
-        _this.Slides.push(new CarouselItemDto(GetLangRes("Shared_HomePageCarouselView1_Title", "GpsNose"), GetLangRes("Shared_HomePageCarouselView1_Text", "Know your area.")));
+        _this.Slides.push(new CarouselItemDto(GetLangRes("Shared_HomePageCarouselView0_Title", ""), GetLangRes("Shared_HomePageCarouselView0_Text", "")));
         if (_this.HasCarousel()) {
             var carouselSlides = [
                 {
-                    title: GetLangRes("Shared_HomePageCarouselView2_Title", "Find new people"),
-                    text: GetLangRes("Shared_HomePageCarouselView2_Text", "The innovative GpsNose system allows you to meet new people nearby.")
+                    title: GetLangRes("Shared_HomePageCarouselView1_Title", ""),
+                    text: GetLangRes("Shared_HomePageCarouselView1_Text", "")
                 },
                 {
-                    title: GetLangRes("Shared_HomePageCarouselView3_Title", "Stay anonymous"),
-                    text: GetLangRes("Shared_HomePageCarouselView3_Text", "GpsNose can be used without any registration: you can stay anonymous and provide your email address later to use your login also from other devices.")
+                    title: GetLangRes("Shared_HomePageCarouselView2_Title", ""),
+                    text: GetLangRes("Shared_HomePageCarouselView2_Text", "")
                 },
                 {
-                    title: GetLangRes("Shared_HomePageCarouselView4_Title", "Write messages"),
-                    text: GetLangRes("Shared_HomePageCarouselView4_Text", "Direct communication without disclosing your email or phone number as we don\'t use the classic communication channels.")
+                    title: GetLangRes("Shared_HomePageCarouselView3_Title", ""),
+                    text: GetLangRes("Shared_HomePageCarouselView3_Text", "")
                 },
                 {
-                    title: GetLangRes("Shared_HomePageCarouselView5_Title", "Chat within your area"),
-                    text: GetLangRes("Shared_HomePageCarouselView5_Text", "You can chat within your area, meet new people and find new places")
+                    title: GetLangRes("Shared_HomePageCarouselView4_Title", ""),
+                    text: GetLangRes("Shared_HomePageCarouselView4_Text", "")
                 },
                 {
-                    title: GetLangRes("Shared_HomePageCarouselView6_Title", "Save your favorite places"),
-                    text: GetLangRes("Shared_HomePageCarouselView6_Text", "You can save a favorite location to be able to find it later again.")
+                    title: GetLangRes("Shared_HomePageCarouselView5_Title", ""),
+                    text: GetLangRes("Shared_HomePageCarouselView5_Text", "")
                 },
                 {
-                    title: GetLangRes("Shared_HomePageCarouselView7_Title", "Create and share tours"),
-                    text: GetLangRes("Shared_HomePageCarouselView7_Text", "You can record tours and share them with others.")
+                    title: GetLangRes("Shared_HomePageCarouselView6_Title", ""),
+                    text: GetLangRes("Shared_HomePageCarouselView6_Text", "")
                 },
                 {
-                    title: GetLangRes("Shared_HomePageCarouselView8_Title", "Share your location"),
-                    text: GetLangRes("Shared_HomePageCarouselView8_Text", "Your location is visible only for allowed users. You can share your location with somebody or send the location once per SMS/Email.")
+                    title: GetLangRes("Shared_HomePageCarouselView7_Title", ""),
+                    text: GetLangRes("Shared_HomePageCarouselView7_Text", "")
+                },
+                {
+                    title: GetLangRes("Shared_HomePageCarouselView8_Title", ""),
+                    text: GetLangRes("Shared_HomePageCarouselView8_Text", "")
                 }
             ];
             for (var k in carouselSlides) {
@@ -280,12 +283,12 @@ ko.components.register('ma-gpsnose-carousel', {
         '</ol>' +
         '<div class="carousel-inner" role="listbox" data-bind="foreach: Slides">' +
         '<div class="item" data-bind="css: { active: $index() == 0 }">' +
-        '<img data-bind="attr: { src: $parent.ImagePath() + \'/bg\' + ($index() > 0 ? $index() : \'\') + \'.png\', atr: Text }">' +
+        '<img data-bind="attr: { src: $parent.ImagePath() + \'/bg\' + $index() + \'.png\', atr: Text }">' +
         '<div class="container">' +
         '<div class="carousel-caption">' +
         '<div class="row">' +
         '<div class="col-xs-4">' +
-        '<img class="intropage"data-bind="attr: { src: $parent.ImagePath() + \'/fg\' + ($index() > 0 ? $index() : \'\') + \'.png\', atr: Text }">' +
+        '<img class="intropage"data-bind="attr: { src: $parent.ImagePath() + \'/fg\' + $index() + \'.png\', atr: Text }">' +
         '</div>' +
         '<div class="col-xs-8">' +
         '<h2 data-bind="text: Title"></h2>' +
@@ -1465,6 +1468,18 @@ var IndexViewModel = (function (_super) {
     function IndexViewModel() {
         var _this = _super.call(this) || this;
         _this.CommunityTag = ko.observable('');
+        _this.MashupPageUrl = '/Home/Page_Mashups';
+        _this.CommunityDetailUrl = '/Community/GetDetail';
+        _this.MashupsPageSize = gnSettings.MashupsPageSize;
+        _this.ShowMashups = ko.observable(true);
+        _this.PublicMashups = ko.observableArray();
+        _this.PublicMashupsLastKnownTagName = '%';
+        _this.HasMorePublicMashups = ko.observable(true);
+        _this.PublicMashupsRequestActive = ko.observable(false);
+        _this.ClosedMashups = ko.observableArray();
+        _this.ClosedMashupsLastKnownTagName = '@';
+        _this.HasMoreClosedMashups = ko.observable(true);
+        _this.ClosedMashupsRequestActive = ko.observable(false);
         _this.NosePageUrl = '/Home/Page_Noses';
         _this.Noses = ko.observableArray();
         _this.NosesPageSize = gnSettings.NosesPageSize;
@@ -1491,8 +1506,105 @@ var IndexViewModel = (function (_super) {
         });
         return _this;
     }
-    IndexViewModel.prototype.OnAddNoses = function () { };
+    IndexViewModel.prototype.OnAddPublicMashups = function () { };
     ;
+    IndexViewModel.prototype.AddPublicMashups = function (data) {
+        if (data == null)
+            return;
+        if (data.length > 0) {
+            this.PublicMashupsLastKnownTagName = data[data.length - 1];
+            for (var i in data)
+                this.PublicMashups.push(new CommunityDto({ 'TagName': data[i] }, new NoseDto({})));
+            if (data.length % this.MashupsPageSize != 0)
+                this.HasMorePublicMashups(false);
+        }
+        else {
+            this.HasMorePublicMashups(false);
+        }
+        if (this.OnAddPublicMashups)
+            this.OnAddPublicMashups();
+    };
+    ;
+    IndexViewModel.prototype.PagePublicMashups = function () {
+        var _this = this;
+        if (!this.ShowMashups() || this.PublicMashupsRequestActive() || !this.HasMorePublicMashups())
+            return;
+        this.PublicMashupsRequestActive(true);
+        jQuery.ajax({
+            type: 'POST',
+            url: this.MashupPageUrl,
+            cache: false,
+            data: {
+                lastKnownMashup: this.PublicMashupsLastKnownTagName,
+                pageSize: this.MashupsPageSize
+            },
+            dataType: 'json',
+            success: function (result) {
+                if (result && result.length > 0) {
+                    _this.AddPublicMashups(result);
+                }
+                else {
+                    _this.HasMorePublicMashups(false);
+                }
+                _this.PublicMashupsRequestActive(false);
+            },
+            error: function (jqxhr) {
+                if (jqxhr.status != 429) {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                }
+                _this.PublicMashupsRequestActive(false);
+            }
+        });
+    };
+    IndexViewModel.prototype.OnAddClosedMashups = function () { };
+    IndexViewModel.prototype.AddClosedMashups = function (data) {
+        if (data == null)
+            return;
+        if (data.length > 0) {
+            this.ClosedMashupsLastKnownTagName = data[data.length - 1];
+            for (var i in data)
+                this.ClosedMashups.push(new CommunityDto({ 'TagName': data[i] }, new NoseDto({})));
+            if (data.length % this.MashupsPageSize != 0)
+                this.HasMoreClosedMashups(false);
+        }
+        else {
+            this.HasMoreClosedMashups(false);
+        }
+        if (this.OnAddClosedMashups)
+            this.OnAddClosedMashups();
+    };
+    IndexViewModel.prototype.PageClosedMashups = function () {
+        var _this = this;
+        if (!this.ShowMashups() || this.ClosedMashupsRequestActive() || !this.HasMoreClosedMashups())
+            return;
+        this.ClosedMashupsRequestActive(true);
+        jQuery.ajax({
+            type: 'POST',
+            url: this.MashupPageUrl,
+            cache: false,
+            data: {
+                lastKnownMashup: this.ClosedMashupsLastKnownTagName,
+                pageSize: this.MashupsPageSize
+            },
+            dataType: 'json',
+            success: function (result) {
+                if (result && result.length > 0) {
+                    _this.AddClosedMashups(result);
+                }
+                else {
+                    _this.HasMoreClosedMashups(false);
+                }
+                _this.ClosedMashupsRequestActive(false);
+            },
+            error: function (jqxhr) {
+                if (jqxhr.status != 429) {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                }
+                _this.ClosedMashupsRequestActive(false);
+            }
+        });
+    };
+    IndexViewModel.prototype.OnAddNoses = function () { };
     IndexViewModel.prototype.AddNoses = function (data) {
         if (data == null)
             return;
@@ -1509,7 +1621,6 @@ var IndexViewModel = (function (_super) {
         if (this.OnAddNoses)
             this.OnAddNoses();
     };
-    ;
     IndexViewModel.prototype.PageNoses = function () {
         var _this = this;
         if (!this.ShowNoses() || this.NosesRequestActive() || !this.HasMoreNoses())
@@ -1543,7 +1654,6 @@ var IndexViewModel = (function (_super) {
         });
     };
     IndexViewModel.prototype.OnAddNews = function () { };
-    ;
     IndexViewModel.prototype.AddNews = function (data) {
         if (data == null)
             return;
@@ -1560,7 +1670,6 @@ var IndexViewModel = (function (_super) {
         if (this.OnAddNews)
             this.OnAddNews();
     };
-    ;
     IndexViewModel.prototype.PageNews = function () {
         var _this = this;
         if (!this.ShowNews() || this.NewsRequestActive() || !this.HasMoreNews())
@@ -1638,25 +1747,37 @@ var CommentDto = (function () {
 var CommunityDto = (function () {
     function CommunityDto(data, user) {
         var _this = this;
+        this.TagName = ko.observable("");
+        this.Description = ko.observable("");
+        this.CreatorLoginName = ko.observable("");
+        this.CreationTicks = ko.observable("0");
+        this.MembersCount = ko.observable(0);
+        this.Acls = ko.observable(0);
+        this.Admins = ko.observableArray([]);
+        this.IsInCommunity = ko.observable(false);
+        this.HasRequested = ko.observable(false);
+        this.IsRequestActive = ko.observable(false);
+        this.LoginName = ko.observable("");
+        this.NoseDto = ko.observable();
         this.ThumbSize = "@100";
         this.ImageUrl = function () {
-            return gnSettings.BaseDataUrl + "/commimg/" + encodeURIComponent(_this.TagName);
+            return gnSettings.BaseDataUrl + "/commimg/" + encodeURIComponent(_this.TagName());
         };
         this.PreviewUrl = function () {
-            return "/community/preview?profileTag=" + encodeURIComponent(_this.TagName);
+            return "/community/preview?profileTag=" + encodeURIComponent(_this.TagName());
         };
         this.DetailUrl = function () {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/community/index?profileTag=" + encodeURIComponent(_this.TagName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '&lid=' + gnSettings.LoginId : '');
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/community/index?profileTag=" + encodeURIComponent(_this.TagName()) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '&lid=' + gnSettings.LoginId : '');
         };
         this.ShareUrl = function () {
-            return gnSettings.BaseUrl + "/community/index?profileTag=" + encodeURIComponent(_this.TagName);
+            return gnSettings.BaseUrl + "/community/index?profileTag=" + encodeURIComponent(_this.TagName());
         };
         this.IsLoginNameAdmin = function () {
-            return _this.LoginName == _this.CreatorLoginName || jQuery.inArray(_this.LoginName, _this.Admins) != -1;
+            return _this.LoginName() == _this.CreatorLoginName() || jQuery.inArray(_this.LoginName(), _this.Admins()) != -1;
         };
         this.WebMashupUrl = function () {
-            if (_this.TagName.indexOf(".") != -1) {
-                var parts = _this.TagName.substring(1).split("@");
+            if (_this.TagName().indexOf(".") != -1) {
+                var parts = _this.TagName().substring(1).split("@");
                 if (parts.length > 0) {
                     return "http://" + parts[0];
                 }
@@ -1664,28 +1785,53 @@ var CommunityDto = (function () {
             return null;
         };
         this.IsAclListMembers = function () {
-            return (_this.Acls & CommunityAcl.ListMembers) == CommunityAcl.ListMembers;
+            return (_this.Acls() & CommunityAcl.ListMembers) == CommunityAcl.ListMembers;
         };
         this.IsMembersListAllowed = function () {
             return _this.IsAclListMembers() || _this.IsLoginNameAdmin();
         };
         this.IsAclMembersInviteMembers = function () {
-            return (_this.Acls & CommunityAcl.MembersInviteMembers) == CommunityAcl.MembersInviteMembers;
+            return (_this.Acls() & CommunityAcl.MembersInviteMembers) == CommunityAcl.MembersInviteMembers;
         };
         this.IsInviteMembersAllowed = function () {
-            return (_this.IsAclMembersInviteMembers() && (_this.IsInCommunity || _this.NoseDto.IsInCommunity(_this.TagName))) || _this.IsLoginNameAdmin();
+            return (_this.IsAclMembersInviteMembers() && (_this.IsInCommunity || _this.NoseDto.IsInCommunity(_this.TagName()))) || _this.IsLoginNameAdmin();
         };
         this.IsAclCommentsFromMembers = function () {
-            return (_this.Acls & CommunityAcl.CommentsFromMembers) == CommunityAcl.CommentsFromMembers;
+            return (_this.Acls() & CommunityAcl.CommentsFromMembers) == CommunityAcl.CommentsFromMembers;
         };
         this.CommentItemType = CommentItemType.Community;
-        this.IsCommentsAllowed = function () { return (_this.IsAclCommentsFromMembers() && (_this.IsInCommunity || _this.NoseDto.IsInCommunity(_this.TagName) || !_this.LoginName)) || _this.IsLoginNameAdmin(); };
-        this.IsUserAdmin = function (loginName) { return _this.LoginName == loginName || jQuery.inArray(loginName, _this.Admins) != -1; };
-        if (data)
-            jQuery.extend(this, data);
-        this.LoginName = user.LoginName;
-        this.NoseDto = new NoseDto(user);
+        this.IsCommentsAllowed = function () { return (_this.IsAclCommentsFromMembers() && (_this.IsInCommunity || _this.NoseDto.IsInCommunity(_this.TagName()) || !_this.LoginName())) || _this.IsLoginNameAdmin(); };
+        this.IsUserAdmin = function (loginName) { return _this.LoginName() == loginName || jQuery.inArray(loginName, _this.Admins()) != -1; };
+        this.Update(data);
+        this.LoginName(user.LoginName);
+        this.NoseDto(new NoseDto(user));
     }
+    CommunityDto.prototype.Update = function (data) {
+        if (data.TagName)
+            this.TagName(data.TagName);
+        if (data.Description)
+            this.Description(data.Description);
+        if (data.CreatorLoginName)
+            this.CreatorLoginName(data.CreatorLoginName);
+        if (data.CreationTicks)
+            this.CreationTicks(data.CreationTicks);
+        if (data.MembersCount)
+            this.MembersCount(data.MembersCount);
+        if (data.Acls)
+            this.Acls(data.Acls);
+        if (data.Admins)
+            this.Admins(data.Admins);
+        if (data.IsInCommunity)
+            this.IsInCommunity(data.IsInCommunity);
+        if (data.LoginName)
+            this.LoginName(data.LoginName);
+        if (data.HasRequested)
+            this.HasRequested(data.HasRequested);
+    };
+    CommunityDto.prototype.DisplayName = function () {
+        var comm = new KeywordDto(this.TagName());
+        return comm.GetHtml();
+    };
     return CommunityDto;
 }());
 var CommunityMemberDto = (function () {
@@ -1783,7 +1929,7 @@ var KeywordDto = (function () {
         var icon = this.GetIcon();
         if (icon != '' && value && value.length > 2) {
             var com = value.substr(1, value.length);
-            return '<span class="glyphicon glyphicon-' + icon + '"></span><span class="keyword-label">' + com + '</span>';
+            return '<span class="glyphicon glyphicon-' + icon + '"></span> <span class="keyword-label">' + com + '</span>';
         }
         else {
             return value;
@@ -1798,13 +1944,13 @@ var KeywordDto = (function () {
         var firstChar = value.charAt(0);
         switch (firstChar) {
             case "@":
-                icon = "lock";
+                icon = "lock fas fa-lock";
                 break;
             case "*":
-                icon = "eye-close";
+                icon = "eye-close fas fa-eye-slash";
                 break;
             case "%":
-                icon = "globe";
+                icon = "globe fas fa-globe-americas";
                 break;
         }
         return icon;
@@ -2161,24 +2307,24 @@ var NearbyViewModel = (function (_super) {
     __extends(NearbyViewModel, _super);
     function NearbyViewModel(communityDto, user) {
         var _this = _super.call(this) || this;
-        _this.TagName = communityDto.TagName;
-        _this.NoseDto = new NoseDto({ "LoginName": communityDto.CreatorLoginName });
         _this.Entity = new CommunityDto(communityDto, user);
-        _this.PageableNoses = new PageableItem(communityDto.TagName, '/Nearby/Noses', gnSettings.NearbyNosesPageSize, function (data) {
+        _this.TagName = _this.Entity.TagName();
+        _this.NoseDto = new NoseDto({ "LoginName": _this.Entity.CreatorLoginName() });
+        _this.PageableNoses = new PageableItem(_this.Entity.TagName(), '/Nearby/Noses', gnSettings.NearbyNosesPageSize, function (data) {
             var nose = new NoseDto(data);
-            nose.IsAdmin = nose.LoginName == _this.Entity.CreatorLoginName || (_this.Entity.Admins && jQuery.inArray(nose.LoginName, _this.Entity.Admins) != -1);
+            nose.IsAdmin = nose.LoginName == _this.Entity.CreatorLoginName() || (_this.Entity.Admins() && jQuery.inArray(nose.LoginName, _this.Entity.Admins()) != -1);
             return nose;
         });
-        _this.PageablePois = new PageableItem(communityDto.TagName, '/Nearby/Pois', gnSettings.NearbyPoisPageSize, function (data) {
+        _this.PageablePois = new PageableItem(_this.Entity.TagName(), '/Nearby/Pois', gnSettings.NearbyPoisPageSize, function (data) {
             return new PoiDto(data);
         });
-        _this.PageableImpressions = new PageableItem(communityDto.TagName, '/Nearby/Impressions', gnSettings.NearbyImpressionsPageSize, function (data) {
+        _this.PageableImpressions = new PageableItem(_this.Entity.TagName(), '/Nearby/Impressions', gnSettings.NearbyImpressionsPageSize, function (data) {
             return new PhotoBlogDto(data);
         });
-        _this.PageableTracks = new PageableItem(communityDto.TagName, '/Nearby/Tracks', gnSettings.NearbyToursPageSize, function (data) {
+        _this.PageableTracks = new PageableItem(_this.Entity.TagName(), '/Nearby/Tracks', gnSettings.NearbyToursPageSize, function (data) {
             return new TourDto(data);
         });
-        _this.PageableEvents = new PageableItem(communityDto.TagName, '/Nearby/Events', gnSettings.NearbyEventsPageSize, function (data) {
+        _this.PageableEvents = new PageableItem(_this.Entity.TagName(), '/Nearby/Events', gnSettings.NearbyEventsPageSize, function (data) {
             return new EventDto(data);
         });
         return _this;
