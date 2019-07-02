@@ -1,3 +1,6 @@
+1.5.2
+- ADD: Add spin to Mashup-css
+
 1.5.1
 - ADD: Add support for Bootstrap4
 
