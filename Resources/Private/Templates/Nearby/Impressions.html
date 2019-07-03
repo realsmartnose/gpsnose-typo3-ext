@@ -43,7 +43,7 @@ $(document).ready(function() {
             <div class="alert alert-info">
                 <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                 <span data-bind="text: ' ' + GetLangRes('Common_loginRequired', 'Please login first.')"></span>
-                <button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.GetLoginUrl(gn_data.Settings.LoginUrl); }">
+                <button type="button" class="btn btn-info btn-xs pull-right float-right" data-bind="click: function() { document.location.href = $data.GetLoginUrl(gn_data.Settings.LoginUrl); }">
                     <i class="glyphicon glyphicon-user fas fa-user"></i>
                     <span data-bind="text: ' ' + GetLangRes('Common_btnLogin', 'Login')"></span>
                 </button>

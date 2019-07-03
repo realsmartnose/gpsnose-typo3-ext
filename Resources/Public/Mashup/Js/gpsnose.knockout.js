@@ -300,11 +300,11 @@ ko.components.register('ma-gpsnose-carousel', {
         '</div>' +
         '</div>' +
         '<a class="left carousel-control" href="#carousel1" role="button" data-slide="prev" data-bind="visible: Slides().length > 1">' +
-        '<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>' +
+        '<i class="glyphicon glyphicon-chevron-left"></i>' +
         '<span class="sr-only">Previous</span>' +
         '</a>' +
         '<a class="right carousel-control" href="#carousel1" role="button" data-slide="next" data-bind="visible: Slides().length > 1">' +
-        '<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>' +
+        '<i class="glyphicon glyphicon-chevron-right"></i>' +
         '<span class="sr-only">Next</span>' +
         '</a>' +
         '</div>' +
@@ -574,16 +574,16 @@ ko.components.register('ma-gpsnose-comments', {
         '<h3 data-bind="text: GetLangRes(\'Common_lblComments\', \'Comments\'), visible: ! HideTitle"></h3>' +
         '<div data-bind="if: IsAddAllowed() && IsLoggedIn() && ! IsActivated()">' +
         '<div class="alert alert-info">' +
-        '<span class="glyphicon glyphicon-info-sign"></span>' +
+        '<i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Comment_lblActivationRequired\', \'To add comments, it is required to validate your account, please validate your account in the GpsNose-App!\')"></span>' +
         '</div>' +
         '</div>' +
         '<div data-bind="if: Entity && Entity.IsCommentsAllowed && ! IsLoggedIn()">' +
         '<div class="alert alert-info">' +
-        '<span class="glyphicon glyphicon-info-sign"></span>' +
+        '<i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Community_loginRequired\', \'Login first to interact\')"></span>' +
-        '<button type="button" class="btn btn-info btn-xs pull-right" data-bind="click: function() { document.location.href = $data.GetLoginUrl($data.LoginUrl); }">' +
-        '<span class="glyphicon glyphicon-user"></span>' +
+        '<button type="button" class="btn btn-info btn-xs pull-right float-right" data-bind="click: function() { document.location.href = $data.GetLoginUrl($data.LoginUrl); }">' +
+        '<i class="glyphicon glyphicon-user fas fa-user"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnLogin\', \'Login\')"></span>' +
         '</button>' +
         '</div>' +
@@ -591,44 +591,43 @@ ko.components.register('ma-gpsnose-comments', {
         '<div data-bind="if: IsAddAllowed() && IsLoggedIn() && IsActivated()">' +
         '<form onsubmit="AddComment()">' +
         '<div class="form-group">' +
-        '<div>' +
         '<div class="input-group">' +
-        '<span class="input-group-btn">' +
-        '<div class="btn btn-default" type="button" style="letter-spacing:-2px;" data-fancybox data-src="#moods-dialog" data-bind="attr: { \'data-remove\': MA_GPSNOSE_IS_MASHUP }">' +
+        '<div class="input-group-btn input-group-prepend">' +
+        '<div class="btn btn-default btn-outline-secondary" type="button" style="letter-spacing:-2px;" data-fancybox data-src="#moods-dialog" data-bind="attr: { \'data-remove\': MA_GPSNOSE_IS_MASHUP }">' +
         '&#x1F60A;&#x1F601;&#x1F631;&#x1F614;' +
         '</div>' +
-        '<button type="button" class="btn btn-default" data-bind="click: function() { LongComment() }">' +
-        '<span class="glyphicon glyphicon-align-left"></span> ' +
+        '<button type="button" class="btn btn-default btn-outline-secondary" data-bind="click: function() { LongComment() }">' +
+        '<i class="glyphicon glyphicon-align-left fas fa-align-left"></i> ' +
         '</button>' +
-        '</span>' +
+        '</div>' +
         '<input type="text" maxlength="1000" class="form-control" data-bind="textInput: CommentAddText, attr: { \'placeholder\': GetLangRes(\'Common_lblCommentAddHint\', \'Write comment\') }" />' +
-        '<span class="input-group-btn">' +
+        '<div class="input-group-btn input-group-append">' +
         '<button class="btn btn-primary" type="submit" data-bind="attr: { \'disabled\': SaveCommentRequestActive() }, click: function(){ AddComment() }">' +
-        '<span class="glyphicon glyphicon-comment" data-bind="visible: ! SaveCommentRequestActive()"></span> ' +
-        '<span class="glyphicon glyphicon-repeat gly-spin" data-bind="visible: SaveCommentRequestActive()"></span> ' +
+        '<i class="glyphicon glyphicon-comment fas fa-comment-alt" data-bind="visible: ! SaveCommentRequestActive()"></i> ' +
+        '<i class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt" data-bind="visible: SaveCommentRequestActive()"></i> ' +
         '<span data-bind="text: GetLangRes(\'Common_btnSend\', \'Send\')"></span>' +
         '</button>' +
-        '</span>' +
         '</div>' +
         '</div>' +
         '</div>' +
         '</form>' +
         '<div id="moods-dialog" data-bind="foreach: Moods" style="display:none;" class="moods-dialog">' +
-        '<div class="btn btn-default" data-bind="text: $data, click: function() { if (jQuery().fancybox) jQuery.fancybox.close(true); $parent.CommentAddMood($data); }"></div>' +
+        '<div class="btn btn-default btn-outline-secondary" data-bind="text: $data, click: function() { if (jQuery().fancybox) jQuery.fancybox.close(true); $parent.CommentAddMood($data); }"></div>' +
         '</div>' +
         '</div>' +
         '<div data-bind="if: Comments().length == 0">' +
         '<div class="alert alert-info" data-bind="text: GetLangRes(\'Common_lblNoCommentsAvailable\', \'Currently there are no comments available for this item.\')"></div>' +
         '</div>' +
         '<div class="comments" data-bind="if: Comments().length > 0">' +
-        '<div class="grid">' +
-        '<div class="grid-sizer col-md-4 col-sm-6 col-xs-12"></div>' +
-        '<div data-bind="foreach: Comments.sort(function (l, r) { return l.CreationTicks < r.CreationTicks ? 1 : -1 })">' +
-        '<div class="grid-item col-md-4 col-sm-6 col-xs-12">' +
+        '<div class="grid row" data-bind="foreach: Comments.sort(function (l, r) { return l.CreationTicks < r.CreationTicks ? 1 : -1 })">' +
+        '<!-- ko if: ($index() === 0) -->' +
+        '<div class="grid-sizer col-md-4 col-sm-6"></div>' +
+        '<!-- /ko -->' +
+        '<div class="grid-item col-md-4 col-sm-6">' +
         '<div class="outer">' +
-        '<div class="media">' +
-        '<div class="media-left">' +
-        '<img class="media-object img-circle" width="32px" data-bind="attr: { src: $data.NoseDto.ImageUrl() + \'@100\', onerror: \'ImageErrorHandler(this, \\\'\' + $parent.ImagePath() + \'/EmptyUser.png\\\')\' }" />' +
+        '<div class="media mb-2">' +
+        '<div class="media-left mr-2">' +
+        '<img class="media-object img-circle rounded-circle" width="32px" data-bind="attr: { src: $data.NoseDto.ImageUrl() + \'@100\', onerror: \'ImageErrorHandler(this, \\\'\' + $parent.ImagePath() + \'/EmptyUser.png\\\')\' }" />' +
         '</div>' +
         '<div class="media-body middle" data-bind="text: $data.Creator"></div>' +
         '<div class="media-body middle mood" data-bind="text: $data.Mood"></div>' +
@@ -637,19 +636,17 @@ ko.components.register('ma-gpsnose-comments', {
         '<div data-bind="text: $data.Text, visible: HasText(), css: ($data.Text && $data.Text.length > 20 ? \'text\' : \'text-big\')"></div>' +
         '<div class="clearfix">' +
         '<img class="ma-crown" data-bind="attr: { src: $parent.ImagePath() + \'/IcActionCrown.png\' }, visible: $parent.Entity.IsUserAdmin($data.Creator)" />' +
-        '<div class="btn-group btn-group-xs pull-right" role="group" aria-label="share">' +
-        '<a class="btn btn-default" data-popup data-bind="attr: { href: $data.NoseDto.DetailUrl(), title: GetLangRes(\'Common_btnShowProfile\', \'Show profile\') }">' +
-        '<span aria-hidden="true" class="glyphicon glyphicon-user"></span>' +
+        '<div class="btn-group btn-group-xs pull-right float-right" role="group" aria-label="share">' +
+        '<a class="btn btn-default btn-outline-secondary" data-popup data-bind="attr: { href: $data.NoseDto.DetailUrl(), title: GetLangRes(\'Common_btnShowProfile\', \'Show profile\') }">' +
+        '<i class="glyphicon glyphicon-user fas fa-user"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnShowProfile\', \'Show profile\')"></span>' +
         '</a>' +
-        '<div class="btn btn-default" data-bind="visible: $data.HasText(), click: function() { if (! $parent.SaveCommentRequestActive()) { if (jQuery().fancybox) jQuery.fancybox.close(true); $parent.EditComment($data); } }, attr: { \'disabled\': $parent.SaveCommentRequestActive(), \'data-remove\': $parent.LoginName() != $data.Creator, title: GetLangRes(\'Common_btnEdit\', \'Edit\') }">' +
-        '<span aria-hidden="true" class="glyphicon glyphicon-edit"></span>' +
+        '<div class="btn btn-default btn-outline-secondary" data-bind="visible: $data.HasText(), click: function() { if (! $parent.SaveCommentRequestActive()) { if (jQuery().fancybox) jQuery.fancybox.close(true); $parent.EditComment($data); } }, attr: { \'disabled\': $parent.SaveCommentRequestActive(), \'data-remove\': $parent.LoginName() != $data.Creator, title: GetLangRes(\'Common_btnEdit\', \'Edit\') }">' +
+        '<i class="glyphicon glyphicon-edit fas fa-edit"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnEdit\', \'Edit\')"></span>' +
         '</div>' +
         '<div class="btn btn-danger" data-bind="click: function() { if (! $parent.SaveCommentRequestActive()) $parent.DeleteComment($data); }, attr: { \'disabled\': $parent.SaveCommentRequestActive(), \'data-remove\': $parent.LoginName() != $data.Creator, title: GetLangRes(\'Common_btnDelete\', \'Delete\') }">' +
-        '<span aria-hidden="true" class="glyphicon glyphicon-remove"></span>' +
-        '</div>' +
-        '</div>' +
+        '<i class="glyphicon glyphicon-remove fas fa-times"></i>' +
         '</div>' +
         '</div>' +
         '</div>' +
@@ -658,13 +655,13 @@ ko.components.register('ma-gpsnose-comments', {
         '</div>' +
         '</div>' +
         '<div class="text-center">' +
-        '<div class="btn btn-default btn-lg" data-bind="click: function(){ PageComments() }, visible: HasMoreComments(), attr: { disabled: CommentsRequestActive() }">' +
+        '<div class="btn btn-default btn-outline-secondary btn-lg" data-bind="click: function(){ PageComments() }, visible: HasMoreComments(), attr: { disabled: CommentsRequestActive() }">' +
         '<div data-bind="visible: ! CommentsRequestActive()">' +
-        '<span class="glyphicon glyphicon-cloud-download"></span>' +
+        '<i class="glyphicon glyphicon-cloud-download fas fa-cloud-download-alt"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_lblLoadMore\', \'more..\')"></span>' +
         '</div>' +
         '<div data-bind="visible: CommentsRequestActive()">' +
-        '<span class="glyphicon glyphicon-repeat gly-spin"></span>' +
+        '<span class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></span>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_lblRequestInProgress\', \'Request in progress\')"></span>' +
         '</div>' +
         '</div>' +
@@ -776,19 +773,20 @@ ko.components.register('ma-gpsnose-dialog', {
         '<form data-bind="submit: function(){ ClickOkButton() }">' +
         '<div class="modal-content">' +
         '<div class="modal-header" data-bind="visible: Title().length > 0">' +
-        '<button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="attr: { \'aria-label\': GetLangRes(\'Common_btnClose\', \'Close\') }"><span aria-hidden="true">&times;</span></button>' +
+        '<button type="button" class="close d-none" data-dismiss="modal" aria-label="Close" data-bind="attr: { \'aria-label\': GetLangRes(\'Common_btnClose\', \'Close\') }"><span>&times;</span></button>' +
         '<h4 class="modal-title" data-bind="text: $data.Title"></h4>' +
+        '<button type="button" class="close hidden" data-dismiss="modal" aria-label="Close" data-bind="attr: { \'aria-label\': GetLangRes(\'Common_btnClose\', \'Close\') }"><span>&times;</span></button>' +
         '</div>' +
         '<div class="modal-body">' +
         '<span data-bind="html: Message"></span>' +
         '</div>' +
         '<div class="modal-footer">' +
-        '<button type="button" class="btn btn-default" data-dismiss="modal">' +
-        '<span aria-hidden="true" class="glyphicon glyphicon-remove"></span>' +
+        '<button type="button" class="btn btn-default btn-outline-secondary" data-dismiss="modal">' +
+        '<i class="glyphicon glyphicon-remove fas fa-times"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnClose\', \'Close\')"></span>' +
         '</button>' +
         '<button type="button" class="btn btn-primary" data-bind="visible: HasOkCallback(), click: function(){ ClickOkButton() }, attr: { \'disabled\': OkClicked() }">' +
-        '<span aria-hidden="true" class="glyphicon glyphicon-ok"></span>' +
+        '<i class="glyphicon glyphicon-ok fas fa-check"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnOk\', \'OK\')"></span>' +
         '</button>' +
         '</div>' +
@@ -823,7 +821,7 @@ ko.components.register('ma-gpsnose-footer', {
         '<span data-bind="if: ! HideSupportMail()">' +
         '<br />' +
         '<a href="mailto:iphone@gpsnose.com">' +
-        '<span aria-hidden="true" class="glyphicon glyphicon-envelope"></span>' +
+        '<i class="glyphicon glyphicon-envelope fas fa-envelope"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Shared_Footer_lblSupportIos\', \'iOS support\')"></span>' +
         '</a>' +
         '</span>' +
@@ -837,7 +835,7 @@ ko.components.register('ma-gpsnose-footer', {
         '<span data-bind="if: ! HideSupportMail()">' +
         '<br />' +
         '<a href="mailto:android@gpsnose.com">' +
-        '<span aria-hidden="true" class="glyphicon glyphicon-envelope"></span>' +
+        '<i class="glyphicon glyphicon-envelope fas fa-envelope"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Shared_Footer_lblSupportAndroid\', \'Android support\') "></span>' +
         '</a>' +
         '</span>' +
@@ -893,10 +891,10 @@ ko.components.register('ma-gpsnose-keepalive', {
     viewModel: KeepAliveViewModel,
     template: '<div data-bind="if: ! IsLoggedIn()">' +
         '<div class="alert alert-danger">' +
-        '<span class="glyphicon glyphicon-info-sign"></span>' +
+        '<i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_lblLoggedOut\', \'You have been logged out. To continue with your work, you have to sign in again.\')"></span>' +
-        '<button type="button" class="btn btn-danger btn-xs pull-right" data-bind="click: function() { location.reload(); }">' +
-        '<span class="glyphicon glyphicon-user"></span>' +
+        '<button type="button" class="btn btn-danger btn-xs pull-right float-right" data-bind="click: function() { location.reload(); }">' +
+        '<i class="glyphicon glyphicon-user fas fa-user"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnLogin\', \'Login\')"></span>' +
         '</button>' +
         '</div>' +
@@ -1000,7 +998,7 @@ ko.components.register('ma-gpsnose-keywords', {
         '</div>' +
         '</div>' +
         '<div class="alert alert-info" data-bind="visible: Keywords().length == 0 && NoEntryLabel()">' +
-        '<span class="glyphicon glyphicon-info-sign"></span>' +
+        '<i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>' +
         '<span data-bind="html: \' \' + NoEntryLabel()"></span>' +
         '</div>' +
         '<div data-bind="foreach: Keywords">' +
@@ -1157,16 +1155,16 @@ ko.components.register('ma-gpsnose-navbar', {
         '<div class="media-body">' +
         '<div class="btn-group-vertical btn-group-xs" role="group" aria-label="share">' +
         '<div class="btn btn-default" data-src="#share" data-fancybox data-bind="attr: { title: GetLangRes(\'Common_btnShare\', \'Share\') }">' +
-        '<span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span><span class="hidden-xs" data-bind="text: \' \' + GetLangRes(\'Common_btnShare\', \'Share\')"></span>' +
+        '<i class="glyphicon glyphicon-qrcode"></i><span class="hidden-xs" data-bind="text: \' \' + GetLangRes(\'Common_btnShare\', \'Share\')"></span>' +
         '</div>' +
         '<div class="btn btn-default hidden" data-fancybox data-src="#poke-moods-dialog" data-bind="attr: { title: GetLangRes(\'Common_btnPoke\', \'Knock\'), \'data-remove\': ! User.LoginName || Profile.LoginName == User.LoginName }, css: { \'hidden\': ! User.LoginName || Profile.LoginName == User.LoginName }">' +
-        '<span class="glyphicon glyphicon-hand-left" aria-hidden="true"></span><span class="hidden-xs" data-bind="text: \' \' + GetLangRes(\'Common_btnPoke\', \'Knock\')"></span>' +
+        '<i class="glyphicon glyphicon-hand-left"></i><span class="hidden-xs" data-bind="text: \' \' + GetLangRes(\'Common_btnPoke\', \'Knock\')"></span>' +
         '</div>' +
         '<a class="btn btn-default hidden" data-bind="attr: { href: GetLoginUrl(null), title: GetLangRes(\'Common_loginToPoke\', \'Login to Knock\'), \'data-remove\': User.LoginName }, css: { \'hidden\': User.LoginName }">' +
-        '<span class="glyphicon glyphicon-hand-left" aria-hidden="true"></span><span class="hidden-xs" data-bind="text: \' \' + GetLangRes(\'Common_loginToPoke\', \'Login to Knock\')"></span>' +
+        '<i class="glyphicon glyphicon-hand-left"></i><span class="hidden-xs" data-bind="text: \' \' + GetLangRes(\'Common_loginToPoke\', \'Login to Knock\')"></span>' +
         '</a>' +
         '<a class="btn btn-default hidden" data-external data-bind="attr: { href: GetGoogleMapsLink(Profile.LastActivityLatitude, Profile.LastActivityLongitude), title: GetLangRes(\'Common_showOnMap\', \'Show on map\'), \'data-remove\': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }, css: { \'hidden\': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }">' +
-        '<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span><span class="hidden-xs" data-bind="text: \' \' + GetLangRes(\'Common_showOnMap\', \'Show on map\')"></span>' +
+        '<i class="glyphicon glyphicon-map-marker"></i><span class="hidden-xs" data-bind="text: \' \' + GetLangRes(\'Common_showOnMap\', \'Show on map\')"></span>' +
         '</a>' +
         '</div>' +
         '</div>' +
@@ -1801,7 +1799,7 @@ var CommunityDto = (function () {
         };
         this.CommentItemType = CommentItemType.Community;
         this.IsCommentsAllowed = function () { return (_this.IsAclCommentsFromMembers() && (_this.IsInCommunity || _this.NoseDto.IsInCommunity(_this.TagName()) || !_this.LoginName())) || _this.IsLoginNameAdmin(); };
-        this.IsUserAdmin = function (loginName) { return _this.LoginName() == loginName || jQuery.inArray(loginName, _this.Admins()) != -1; };
+        this.IsUserAdmin = function (loginName) { return _this.CreatorLoginName() == loginName || jQuery.inArray(loginName, _this.Admins()) != -1; };
         this.Update(data);
         this.LoginName(user.LoginName);
         this.NoseDto(new NoseDto(user));

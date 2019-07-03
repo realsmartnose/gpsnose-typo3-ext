@@ -1,3 +1,7 @@
+1.5.3
+- CHA: Change license to GPL
+- ADD: Add support for Bootstrap4
+
 1.5.2
 - ADD: Add spin to Mashup-css
 
