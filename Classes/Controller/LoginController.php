@@ -105,7 +105,7 @@ class LoginController extends BaseController
                 $needsActivation = $this->contentObj->data['tx_gpsnose_mashup_login_option_needs_activation'];
                 $acls = $this->contentObj->data['tx_gpsnose_mashup_login_acl'];
 
-                $loginApi = $this->_gnApi->GetLoginApiForEndUser($appKey, $loginId);
+                $loginApi = $this->_gnApi->GetLoginApiForEndUser($appKey, $loginId, $this->getLanguage());
                 $this->view->assign('qr_code_image', 'data:image/png;base64,' . base64_encode($loginApi->GenerateQrCode($mustJoin, $needsActivation, $acls)));
                 $this->view->assign('login_id', $loginId);
 

@@ -12,9 +12,9 @@ class GnMappingService extends GnBaseService
     /**
      * GnMappingService __construct
      */
-    public function __construct()
+    public function __construct($langId)
     {
-        parent::__construct();
+        parent::__construct($langId);
     }
 
     /**
@@ -40,7 +40,7 @@ class GnMappingService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     /** @var $gnLoginApi \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser */
-                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey());
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, $this->_langId);
                     return $gnLoginApi->GetGnMappingApi()->GetLatLonRectangleFromGIp($gip);
                 }
             }
@@ -75,7 +75,7 @@ class GnMappingService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     /** @var $gnLoginApi \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser */
-                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey());
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, $this->_langId);
                     return $gnLoginApi->GetGnMappingApi()->GetGipFromLatLon($lat, $lon, ($zoom > GnMappingApi::MAX_ZOOM || $zoom < 1 ? GnMappingApi::MAX_ZOOM : $zoom));
                 }
             }

@@ -43,7 +43,7 @@ class JoinqrcodeViewHelper extends AbstractViewHelper
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     $gnApi = new GnApi();
-                    $gnLoginApi = $gnApi->GetLoginApiForEndUser($mashup->getAppKey());
+                    $gnLoginApi = $gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, NULL);
                     $bytes = $gnLoginApi->GetCommunityApi()->GenerateQrCodeForCommunityJoin($tag);
                     $base64 = base64_encode($bytes);
                     return "<img src=\"data:image/png;base64,{$base64}\" />";

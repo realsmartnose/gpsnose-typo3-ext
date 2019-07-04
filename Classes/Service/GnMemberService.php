@@ -12,9 +12,9 @@ class GnMemberService extends GnBaseService
     /**
      * GnMemberService __construct
      */
-    public function __construct()
+    public function __construct($langId)
     {
-        parent::__construct();
+        parent::__construct($langId);
     }
 
     /**
@@ -44,7 +44,7 @@ class GnMemberService extends GnBaseService
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
-                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey());
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, $this->_langId);
                     $items = $gnLoginApi->GetCommunityApi()->GetMembersPage($lastKnownTicks, $communityTag, $pageSize);
 
                     return $items;

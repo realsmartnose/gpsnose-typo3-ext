@@ -52,7 +52,7 @@ class MemberController extends BaseController
         $this->view->assign('record', $this->contentObj->data['uid']);
 
         $pageSize = $this->settings['membersPageSize'];
-        $memberService = new GnMemberService();
+        $memberService = new GnMemberService($this->getLanguage());
         $members = $memberService->GetMembersPage($communityTag, NULL, $pageSize);
         $this->view->assign('members', json_encode($members));
 

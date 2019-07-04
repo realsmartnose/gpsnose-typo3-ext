@@ -11,9 +11,9 @@ class GnCommunityService extends GnBaseService
     /**
      * GnCommunityService __construct
      */
-    public function __construct()
+    public function __construct($langId)
     {
-        parent::__construct();
+        parent::__construct($langId);
     }
 
     /**
@@ -35,7 +35,7 @@ class GnCommunityService extends GnBaseService
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
-                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey());
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, $this->_langId);
                     $communityItem = $gnLoginApi->GetCommunityApi()->GetCommunity($communityTag);
 
                     return $communityItem;
@@ -67,7 +67,7 @@ class GnCommunityService extends GnBaseService
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
-                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey());
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, $this->_langId);
                     return $gnLoginApi->GetCommunityApi()->GenerateQrCodeForCommunityJoin($communityTag);
                 }
             }

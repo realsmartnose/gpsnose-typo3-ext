@@ -45,7 +45,7 @@ class NearbyController extends BaseController
 
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyNosesPageSize'];
-            $nearbyService = new GnNearbyService();
+            $nearbyService = new GnNearbyService($this->getLanguage());
             $noses = $nearbyService->GetNosesAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('noses', json_encode($noses));
         }
@@ -74,7 +74,7 @@ class NearbyController extends BaseController
 
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyImpressionsPageSize'];
-            $nearbyService = new GnNearbyService();
+            $nearbyService = new GnNearbyService($this->getLanguage());
             $impressions = $nearbyService->GetImpressionsAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('impressions', json_encode($impressions));
         }
@@ -103,7 +103,7 @@ class NearbyController extends BaseController
 
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyPoisPageSize'];
-            $nearbyService = new GnNearbyService();
+            $nearbyService = new GnNearbyService($this->getLanguage());
             $pois = $nearbyService->GetPoisAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('pois', json_encode($pois));
         }
@@ -132,7 +132,7 @@ class NearbyController extends BaseController
 
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyTracksPageSize'];
-            $nearbyService = new GnNearbyService();
+            $nearbyService = new GnNearbyService($this->getLanguage());
             $tracks = $nearbyService->GetTracksAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('tracks', json_encode($tracks));
         }
@@ -161,7 +161,7 @@ class NearbyController extends BaseController
 
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyEventsPageSize'];
-            $nearbyService = new GnNearbyService();
+            $nearbyService = new GnNearbyService($this->getLanguage());
             $events = $nearbyService->GetEventsAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('events', json_encode($events));
         }

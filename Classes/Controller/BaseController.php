@@ -8,6 +8,7 @@ use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use SmartNoses\Gpsnose\Service\GnCommunityService;
 use SmartNoses\Gpsnose\Utility\GnUtility;
+use GpsNose\SDK\Framework\Logging\GnLogger;
 
 $file = __DIR__ . '/../../_dev.php';
 if (file_exists($file)) {
@@ -62,7 +63,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected function SetCommunity(string $communityTag = NULL)
     {
         if ($communityTag) {
-            $communityService = new GnCommunityService();
+            $communityService = new GnCommunityService($this->getLanguage());
             /** @var $community \GpsNose\SDK\Mashup\Model\GnCommunity */
             $community = $communityService->GetCommunity($communityTag);
 
@@ -102,6 +103,10 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         // Add moment
         if ($moment = $this->getFileNameOrPath($this->settings['javascript']['moment'])) {
             $this->frontendController->additionalFooterData['gpsnose_js_moment'] = '<script src="' . $moment . '" type="text/javascript"></script>';
+            // Locale
+            if ($momentLocalePath = $this->getFileNameOrPath($this->settings['javascript']['momentLocalePath'] . $this->getLanguage() . '.js')) {
+                $this->frontendController->additionalFooterData['gpsnose_js_momentLocales'] = '<script src="' . $momentLocalePath . '" type="text/javascript"></script>';
+            }
         }
         // Add numeral
         if ($numeral = $this->getFileNameOrPath($this->settings['javascript']['numeral'])) {
@@ -165,6 +170,26 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         $file = GeneralUtility::getFileAbsFileName($fileName);
         return PathUtility::stripPathSitePrefix($file);
+    }
+
+    /**
+     * Returns the language two letter code
+     */
+    protected function getLanguage() {
+        $lang = "";
+        if (TYPO3_MODE === 'FE') {
+            try {
+                $lang = $GLOBALS['TYPO3_REQUEST']->getAttribute('language')->getTwoLetterIsoCode();
+            } catch (\Exception $e) {
+                GnLogger::Error($e->getMessage());
+                if (isset($GLOBALS['TSFE']->config['config']['language'])) {
+                    $lang = $GLOBALS['TSFE']->config['config']['language'];
+                }
+            }
+        } elseif (strlen($GLOBALS['BE_USER']->uc['lang']) > 0) {
+            $lang = $GLOBALS['BE_USER']->uc['lang'];
+        }
+        return strlen($lang) == 0 ? "en" : $lang;
     }
 
     /**

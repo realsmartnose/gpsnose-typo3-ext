@@ -26,6 +26,11 @@ class GnBaseService
     protected $_loginId;
 
     /**
+     * @var string
+     */
+    protected $_langId;
+
+    /**
      * @var \GpsNose\SDK\Web\Login\GnPrincipal
      */
     protected $_currentUser;
@@ -38,8 +43,9 @@ class GnBaseService
     /**
      * BaseController __construct
      */
-    public function __construct()
+    public function __construct($langId)
     {
+        $this->_langId = $langId;
         $this->frontendController = $GLOBALS['TSFE'];
 
         $this->_gnApi = new GnApi();

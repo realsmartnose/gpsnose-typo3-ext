@@ -914,7 +914,7 @@ class MashupController extends BaseController
 
         $token->setCheckboxByOption();
 
-        $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $this->_currentUser->LoginId);
+        $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $this->_currentUser->LoginId, NULL);
         $gnLogin = $gnLoginApi->GetVerified();
         if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
             try {
@@ -977,12 +977,12 @@ class MashupController extends BaseController
                     $tokenScan->setAmount($mashupToken->Amount ?: 0);
                     $tokenScan->setComment($mashupToken->Comment ?: '');
                     $tokenScan->setGpsSharingWanted($mashupToken->IsGpsSharingWanted ?: FALSE);
-                    $tokenScan->setValidUntilTicks($mashupToken->ValidUntilTicks ?: 0);
+                    $tokenScan->setValidUntilTicks($mashupToken->ValidUntilTicks ?: '0');
                     $tokenScan->setLabel($mashupToken->Label ?: '');
                     $tokenScan->setValuePerUnit($mashupToken->ValuePerUnit ?: 0);
                     $tokenScan->setCreationTicks($mashupToken->CreationTicks ?: '0');
                     $tokenScan->setCreatedByLoginName($mashupToken->CreatedByLoginName ?: '');
-                    $tokenScan->setBatchCreationTicks($mashupToken->BatchCreationTicks ?: '');
+                    $tokenScan->setBatchCreationTicks($mashupToken->BatchCreationTicks ?: '0');
 
                     $tokenDto->addTokenScan($tokenScan);
                     $updateCount++;

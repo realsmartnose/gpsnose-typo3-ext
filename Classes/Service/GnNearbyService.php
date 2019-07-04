@@ -13,9 +13,9 @@ class GnNearbyService extends GnBaseService
     /**
      * GnNearbyService __construct
      */
-    public function __construct()
+    public function __construct($langId)
     {
-        parent::__construct();
+        parent::__construct($langId);
     }
 
     /**
@@ -46,7 +46,7 @@ class GnNearbyService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     $currentUser = GnAuthentication::CurrentUser();
-                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId, $this->_langId);
                     $gnLogin = $gnLoginApi->GetVerified();
                     if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
@@ -93,7 +93,7 @@ class GnNearbyService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     $currentUser = GnAuthentication::CurrentUser();
-                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId, $this->_langId);
                     $gnLogin = $gnLoginApi->GetVerified();
                     if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
@@ -140,7 +140,7 @@ class GnNearbyService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     $currentUser = GnAuthentication::CurrentUser();
-                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId, $this->_langId);
                     $gnLogin = $gnLoginApi->GetVerified();
                     if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
@@ -187,7 +187,7 @@ class GnNearbyService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     $currentUser = GnAuthentication::CurrentUser();
-                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId, $this->_langId);
                     $gnLogin = $gnLoginApi->GetVerified();
                     if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
@@ -234,7 +234,7 @@ class GnNearbyService extends GnBaseService
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
                     $currentUser = GnAuthentication::CurrentUser();
-                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId);
+                    $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId, $this->_langId);
                     $gnLogin = $gnLoginApi->GetVerified();
                     if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?

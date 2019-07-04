@@ -26,6 +26,9 @@ plugin.tx_gpsnose {
     # cat=plugin.tx_gpsnose/javascript/030; type=string; label=Location of moment
     moment = EXT:gpsnose/Resources/Public/Mashup/Libs/moment/2.17.1/moment.min.js
 
+    # cat=plugin.tx_gpsnose/javascript/031; type=string; label=Path of moment locales
+    momentLocalePath = EXT:gpsnose/Resources/Public/Mashup/Libs/moment/2.17.1/locale/
+
     # cat=plugin.tx_gpsnose/javascript/040; type=string; label=Location of numeral-js
     numeral = EXT:gpsnose/Resources/Public/Mashup/Libs/Numeral-js/2.0.6/numeral.min.js
 

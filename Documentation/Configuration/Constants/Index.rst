@@ -27,6 +27,8 @@ javascript.bignumber                    string      Location of bignumber.js, if
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 javascript.moment                       string      Location of moment.js, if empty, script will not be loaded          EXT:gpsnose/Resources/Public/Mashup/Libs/moment/2.17.1/moment.min.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+javascript.momentLocalePath             string      Path of moment locales, if empty, script will not be loaded         EXT:gpsnose/Resources/Public/Mashup/Libs/moment/2.17.1/locale/
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 javascript.imagesloaded                 string      Location of imagesloaded.js, if empty, script will not be loaded    EXT:gpsnose/Resources/Public/Mashup/Libs/imagesloaded/4.1.4/imagesloaded.pkgd.min.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 javascript.masonry                      string      Location of masonry.js, if empty, script will not be loaded         EXT:gpsnose/Resources/Public/Mashup/Libs/masonry/4.2.1/masonry.pkgd.min.js

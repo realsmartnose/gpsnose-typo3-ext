@@ -44,7 +44,7 @@ class NewsController extends BaseController
         $this->view->assign('record', $this->contentObj->data['uid']);
 
         $pageSize = $this->settings['newsPageSize'];
-        $newsService = new GnNewsService();
+        $newsService = new GnNewsService($this->getLanguage());
         $news = $newsService->GetNewsPage($communityTag, NULL, $pageSize);
         $this->view->assign('news', json_encode($news));
 

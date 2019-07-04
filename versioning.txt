@@ -1,3 +1,6 @@
+1.5.4
+- FIX: Fix language support
+
 1.5.3
 - CHA: Change license to GPL
 - ADD: Add support for Bootstrap4

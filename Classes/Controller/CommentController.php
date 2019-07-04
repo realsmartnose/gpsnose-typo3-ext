@@ -52,7 +52,7 @@ class CommentController extends BaseController
         $this->view->assign('record', $this->contentObj->data['uid']);
 
         $pageSize = $this->settings['commentsPageSize'];
-        $commentService = new GnCommentService();
+        $commentService = new GnCommentService($this->getLanguage());
         $comments = $commentService->GetCommentsPage(GnCommentItemType::Community, $communityTag, NULL, $pageSize);
         $this->view->assign('comments', json_encode($comments));
 

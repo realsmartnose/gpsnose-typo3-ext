@@ -68,7 +68,7 @@ class GnLogListener implements GnILogListener
         if ($GLOBALS['BE_USER']) {
             try {
                 $GLOBALS['BE_USER']->simplelog($message, 'gpsnose', $level);
-            } catch (\Exception $e1) {
+            } catch (\Exception $e) {
                 $message = str_replace('%', '%%', $message);
                 try {
                     $GLOBALS['BE_USER']->simplelog($message, 'gpsnose', $level);
@@ -79,7 +79,7 @@ class GnLogListener implements GnILogListener
         } else {
             try {
                 GeneralUtility::sysLog($message, 'gpsnose', $level);
-            } catch (\Exception $e1) {
+            } catch (\Exception $e) {
                 $message = str_replace('%', '%%', $message);
                 try {
                     GeneralUtility::sysLog($message, 'gpsnose', $level);

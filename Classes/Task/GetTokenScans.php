@@ -42,7 +42,7 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                 if ($mashup) {
                     $gnApi = new GnApi();
 
-                    $gnLoginApi = $gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, 'en');
+                    $gnLoginApi = $gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, NULL);
                     $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
 
                     $mashupTokens = $mashupTokensApi->GetMashupTokensPage($mashup->getCommunityTag(), $mashup->getLatestTokenScanTicks(), 50);
@@ -75,12 +75,12 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                                 $tokenScan->setAmount($mashupToken->Amount);
                                 $tokenScan->setComment($mashupToken->Comment ?: '');
                                 $tokenScan->setGpsSharingWanted($mashupToken->IsGpsSharingWanted);
-                                $tokenScan->setValidUntilTicks($mashupToken->ValidUntilTicks ?: 0);
+                                $tokenScan->setValidUntilTicks($mashupToken->ValidUntilTicks ?: '0');
                                 $tokenScan->setLabel($mashupToken->Label ?: '');
                                 $tokenScan->setValuePerUnit($mashupToken->ValuePerUnit ?: 0);
                                 $tokenScan->setCreationTicks($mashupToken->CreationTicks ?: '0');
                                 $tokenScan->setCreatedByLoginName($mashupToken->CreatedByLoginName ?: '');
-                                $tokenScan->setBatchCreationTicks($mashupToken->BatchCreationTicks ?: '');
+                                $tokenScan->setBatchCreationTicks($mashupToken->BatchCreationTicks ?: '0');
 
                                 $tokenDto->addTokenScan($tokenScan);
                             }
