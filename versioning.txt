@@ -1,3 +1,6 @@
+1.5.5
+- FIX: Remove .ts files (renamed to txt)
+
 1.5.4
 - FIX: Fix language support
 
