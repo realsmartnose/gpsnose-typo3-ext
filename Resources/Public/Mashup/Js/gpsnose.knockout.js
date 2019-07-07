@@ -1278,7 +1278,7 @@ var EventDetailViewModel = (function (_super) {
     __extends(EventDetailViewModel, _super);
     function EventDetailViewModel(eventDto) {
         var _this = _super.call(this) || this;
-        _this.PossibleDates = ko.observableArray();
+        _this.Dates = ko.observableArray();
         _this.UniqueKey = eventDto.UniqueKey || "";
         _this.LoginName = GetLoginNameFromUniqueKey(_this.UniqueKey);
         _this.CreationTicks = GetTicksFromUniqueKey(_this.UniqueKey);
@@ -1286,15 +1286,15 @@ var EventDetailViewModel = (function (_super) {
         _this.NoseDto = new NoseDto({ "LoginName": _this.LoginName });
         return _this;
     }
-    EventDetailViewModel.prototype.OnAddPossibleDates = function (data) { };
+    EventDetailViewModel.prototype.OnAddDates = function (data) { };
     ;
-    EventDetailViewModel.prototype.AddPossibleDates = function (data) {
+    EventDetailViewModel.prototype.AddDates = function (data) {
         if (data == null)
             return;
         for (var prop in data)
-            this.PossibleDates.push(new EventDateDto(prop, data[prop]));
-        if (this.OnAddPossibleDates)
-            this.OnAddPossibleDates(this.PossibleDates());
+            this.Dates.push(new EventDateDto(prop, data[prop]));
+        if (this.OnAddDates)
+            this.OnAddDates(this.Dates());
     };
     ;
     return EventDetailViewModel;

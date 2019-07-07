@@ -1,3 +1,8 @@
+1.5.6
+- FIX: Fix moment en.js = 404
+- FIX: Fix Exception in TYPO3 V8
+- FIX: Fix translation
+
 1.5.5
 - FIX: Remove .ts files (renamed to txt)
 

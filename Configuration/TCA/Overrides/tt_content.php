@@ -99,9 +99,6 @@ $fields = array(
             'foreign_table_where' => 'ORDER BY pages.sorting',
             'items' => array(),
             'size' => 10,
-            'behaviour' => [
-                'allowLanguageSynchronization' => TRUE
-            ],
             'treeConfig' => [
                 'parentField' => 'pid',
                 'appearance' => [

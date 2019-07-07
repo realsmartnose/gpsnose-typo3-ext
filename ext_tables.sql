@@ -40,14 +40,9 @@ CREATE TABLE tx_gpsnose_domain_model_mashup (
     t3ver_move_id int(11) DEFAULT '0' NOT NULL,
     sorting int(11) DEFAULT '0' NOT NULL,
 
-    sys_language_uid int(11) DEFAULT '0' NOT NULL,
-    l10n_parent int(11) DEFAULT '0' NOT NULL,
-    l10n_diffsource mediumblob,
-
     PRIMARY KEY (uid),
     KEY parent (pid),
-    KEY t3ver_oid (t3ver_oid,t3ver_wsid),
-    KEY language (l10n_parent,sys_language_uid)
+    KEY t3ver_oid (t3ver_oid,t3ver_wsid)
 
 );
 
@@ -81,14 +76,9 @@ CREATE TABLE tx_gpsnose_domain_model_subcommunity (
     t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
     t3ver_move_id int(11) DEFAULT '0' NOT NULL,
 
-    sys_language_uid int(11) DEFAULT '0' NOT NULL,
-    l10n_parent int(11) DEFAULT '0' NOT NULL,
-    l10n_diffsource mediumblob,
-
     PRIMARY KEY (uid),
     KEY parent (pid),
-    KEY t3ver_oid (t3ver_oid,t3ver_wsid),
-    KEY language (l10n_parent,sys_language_uid)
+    KEY t3ver_oid (t3ver_oid,t3ver_wsid)
 
 );
 
@@ -122,14 +112,9 @@ CREATE TABLE tx_gpsnose_domain_model_host (
     t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
     t3ver_move_id int(11) DEFAULT '0' NOT NULL,
 
-    sys_language_uid int(11) DEFAULT '0' NOT NULL,
-    l10n_parent int(11) DEFAULT '0' NOT NULL,
-    l10n_diffsource mediumblob,
-
     PRIMARY KEY (uid),
     KEY parent (pid),
-    KEY t3ver_oid (t3ver_oid,t3ver_wsid),
-    KEY language (l10n_parent,sys_language_uid)
+    KEY t3ver_oid (t3ver_oid,t3ver_wsid)
 
 );
 
@@ -165,14 +150,9 @@ CREATE TABLE tx_gpsnose_domain_model_history (
     t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
     t3ver_move_id int(11) DEFAULT '0' NOT NULL,
 
-    sys_language_uid int(11) DEFAULT '0' NOT NULL,
-    l10n_parent int(11) DEFAULT '0' NOT NULL,
-    l10n_diffsource mediumblob,
-
     PRIMARY KEY (uid),
     KEY parent (pid),
-    KEY t3ver_oid (t3ver_oid,t3ver_wsid),
-    KEY language (l10n_parent,sys_language_uid)
+    KEY t3ver_oid (t3ver_oid,t3ver_wsid)
 
 );
 
@@ -215,14 +195,9 @@ CREATE TABLE tx_gpsnose_domain_model_token (
     t3ver_move_id int(11) DEFAULT '0' NOT NULL,
     sorting int(11) DEFAULT '0' NOT NULL,
 
-    sys_language_uid int(11) DEFAULT '0' NOT NULL,
-    l10n_parent int(11) DEFAULT '0' NOT NULL,
-    l10n_diffsource mediumblob,
-
     PRIMARY KEY (uid),
     KEY parent (pid),
-    KEY t3ver_oid (t3ver_oid,t3ver_wsid),
-    KEY language (l10n_parent,sys_language_uid)
+    KEY t3ver_oid (t3ver_oid,t3ver_wsid)
 
 );
 
@@ -273,14 +248,9 @@ CREATE TABLE tx_gpsnose_domain_model_tokenscan (
     t3ver_move_id int(11) DEFAULT '0' NOT NULL,
     sorting int(11) DEFAULT '0' NOT NULL,
 
-    sys_language_uid int(11) DEFAULT '0' NOT NULL,
-    l10n_parent int(11) DEFAULT '0' NOT NULL,
-    l10n_diffsource mediumblob,
-
     PRIMARY KEY (uid),
     KEY parent (pid),
-    KEY t3ver_oid (t3ver_oid,t3ver_wsid),
-    KEY language (l10n_parent,sys_language_uid)
+    KEY t3ver_oid (t3ver_oid,t3ver_wsid)
 
 );
 
@@ -290,10 +260,10 @@ CREATE TABLE tx_gpsnose_domain_model_tokenscan (
 #
 CREATE TABLE tt_content (
     tx_gpsnose_community_tag varchar(255) DEFAULT '' NOT NULL,
-    tx_gpsnose_mashup_login_acl int(11) DEFAULT 0 NOT NULL,
+    tx_gpsnose_mashup_login_acl int(11) DEFAULT '0' NOT NULL,
     tx_gpsnose_mashup_login_option_must_join tinyint(4) unsigned DEFAULT '0' NOT NULL,
     tx_gpsnose_mashup_login_option_needs_activation tinyint(4) unsigned DEFAULT '0' NOT NULL,
-    tx_gpsnose_mashup_login_redirect int(11) unsigned DEFAULT 0 NOT NULL,
+    tx_gpsnose_mashup_login_redirect int(11) unsigned DEFAULT '0' NOT NULL,
 );
 
 
