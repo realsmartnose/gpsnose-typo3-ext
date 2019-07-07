@@ -37,8 +37,32 @@ class FrontendUserGroupRepository
         $this->repository = $objectManager->get(\TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository::class);
     }
 
+    
     /**
-     * Finds the user matching the given GpsNose-Loginname
+     * Finds the user matching the given UID
+     *
+     * @param int $uid
+     *            UID of the FrontendUserGroup
+     *
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup
+     */
+    public function findByUid($uid)
+    {
+        $query = $this->repository->createQuery();
+
+        $querySettings = $query->getQuerySettings();
+        $querySettings->setRespectStoragePage(FALSE);
+        $querySettings->setRespectSysLanguage(FALSE);
+
+        $object = $query->matching($query->equals('uid', $uid))
+            ->execute()
+            ->getFirst();
+
+        return $object;
+    }
+
+    /**
+     * Finds the user matching the given Title
      *
      * @param string $title
      *            Title of the FrontendUserGroup

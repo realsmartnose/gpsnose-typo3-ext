@@ -29,9 +29,7 @@ class GnUtility
     {
         GnLogConfig::AddListener(new GnLogListener());
 
-        $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['gpsnose'], [
-            'allowed_classes' => FALSE
-        ]);
+        $extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['gpsnose'];
 
         if (!empty($extConf['cacheType'])) {
             switch ($extConf['cacheType']) {

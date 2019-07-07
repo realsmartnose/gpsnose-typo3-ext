@@ -2,6 +2,8 @@
 - FIX: Fix moment en.js = 404
 - FIX: Fix Exception in TYPO3 V8
 - FIX: Fix translation
+- FIX: Fix backendLockedUser
+- FIX: Add missing method findByUid in FrontendUserGroupRepository
 
 1.5.5
 - FIX: Remove .ts files (renamed to txt)

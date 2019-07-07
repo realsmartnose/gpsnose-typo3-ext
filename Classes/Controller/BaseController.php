@@ -46,6 +46,11 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected const MAX_DATE_TIME_TICKS = 3155378975999999999;
 
     /**
+     * @var array
+     */
+    protected $extConf;
+
+    /**
      * BaseController __construct
      */
     public function __construct()
@@ -53,6 +58,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         parent::__construct();
 
         $this->frontendController = $GLOBALS['TSFE'];
+        $this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['gpsnose'];
 
         GnUtility::applyExtConf();
     }
