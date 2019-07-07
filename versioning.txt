@@ -1,3 +1,6 @@
+1.5.7
+- UPD: Update to GpsNose-SDK 1.0.10
+
 1.5.6
 - FIX: Fix moment en.js = 404
 - FIX: Fix Exception in TYPO3 V8
