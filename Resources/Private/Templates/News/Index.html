@@ -1,4 +1,5 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
     xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
     data-namespace-typo3-fluid="true">
@@ -17,7 +18,7 @@ $(document).ready(function() {
     AddLangRes('Home_Index_lblNoNews', '<f:translate key="Home_Index_lblNoNews" />');
     AddLangRes('NewsPart_Load_lblBlogWasDeleted', '<f:translate key="NewsPart_Load_lblBlogWasDeleted" />');
     AddLangRes('NewsPart_Load_lblCommentWasDeleted', '<f:translate key="NewsPart_Load_lblCommentWasDeleted" />');
-    gn_data.Settings.NewsPageUrl = $('<textarea />').html('{f:uri.action(action:'pageNews', controller:'Api', pluginName:'Pagenews', pageType:'{settings.ajax.pageNews}', arguments:'{ communityTag : communityTag }')}').text();
+    gn_data.Settings.NewsPageUrl = $('<textarea />').html("{f:uri.action(action:'pageNews', controller:'Api', pluginName:'Pagenews', pageType:'{settings.ajax.pageNews}', arguments:'{ communityTag : communityTag }')}").text();
 });
 </script>
 
@@ -27,7 +28,7 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.9">
+<div class="ma-gpsnose" data-gn-version="1.0.10">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-news" data-bind="visible:true" style="display: none;">
 

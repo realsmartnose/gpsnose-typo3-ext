@@ -20,6 +20,30 @@ if (window.gn_data !== undefined && window.gn_data.Settings !== undefined && win
 var MAX_DATE_TIME_TICKS = "3155378975999999999";
 
 
+function MaWaitForLogin(loginVerifyUrl, returnUrl) {
+    $.ajax({
+        type: 'POST',
+        url: loginVerifyUrl,
+        cache: false,
+        dataType: 'json',
+        success: function(result) {
+            if (result.IsOk) {
+                if (returnUrl == '') {
+                    document.location.reload();
+                } else {
+                    window.location.replace(returnUrl);
+                }
+            } else {
+                window.setTimeout(function() { MaWaitForLogin(loginVerifyUrl, returnUrl); }, 3500);
+            }
+        },
+        error: function() {
+            window.setTimeout(function() { MaWaitForLogin(loginVerifyUrl, returnUrl); }, 3500);
+        }
+    });
+}
+
+
 function SwitchLanguage(lang) {
     var url;
     var form = jQuery('form:has(div:first[role!="dialog"])')[0];

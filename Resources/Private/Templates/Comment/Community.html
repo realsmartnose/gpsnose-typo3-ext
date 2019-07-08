@@ -1,8 +1,8 @@
 <html
-  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
-  xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
-  data-namespace-typo3-fluid="true">
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+    data-namespace-typo3-fluid="true">
 
 <f:layout name="Default" />
 
@@ -31,9 +31,9 @@ $(document).ready(function() {
     AddLangRes('Common_lblRequestInProgress', '<f:translate key="Common_lblRequestInProgress" />');
     AddLangRes('Common_lblScanToJoin', '<f:translate key="Common_lblScanToJoin" />');
     AddLangRes('Community_loginRequired', '<f:translate key="Community_loginRequired" />');
-    gn_data.Settings.CommentPageUrl = $('<textarea />').html('{f:uri.action(action:'pageComments', controller:'Api', pluginName:'Pagecomments', pageType:'{settings.ajax.pageComments}', arguments:'{ communityTag : communityTag }')}').text();
-    gn_data.Settings.CommentSaveUrl = $('<textarea />').html('{f:uri.action(action:'commentSave', controller:'Api', pluginName:'Commentsave', pageType:'{settings.ajax.commentSave}', arguments:'{ communityTag : communityTag }')}').text();
-    gn_data.Settings.LoginUrl = $('<textarea />').html('{f:uri.page(pageUid:'{settings.login.loginPid}')}').text();
+    gn_data.Settings.CommentPageUrl = $('<textarea />').html("{f:uri.action(action:'pageComments', controller:'Api', pluginName:'Pagecomments', pageType:'{settings.ajax.pageComments}', arguments:'{ communityTag : communityTag }')}").text();
+    gn_data.Settings.CommentSaveUrl = $('<textarea />').html("{f:uri.action(action:'commentSave', controller:'Api', pluginName:'Commentsave', pageType:'{settings.ajax.commentSave}', arguments:'{ communityTag : communityTag }')}").text();
+    gn_data.Settings.LoginUrl = $('<textarea />').html("{f:uri.page(pageUid:'{settings.login.loginPid}')}").text();
 });
 </script>
 
@@ -43,7 +43,7 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.9">
+<div class="ma-gpsnose" data-gn-version="1.0.10">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-comment" data-bind="visible:true" style="display:none;">
 

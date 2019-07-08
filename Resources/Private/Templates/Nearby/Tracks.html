@@ -19,8 +19,8 @@ $(document).ready(function() {
     AddLangRes('Common_lblScanToJoin', '<f:translate key="Common_lblScanToJoin" />');
     AddLangRes('Common_loginRequired', '<f:translate key="Common_loginRequired" />');
     AddLangRes('Nearby_lblNoTracks', '<f:translate key="Nearby_lblNoTracks" />');
-    gn_data.Settings.LoginUrl = $('<textarea />').html('{f:uri.page(pageUid:'{settings.login.loginPid}')}').text();
-    gn_data.Settings.NearbyTracksPageUrl = $('<textarea />').html('{f:uri.action(action:'pageNearbyTracks', controller:'Api', pluginName:'Pagenearbytracks', pageType:'{settings.ajax.pageNearbyTracks}', arguments:'{ communityTag : communityTag }')}').text();
+    gn_data.Settings.LoginUrl = $('<textarea />').html("{f:uri.page(pageUid:'{settings.login.loginPid}')}").text();
+    gn_data.Settings.NearbyTracksPageUrl = $('<textarea />').html("{f:uri.action(action:'pageNearbyTracks', controller:'Api', pluginName:'Pagenearbytracks', pageType:'{settings.ajax.pageNearbyTracks}', arguments:'{ communityTag : communityTag }')}").text();
 });
 </script>
 
@@ -30,7 +30,7 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.9">
+<div class="ma-gpsnose" data-gn-version="1.0.10">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-tracks" data-bind="visible:true" style="display:none;">
 

@@ -16,7 +16,7 @@ $(document).ready(function() {
     AddLangRes('Common_lblRequestInProgress', '<f:translate key="Common_lblRequestInProgress" />');
     AddLangRes('Common_lblScanToJoin', '<f:translate key="Common_lblScanToJoin" />');
     AddLangRes('Community_lblMembersNoEntryMessage', '<f:translate key="Community_lblMembersNoEntryMessage" />');
-    gn_data.Settings.MembersPageUrl = $('<textarea />').html('{f:uri.action(action:'pageMembers', controller:'Api', pluginName:'Pagemembers', pageType:'{settings.ajax.pageMembers}', arguments:'{ communityTag : communityTag }')}').text();
+    gn_data.Settings.MembersPageUrl = $('<textarea />').html("{f:uri.action(action:'pageMembers', controller:'Api', pluginName:'Pagemembers', pageType:'{settings.ajax.pageMembers}', arguments:'{ communityTag : communityTag }')}").text();
 });
 </script>
 
@@ -26,7 +26,7 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.9">
+<div class="ma-gpsnose" data-gn-version="1.0.10">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-members" data-bind="visible:true" style="display:none;">
 

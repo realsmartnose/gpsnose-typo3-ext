@@ -1,8 +1,8 @@
 <html
-  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
-  xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
-  data-namespace-typo3-fluid="true">
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
+    data-namespace-typo3-fluid="true">
 
 <f:layout name="Default" />
 
@@ -30,7 +30,7 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.9">
+<div class="ma-gpsnose" data-gn-version="1.0.10">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-login" data-bind="visible:true" style="display:none;">
 
@@ -69,30 +69,8 @@ var MA_GPSNOSE_IS_MASHUP = true;
 $(document).ready(function() {
     if (! gn_data.User) gn_data.User = {};
     ko.applyBindings(new BaseViewModel(), $('#ma-gpsnose-{record}').get(0));
-    window.setTimeout(WaitForLogin, 3500);
+    window.setTimeout(function() { MaWaitForLogin(gn_data.Settings.LoginVerifyUrl, gn_data.Settings.ReturnUrl); }, 3500);
 });
-function WaitForLogin() {
-    $.ajax({
-        type: 'POST',
-        url: gn_data.Settings.LoginVerifyUrl,
-        cache: false,
-        dataType: 'json',
-        success: function(result) {
-            if (result.IsOk) {
-                if (gn_data.Settings.ReturnUrl == '') {
-                    document.location.reload();
-                } else {
-                    window.location.replace(gn_data.Settings.ReturnUrl);
-                }
-            } else {
-                window.setTimeout(WaitForLogin, 3500);
-            }
-        },
-        error: function() {
-            window.setTimeout(WaitForLogin, 3500);
-        }
-    });
-}
 </script>
 <!-- MAIN_END -->
 
