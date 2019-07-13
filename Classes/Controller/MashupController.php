@@ -33,7 +33,7 @@ use GpsNose\SDK\Framework\Logging\GnLogger;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *
- * (c) 2018 Dev2 <info@gpsnose.com>, SmartNoses
+ * (c) 2019 Dev2 <info@gpsnose.com>, SmartNoses
  *
  * *
  */

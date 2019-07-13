@@ -30,7 +30,7 @@ GpsNose
 		community,gpsnose.com,comment,members,news
 
 	:Copyright:
-		2018
+		2019
 
 	:Author:
 		smart.nose

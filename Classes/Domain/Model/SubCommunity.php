@@ -9,7 +9,7 @@ namespace SmartNoses\Gpsnose\Domain\Model;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *
- * (c) 2018 SmartNose <info@gpsnose.com>, SmartNoses
+ * (c) 2019 SmartNose <info@gpsnose.com>, SmartNoses
  *
  * *
  */
