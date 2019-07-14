@@ -23,7 +23,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'][] = 'myext
 
     This Hook will be called everytime new MshupTokenScans where stored to the database
 
-    You get a list of the added tokens in the $params['addedTokens']
+    You get a list of :php:`\SmartNoses\Gpsnose\Domain\Model\TokenScan` in the :php:`$params['addedScans']`
 
 
 Target group: **Administrators**

@@ -1,3 +1,6 @@
+1.6.1
+- FIX: Fix the documentation for Hooks
+
 1.6.0
 - ADD: Add text of QR-Code in MashupToken
 - ADD: Add hook for MashupToken-Callback
