@@ -367,48 +367,48 @@ class ApiController extends BaseController
                 if ($mashup) {
                     $payload = GeneralUtility::_POST("payload");
                     $user = GeneralUtility::_POST("user");
-                    $ticks = GeneralUtility::_POST("ticks");
+                    $scannedTicks = GeneralUtility::_POST("scannedTicks");
 
-                    // TODO: What are the props?
-                    $recorded = GeneralUtility::_POST("recorded");
+                    $recordedTicks = GeneralUtility::_POST("recordedTicks");
 
                     $lat = GeneralUtility::_POST("lat");
                     $lon = GeneralUtility::_POST("lon");
 
-                    // TODO: What are the props?
                     $isBatchCompleted = boolval(GeneralUtility::_POST("isBatchCompleted"));
                     $amount = GeneralUtility::_POST("amount") + 0;
                     $comment = GeneralUtility::_POST("comment") ?: '';
                     $isGpsSharingWanted = boolval(GeneralUtility::_POST("isGpsSharingWanted"));
                     $label = GeneralUtility::_POST("label") ?: '';
-                    $validUntilTicks = GeneralUtility::_POST("validto") ?: '0';
-                    $valuePerUnit = GeneralUtility::_POST("valperu") ?: 0.0;
-                    $creationTicks = GeneralUtility::_POST("creation") ?: '0';
+                    $validUntilTicks = GeneralUtility::_POST("validUntilTicks") ?: '0';
+                    $valuePerUnit = GeneralUtility::_POST("valuePerUnit") ?: 0.0;
+                    $createdTicks = GeneralUtility::_POST("createdTicks") ?: '0';
                     $createdByLoginName = GeneralUtility::_POST("creator") ?: '';
                     $batchCreationTicks = GeneralUtility::_POST("batchCreationTicks") ?: '0';
+                    $options = intval(GeneralUtility::_POST("options")) ?: GnMashupTokenOptions::NoOptions;
 
-                    if ($payload && $user && $ticks && $lat && $lon) {
+                    if ($payload && $user && $scannedTicks && $lat && $lon) {
                         $tokenDto = $mashup->findTokenByPayload($payload);
                         if ($tokenDto == NULL) {
                             $tokenDto = new Token();
                             $tokenDto->setPayload($payload);
                             $tokenDto->setCallbackResponse('');
-                            $tokenDto->setOptions(GnMashupTokenOptions::NoOptions);
+                            $tokenDto->setOptions($options);
                             $tokenDto->setValuePerUnit($valuePerUnit);
                             $tokenDto->setLabel($label);
                             $tokenDto->setValidUntilTicks($validUntilTicks);
-                            $tokenDto->setCreationTicks($creationTicks);
+                            $tokenDto->setCreationTicks($createdTicks);
                             $tokenDto->setCreatedByLoginName($createdByLoginName);
                         }
                         $message = $tokenDto->getCallbackResponse();
 
                         /* @val $tokenScan \SmartNoses\Gpsnose\Domain\Model\TokenScan */
-                        $tokenScan = $tokenDto->findTokenScanByUserAndTicks($user, $ticks);
+                        $tokenScan = $tokenDto->findTokenScanByUserAndTicks($user, $scannedTicks);
                         if ($tokenScan == NULL) {
                             $tokenScan = new TokenScan();
+                            $tokenScan->setPayload($tokenDto->getPayload());
                             $tokenScan->setScannedByLoginName($user);
-                            $tokenScan->setScannedTicks($ticks);
-                            $tokenScan->setRecordedTicks($recorded);
+                            $tokenScan->setScannedTicks($scannedTicks);
+                            $tokenScan->setRecordedTicks($recordedTicks);
                             $tokenScan->setScannedLatitude($lat);
                             $tokenScan->setScannedLongitude($lon);
                             $tokenScan->setCallbackResponseHttpCode(200);
@@ -420,7 +420,7 @@ class ApiController extends BaseController
                             $tokenScan->setValuePerUnit($valuePerUnit);
                             $tokenScan->setLabel($label);
                             $tokenScan->setValidUntilTicks($validUntilTicks);
-                            $tokenScan->setCreationTicks($creationTicks);
+                            $tokenScan->setCreationTicks($createdTicks);
                             $tokenScan->setCreatedByLoginName($createdByLoginName);
                             $tokenScan->setBatchCreationTicks($batchCreationTicks);
 
@@ -428,6 +428,16 @@ class ApiController extends BaseController
                             $mashup->addToken($tokenDto);
                             $this->mashupRepository->update($mashup);
                             $objectManager->get(PersistenceManager::class)->persistAll();
+
+                            if (!empty($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'])) {
+                                $_params = [
+                                    'pObj' => &$GLOBALS['TSFE'],
+                                    'addedScans' => [$tokenScan]
+                                ];
+                                foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'] as $_funcRef) {
+                                    GeneralUtility::callUserFunction($_funcRef, $_params, $GLOBALS['TSFE']);
+                                }
+                            }        
                         } else {
                             throw new \Exception("Token already submitted!");
                         }

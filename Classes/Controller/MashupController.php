@@ -921,6 +921,9 @@ class MashupController extends BaseController
                 $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
                 $qr_code_image = $mashupTokensApi->GenerateQrTokenForMashup($token->getPayload(), intval($token->getValidUntilTicks()), $token->getValuePerUnit(), $token->getLabel(), $token->getOptions());
                 $this->view->assign('qr_code_image', base64_encode($qr_code_image));
+
+                $qr_code_text = $mashupTokensApi->GenerateQrTokenForMashupAsTextLink($token->getPayload(), intval($token->getValidUntilTicks()), $token->getValuePerUnit(), $token->getLabel(), $token->getOptions());
+                $this->view->assign('qr_code_text', $qr_code_text);
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
                 GnLogger::LogException($e);
@@ -948,6 +951,8 @@ class MashupController extends BaseController
             $updateCount = 0;
             $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, NULL);
             $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
+
+            $addedScans = array();
             /** @var $mashupToken \GpsNose\SDK\Mashup\Model\GnMashupToken */
             foreach ($mashupTokensApi->GetMashupTokensPage($mashup->getCommunityTag(), $mashup->getLatestTokenScanTicks(), 50) as $mashupToken) {
                 $tokenDto = $mashup->findTokenByPayload($mashupToken->Payload);
@@ -966,6 +971,7 @@ class MashupController extends BaseController
                 $tokenScan = $tokenDto->findTokenScanByUserAndTicks($mashupToken->ScannedByLoginName, $mashupToken->ScannedTicks);
                 if ($tokenScan == NULL) {
                     $tokenScan = new TokenScan();
+                    $tokenScan->setPayload($tokenDto->getPayload());
                     $tokenScan->setScannedByLoginName($mashupToken->ScannedByLoginName);
                     $tokenScan->setScannedTicks($mashupToken->ScannedTicks);
                     $tokenScan->setRecordedTicks($mashupToken->RecordedTicks);
@@ -985,12 +991,24 @@ class MashupController extends BaseController
                     $tokenScan->setBatchCreationTicks($mashupToken->BatchCreationTicks ?: '0');
 
                     $tokenDto->addTokenScan($tokenScan);
+                    $addedScans[] = $tokenScan;
+
                     $updateCount++;
                 }
 
                 $mashup->addToken($tokenDto);
             }
             $this->mashupRepository->update($mashup);
+
+            if (!empty($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'])) {
+                $_params = [
+                    'pObj' => &$GLOBALS['TSFE'],
+                    'addedScans' => $addedScans
+                ];
+                foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'] as $_funcRef) {
+                    GeneralUtility::callUserFunction($_funcRef, $_params, $GLOBALS['TSFE']);
+                }
+            }
 
             if ($updateCount > 0) {
                 $this->addFlashMessage("Added {$updateCount} items", '', FlashMessage::OK, TRUE);

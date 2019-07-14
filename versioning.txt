@@ -1,3 +1,7 @@
+1.6.0
+- ADD: Add text of QR-Code in MashupToken
+- ADD: Add hook for MashupToken-Callback
+
 1.5.9
 - UPD: Update to GpsNose-SDK 1.0.11
 

@@ -97,6 +97,7 @@
                 <f:if condition="{qr_code_image}">
                     <f:then>
                         <img class="qrcode" src="data:image/png;base64,{qr_code_image}" />
+                        <textarea rows="5" class="form-control">{qr_code_text}</textarea>
                     </f:then>
                     <f:else>
                         <p>No image created</p>

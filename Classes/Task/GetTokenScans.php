@@ -48,6 +48,7 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                     $mashupTokens = $mashupTokensApi->GetMashupTokensPage($mashup->getCommunityTag(), $mashup->getLatestTokenScanTicks(), 50);
 
                     if (is_array($mashupTokens)) {
+                        $addedScans = array();
                         /** @var $mashupToken \GpsNose\SDK\Mashup\Model\GnMashupToken */
                         foreach ($mashupTokens as $mashupToken) {
                             $tokenDto = $mashup->findTokenByPayload($mashupToken->Payload);
@@ -66,6 +67,7 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                             $tokenScan = $tokenDto->findTokenScanByUserAndTicks($mashupToken->ScannedByLoginName, $mashupToken->ScannedTicks);
                             if ($tokenScan == NULL) {
                                 $tokenScan = new TokenScan();
+                                $tokenScan->setPayload($tokenDto->getPayload());
                                 $tokenScan->setScannedByLoginName($mashupToken->ScannedByLoginName);
                                 $tokenScan->setScannedTicks($mashupToken->ScannedTicks);
                                 $tokenScan->setRecordedTicks($mashupToken->RecordedTicks);
@@ -83,10 +85,22 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                                 $tokenScan->setBatchCreationTicks($mashupToken->BatchCreationTicks ?: '0');
 
                                 $tokenDto->addTokenScan($tokenScan);
+                                $addedScans[] = $tokenScan;
                             }
 
                             $mashup->addToken($tokenDto);
                         }
+
+                        if (!empty($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'])) {
+                            $_params = [
+                                'pObj' => &$GLOBALS['TSFE'],
+                                'addedScans' => $addedScans
+                            ];
+                            foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'] as $_funcRef) {
+                                GeneralUtility::callUserFunction($_funcRef, $_params, $GLOBALS['TSFE']);
+                            }
+                        }
+
                         $mashupRepository->update($mashup);
                         $persistenceManager->persistAll();
                     }

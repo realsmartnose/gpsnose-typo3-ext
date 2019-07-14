@@ -20,6 +20,27 @@ namespace SmartNoses\Gpsnose\Domain\Model;
 class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
     /**
+     * this property will not be persist, its only for hook
+     * @var string
+     */
+    private $payload = '';
+    /**
+     * @return string
+     */
+    public function getPayload()
+    {
+        return $this->payload;
+    }
+    /**
+     * @param string $payload
+     */
+    public function setPayload($payload)
+    {
+        $this->payload = $payload;
+    }
+
+
+    /**
      * @var string
      */
     protected $scannedByLoginName = '';

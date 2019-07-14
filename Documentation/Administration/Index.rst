@@ -19,6 +19,7 @@ Learn how to install and initiate the plugin in the next two pages.
 
     Configuration/Index
     SchedulerTasks/Index
+    Hooks/Index
 
 
 Target group: **Administrators**
