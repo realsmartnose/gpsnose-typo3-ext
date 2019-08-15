@@ -23,7 +23,7 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.10">
+<div class="ma-gpsnose" data-gn-version="1.0.11">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-news" data-bind="visible:true" style="display: none;">
 
@@ -36,7 +36,7 @@ Replace {record} with a unique id that identifies the entry
             <!-- ko if: ($index() === 0) -->
             <div class="grid-sizer col-lg-3 col-md-4 col-sm-6"></div>
             <!-- /ko -->
-            <div class="grid-item col-lg-3 col-md-4 col-sm-6" data-bind="template: { name: TemplateName() }"></div>
+            <div class="grid-item col-lg-3 col-md-4 col-sm-6" data-bind="visible:!$data.IsNowDeleted, template: { name: TemplateName() }"></div>
         </div>
         <div class="text-center">
             <div class="btn btn-default btn-outline-secondary btn-lg" role="button"
@@ -86,7 +86,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/html" id="UnknownTemplate">
-    <div class="UnknownNews" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
+    <div class="UnknownNews">
         <div class="panel panel-default card">
             <div class="panel-body card-body">
                 <div class="panel-bottom">
@@ -100,7 +100,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/html" id="AboutNewsTemplate">
-    <div class="AboutNews" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
+    <div class="AboutNews">
         <div class="panel panel-default card">
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media mb-2">
@@ -125,7 +125,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/html" id="ProfileImageNewsTemplate">
-    <div class="ProfileImageNews" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
+    <div class="ProfileImageNews">
         <div class="panel panel-default card">
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled: $data.IsNowDeleted }">
                 <img class="image" data-bind="attr: { src: ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
@@ -141,7 +141,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/html" id="NewGuestUserNewsTemplate">
-    <div class="NewGuestUserNews" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
+    <div class="NewGuestUserNews">
         <div class="panel panel-default card">
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media mb-2">
@@ -166,7 +166,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/html" id="ProfileActivatedTemplate">
-    <div class="ProfileActivated" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
+    <div class="ProfileActivated">
         <div class="panel panel-default card">
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media mb-2">
@@ -191,7 +191,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/html" id="PhotoBlogNewsTemplate">
-    <div class="PhotoBlogNews" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
+    <div class="PhotoBlogNews">
         <div class="panel panel-default card">
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media mb-2">
@@ -222,7 +222,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/html" id="PoIPublishedNewsTemplate">
-    <div class="PoIPublishedNews" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
+    <div class="PoIPublishedNews">
         <div class="panel panel-default card">
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media mb-2">
@@ -247,7 +247,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/html" id="TourNewsTemplate">
-    <div class="TourNews" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
+    <div class="TourNews">
         <div class="panel panel-default card">
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media mb-2">
@@ -272,7 +272,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/html" id="EventNewsTemplate">
-    <div class="AboutNews" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
+    <div class="AboutNews">
         <div class="panel panel-default card">
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media mb-2">
@@ -298,7 +298,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/html" id="CommentNewsTemplate">
-    <div class="CommentNews" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
+    <div class="CommentNews">
         <div class="panel panel-default card">
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl() }">
                 <div>
@@ -324,7 +324,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/html" id="RatingNewsTemplate">
-    <div class="RatingNews" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
+    <div class="RatingNews">
         <div class="panel panel-default card">
             <div class="panel-body card-body" data-external data-bind="attr: { src: ThumbUrl(), 'data-src': $data.DetailUrl() }">
                 <div>
@@ -353,7 +353,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/html" id="MashupNewsTemplate">
-    <div class="MashupNews" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
+    <div class="MashupNews">
         <div class="panel panel-default card">
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled:$data.IsNowDeleted }">
                 <div class="media mb-2">

@@ -1,3 +1,7 @@
+1.6.3
+- UPD: Update to GpsNose-SDK 1.0.12
+- UPD: Update Mashup
+
 1.6.2
 - FIX: Fix login from Mobile (gnlid) with PSR-15
 
