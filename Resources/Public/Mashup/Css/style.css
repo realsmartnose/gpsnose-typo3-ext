@@ -28,8 +28,6 @@
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
     padding: 6px; }
     .ma-gpsnose .outer.inactive {
       opacity: 0.4; }
@@ -190,8 +188,6 @@
       margin: 0 5px 5px 0;
       border: 3px solid #007800;
       color: #007800;
-      -webkit-border-radius: 5px;
-      -moz-border-radius: 5px;
       border-radius: 5px;
       cursor: default;
       white-space: nowrap;
@@ -208,8 +204,7 @@
     border: none;
     color: #ffffff;
     background-color: #007800;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px; }
+    border-radius: 3px; }
   .ma-gpsnose .rating-stars-container {
     margin-top: 5px;
     text-align: center; }

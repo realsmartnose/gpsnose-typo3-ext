@@ -324,6 +324,7 @@ var CommentsViewModel = (function (_super) {
         _this.LoginName = ko.observable("");
         _this.IsActivated = ko.observable(false);
         _this.IsAddAllowed = ko.observable(false);
+        _this.IsReadonly = ko.observable(false);
         _this.IsLoggedIn = ko.observable(false);
         _this.CommentAddText = ko.observable("");
         _this.CommentAddMood = ko.observable("");
@@ -348,6 +349,9 @@ var CommentsViewModel = (function (_super) {
             _this.Entity = params.entity;
             _this.ItemType = _this.Entity.CommentItemType;
             _this.IsAddAllowed(_this.Entity.IsCommentsAllowed());
+        }
+        if (params && params.isReadonly) {
+            _this.IsReadonly(params.isReadonly);
         }
         _this.IsLoggedIn(_this.LoginName().length > 0);
         _this.Moods = ko.observableArray([
@@ -572,13 +576,13 @@ ko.components.register('ma-gpsnose-comments', {
     viewModel: CommentsViewModel,
     template: '<div id="commentsContainer">' +
         '<h3 data-bind="text: GetLangRes(\'Common_lblComments\', \'Comments\'), visible: ! HideTitle"></h3>' +
-        '<div data-bind="if: IsAddAllowed() && IsLoggedIn() && ! IsActivated()">' +
+        '<div data-bind="if: IsAddAllowed() && IsLoggedIn() && ! IsActivated() && ! IsReadonly()">' +
         '<div class="alert alert-info">' +
         '<i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Comment_lblActivationRequired\', \'To add comments, it is required to validate your account, please validate your account in the GpsNose-App!\')"></span>' +
         '</div>' +
         '</div>' +
-        '<div data-bind="if: Entity && Entity.IsCommentsAllowed && ! IsLoggedIn()">' +
+        '<div data-bind="if: IsAddAllowed() && ! IsLoggedIn() && ! IsReadonly()">' +
         '<div class="alert alert-info">' +
         '<i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Community_loginRequired\', \'Login first to interact\')"></span>' +
@@ -588,7 +592,7 @@ ko.components.register('ma-gpsnose-comments', {
         '</button>' +
         '</div>' +
         '</div>' +
-        '<div data-bind="if: IsAddAllowed() && IsLoggedIn() && IsActivated()">' +
+        '<div data-bind="if: IsAddAllowed() && IsLoggedIn() && IsActivated() && ! IsReadonly()">' +
         '<form onsubmit="AddComment()">' +
         '<div class="form-group">' +
         '<div class="input-group">' +
@@ -634,7 +638,7 @@ ko.components.register('ma-gpsnose-comments', {
         '<div class="media-right middle" data-bind="text: GetAgeStringFromTicks($data.CreationTicks)"></div>' +
         '</div>' +
         '<div data-bind="text: $data.Text, visible: HasText(), css: ($data.Text && $data.Text.length > 20 ? \'text\' : \'text-big\')"></div>' +
-        '<div class="clearfix">' +
+        '<div class="clearfix" data-bind="if: ! $parent.IsReadonly()">' +
         '<img class="ma-crown" data-bind="attr: { src: $parent.ImagePath() + \'/IcActionCrown.png\' }, visible: $parent.Entity.IsUserAdmin($data.Creator)" />' +
         '<div class="btn-group btn-group-xs pull-right float-right" role="group" aria-label="share">' +
         '<a class="btn btn-default btn-outline-secondary" data-popup data-bind="attr: { href: $data.NoseDto.DetailUrl(), title: GetLangRes(\'Common_btnShowProfile\', \'Show profile\') }">' +
@@ -654,7 +658,7 @@ ko.components.register('ma-gpsnose-comments', {
         '</div>' +
         '</div>' +
         '</div>' +
-        '<div class="text-center">' +
+        '<div class="text-center" data-bind="if: ! IsReadonly()">' +
         '<div class="btn btn-default btn-outline-secondary btn-lg" data-bind="click: function(){ PageComments() }, visible: HasMoreComments(), attr: { disabled: CommentsRequestActive() }">' +
         '<div data-bind="visible: ! CommentsRequestActive()">' +
         '<i class="glyphicon glyphicon-cloud-download fas fa-cloud-download-alt"></i>' +
@@ -2023,7 +2027,7 @@ var NewsDto = (function () {
                 return text + mood;
             }
         };
-        this.ThumbSize = "@400";
+        this.ThumbSize = "@600";
         this.ImageUrl = function () {
             return _this.Entity.ImageUrl();
         };
@@ -2218,7 +2222,7 @@ var PhotoBlogDto = (function (_super) {
             }
             return moment(date).format('LLL');
         });
-        _this.ThumbSize = "@400";
+        _this.ThumbSize = "@600";
         _this.ImageUrl = function () {
             return gnSettings.BaseDataUrl + "/pbimg/" + encodeURIComponent(_this.UniqueKey);
         };
@@ -2415,17 +2419,22 @@ var TourDetailViewModel = (function (_super) {
             var items = new Array();
             for (var i in data) {
                 var item = data[i];
-                if (item.properties && item.geometry) {
-                    var newItem = {
-                        "UniqueKey": item.properties.identifier,
-                        "Latitude": item.geometry.coordinates[1],
-                        "Longitude": item.geometry.coordinates[0]
-                    };
-                    if (item.properties.type == "poi") {
-                        items.push(new PoiDto(newItem));
+                if (item.properties) {
+                    if (item.geometry) {
+                        var newItem = {
+                            "UniqueKey": item.properties.identifier,
+                            "Latitude": item.geometry.coordinates[1],
+                            "Longitude": item.geometry.coordinates[0]
+                        };
+                        if (item.properties.type == "poi") {
+                            items.push(new PoiDto(newItem));
+                        }
+                        else if (item.properties.type == "blog") {
+                            items.push(new PhotoBlogDto(newItem));
+                        }
                     }
                     else if (item.properties.type == "blog") {
-                        items.push(new PhotoBlogDto(newItem));
+                        items.push(new PhotoBlogDto({ "UniqueKey": item.properties.identifier }));
                     }
                 }
             }
@@ -2510,11 +2519,28 @@ var TourDetailViewModel = (function (_super) {
                 if (maxAlt < coordinate.alt && coordinate.alt != this.ALTITUDE_UNKNOWN && coordinate.alt != this.ALTITUDE_FROM_MISSING_QUADRANT)
                     maxAlt = coordinate.alt;
             }
+            var hLineGap = void 0;
+            var diffAlt = (maxAlt - minAlt);
+            if (diffAlt < 50) {
+                minAlt -= 20;
+                maxAlt += 20;
+                hLineGap = 10;
+            }
+            else if (diffAlt < 100) {
+                minAlt -= 20;
+                maxAlt += 20;
+                hLineGap = 20;
+            }
+            else {
+                minAlt -= 50;
+                maxAlt += 50;
+                hLineGap = 100;
+            }
             this.ElevationMin(minAlt);
             this.ElevationMax(maxAlt);
-            for (var i = Math.floor(minAlt / 100) + 1; i < Math.floor(maxAlt / 100); i++) {
+            for (var i = Math.floor(minAlt / hLineGap) + 1; i < Math.floor(maxAlt / hLineGap); i++) {
                 var oneMeter = this.cHeight / Math.abs(maxAlt - minAlt);
-                var vertical = this.cHeight - ((i * 100 - minAlt) * oneMeter);
+                var vertical = this.cHeight - ((i * hLineGap - minAlt) * oneMeter);
                 ctx.beginPath();
                 ctx.moveTo(this.cMargin, vertical + this.cMargin);
                 ctx.lineTo(this.cWidth + this.cMargin, vertical + this.cMargin);

@@ -867,6 +867,7 @@ class MashupController extends BaseController
 
         $query = $repository->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(FALSE);
+        $query->getQuerySettings()->setRespectSysLanguage(FALSE);
         $mashupName = GnUtility::getGnSettingsMashupName();
         if (!GnUtil::IsNullOrEmpty($mashupName)) {
             $query->matching($query->logicalAnd($query->like('communityTag', '%' . substr($mashupName, 1))));

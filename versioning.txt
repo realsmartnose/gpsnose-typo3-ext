@@ -1,3 +1,6 @@
+1.6.4
+- UPD: Update Mashup
+
 1.6.3
 - UPD: Update to GpsNose-SDK 1.0.12
 - UPD: Update Mashup

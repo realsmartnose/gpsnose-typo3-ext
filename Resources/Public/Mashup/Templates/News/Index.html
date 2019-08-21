@@ -23,7 +23,7 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.11">
+<div class="ma-gpsnose" data-gn-version="1.0.12">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-news" data-bind="visible:true" style="display: none;">
 
@@ -227,7 +227,7 @@ $(document).ready(function() {
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media mb-2">
                     <div class="media-left mr-2">
-                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyImage.png')" />
+                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyPoi.png')" />
                     </div>
                     <div class="media-body">
                         <div class="media-height">
@@ -277,7 +277,7 @@ $(document).ready(function() {
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media mb-2">
                     <div class="media-left mr-2">
-                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyImage.png')" />
+                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyEvent.png')" />
                     </div>
                     <div class="media-body">
                         <div>
@@ -306,8 +306,14 @@ $(document).ready(function() {
                         <div data-bind="if: Comment_CommentItemType == 'Tour'">
                             <img class="img-rounded comment-image-right" data-bind="attr: { src: gn_data.Settings.ImagePath+'/EmptyMap.png' }" />
                         </div>
-                        <div data-bind="if: Comment_CommentItemType != 'Tour'">
+                        <div data-bind="if: Comment_CommentItemType == 'FavoriteLocation'">
+                            <img class="img-rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyPoi.png')" />
+                        </div>
+                        <div data-bind="if: Comment_CommentItemType == 'PhotoBlog'">
                             <img class="img-rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyImage.png')" />
+                        </div>
+                        <div data-bind="if: Comment_CommentItemType == 'Community'">
+                            <img class="img-rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyCommunity.png')" />
                         </div>
                         <img class="img-rounded comment-image-left" data-bind="attr: { src: NoseDto.ImageUrl() + '@100' }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
                     </div>
@@ -329,11 +335,17 @@ $(document).ready(function() {
             <div class="panel-body card-body" data-external data-bind="attr: { src: ThumbUrl(), 'data-src': $data.DetailUrl() }">
                 <div>
                     <div class="comment-image-container clearfix">
-                        <div data-bind="if: Comment_CommentItemType == 'Tour'">
+                        <div data-bind="if: Rating_RatedItemType == 'Tour'">
                             <img class="img-rounded comment-image-right" data-bind="attr: { src: gn_data.Settings.ImagePath+'/EmptyMap.png' }" />
                         </div>
-                        <div data-bind="if: Comment_CommentItemType != 'Tour'">
+                        <div data-bind="if: Rating_RatedItemType == 'FavoriteLocation'">
+                            <img class="img-rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyPoi.png')" />
+                        </div>
+                        <div data-bind="if: Rating_RatedItemType == 'PhotoBlog'">
                             <img class="img-rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyImage.png')" />
+                        </div>
+                        <div data-bind="if: Rating_RatedItemType == 'Community'">
+                            <img class="img-rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyCommunity.png')" />
                         </div>
                         <img class="img-rounded comment-image-left" data-bind="attr: { src: NoseDto.ImageUrl() + '@100' }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
                     </div>
@@ -358,7 +370,7 @@ $(document).ready(function() {
             <div class="panel-body card-body" data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled:$data.IsNowDeleted }">
                 <div class="media mb-2">
                     <div class="media-left mr-2">
-                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyImage.png')" />
+                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyCommunity.png')" />
                     </div>
                     <div class="media-body">
                         <div class="media-height">

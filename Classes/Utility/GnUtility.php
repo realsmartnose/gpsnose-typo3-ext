@@ -78,6 +78,7 @@ class GnUtility
                 // Set the PID
                 $querySettings = $frontendUserRepository->createQuery()->getQuerySettings();
                 $querySettings->setRespectStoragePage(FALSE);
+                $querySettings->setRespectSysLanguage(FALSE);
                 $frontendUserRepository->setDefaultQuerySettings($querySettings);
 
                 $frontendUser = $frontendUserRepository->findByGpsnoseLoginName($gnLogin->LoginName);
@@ -202,6 +203,7 @@ class GnUtility
             $mashupRepository = $objectManager->get(MashupRepository::class);
             $query = $mashupRepository->createQuery();
             $query->getQuerySettings()->setRespectStoragePage(FALSE);
+            $query->getQuerySettings()->setRespectSysLanguage(FALSE);
             $mashups = $query->execute();
             $firstMashup = $mashups->getFirst();
             if ($firstMashup) {
