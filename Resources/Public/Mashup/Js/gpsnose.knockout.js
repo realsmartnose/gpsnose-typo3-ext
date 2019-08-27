@@ -476,6 +476,9 @@ var CommentsViewModel = (function (_super) {
                         _this.OnChangeComments(jQuery('#commentsContainer'));
                 });
             }
+            else {
+                dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Comment_lblErrorTextRequired", "Text is required!"), null);
+            }
         });
     };
     CommentsViewModel.prototype.EditComment = function (comment) {
@@ -505,7 +508,7 @@ var CommentsViewModel = (function (_super) {
     };
     CommentsViewModel.prototype.DeleteComment = function (comment) {
         var _this = this;
-        dialog.Show(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
+        dialog.ShowDestructive(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
             comment.Text = null;
             comment.Mood = null;
             _this.SaveComment(comment, true, function () {
@@ -631,7 +634,7 @@ ko.components.register('ma-gpsnose-comments', {
         '<div class="outer">' +
         '<div class="media mb-2">' +
         '<div class="media-left mr-2">' +
-        '<img class="media-object img-circle rounded-circle" width="32px" data-bind="attr: { src: $data.NoseDto.ImageUrl() + \'@100\', onerror: \'ImageErrorHandler(this, \\\'\' + $parent.ImagePath() + \'/EmptyUser.png\\\')\' }" />' +
+        '<img class="media-object img-circle rounded-circle" width="32px" data-bind="attr: { src: $data.NoseDto.ImageUrl() + \'@200\', onerror: \'ImageErrorHandler(this, \\\'\' + $parent.ImagePath() + \'/EmptyUser.png\\\')\' }" />' +
         '</div>' +
         '<div class="media-body middle" data-bind="text: $data.Creator"></div>' +
         '<div class="media-body middle mood" data-bind="text: $data.Mood"></div>' +
@@ -676,6 +679,7 @@ var DialogViewModel = (function () {
     function DialogViewModel() {
         this.Title = ko.observable("");
         this.Message = ko.observable("");
+        this.IsDestructive = ko.observable(false);
         this.OkCallback = null;
         this.OkClicked = ko.observable(false);
         this.HasOkCallback = ko.observable(false);
@@ -684,6 +688,17 @@ var DialogViewModel = (function () {
     DialogViewModel.prototype.Show = function (title, message, okCallback) {
         this.Title(title);
         this.Message(message);
+        this.IsDestructive(false);
+        this.OkCallback = okCallback;
+        this.HasOkCallback(okCallback != null);
+        this.ShowDialog(title.length > 0 || message.length > 0);
+        this.OkClicked(false);
+        jQuery(document).trigger('gn.dialog.show');
+    };
+    DialogViewModel.prototype.ShowDestructive = function (title, message, okCallback) {
+        this.Title(title);
+        this.Message(message);
+        this.IsDestructive(true);
         this.OkCallback = okCallback;
         this.HasOkCallback(okCallback != null);
         this.ShowDialog(title.length > 0 || message.length > 0);
@@ -739,7 +754,7 @@ var DialogViewModel = (function () {
         var keyword = new KeywordDto(comm);
         if (keyword.IsCommunity) {
             var msg = GetLangRes("Common_lblLeaveCommunityAreYouSure", "Would you like to leave the community %community%?").replace("%community%", keyword.GetHtml());
-            dialog.Show(GetLangRes("Common_lblLeaveTitle", "Leave community"), msg, function () {
+            dialog.ShowDestructive(GetLangRes("Common_lblLeaveTitle", "Leave community"), msg, function () {
                 jQuery.ajax({
                     type: 'POST',
                     url: '/WebApi/LeaveCommunity',
@@ -789,7 +804,7 @@ ko.components.register('ma-gpsnose-dialog', {
         '<i class="glyphicon glyphicon-remove fas fa-times"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnClose\', \'Close\')"></span>' +
         '</button>' +
-        '<button type="button" class="btn btn-primary" data-bind="visible: HasOkCallback(), click: function(){ ClickOkButton() }, attr: { \'disabled\': OkClicked() }">' +
+        '<button type="button" class="btn" data-bind="visible: HasOkCallback(), click: function(){ ClickOkButton() }, attr: { \'disabled\': OkClicked() }, css: { \'btn-danger\': IsDestructive(), \'btn-primary\': !IsDestructive() }">' +
         '<i class="glyphicon glyphicon-ok fas fa-check"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnOk\', \'OK\')"></span>' +
         '</button>' +
@@ -1144,7 +1159,7 @@ ko.components.register('ma-gpsnose-navbar', {
         '<div class="media">' +
         '<div class="media-left">' +
         '<a data-bind="attr: { href: NoseDto.ImageUrl() }" data-fancybox>' +
-        '<img class="media-object img-circle" data-bind="attr: { src: NoseDto.ImageUrl() + \'@100\', onerror: \'RemoveFancyboxForImage(this);ImageErrorHandler(this, \\\'\' + ImagePath() + \'/EmptyUser.png\\\');\' }" />' +
+        '<img class="media-object img-circle" data-bind="attr: { src: NoseDto.ImageUrl() + \'@200\', onerror: \'RemoveFancyboxForImage(this);ImageErrorHandler(this, \\\'\' + ImagePath() + \'/EmptyUser.png\\\');\' }" />' +
         '</a>' +
         '</div>' +
         '<div class="media-body nowrap">' +
@@ -1761,9 +1776,12 @@ var CommunityDto = (function () {
         this.IsRequestActive = ko.observable(false);
         this.LoginName = ko.observable("");
         this.NoseDto = ko.observable();
-        this.ThumbSize = "@100";
+        this.ThumbSize = "@200";
         this.ImageUrl = function () {
             return gnSettings.BaseDataUrl + "/commimg/" + encodeURIComponent(_this.TagName());
+        };
+        this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
         };
         this.PreviewUrl = function () {
             return "/community/preview?profileTag=" + encodeURIComponent(_this.TagName());
@@ -1796,13 +1814,13 @@ var CommunityDto = (function () {
             return (_this.Acls() & CommunityAcl.MembersInviteMembers) == CommunityAcl.MembersInviteMembers;
         };
         this.IsInviteMembersAllowed = function () {
-            return (_this.IsAclMembersInviteMembers() && (_this.IsInCommunity || _this.NoseDto.IsInCommunity(_this.TagName()))) || _this.IsLoginNameAdmin();
+            return (_this.IsAclMembersInviteMembers() && (_this.IsInCommunity() || _this.NoseDto().IsInCommunity(_this.TagName()))) || _this.IsLoginNameAdmin();
         };
         this.IsAclCommentsFromMembers = function () {
             return (_this.Acls() & CommunityAcl.CommentsFromMembers) == CommunityAcl.CommentsFromMembers;
         };
         this.CommentItemType = CommentItemType.Community;
-        this.IsCommentsAllowed = function () { return (_this.IsAclCommentsFromMembers() && (_this.IsInCommunity || _this.NoseDto.IsInCommunity(_this.TagName()) || !_this.LoginName())) || _this.IsLoginNameAdmin(); };
+        this.IsCommentsAllowed = function () { return (_this.IsAclCommentsFromMembers() && (_this.IsInCommunity() || _this.NoseDto().IsInCommunity(_this.TagName()) || !_this.LoginName())) || _this.IsLoginNameAdmin(); };
         this.IsUserAdmin = function (loginName) { return _this.CreatorLoginName() == loginName || jQuery.inArray(loginName, _this.Admins()) != -1; };
         this.Update(data);
         this.LoginName(user.LoginName);
@@ -1867,9 +1885,12 @@ var EventDto = (function (_super) {
     __extends(EventDto, _super);
     function EventDto(data) {
         var _this = _super.call(this, data) || this;
-        _this.ThumbSize = "@100";
+        _this.ThumbSize = "@200";
         _this.ImageUrl = function () {
             return gnSettings.BaseDataUrl + "/eventsimg/" + encodeURIComponent(_this.UniqueKey);
+        };
+        _this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
         };
         _this.PreviewUrl = function () {
             return "/event/preview/" + encodeURIComponent(_this.UniqueKey);
@@ -2122,6 +2143,9 @@ var NoseDto = (function (_super) {
         _this.ImageUrl = function () {
             return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(_this.LoginName);
         };
+        _this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
+        };
         _this.PreviewUrl = function () {
             return "/nose/preview/" + encodeURIComponent(_this.LoginName);
         };
@@ -2226,6 +2250,9 @@ var PhotoBlogDto = (function (_super) {
         _this.ImageUrl = function () {
             return gnSettings.BaseDataUrl + "/pbimg/" + encodeURIComponent(_this.UniqueKey);
         };
+        _this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
+        };
         _this.PreviewUrl = function () {
             return "/impression/preview/" + encodeURIComponent(_this.UniqueKey);
         };
@@ -2246,9 +2273,12 @@ var PoiDto = (function (_super) {
     __extends(PoiDto, _super);
     function PoiDto(data) {
         var _this = _super.call(this, data) || this;
-        _this.ThumbSize = "@100";
+        _this.ThumbSize = "@200";
         _this.ImageUrl = function () {
             return gnSettings.BaseDataUrl + "/locimg/" + encodeURIComponent(_this.UniqueKey);
+        };
+        _this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
         };
         _this.PreviewUrl = function () {
             return "/poi/preview/" + encodeURIComponent(_this.UniqueKey);
@@ -2272,6 +2302,9 @@ var TourDto = (function (_super) {
         var _this = _super.call(this, data) || this;
         _this.ThumbSize = "";
         _this.ImageUrl = function () {
+            return "";
+        };
+        _this.ThumbUrl = function () {
             return "";
         };
         _this.PreviewUrl = function () {

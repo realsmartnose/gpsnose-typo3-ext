@@ -28,7 +28,7 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.12">
+<div class="ma-gpsnose" data-gn-version="1.0.13">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-news" data-bind="visible:true" style="display: none;">
 
@@ -320,7 +320,7 @@ $(document).ready(function() {
                         <div data-bind="if: Comment_CommentItemType == 'Community'">
                             <img class="img-rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyCommunity.png')" />
                         </div>
-                        <img class="img-rounded comment-image-left" data-bind="attr: { src: NoseDto.ImageUrl() + '@100' }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
+                        <img class="img-rounded comment-image-left" data-bind="attr: { src: NoseDto.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
                     </div>
                     <p class="text" data-bind="text: CommentText()"></p>
                 </div>
@@ -352,7 +352,7 @@ $(document).ready(function() {
                         <div data-bind="if: Rating_RatedItemType == 'Community'">
                             <img class="img-rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyCommunity.png')" />
                         </div>
-                        <img class="img-rounded comment-image-left" data-bind="attr: { src: NoseDto.ImageUrl() + '@100' }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
+                        <img class="img-rounded comment-image-left" data-bind="attr: { src: NoseDto.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyUser.png')" />
                     </div>
                     <div class="rating-stars-container">
                         <ma-gpsnose-rating params="percent: $data.Rating_Percent, count: -1, imagePath: gn_data.Settings.ImagePath"></ma-gpsnose-rating>

@@ -39,6 +39,9 @@ var NoseDto = (function (_super) {
         _this.ImageUrl = function () {
             return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(_this.LoginName);
         };
+        _this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
+        };
         _this.PreviewUrl = function () {
             return "/nose/preview/" + encodeURIComponent(_this.LoginName);
         };
@@ -485,7 +488,7 @@ var MashupAdminViewModel = (function () {
     MashupAdminViewModel.prototype.RegenerateAppKey = function () {
         var _this = this;
         if (this.CurrentMashup() != null) {
-            dialog.Show(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
+            dialog.ShowDestructive(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
                 dialog.Hide();
                 var self = _this;
                 if (self.RequestActiveRegenerateAppKey())
@@ -561,7 +564,7 @@ var MashupAdminViewModel = (function () {
     };
     MashupAdminViewModel.prototype.DelSubCommunity = function (tag) {
         var _this = this;
-        dialog.Show(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
+        dialog.ShowDestructive(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
             dialog.Hide();
             var self = _this;
             if (self.RequestActiveDelSubCommunity())

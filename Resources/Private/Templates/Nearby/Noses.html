@@ -30,7 +30,7 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.12">
+<div class="ma-gpsnose" data-gn-version="1.0.13">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-noses" data-bind="visible:true" style="display:none;">
 
@@ -54,7 +54,7 @@ $(document).ready(function() {
                 <div class="grid-item col-lg-2 col-md-3 col-sm-4 col-xs-6 col-6">
                     <div class="outer" data-external="true" data-bind="attr: { 'data-src': $data.DetailUrl() }">
                         <div class="thumbnail">
-                            <img data-bind="attr: { src: $data.ImageUrl() + '@200' }" onerror="this.src=window.gn_data.Settings.ImagePath+'/EmptyUser.png'" />
+                            <img data-bind="attr: { src: $data.ThumbUrl() }" onerror="this.src=window.gn_data.Settings.ImagePath+'/EmptyUser.png'" />
                             <div data-bind="if: $data.IsAdmin">
                                 <img class="ma-crown" data-bind="attr: { src: window.gn_data.Settings.ImagePath + '/IcActionCrown.png'}" />
                             </div>
