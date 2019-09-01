@@ -49,14 +49,14 @@ Configuration
 GpsNose cache
 -------------
 
-If you like to change the cache of the GpsNose-Data, you can change those Settings in your typo3conf/LocalConfiguration.php like this:
+If you like to change the cache of the GpsNose-Data, you can change those Settings in your ::`typo3conf/AdditionalConfiguration.php` like this:
 
 ::
 
-$GLOBALS['TYPO3_CONF_VARS'] ['SYS']['caching']['cacheConfigurations'][$extKey] = array();
-$GLOBALS['TYPO3_CONF_VARS'] ['SYS']['caching']['cacheConfigurations'][$extKey]['frontend'] = \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class;
-$GLOBALS['TYPO3_CONF_VARS'] ['SYS']['caching']['cacheConfigurations'][$extKey]['options'] = array('defaultLifetime' => 3600);
-$GLOBALS['TYPO3_CONF_VARS'] ['SYS']['caching']['cacheConfigurations'][$extKey]['groups'] = array('all');
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['gpsnose'] = array();
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['gpsnose']['frontend'] = \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class;
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['gpsnose']['options'] = array('defaultLifetime' => 3600);
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['gpsnose']['groups'] = array('all');
 
 
 

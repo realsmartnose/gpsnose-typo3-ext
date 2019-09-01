@@ -53,7 +53,7 @@ $(document).ready(function() {
             <div class="grid" data-bind="PageableTracks.Items().length > 0">
                 <div class="tracks" id="tracksContainer" data-bind="foreach: PageableTracks.Items()">
                     <!-- ko if: ($index() === 0) -->
-                    <div class="grid-sizer col-lg-3 col-md-4 col-sm-6"></div>
+                    <div class="grid-sizer col-lg-4 col-sm-6"></div>
                     <!-- /ko -->
                     <div class="grid-item col-lg-4 col-sm-6">
                         <div data-external data-bind="attr: { 'data-src': $data.DetailUrl() }">
