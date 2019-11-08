@@ -35,6 +35,7 @@ class DatetimeViewHelper extends AbstractViewHelper
                 return "-";
             }
             $date = GnUtil::DateFromTicks($ticks);
+            date_default_timezone_set("UTC");
             return date($format, $date->getTimestamp());
         } catch (\Exception $e) {
             GnLogger::Error($e->getMessage());

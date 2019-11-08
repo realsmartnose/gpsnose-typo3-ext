@@ -21,6 +21,9 @@ plugin.tx_gpsnose {
       knockout = {$plugin.tx_gpsnose.javascript.knockout}
       knockoutVm = {$plugin.tx_gpsnose.javascript.knockoutVm}
       maframework = {$plugin.tx_gpsnose.javascript.maframework}
+      qrCodeLib = {$plugin.tx_gpsnose.javascript.qrCodeLib}
+      qrCodeScanner = {$plugin.tx_gpsnose.javascript.qrCodeScanner}
+      qrCodeWorker = {$plugin.tx_gpsnose.javascript.qrCodeWorker}
     }
 
     login {
@@ -71,6 +74,7 @@ plugin.tx_gpsnose {
       pageNearbyPois = 10008
       pageNearbyTracks = 10009
       pageNearbyEvents = 10010
+      validateSecurityToken = 10011
     }
 
   }
@@ -196,11 +200,18 @@ ajax_gpsnose_commentsave {
   10 < tt_content.list.20.gpsnose_commentsave
 }
 
-# ajax action verifie
+# ajax action loginVerifie
 ajax_gpsnose_verifie < ajax_gpsnose_pagemembers
 ajax_gpsnose_verifie {
   typeNum < plugin.tx_gpsnose.settings.ajax.loginVerifie
   10 < tt_content.list.20.gpsnose_loginverifie
+}
+
+# ajax action validateSecurityToken
+ajax_gpsnose_validate_security_token < ajax_gpsnose_pagemembers
+ajax_gpsnose_validate_security_token {
+  typeNum < plugin.tx_gpsnose.settings.ajax.validateSecurityToken
+  10 < tt_content.list.20.gpsnose_validatesecuritytoken
 }
 
 # ajax action page-nearby-noses

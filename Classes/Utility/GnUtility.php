@@ -83,6 +83,9 @@ class GnUtility
 
                 $frontendUser = $frontendUserRepository->findByGpsnoseLoginName($gnLogin->LoginName);
                 if (!$frontendUser) {
+                    $frontendUser = $frontendUserRepository->findByUsername($gnLogin->LoginName);
+                }
+                if (!$frontendUser) {
                     $frontendUser = new FrontendUser();
                     $isNewUser = TRUE;
                 }

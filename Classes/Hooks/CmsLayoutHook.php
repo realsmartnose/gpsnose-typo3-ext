@@ -50,6 +50,9 @@ class CmsLayoutHook
             case 'gpsnose_nearbyevents':
                 $iconName = 'gpsnose-plugin-nearby';
                 break;
+            case 'gpsnose_qrscanindex':
+                $iconName = 'gpsnose-plugin-qrscan';
+                break;
         }
 
         if ($iconName !== NULL) {

@@ -63,6 +63,19 @@ call_user_func(
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'SmartNoses.Gpsnose',
+            'Qrscanindex',
+            ['Qrscan' => 'index'],
+            ['Qrscan' => 'index']
+        );
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'SmartNoses.Gpsnose',
+            'Validatesecuritytoken',
+            ['Api' => 'validateSecurityToken'],
+            ['Api' => 'validateSecurityToken']
+        );
+
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'SmartNoses.Gpsnose',
             'Nearbynoses',
             ['Nearby' => 'noses'],
             ['Nearby' => 'noses']
@@ -146,6 +159,7 @@ call_user_func(
                     gpsnose_nearbypois = EXT:' . $extKey . '/Resources/Private/Preview/NearbyPois.html
                     gpsnose_nearbytracks = EXT:' . $extKey . '/Resources/Private/Preview/NearbyTracks.html
                     gpsnose_nearbyevents = EXT:' . $extKey . '/Resources/Private/Preview/NearbyEvents.html
+                    gpsnose_qrscanindex = EXT:' . $extKey . '/Resources/Private/Preview/Qrscan.html
                 }
                 wizards.newContentElement.wizardItems.plugins {
                     elements {
@@ -228,6 +242,15 @@ call_user_func(
                             tt_content_defValues {
                                 CType = list
                                 list_type = gpsnose_nearbyevents
+                            }
+                        }
+                        gpsnose_qrscanindex {
+                            iconIdentifier = gpsnose-plugin-qrscan
+                            title = LLL:EXT:' . $extKey . '/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_plugin_qrscan.title
+                            description = LLL:EXT:' . $extKey . '/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_plugin_qrscan.description
+                            tt_content_defValues {
+                                CType = list
+                                list_type = gpsnose_qrscanindex
                             }
                         }
                     }
@@ -412,6 +435,11 @@ call_user_func(
             'gpsnose-plugin-nearby',
             \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
             ['source' => 'EXT:' . $extKey . '/Resources/Public/Icons/user_plugin_nearby.svg']
+        );
+        $iconRegistry->registerIcon(
+            'gpsnose-plugin-qrscan',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:' . $extKey . '/Resources/Public/Icons/user_plugin_qrscan.svg']
         );
     },
     $_EXTKEY

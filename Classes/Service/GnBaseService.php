@@ -36,11 +36,6 @@ class GnBaseService
     protected $_currentUser;
 
     /**
-     * @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser
-     */
-    protected $_gnLoginApi;
-
-    /**
      * BaseController __construct
      */
     public function __construct($langId)

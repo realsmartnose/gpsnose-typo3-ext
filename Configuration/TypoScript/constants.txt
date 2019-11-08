@@ -46,6 +46,15 @@ plugin.tx_gpsnose {
 
     # cat=plugin.tx_gpsnose/javascript/090; type=string; label=Location of maframework
     maframework = EXT:gpsnose/Resources/Public/Mashup/Js/maframework.min.js
+
+    # cat=plugin.tx_gpsnose/javascript/110; type=string; label=Location of QR-Code Lib
+    qrCodeLib = EXT:gpsnose/Resources/Public/Mashup/Libs/webcodecamjs/2.7.0/qrcodelib.js
+
+    # cat=plugin.tx_gpsnose/javascript/110; type=string; label=Location of QR-Code Scanner
+    qrCodeScanner = EXT:gpsnose/Resources/Public/Mashup/Libs/webcodecamjs/2.7.0/webcodecamjquery.js
+
+    # cat=plugin.tx_gpsnose/javascript/110; type=string; label=Location of QR-Code Worker
+    qrCodeWorker = EXT:gpsnose/Resources/Public/Mashup/Libs/webcodecamjs/2.7.0/DecoderWorker.js
   }
 
   login {

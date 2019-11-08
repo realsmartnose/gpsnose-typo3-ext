@@ -39,6 +39,14 @@ javascript.knockoutVm                   string      Location of knockoutVm.js, i
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 javascript.maframework                  string      Location of maframework.js, if empty, script will not be loaded     EXT:gpsnose/Resources/Public/Mashup/Js/maframework.min.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.javascript.qrCodeLib           string      Location of qrcodelib.js, if empty, script will not be loaded       EXT:gpsnose/Resources/Public/Mashup/Libs/webcodecamjs/2.7.0/qrcodelib.js
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.javascript.qrCodeScanner       string      Location of webcodecamjquery.js, if empty, script will not be       EXT:gpsnose/Resources/Public/Mashup/Libs/webcodecamjs/2.7.0/webcodecamjquery.js
+                                                    loaded
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.javascript.qrCodeWorker        string      Location of webcodecamjquery.js, if empty, script will not be       EXT:gpsnose/Resources/Public/Mashup/Libs/webcodecamjs/2.7.0/DecoderWorker.js
+                                                    loaded
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 login.loginPid                          int         UID of the page where the login-module is placed                    
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 login.groupId                           int         UID of the fe-group that is used for user logged in by GpsNose      

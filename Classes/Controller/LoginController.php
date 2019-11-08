@@ -56,11 +56,6 @@ class LoginController extends BaseController
     protected $_currentUser;
 
     /**
-     * @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser
-     */
-    protected $_gnLoginApi;
-
-    /**
      * LoginController __construct
      */
     public function __construct()
@@ -88,7 +83,7 @@ class LoginController extends BaseController
         if ($this->isUserLoggedIn()) {
             if (isset($_GET['returnUrl'])) {
                 $this->redirectToUri($_GET['returnUrl']);
-            } else {
+            } else if ($redirectPid > 0) {
                 $this->redirectToPage($redirectPid);
             }
         } else {

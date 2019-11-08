@@ -263,7 +263,7 @@ CREATE TABLE tt_content (
     tx_gpsnose_mashup_login_acl int(11) DEFAULT '0' NOT NULL,
     tx_gpsnose_mashup_login_option_must_join tinyint(4) unsigned DEFAULT '0' NOT NULL,
     tx_gpsnose_mashup_login_option_needs_activation tinyint(4) unsigned DEFAULT '0' NOT NULL,
-    tx_gpsnose_mashup_login_redirect int(11) unsigned DEFAULT '0' NOT NULL,
+    tx_gpsnose_mashup_login_redirect varchar(11) DEFAULT '' NOT NULL,
 );
 
 

@@ -66,6 +66,13 @@
                 <source>Show list of nearby events</source>
             </trans-unit>
 
+            <trans-unit id="tx_gpsnose_plugin_qrscan.title">
+                <source>GpsNose QrScan</source>
+            </trans-unit>
+            <trans-unit id="tx_gpsnose_plugin_qrscan.description">
+                <source>Open the QR-Code scanner to scan a SecureCode</source>
+            </trans-unit>
+
             <trans-unit id="tx_gpsnose_domain_model_mashup">
                 <source>Mashup</source>
             </trans-unit>

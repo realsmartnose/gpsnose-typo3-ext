@@ -378,6 +378,21 @@
 			<trans-unit id="Nearby_lblNoTracks" xml:space="preserve">
 				<source><![CDATA[Currently there are no tracks around available]]></source>
 			</trans-unit>
+			<trans-unit id="SecurityTokenValidator_heading" xml:space="preserve">
+				<source><![CDATA[SecurityToken validator]]></source>
+			</trans-unit>
+			<trans-unit id="SecurityTokenValidator_hint" xml:space="preserve">
+				<source><![CDATA[Start the camera and scan a SecurityToken..]]></source>
+			</trans-unit>
+			<trans-unit id="SecurityTokenValidator_invalideQrCode" xml:space="preserve">
+				<source><![CDATA[Wrong type of QR-Code, please scan a SecurityToken]]></source>
+			</trans-unit>
+			<trans-unit id="SecurityTokenValidator_validationFail" xml:space="preserve">
+				<source><![CDATA[The security-token of %user_name% is not valide]]></source>
+			</trans-unit>
+			<trans-unit id="SecurityTokenValidator_validationSuccess" xml:space="preserve">
+				<source><![CDATA[The security-token of %user_name% was successfully validated]]></source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

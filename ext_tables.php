@@ -57,6 +57,12 @@ call_user_func(
             'LLL:EXT:' . $extKey . '/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_plugin_nearby_events.title',
             'EXT:' . $extKey . '/Resources/Public/Icons/user_plugin_nearby.svg'
         );
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+            'SmartNoses.Gpsnose',
+            'Qrscanindex',
+            'LLL:EXT:' . $extKey . '/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_plugin_qrscan.title',
+            'EXT:' . $extKey . '/Resources/Public/Icons/user_plugin_qrscan.svg'
+        );
 
         if (TYPO3_MODE === 'BE') {
             \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(

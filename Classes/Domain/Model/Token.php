@@ -163,7 +163,7 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->setOptions($options);
 
         if (!GnUtil::IsNullOrEmpty($this->getValidUntilDateString())) {
-            $validUntilDate = new \DateTime($this->getValidUntilDateString());
+            $validUntilDate = new \DateTime($this->getValidUntilDateString(), new \DateTimeZone("UTC"));
             $this->setValidUntilTicks((string)GnUtil::TicksFromDate($validUntilDate->add(new \DateInterval('PT23H59M59S'))));
         } else {
             $this->setValidUntilTicks("");

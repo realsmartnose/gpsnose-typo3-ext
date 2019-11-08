@@ -46,4 +46,31 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
 
         return $object;
     }
+
+    /**
+     * Finds the user matching the given Username
+     *
+     * @param string $username
+     *            Username
+     *
+     * @return \SmartNoses\Gpsnose\Domain\Model\FrontendUser
+     */
+    public function findByUsername($username)
+    {
+        $query = $this->createQuery();
+
+        $querySettings = $query->getQuerySettings();
+        $querySettings->setRespectStoragePage(FALSE);
+        $querySettings->setRespectSysLanguage(FALSE);
+        $querySettings->setIgnoreEnableFields(TRUE);
+        $querySettings->setEnableFieldsToBeIgnored([
+            'disabled'
+        ]);
+
+        $object = $query->matching($query->equals('username', $username))
+            ->execute()
+            ->getFirst();
+
+        return $object;
+    }
 }

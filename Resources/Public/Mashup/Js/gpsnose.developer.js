@@ -311,10 +311,10 @@ var MashupAdminViewModel = (function () {
         additionalClass = additionalClass ? ' ' + additionalClass : '';
         if (icon != "" && value && value.length > 2) {
             var com = value.substr(1, value.length);
-            return '<span class="glyphicon glyphicon-' + icon + '"></span> <span class="keyword-label' + additionalClass + '"> ' + com + '</span>';
+            return '<i class="glyphicon glyphicon-' + icon + '"></i> <span class="keyword-label' + additionalClass + '"> ' + com + '</span>';
         }
         else {
-            return '<span class="glyphicon glyphicon-globe fas fa-globe-americas"></span> <span class="keyword-label' + additionalClass + '"> ' + value + '</span>';
+            return '<i class="glyphicon glyphicon-globe fas fa-globe-americas"></i> <span class="keyword-label' + additionalClass + '"> ' + value + '</span>';
         }
     };
     MashupAdminViewModel.prototype.GetCommunityPrefix = function (value) {

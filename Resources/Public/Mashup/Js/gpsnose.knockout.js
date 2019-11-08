@@ -668,7 +668,7 @@ ko.components.register('ma-gpsnose-comments', {
         '<span data-bind="text: \' \' + GetLangRes(\'Common_lblLoadMore\', \'more..\')"></span>' +
         '</div>' +
         '<div data-bind="visible: CommentsRequestActive()">' +
-        '<span class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></span>' +
+        '<i class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_lblRequestInProgress\', \'Request in progress\')"></span>' +
         '</div>' +
         '</div>' +
@@ -1952,7 +1952,7 @@ var KeywordDto = (function () {
         var icon = this.GetIcon();
         if (icon != '' && value && value.length > 2) {
             var com = value.substr(1, value.length);
-            return '<span class="glyphicon glyphicon-' + icon + '"></span> <span class="keyword-label">' + com + '</span>';
+            return '<i class="glyphicon glyphicon-' + icon + '"></i> <span class="keyword-label">' + com + '</span>';
         }
         else {
             return value;
@@ -2296,6 +2296,17 @@ var PoiDto = (function (_super) {
     }
     return PoiDto;
 }(BaseNavigableItem));
+var SecurityToken = (function () {
+    function SecurityToken() {
+        this.Token = ko.observable(null);
+        this.CreatorUserName = ko.observable(null);
+        this.CreatedTicks = ko.observable(null);
+        this.ScannedTicks = ko.observable(null);
+        this.IsValid = ko.observable(false);
+        this.IsPending = ko.observable(false);
+    }
+    return SecurityToken;
+}());
 var TourDto = (function (_super) {
     __extends(TourDto, _super);
     function TourDto(data) {
@@ -2403,6 +2414,108 @@ var PoiDetailViewModel = (function (_super) {
         this.Tour = new TourDto({ "UniqueKey": uniqueKey });
     };
     return PoiDetailViewModel;
+}(BaseViewModel));
+var SecurityTokenValidatorViewModel = (function (_super) {
+    __extends(SecurityTokenValidatorViewModel, _super);
+    function SecurityTokenValidatorViewModel() {
+        var _this = _super.call(this) || this;
+        _this.ValidateUrl = '/WebApi/IsSecurityTokenValid';
+        _this.ValidationRequestActive = ko.observable(false);
+        _this.CurrentSecurityToken = ko.observable(null);
+        _this.SecurityTokens = ko.observableArray([]);
+        _this.MessageError = ko.observable(null);
+        _this.MessageSuccess = ko.observable(null);
+        _this.HasMessage = ko.computed(function () {
+            return _this.MessageError() != null || _this.MessageSuccess() != null;
+        });
+        _this.IsCameraOn = ko.observable(false);
+        _this.IsCameraPending = ko.observable(false);
+        _this.IsScanFinished = ko.observable(false);
+        _this.IsCameraOn.subscribe(function (newValue) {
+            if (newValue) {
+                if (_this.OnCameraOn) {
+                    _this.OnCameraOn(_this.Decoder);
+                }
+                _this.CurrentSecurityToken(null);
+                _this.MessageError(null);
+                _this.MessageSuccess(null);
+                _this.IsScanFinished(false);
+            }
+            else {
+                if (_this.OnCameraOff) {
+                    _this.OnCameraOff(_this.Decoder);
+                }
+            }
+            _this.ValidationRequestActive(false);
+            _this.IsCameraPending(newValue);
+        });
+        _this.CurrentSecurityToken.subscribe(function (newValue) {
+            if (newValue != null) {
+                _this.SecurityTokens.push(newValue);
+            }
+        });
+        return _this;
+    }
+    SecurityTokenValidatorViewModel.prototype.OnCameraOn = function (decoder) { };
+    ;
+    SecurityTokenValidatorViewModel.prototype.OnCameraOff = function (decoder) { };
+    ;
+    SecurityTokenValidatorViewModel.prototype.OnValidateComplete = function (tokenIsValide, creatorUserName) { };
+    ;
+    SecurityTokenValidatorViewModel.prototype.ToggleCamera = function () {
+        this.IsCameraOn(!this.IsCameraOn());
+    };
+    SecurityTokenValidatorViewModel.prototype.CameraIsNowReady = function () {
+        this.IsCameraPending(false);
+    };
+    SecurityTokenValidatorViewModel.prototype.ValidateResultCode = function (resultCode) {
+        if (this.ValidationRequestActive())
+            return;
+        this.ValidationRequestActive(true);
+        var self = this;
+        var invalideQrCodeMessage = GetLangRes('SecurityTokenValidator_invalideQrCode', 'Wrong type of QR-Code, please scan a SecurityToken');
+        var url = new URL(resultCode);
+        if (url == null) {
+            this.MessageError(invalideQrCodeMessage);
+            this.ValidationRequestActive(false);
+        }
+        else {
+            var securityToken = new SecurityToken();
+            securityToken.Token(url.searchParams.get("t"));
+            securityToken.CreatorUserName(url.searchParams.get("u"));
+            securityToken.CreatedTicks(url.searchParams.get("c"));
+            securityToken.ScannedTicks(GetTicksFromDate(new Date()));
+            securityToken.IsPending(true);
+            this.CurrentSecurityToken(securityToken);
+            if (securityToken.Token() == null || securityToken.Token().length < 1) {
+                this.MessageError(invalideQrCodeMessage);
+                this.ValidationRequestActive(false);
+            }
+            else {
+                this.IsCameraOn(false);
+                jQuery.ajax({
+                    type: 'POST',
+                    url: self.ValidateUrl,
+                    data: {
+                        "token": securityToken.Token()
+                    },
+                    cache: false,
+                    dataType: 'json',
+                    success: function (result) {
+                        securityToken.IsValid(result.IsOk);
+                        self.IsScanFinished(true);
+                    },
+                    error: function () {
+                    },
+                    complete: function () {
+                        securityToken.IsPending(false);
+                        self.OnValidateComplete(securityToken.IsValid(), securityToken.CreatorUserName());
+                    }
+                });
+            }
+        }
+    };
+    return SecurityTokenValidatorViewModel;
 }(BaseViewModel));
 var TourDetailViewModel = (function (_super) {
     __extends(TourDetailViewModel, _super);

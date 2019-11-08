@@ -173,7 +173,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param string $fileName
      * @return string
      */
-    private function getFileNameOrPath($fileName)
+    protected function getFileNameOrPath($fileName)
     {
         $file = GeneralUtility::getFileAbsFileName($fileName);
         return PathUtility::stripPathSitePrefix($file);

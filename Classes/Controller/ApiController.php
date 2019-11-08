@@ -15,6 +15,8 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use GpsNose\SDK\Framework\Logging\GnLogger;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use GpsNose\SDK\Mashup\Api\GnApi;
+use GpsNose\SDK\Web\Login\GnAuthentication;
 
 /**
  * *
@@ -178,7 +180,7 @@ class ApiController extends BaseController
     }
 
     /**
-     * loginvVerifie
+     * loginVerifie
      *
      * @return void
      */
@@ -197,6 +199,32 @@ class ApiController extends BaseController
         ]);
         $this->view->setVariablesToRender(array(
             'verified'
+        ));
+    }
+
+    /**
+     * validateSecurityToken
+     *
+     * @return void
+     */
+    public function validateSecurityTokenAction() {
+        $validated = FALSE;
+        if ($this->request->hasArgument("mashup")) {
+            $token = $_POST['token'];
+            $currentUser = GnAuthentication::CurrentUser();
+            /** @var $mashup \SmartNoses\Gpsnose\Domain\Model\Mashup */
+            $mashup = $this->mashupRepository->findByUid($this->request->getArgument('mashup'));
+
+            $gnApi = new GnApi();
+            $gnLoginApi = $gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId, $this->getLanguage());
+            $validated = $gnLoginApi->IsSecurityTokenValid($token) === TRUE ? TRUE : FALSE;
+        }
+
+        $this->view->assign('validated', (object)[
+            'IsOk' => $validated
+        ]);
+        $this->view->setVariablesToRender(array(
+            'validated'
         ));
     }
 

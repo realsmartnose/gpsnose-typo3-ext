@@ -39,6 +39,14 @@ settings.javascript.knockoutVm          string      Location of knockoutVm.js, i
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 settings.javascript.maframework         string      Location of maframework.js, if empty, script will not be loaded     from constant
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.javascript.qrCodeLib           string      Location of qrcodelib.js, if empty, script will not be loaded       from constant
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.javascript.qrCodeScanner       string      Location of webcodecamjquery.js, if empty, script will not be       from constant
+                                                    loaded
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.javascript.qrCodeWorker        string      Location of webcodecamjquery.js, if empty, script will not be       from constant
+                                                    loaded
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 settings.login.loginPid                 int         UID of the page where the login-module is placed                    from constant
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 settings.login.groupId                  int         UID of the fe-group that is used for user logged in by GpsNose      from constant
@@ -68,6 +76,18 @@ settings.ajax.pageComments              int         Page typeNum for comments   
 settings.ajax.commentSave               int         Page typeNum for comments save (add, update, delete)                10004
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 settings.ajax.loginVerifie              int         Page typeNum to verfie login                                        10005
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.ajax.pageNearbyNoses           int         Page typeNum to page nearby noses                                   10006
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.ajax.pageNearbyImpressions     int         Page typeNum to page nearby impressions                             10007
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.ajax.pageNearbyPois            int         Page typeNum to page nearby pois                                    10008
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.ajax.pageNearbyTracks          int         Page typeNum to page nearby tracks                                  10009
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.ajax.pageNearbyEvents          int         Page typeNum to page nearby events                                  10010
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.ajax.validateSecurityToken     int         Page typeNum to validete the SecureToken                            10011
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 view.templateRootPath                   stdWrap     Defines the path where the templates are located                    templateRootPaths.0 = EXT:gpsnose/Resources/Private/Templates/
                                                                                                                         templateRootPaths.1 = {$plugin.tx_gpsnose.view.templateRootPath}
