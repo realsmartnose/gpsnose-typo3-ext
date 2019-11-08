@@ -2,6 +2,7 @@
 - UPD: Update to GpsNose-SDK 1.0.13
 - ADD: New plugin to scan the SecurityToken
 - FIX: Fix TimeZone of Tokens
+- UPD: Improve the login
 
 1.6.6
 - UPD: Update Mashup
