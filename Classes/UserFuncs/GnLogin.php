@@ -21,17 +21,24 @@ class GnLogin
      */
     public function login($content, $conf)
     {
-        $loginId = $_GET["gnlid"];
+        $loginId = $GLOBALS["TSFE"]->fe_user->getKey("ses", "gnlid");
+        if (!$loginId) {
+            $loginId = $_GET["gnlid"];
+        } else {
+            $GLOBALS['TSFE']->fe_user->setKey("ses", "gnlid", NULL);
+            $GLOBALS['TSFE']->fe_user->storeSessionData();
+        }
+
         if ($loginId) {
             try {
                 GnUtility::applyExtConf();
 
                 $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-                /** @var $mashupRepository \SmartNoses\Gpsnose\Domain\Repository\MashupRepository */
+                /** @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository $mashupRepository */
                 $mashupRepository = $objectManager->get(MashupRepository::class);
 
                 if ($mashupRepository) {
-                    /** @var $mashup \SmartNoses\Gpsnose\Domain\Model\Mashup */
+                    /** @var \SmartNoses\Gpsnose\Domain\Model\Mashup $mashup */
                     $mashup = $mashupRepository->findByCommunityTag(GnUtility::getGnSettingsMashupName());
                     if ($mashup) {
                         if (GnUtility::login($mashup, $loginId)) {

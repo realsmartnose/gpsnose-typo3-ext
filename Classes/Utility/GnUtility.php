@@ -65,7 +65,7 @@ class GnUtility
         $verified = FALSE;
         if ($mashup && !GnUtil::IsNullOrEmpty($loginId)) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var $frontendUserRepository \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository */
+            /** @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository $frontendUserRepository */
             $frontendUserRepository = $objectManager->get(FrontendUserRepository::class);
 
             $api = new GnApi();
@@ -103,7 +103,7 @@ class GnUtility
                     $frontendUser->setPassword(GnUtil::NewGuid());
                 }
 
-                /** @var $userGroupRepository \SmartNoses\Gpsnose\Domain\Repository\FrontendUserGroupRepository */
+                /** @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserGroupRepository $userGroupRepository */
                 $userGroupRepository = $objectManager->get(FrontendUserGroupRepository::class);
                 // Add UserGroup
                 if ($gnSettings['login.']['groupId'] > 0) {
@@ -202,7 +202,7 @@ class GnUtility
         $mashupName = self::getGnSetting()['mashup.']['activeMashup'];
         if (strlen($mashupName) < 1) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var $mashupRepository MashupRepository */
+            /** @var MashupRepository $mashupRepository */
             $mashupRepository = $objectManager->get(MashupRepository::class);
             $query = $mashupRepository->createQuery();
             $query->getQuerySettings()->setRespectStoragePage(FALSE);

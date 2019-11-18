@@ -147,7 +147,7 @@ class MashupController extends BaseController
     private function RefreshMashups(GnLoginApiAdmin $gnLoginApiForAdmin = NULL)
     {
         try {
-            /** @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin $gnLoginApiForAdmin  */
+            /** @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin $gnLoginApiForAdmin */
             if ($gnLoginApiForAdmin == NULL) {
                 if ($this->_currentUser != NULL) {
                     // Verifie the user
@@ -159,7 +159,7 @@ class MashupController extends BaseController
             $ownMashups = $adminApi->GetOwnMashups();
 
             if (is_array($ownMashups)) {
-                /** @var $mashup \GpsNose\SDK\Mashup\Model\GnMashup */
+                /** @var \GpsNose\SDK\Mashup\Model\GnMashup $mashup */
                 foreach ($ownMashups as $mashup) {
                     // Try to find the existing entry
                     $mashupDto = $this->mashupRepository->findByCommunityTag($mashup->CommunityTag);
@@ -560,7 +560,7 @@ class MashupController extends BaseController
         $settings = GnUtility::getGnSetting();
         if ($settings['mashup.']['callbackPid'] > 0) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var $uriBuilder \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder */
+            /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
             $uriBuilder = $objectManager->get(UriBuilder::class);
             $uri = $uriBuilder->reset()
                 ->setTargetPageUid($settings['mashup.']['callbackPid'])
@@ -954,7 +954,7 @@ class MashupController extends BaseController
             $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
 
             $addedScans = array();
-            /** @var $mashupToken \GpsNose\SDK\Mashup\Model\GnMashupToken */
+            /** @var \GpsNose\SDK\Mashup\Model\GnMashupToken $mashupToken */
             foreach ($mashupTokensApi->GetMashupTokensPage($mashup->getCommunityTag(), $mashup->getLatestTokenScanTicks(), 50) as $mashupToken) {
                 $tokenDto = $mashup->findTokenByPayload($mashupToken->Payload);
                 if ($tokenDto == NULL) {

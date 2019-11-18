@@ -70,7 +70,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         if ($communityTag) {
             $communityService = new GnCommunityService($this->getLanguage());
-            /** @var $community \GpsNose\SDK\Mashup\Model\GnCommunity */
+            /** @var \GpsNose\SDK\Mashup\Model\GnCommunity $community */
             $community = $communityService->GetCommunity($communityTag);
 
             if ($community) {

@@ -31,12 +31,12 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             GnCache::$DisableCache = TRUE;
 
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var $mashupRepository MashupRepository */
+            /** @var MashupRepository $mashupRepository */
             $mashupRepository = $objectManager->get(MashupRepository::class);
             $persistenceManager = $objectManager->get(PersistenceManager::class);
 
             if ($mashupRepository && $persistenceManager) {
-                /** @var $mashup Mashup */
+                /** @var Mashup $mashup */
                 $mashup = $mashupRepository->findByCommunityTag(GnUtility::getGnSettingsMashupName());
 
                 if ($mashup) {
@@ -49,7 +49,7 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
 
                     if (is_array($mashupTokens)) {
                         $addedScans = array();
-                        /** @var $mashupToken \GpsNose\SDK\Mashup\Model\GnMashupToken */
+                        /** @var \GpsNose\SDK\Mashup\Model\GnMashupToken $mashupToken */
                         foreach ($mashupTokens as $mashupToken) {
                             $tokenDto = $mashup->findTokenByPayload($mashupToken->Payload);
                             if ($tokenDto == NULL) {
@@ -91,6 +91,9 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                             $mashup->addToken($tokenDto);
                         }
 
+                        $mashupRepository->update($mashup);
+                        $persistenceManager->persistAll();
+
                         if (!empty($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'])) {
                             $_params = [
                                 'pObj' => &$GLOBALS['TSFE'],
@@ -100,9 +103,6 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                                 GeneralUtility::callUserFunction($_funcRef, $_params, $GLOBALS['TSFE']);
                             }
                         }
-
-                        $mashupRepository->update($mashup);
-                        $persistenceManager->persistAll();
                     }
                 }
                 return TRUE;

@@ -24,30 +24,10 @@ class GpsnoseLogin implements MiddlewareInterface
         $response = $handler->handle($request);
 
         $queryParams = $request->getQueryParams();
-
         $loginId = $queryParams['gnlid'];
         if ($loginId) {
-            try {
-                GnUtility::applyExtConf();
-
-                $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-                /** @var $mashupRepository \SmartNoses\Gpsnose\Domain\Repository\MashupRepository */
-                $mashupRepository = $objectManager->get(MashupRepository::class);
-
-                if ($mashupRepository) {
-                    /** @var $mashup \SmartNoses\Gpsnose\Domain\Model\Mashup */
-                    $mashup = $mashupRepository->findByCommunityTag(GnUtility::getGnSettingsMashupName());
-                    if ($mashup) {
-                        if (GnUtility::login($mashup, $loginId)) {
-                            GnLogger::Info("Successfully logged in with LoginId:'{$loginId}' @mashup:'{$mashup->getCommunityTag()}'");
-                        } else {
-                            GnLogger::Warning("Failed to login with LoginId:'{$loginId}' @mashup:'{$mashup->getCommunityTag()}'");
-                        }
-                    }
-                }
-            } catch (\Exception $e) {
-                GnLogger::LogException($e);
-            }
+            $GLOBALS['TSFE']->fe_user->setKey("ses", "gnlid", $loginId);
+            $GLOBALS['TSFE']->fe_user->storeSessionData();
         }
 
         return $response;

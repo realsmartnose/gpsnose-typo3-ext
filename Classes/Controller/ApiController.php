@@ -188,7 +188,7 @@ class ApiController extends BaseController
     {
         $verified = FALSE;
         if ($this->request->hasArgument("mashup") && $this->request->hasArgument("loginId")) {
-            /** @var $mashup \SmartNoses\Gpsnose\Domain\Model\Mashup */
+            /** @var \SmartNoses\Gpsnose\Domain\Model\Mashup $mashup */
             $mashup = $this->mashupRepository->findByUid($this->request->getArgument('mashup'));
             $loginId = $this->request->getArgument('loginId');
 
@@ -212,7 +212,7 @@ class ApiController extends BaseController
         if ($this->request->hasArgument("mashup")) {
             $token = $_POST['token'];
             $currentUser = GnAuthentication::CurrentUser();
-            /** @var $mashup \SmartNoses\Gpsnose\Domain\Model\Mashup */
+            /** @var \SmartNoses\Gpsnose\Domain\Model\Mashup $mashup */
             $mashup = $this->mashupRepository->findByUid($this->request->getArgument('mashup'));
 
             $gnApi = new GnApi();

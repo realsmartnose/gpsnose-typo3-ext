@@ -710,7 +710,7 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getLatestTokenScanTicks()
     {
         $latestTicks = 0;
-        /** @var $token Token */
+        /** @var Token $token */
         foreach ($this->tokens as $token) {
             $newTicks = $token->getLatestTokenScanTicks();
             if ($newTicks > $latestTicks) {

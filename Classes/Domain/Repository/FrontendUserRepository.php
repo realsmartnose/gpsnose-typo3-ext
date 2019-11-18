@@ -39,12 +39,10 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
             'disabled'
         ]);
 
-        // TODO: search the user-group too?
-        $object = $query->matching($query->equals('gpsnose_loginname', $loginname))
-            ->execute()
-            ->getFirst();
+        $query = $query->matching($query->equals('gpsnose_loginname', $loginname));
+        $objects = $query->execute();
 
-        return $object;
+        return $objects->getFirst();
     }
 
     /**
@@ -67,10 +65,9 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
             'disabled'
         ]);
 
-        $object = $query->matching($query->equals('username', $username))
-            ->execute()
-            ->getFirst();
+        $query = $query->matching($query->equals('username', $username));
+        $objects = $query->execute();
 
-        return $object;
+        return $objects->getFirst();
     }
 }

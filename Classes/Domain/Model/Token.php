@@ -436,7 +436,7 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function findTokenScanByUserAndTicks(string $user, string $ticks)
     {
-        /** @var $tokenScan TokenScan */
+        /** @var TokenScan $tokenScan */
         foreach ($this->tokenScans as $tokenScan) {
             if ($tokenScan->getScannedByLoginName() === $user && $tokenScan->getScannedTicks() === $ticks) {
                 return $tokenScan;
@@ -453,7 +453,7 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getLatestTokenScanTicks()
     {
         $latestTicks = 0;
-        /** @var $tokenScan TokenScan */
+        /** @var TokenScan $tokenScan */
         foreach ($this->tokenScans as $tokenScan) {
             if ($tokenScan->getScannedTicks() > $latestTicks) {
                 $latestTicks = $tokenScan->getScannedTicks();

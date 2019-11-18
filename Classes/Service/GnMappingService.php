@@ -39,7 +39,7 @@ class GnMappingService extends GnBaseService
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
-                    /** @var $gnLoginApi \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser */
+                    /** @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser $gnLoginApi */
                     $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, $this->_langId);
                     return $gnLoginApi->GetGnMappingApi()->GetLatLonRectangleFromGIp($gip);
                 }
@@ -74,7 +74,7 @@ class GnMappingService extends GnBaseService
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
                 if ($mashup) {
-                    /** @var $gnLoginApi \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser */
+                    /** @var \GpsNose\SDK\Mashup\Api\Modules\GnLoginApiEndUser $gnLoginApi */
                     $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, $this->_langId);
                     return $gnLoginApi->GetGnMappingApi()->GetGipFromLatLon($lat, $lon, ($zoom > GnMappingApi::MAX_ZOOM || $zoom < 1 ? GnMappingApi::MAX_ZOOM : $zoom));
                 }

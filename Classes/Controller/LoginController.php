@@ -89,7 +89,7 @@ class LoginController extends BaseController
         } else {
             $this->initFrontend();
 
-            /** @var \SmartNoses\Gpsnose\Domain\Model\Mashup */
+            /** @var \SmartNoses\Gpsnose\Domain\Model\Mashup $mashup */
             $mashup = $this->mashupRepository->findByCommunityTag(GnUtility::getGnSettingsMashupName());
 
             if ($mashup) {
