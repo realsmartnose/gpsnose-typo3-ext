@@ -1,3 +1,6 @@
+1.7.3
+- FIX: Login with gnlid
+
 1.7.2
 - FIX: Fix duplicate fe_users after login
 - FIX: Login with gnlid

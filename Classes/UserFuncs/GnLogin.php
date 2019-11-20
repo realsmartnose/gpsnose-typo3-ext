@@ -26,7 +26,6 @@ class GnLogin
             $loginId = $_GET["gnlid"];
         } else {
             $GLOBALS['TSFE']->fe_user->setKey("ses", "gnlid", NULL);
-            $GLOBALS['TSFE']->fe_user->storeSessionData();
         }
 
         if ($loginId) {
