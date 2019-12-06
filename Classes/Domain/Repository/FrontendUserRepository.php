@@ -30,15 +30,6 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
     public function findByGpsnoseLoginName($loginname)
     {
         $query = $this->createQuery();
-
-        $querySettings = $query->getQuerySettings();
-        $querySettings->setRespectStoragePage(FALSE);
-        $querySettings->setRespectSysLanguage(FALSE);
-        $querySettings->setIgnoreEnableFields(TRUE);
-        $querySettings->setEnableFieldsToBeIgnored([
-            'disabled'
-        ]);
-
         $query = $query->matching($query->equals('gpsnose_loginname', $loginname));
         $objects = $query->execute();
 
@@ -56,15 +47,6 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
     public function findByUsername($username)
     {
         $query = $this->createQuery();
-
-        $querySettings = $query->getQuerySettings();
-        $querySettings->setRespectStoragePage(FALSE);
-        $querySettings->setRespectSysLanguage(FALSE);
-        $querySettings->setIgnoreEnableFields(TRUE);
-        $querySettings->setEnableFieldsToBeIgnored([
-            'disabled'
-        ]);
-
         $query = $query->matching($query->equals('username', $username));
         $objects = $query->execute();
 

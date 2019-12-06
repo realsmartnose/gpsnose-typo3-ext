@@ -28,7 +28,7 @@ return [
     ],
     'columns' => [
         't3ver_label' => [
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.versionLabel',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.versionLabel',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -37,7 +37,7 @@ return [
         ],
         'hidden' => [
             'exclude' => TRUE,
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.visible',
             'config' => [
                 'type' => 'check',
                 'items' => [
@@ -49,26 +49,32 @@ return [
         ],
         'starttime' => [
             'exclude' => TRUE,
-            'l10n_mode' => 'mergeIfNotBlank',
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config' => [
                 'type' => 'input',
+                'renderType' => 'inputDateTime',
                 'size' => 13,
                 'eval' => 'datetime',
-                'default' => 0
+                'default' => 0,
+                'behaviour' => [
+                    'allowLanguageSynchronization' => TRUE
+                ]
             ]
         ],
         'endtime' => [
             'exclude' => TRUE,
-            'l10n_mode' => 'mergeIfNotBlank',
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'input',
+                'renderType' => 'inputDateTime',
                 'size' => 13,
                 'eval' => 'datetime',
                 'default' => 0,
                 'range' => [
                     'upper' => mktime(0, 0, 0, 1, 1, 2038)
+                ],
+                'behaviour' => [
+                    'allowLanguageSynchronization' => TRUE
                 ]
             ]
         ],
@@ -88,7 +94,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 20,
-                'eval' => 'trim'
+                'eval' => 'trim,required'
             ]
         ],
         'recorded_ticks' => [
@@ -97,7 +103,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 20,
-                'eval' => 'trim'
+                'eval' => 'trim,required'
             ]
         ],
         'scanned_latitude' => [

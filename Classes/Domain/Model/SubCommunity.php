@@ -23,9 +23,15 @@ class SubCommunity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * name
      *
      * @var string
+     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      * @validate NotEmpty
      */
     protected $name = '';
+
+    /**
+     * @var \SmartNoses\Gpsnose\Domain\Model\Mashup
+     */
+    protected $mashup = NULL;
 
     /**
      * Returns the name
@@ -46,5 +52,21 @@ class SubCommunity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return \SmartNoses\Gpsnose\Domain\Model\Mashup
+     */
+    public function getMashup()
+    {
+        return $this->mashup;
+    }
+
+    /**
+     * @param \SmartNoses\Gpsnose\Domain\Model\Mashup $mashup 
+     */
+    public function setMashup(\SmartNoses\Gpsnose\Domain\Model\Mashup $mashup)
+    {
+        $this->mashup = $mashup;
     }
 }

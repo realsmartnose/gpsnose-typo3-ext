@@ -6,16 +6,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
-use SmartNoses\Gpsnose\Utility\GnUtility;
-use GpsNose\SDK\Framework\Logging\GnLogger;
-
-$file = __DIR__ . '/../../_dev.php';
-if (file_exists($file)) {
-    include($file);
-}
 
 class GpsnoseLogin implements MiddlewareInterface
 {

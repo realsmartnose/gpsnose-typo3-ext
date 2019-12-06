@@ -13,6 +13,7 @@ $fields = array(
         'displayCond' => 'FIELD:list_type:IN:gpsnose_members,gpsnose_news,gpsnose_commentscommunity,gpsnose_nearbynoses,gpsnose_nearbyimpressions,gpsnose_nearbypois,gpsnose_nearbytracks,gpsnose_nearbyevents',
         'config' => array(
             'type' => 'select',
+            'renderType' => 'selectSingle',
             'itemsProcFunc' => 'SmartNoses\Gpsnose\Controller\MashupController->flexFormsCommunitiesListItems',
             'items' => array(),
             'size' => 1,

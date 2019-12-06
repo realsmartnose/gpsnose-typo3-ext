@@ -37,7 +37,6 @@ class FrontendUserGroupRepository
         $this->repository = $objectManager->get(\TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository::class);
     }
 
-    
     /**
      * Finds the user matching the given UID
      *
@@ -49,11 +48,6 @@ class FrontendUserGroupRepository
     public function findByUid($uid)
     {
         $query = $this->repository->createQuery();
-
-        $querySettings = $query->getQuerySettings();
-        $querySettings->setRespectStoragePage(FALSE);
-        $querySettings->setRespectSysLanguage(FALSE);
-
         $object = $query->matching($query->equals('uid', $uid))
             ->execute()
             ->getFirst();
@@ -72,11 +66,6 @@ class FrontendUserGroupRepository
     public function findByTitle($title)
     {
         $query = $this->repository->createQuery();
-
-        $querySettings = $query->getQuerySettings();
-        $querySettings->setRespectStoragePage(FALSE);
-        $querySettings->setRespectSysLanguage(FALSE);
-
         $object = $query->matching($query->equals('title', $title))
             ->execute()
             ->getFirst();
@@ -94,7 +83,7 @@ class FrontendUserGroupRepository
      */
     public function addIfNotExistByTitle($title)
     {
-        if (! $this->findByTitle($title)) {
+        if (!$this->findByTitle($title)) {
             $userGroup = new FrontendUserGroup();
             $userGroup->setTitle($title);
             $userGroup->setDescription("Created by GpsNose");

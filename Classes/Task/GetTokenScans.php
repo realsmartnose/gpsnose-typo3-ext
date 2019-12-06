@@ -1,11 +1,6 @@
 <?php
 namespace SmartNoses\Gpsnose\Task;
 
-$file = __DIR__ . '/../../_dev.php';
-if (file_exists($file)) {
-    include($file);
-}
-
 use GpsNose\SDK\Framework\GnCache;
 use GpsNose\SDK\Framework\Logging\GnLogConfig;
 use GpsNose\SDK\Framework\Logging\GnLogger;
@@ -31,12 +26,18 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             GnCache::$DisableCache = TRUE;
 
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var MashupRepository $mashupRepository */
+            /** @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository $mashupRepository */
             $mashupRepository = $objectManager->get(MashupRepository::class);
             $persistenceManager = $objectManager->get(PersistenceManager::class);
 
             if ($mashupRepository && $persistenceManager) {
-                /** @var Mashup $mashup */
+                // Here we dont have the StoragePage
+                $querySettings = $mashupRepository->createQuery()->getQuerySettings();
+                $querySettings->setRespectStoragePage(FALSE);
+                $querySettings->setRespectSysLanguage(FALSE);
+                $mashupRepository->setDefaultQuerySettings($querySettings);
+
+                /** @var \SmartNoses\Gpsnose\Domain\Model\Mashup $mashup */
                 $mashup = $mashupRepository->findByCommunityTag(GnUtility::getGnSettingsMashupName());
 
                 if ($mashup) {
@@ -54,6 +55,7 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                             $tokenDto = $mashup->findTokenByPayload($mashupToken->Payload);
                             if ($tokenDto == NULL) {
                                 $tokenDto = new Token();
+                                $tokenDto->setPid($mashup->getPid());
                                 $tokenDto->setPayload($mashupToken->Payload);
                                 $tokenDto->setCallbackResponse('');
                                 $tokenDto->setOptions(GnMashupTokenOptions::NoOptions);
@@ -67,6 +69,7 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                             $tokenScan = $tokenDto->findTokenScanByUserAndTicks($mashupToken->ScannedByLoginName, $mashupToken->ScannedTicks);
                             if ($tokenScan == NULL) {
                                 $tokenScan = new TokenScan();
+                                $tokenScan->setPid($mashup->getPid());
                                 $tokenScan->setPayload($tokenDto->getPayload());
                                 $tokenScan->setScannedByLoginName($mashupToken->ScannedByLoginName);
                                 $tokenScan->setScannedTicks($mashupToken->ScannedTicks);

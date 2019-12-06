@@ -10,11 +10,6 @@ use SmartNoses\Gpsnose\Service\GnCommunityService;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 use GpsNose\SDK\Framework\Logging\GnLogger;
 
-$file = __DIR__ . '/../../_dev.php';
-if (file_exists($file)) {
-    include($file);
-}
-
 /**
  * *
  *
@@ -59,6 +54,9 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $this->frontendController = $GLOBALS['TSFE'];
         $this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['gpsnose'];
+        if ($this->extConf == NULL) {
+            $this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['gpsnose']);
+        }
 
         GnUtility::applyExtConf();
     }
@@ -218,7 +216,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     protected function isUserLoggedIn()
     {
-        return is_array($this->frontendController->fe_user->user);
+        return $this->frontendController->fe_user->user["uid"] > 0;
     }
 
     /**

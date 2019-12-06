@@ -23,6 +23,7 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * communityTag
      *
      * @var string
+     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      * @validate NotEmpty
      */
     protected $communityTag = '';
@@ -87,6 +88,7 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * subCommunities
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\SubCommunity>
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      * @cascade remove
      */
     protected $subCommunities = NULL;
@@ -95,6 +97,7 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * hosts
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\Host>
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      * @cascade remove
      */
     protected $hosts = NULL;
@@ -103,6 +106,7 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * callHistory
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\History>
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      * @cascade remove
      */
     protected $callHistory = NULL;
@@ -111,6 +115,7 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * exceededQuotaHistory
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\History>
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      * @cascade remove
      */
     protected $exceededQuotaHistory = NULL;
@@ -119,6 +124,7 @@ class Mashup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * tokens
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\Token>
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      * @cascade remove
      */
     protected $tokens = NULL;

@@ -165,4 +165,39 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         $this->gpsnoseLongitude = $gpsnoseLongitude + 0;
     }
+
+    /**
+     * 
+     */
+    public function getGpsnoseUrl(): string
+    {
+        $url = \GpsNose\SDK\Mashup\GnPaths::$HomeUrl . "/" . urlencode($this->getGpsnoseLoginname());
+        \SmartNoses\Gpsnose\Utility\GnUtility::applyExtConf();
+        $currentUser = \GpsNose\SDK\Web\Login\GnAuthentication::CurrentUser();
+        if ($currentUser != NULL && $currentUser->LoginId) {
+            $url .= "?lid=" . $currentUser->LoginId;
+        }
+        return $url;
+    }
+
+    /**
+     * 
+     */
+    public function getGpsnoseImageUrl(): string
+    {
+        return \GpsNose\SDK\Mashup\GnPaths::$DataUrl . "/profimg/" . urlencode($this->getGpsnoseLoginname()) . "@200";
+    }
+
+    /**
+     * 
+     */
+    public function getIsCurrentUser(): bool
+    {
+        \SmartNoses\Gpsnose\Utility\GnUtility::applyExtConf();
+        $currentUser = \GpsNose\SDK\Web\Login\GnAuthentication::CurrentUser();
+        if ($currentUser != NULL && $currentUser->LoginId && $this->getGpsnoseLoginname() == $GLOBALS['TSFE']->fe_user->user['gpsnose_loginname']) {
+            return TRUE;
+        }
+        return FALSE;
+    }
 }

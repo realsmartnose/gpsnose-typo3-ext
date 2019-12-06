@@ -12,8 +12,15 @@ memcachedServerHost = 127.0.0.1
 memcachedServerPort = 11211
 
 
-# cat=Backend/010; type=boolean; label=Debug-Log
+# cat=Backend/010; type=string; label=Backend-Modul locked to GpsNose-User
+backendLockedUser = 
+
+
+# cat=Debug/010; type=boolean; label=Debug-Log
 debugLog = 0
 
-# cat=Backend/020; type=string; label=Backend-Modul locked to GpsNose-User
-backendLockedUser = 
+# cat=Debug/020; type=string; label=GpsNose API (empty for default)
+homeUrl = 
+
+# cat=Debug/030; type=string; label=GpsNose DATA (empty for default)
+dataUrl = 

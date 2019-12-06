@@ -59,7 +59,7 @@ class GnBaseService
      */
     protected function isUserLoggedIn()
     {
-        return is_array($this->frontendController->fe_user->user);
+        return $this->frontendController->fe_user->user["uid"] > 0;
     }
 
     /**

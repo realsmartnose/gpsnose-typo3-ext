@@ -126,6 +126,11 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $batchCreationTicks = '0';
 
     /**
+     * @var \SmartNoses\Gpsnose\Domain\Model\Token
+     */
+    protected $token = NULL;
+
+    /**
      * @return string
      */
     public function getScannedByLoginName()
@@ -405,5 +410,21 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setBatchCreationTicks(string $batchCreationTicks)
     {
         $this->batchCreationTicks = $batchCreationTicks;
+    }
+
+    /**
+     * @return \SmartNoses\Gpsnose\Domain\Model\Token
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param \SmartNoses\Gpsnose\Domain\Model\Token $token 
+     */
+    public function setToken(\SmartNoses\Gpsnose\Domain\Model\Token $token)
+    {
+        $this->token = $token;
     }
 }

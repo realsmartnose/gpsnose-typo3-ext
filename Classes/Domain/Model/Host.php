@@ -27,6 +27,11 @@ class Host extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $domain = '';
 
     /**
+     * @var \SmartNoses\Gpsnose\Domain\Model\Mashup
+     */
+    protected $mashup = NULL;
+
+    /**
      * Returns the domain
      *
      * @return string $domain
@@ -45,5 +50,21 @@ class Host extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setDomain($domain)
     {
         $this->domain = $domain;
+    }
+
+    /**
+     * @return \SmartNoses\Gpsnose\Domain\Model\Mashup
+     */
+    public function getMashup()
+    {
+        return $this->mashup;
+    }
+
+    /**
+     * @param \SmartNoses\Gpsnose\Domain\Model\Mashup $mashup 
+     */
+    public function setMashup(\SmartNoses\Gpsnose\Domain\Model\Mashup $mashup)
+    {
+        $this->mashup = $mashup;
     }
 }

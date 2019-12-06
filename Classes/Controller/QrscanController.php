@@ -26,6 +26,7 @@ class QrscanController extends BaseController
      * mashupRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      * @inject
      */
     protected $mashupRepository = NULL;

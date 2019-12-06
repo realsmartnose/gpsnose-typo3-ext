@@ -50,6 +50,7 @@ class ApiController extends BaseController
      * mashupRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      * @inject
      */
     protected $mashupRepository = NULL;
@@ -58,6 +59,7 @@ class ApiController extends BaseController
      * frontendUserRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      * @inject
      */
     protected $frontendUserRepository = NULL;
@@ -463,9 +465,9 @@ class ApiController extends BaseController
                                     'addedScans' => [$tokenScan]
                                 ];
                                 foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'] as $_funcRef) {
-                                    GeneralUtility::callUserFunction($_funcRef, $_params, $GLOBALS['TSFE']);
+                                    $message .= GeneralUtility::callUserFunction($_funcRef, $_params, $GLOBALS['TSFE']);
                                 }
-                            }        
+                            }
                         } else {
                             throw new \Exception("Token already submitted!");
                         }

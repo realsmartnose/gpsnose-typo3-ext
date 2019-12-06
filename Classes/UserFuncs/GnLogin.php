@@ -7,11 +7,6 @@ use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 use GpsNose\SDK\Framework\Logging\GnLogger;
 
-$file = __DIR__ . '/../../_dev.php';
-if (file_exists($file)) {
-    include($file);
-}
-
 class GnLogin
 {
     /**
@@ -35,6 +30,11 @@ class GnLogin
                 $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
                 /** @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository $mashupRepository */
                 $mashupRepository = $objectManager->get(MashupRepository::class);
+                // Here we dont have the StoragePage (in case of gnlid-login-process)
+                $querySettings = $mashupRepository->createQuery()->getQuerySettings();
+                $querySettings->setRespectStoragePage(FALSE);
+                $querySettings->setRespectSysLanguage(FALSE);
+                $mashupRepository->setDefaultQuerySettings($querySettings);
 
                 if ($mashupRepository) {
                     /** @var \SmartNoses\Gpsnose\Domain\Model\Mashup $mashup */

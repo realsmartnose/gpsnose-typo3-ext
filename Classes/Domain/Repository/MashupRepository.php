@@ -37,9 +37,7 @@ class MashupRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function findByCommunityTag(string $communityTag)
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setRespectStoragePage(FALSE);
-        $query->getQuerySettings()->setRespectSysLanguage(FALSE);
-        $query->matching($query->logicalAnd($query->like('communityTag', '%' . substr($communityTag, 1))));
+        $query->matching($query->like('communityTag', '%' . substr($communityTag, 1)));
         return $query->execute()->getFirst();
     }
 
@@ -51,9 +49,7 @@ class MashupRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function findNotValidated()
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setRespectStoragePage(FALSE);
-        $query->getQuerySettings()->setRespectSysLanguage(FALSE);
-        $query->matching($query->logicalAnd($query->equals('appKey', '')));
+        $query->matching($query->equals('appKey', ''));
         return $query->execute();
     }
 }

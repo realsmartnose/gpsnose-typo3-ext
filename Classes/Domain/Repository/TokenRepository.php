@@ -37,7 +37,8 @@ class TokenRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function findByPayload(string $payload)
     {
         $query = $this->createQuery();
-        $query->matching($query->logicalAnd($query->like('payload', $payload)));
+        $query->matching($query->like('payload', $payload));
+
         return $query->execute()->getFirst();
     }
 }

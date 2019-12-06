@@ -30,6 +30,13 @@ class GnUtility
         GnLogConfig::AddListener(new GnLogListener());
 
         $extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['gpsnose'];
+        if ($extConf == NULL) {
+            $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['gpsnose']);
+        }
+
+        if ($extConf['cookieCryptPass']) {
+            GnCryptor::$pass = $extConf['cookieCryptPass'];
+        }
 
         if (!empty($extConf['cacheType'])) {
             switch ($extConf['cacheType']) {
@@ -45,11 +52,15 @@ class GnUtility
                     GnCache::$DisableCache = TRUE;
             }
         }
+
         if ($extConf['debugLog']) {
             GnApi::$Debug = TRUE;
         }
-        if ($extConf['cookieCryptPass']) {
-            GnCryptor::$pass = $extConf['cookieCryptPass'];
+        if ($extConf['homeUrl']) {
+            \GpsNose\SDK\Mashup\GnPaths::$HomeUrl = $extConf['homeUrl'];
+        }
+        if ($extConf['dataUrl']) {
+            \GpsNose\SDK\Mashup\GnPaths::$DataUrl = $extConf['dataUrl'];
         }
     }
 
@@ -65,8 +76,6 @@ class GnUtility
         $verified = FALSE;
         if ($mashup && !GnUtil::IsNullOrEmpty($loginId)) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository $frontendUserRepository */
-            $frontendUserRepository = $objectManager->get(FrontendUserRepository::class);
 
             $api = new GnApi();
             $gnLogin = $api->GetLoginApiForEndUser($mashup->getAppKey(), $loginId, NULL)->GetVerified();
@@ -75,7 +84,9 @@ class GnUtility
 
                 $isNewUser = FALSE;
 
-                // Set the PID
+                /** @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository $frontendUserRepository */
+                $frontendUserRepository = $objectManager->get(FrontendUserRepository::class);
+                // Here we dont have the StoragePage (in case of gnlid-login-process)
                 $querySettings = $frontendUserRepository->createQuery()->getQuerySettings();
                 $querySettings->setRespectStoragePage(FALSE);
                 $querySettings->setRespectSysLanguage(FALSE);
@@ -87,9 +98,9 @@ class GnUtility
                 }
                 if (!$frontendUser) {
                     $frontendUser = new FrontendUser();
+                    $frontendUser->setPid($mashup->getPid());
                     $isNewUser = TRUE;
                 }
-                $frontendUser->setPid(self::getGnPersistenceStoragePid());
                 $frontendUser->setUsername($gnSettings['login.']['loginNamePrefix'] . $gnLogin->LoginName);
                 $frontendUser->setGpsnoseLoginname($gnLogin->LoginName);
                 $frontendUser->setGpsnoseIsActivated($gnLogin->IsActivated);
@@ -122,10 +133,13 @@ class GnUtility
                     }
                 }
 
+                $hookName = '';
                 if ($isNewUser) {
                     $frontendUserRepository->add($frontendUser);
+                    $hookName = 'loginNewUser';
                 } else {
                     $frontendUserRepository->update($frontendUser);
+                    $hookName = 'loginUpdateUser';
                 }
                 $objectManager->get(PersistenceManager::class)->persistAll();
                 $verified = self::loginUser($frontendUser->getUsername());
@@ -135,6 +149,18 @@ class GnUtility
                 $gnAuthData->LoginName = $gnLogin->LoginName;
                 $gnAuthData->ProfileTags = $gnLogin->Communities;
                 GnAuthentication::Login($gnAuthData);
+
+                try {
+                    if ($verified && $frontendUser && !empty($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose'][$hookName])) {
+                        $_params = [
+                            'pObj' => &$GLOBALS['TSFE'],
+                            'fe_user' => $frontendUser
+                        ];
+                        foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose'][$hookName] as $_funcRef) {
+                            GeneralUtility::callUserFunction($_funcRef, $_params, $GLOBALS['TSFE']);
+                        }
+                    }
+                } catch (\Exception $ignore) {}
             }
         }
         return $verified;
@@ -225,7 +251,7 @@ class GnUtility
      */
     public static function isUserLoggedIn()
     {
-        return is_array($GLOBALS['TSFE']->fe_user->user);
+        return $GLOBALS['TSFE']->fe_user->user["uid"] > 0;
     }
 
     /**

@@ -47,6 +47,7 @@ class MashupController extends BaseController
      * persistenceManager
      *
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      * @inject
      */
     protected $persistenceManager = NULL;
@@ -55,6 +56,7 @@ class MashupController extends BaseController
      * mashupRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      * @inject
      */
     protected $mashupRepository = NULL;
@@ -63,6 +65,7 @@ class MashupController extends BaseController
      * tokenRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\TokenRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      * @inject
      */
     protected $tokenRepository = NULL;
@@ -71,6 +74,7 @@ class MashupController extends BaseController
      * frontendUserGroupRepository
      * 
      * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserGroupRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      * @inject
      */
     protected $frontendUserGroupRepository = NULL;
@@ -310,6 +314,9 @@ class MashupController extends BaseController
             }
             $this->redirect('list');
         } else {
+            if (!GnUtil::IsNullOrEmpty($this->extConf['backendLockedUser'])) {
+                $this->addFlashMessage("The module is locked to the user '{$this->extConf['backendLockedUser']}'", '', FlashMessage::WARNING, TRUE);
+            }
             $this->addFlashMessage('To login, scan this QR code using your mobile GpsNose app please', 'Info', FlashMessage::INFO);
             $loginId = GnUtil::NewGuid();
             $this->view->assign('qr_code_image', base64_encode($this->_gnApi->GetLoginApiForAdmin($loginId, "")
@@ -544,6 +551,7 @@ class MashupController extends BaseController
      * action edit
      *
      * @param Mashup $mashup
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("mashup")
      * @ignorevalidation $mashup
      * @return void
      */
@@ -870,7 +878,7 @@ class MashupController extends BaseController
         $query->getQuerySettings()->setRespectSysLanguage(FALSE);
         $mashupName = GnUtility::getGnSettingsMashupName();
         if (!GnUtil::IsNullOrEmpty($mashupName)) {
-            $query->matching($query->logicalAnd($query->like('communityTag', '%' . substr($mashupName, 1))));
+            $query->matching($query->like('communityTag', '%' . substr($mashupName, 1)));
         }
         $mashups = $query->execute();
 

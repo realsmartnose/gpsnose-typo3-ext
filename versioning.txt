@@ -1,3 +1,7 @@
+1.7.4
+- FIX: Output message from hook
+- FIX: FE-Login session timeout problems
+
 1.7.3
 - FIX: Login with gnlid
 

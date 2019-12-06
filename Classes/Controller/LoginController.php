@@ -28,6 +28,7 @@ class LoginController extends BaseController
      * mashupRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      * @inject
      */
     protected $mashupRepository = NULL;
@@ -36,6 +37,7 @@ class LoginController extends BaseController
      * frontendUserRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      * @inject
      */
     protected $frontendUserRepository = NULL;
