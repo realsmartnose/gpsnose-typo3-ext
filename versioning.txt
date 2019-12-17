@@ -1,3 +1,7 @@
+1.7.5
+- UPD: Update to GpsNose-SDK 1.0.14
+- ADD: Add new function to get the GpsNose-Key
+
 1.7.4
 - FIX: Output message from hook
 - FIX: FE-Login session timeout problems

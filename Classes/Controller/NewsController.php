@@ -3,6 +3,7 @@ namespace SmartNoses\Gpsnose\Controller;
 
 use SmartNoses\Gpsnose\Utility\GnData;
 use SmartNoses\Gpsnose\Service\GnNewsService;
+use SmartNoses\Gpsnose\Utility\GnUtility;
 
 /**
  * *
@@ -44,7 +45,7 @@ class NewsController extends BaseController
         $this->view->assign('record', $this->contentObj->data['uid']);
 
         $pageSize = $this->settings['newsPageSize'];
-        $newsService = new GnNewsService($this->getLanguage());
+        $newsService = new GnNewsService(GnUtility::getLanguage());
         $news = $newsService->GetNewsPage($communityTag, NULL, $pageSize);
         $this->view->assign('news', json_encode($news));
 

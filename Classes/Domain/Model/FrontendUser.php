@@ -185,7 +185,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      */
     public function getGpsnoseImageUrl(): string
     {
-        return \GpsNose\SDK\Mashup\GnPaths::$DataUrl . "/profimg/" . urlencode($this->getGpsnoseLoginname()) . "@200";
+        return \GpsNose\SDK\Mashup\GnPaths::$DataUrl . "/profimg/" . urlencode($this->getGpsnoseLoginname()) . "@400";
     }
 
     /**

@@ -3,6 +3,7 @@ namespace SmartNoses\Gpsnose\Controller;
 
 use SmartNoses\Gpsnose\Service\GnNearbyService;
 use SmartNoses\Gpsnose\Utility\GnData;
+use SmartNoses\Gpsnose\Utility\GnUtility;
 
 /**
  * *
@@ -45,7 +46,7 @@ class NearbyController extends BaseController
 
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyNosesPageSize'];
-            $nearbyService = new GnNearbyService($this->getLanguage());
+            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $noses = $nearbyService->GetNosesAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('noses', json_encode($noses));
         }
@@ -74,7 +75,7 @@ class NearbyController extends BaseController
 
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyImpressionsPageSize'];
-            $nearbyService = new GnNearbyService($this->getLanguage());
+            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $impressions = $nearbyService->GetImpressionsAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('impressions', json_encode($impressions));
         }
@@ -103,7 +104,7 @@ class NearbyController extends BaseController
 
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyPoisPageSize'];
-            $nearbyService = new GnNearbyService($this->getLanguage());
+            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $pois = $nearbyService->GetPoisAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('pois', json_encode($pois));
         }
@@ -132,7 +133,7 @@ class NearbyController extends BaseController
 
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyTracksPageSize'];
-            $nearbyService = new GnNearbyService($this->getLanguage());
+            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $tracks = $nearbyService->GetTracksAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('tracks', json_encode($tracks));
         }
@@ -161,7 +162,7 @@ class NearbyController extends BaseController
 
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyEventsPageSize'];
-            $nearbyService = new GnNearbyService($this->getLanguage());
+            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $events = $nearbyService->GetEventsAroundPage($communityTag, NULL, $pageSize);
             $this->view->assign('events', json_encode($events));
         }

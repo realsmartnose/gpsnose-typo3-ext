@@ -23,6 +23,11 @@ use GpsNose\SDK\Framework\Logging\GnLogger;
 class GnUtility
 {
     /**
+     * @var int
+     */
+    protected const MAX_DATE_TIME_TICKS = 3155378975999999999;
+
+    /**
      * Use the settings in the ext-conf to set cache/debug
      */
     public static function applyExtConf()
@@ -242,6 +247,40 @@ class GnUtility
             return "";
         }
         return $mashupName;
+    }
+
+    /**
+     * Returns the UniqueKey of a GpsNose-Item
+     * @param $loginName string
+     * @param $ticks int
+     */
+    public static function GetUniqueKey($loginName, $ticks)
+    {
+        $maxDateTicks = GnUtility::MAX_DATE_TIME_TICKS;
+        return $loginName . "_" . ($maxDateTicks - $ticks);
+    }
+
+    /**
+     * Returns the language two letter code
+     */
+    public static function getLanguage()
+    {
+        $lang = NULL;
+        if (TYPO3_MODE === 'FE') {
+            try {
+                if (isset($GLOBALS['TYPO3_REQUEST']) && $GLOBALS['TYPO3_REQUEST']->getAttribute('language')) {
+                    $lang = $GLOBALS['TYPO3_REQUEST']->getAttribute('language')->getTwoLetterIsoCode();
+                }
+            } catch (\Exception $e) {
+                GnLogger::Error($e->getMessage());
+            }
+            if (!$lang && isset($GLOBALS['TSFE']->config['config']['language'])) {
+                $lang = $GLOBALS['TSFE']->config['config']['language'];
+            }
+        } elseif (strlen($GLOBALS['BE_USER']->uc['lang']) > 0) {
+            $lang = $GLOBALS['BE_USER']->uc['lang'];
+        }
+        return strlen($lang) == 0 ? "en" : $lang;
     }
 
     /**

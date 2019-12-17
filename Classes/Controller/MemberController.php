@@ -3,6 +3,7 @@ namespace SmartNoses\Gpsnose\Controller;
 
 use SmartNoses\Gpsnose\Service\GnMemberService;
 use SmartNoses\Gpsnose\Utility\GnData;
+use SmartNoses\Gpsnose\Utility\GnUtility;
 
 /**
  * *
@@ -53,7 +54,7 @@ class MemberController extends BaseController
         $this->view->assign('record', $this->contentObj->data['uid']);
 
         $pageSize = $this->settings['membersPageSize'];
-        $memberService = new GnMemberService($this->getLanguage());
+        $memberService = new GnMemberService(GnUtility::getLanguage());
         $members = $memberService->GetMembersPage($communityTag, NULL, $pageSize);
         $this->view->assign('members', json_encode($members));
 

@@ -92,7 +92,7 @@ class ApiController extends BaseController
         $communityTag = $_POST['community'];
 
         if (!GnUtil::IsNullOrEmpty($communityTag)) {
-            $memberService = new GnMemberService($this->getLanguage());
+            $memberService = new GnMemberService(GnUtility::getLanguage());
             $this->view->assign('members', $memberService->GetMembersPage($communityTag, $lastKnownTicks, $pageSize));
             $this->view->setVariablesToRender(array(
                 'members'
@@ -120,7 +120,7 @@ class ApiController extends BaseController
         $communityTag = $_POST['community'];
 
         if (!GnUtil::IsNullOrEmpty($communityTag)) {
-            $newsService = new GnNewsService($this->getLanguage());
+            $newsService = new GnNewsService(GnUtility::getLanguage());
             $this->view->assign('news', $newsService->GetNewsPage($communityTag, $lastKnownTicks, $pageSize));
             $this->view->setVariablesToRender(array(
                 'news'
@@ -150,7 +150,7 @@ class ApiController extends BaseController
         $itemType = $_POST['itemType'];
 
         if (!GnUtil::IsNullOrEmpty($communityTag)) {
-            $commentService = new GnCommentService($this->getLanguage());
+            $commentService = new GnCommentService(GnUtility::getLanguage());
             $this->view->assign('comments', $commentService->GetCommentsPage($itemType, $communityTag, $lastKnownTicks, $pageSize));
             $this->view->setVariablesToRender(array(
                 'comments'
@@ -173,7 +173,7 @@ class ApiController extends BaseController
         $isUpdate = filter_var($_POST['isUpdate'], FILTER_VALIDATE_BOOLEAN);
 
         if (!GnUtil::IsNullOrEmpty($uniqueKey)) {
-            $commentService = new GnCommentService($this->getLanguage());
+            $commentService = new GnCommentService(GnUtility::getLanguage());
             $this->view->assign('result', $commentService->SaveComment($creationTicks, $text, $itemType, $uniqueKey, $isUpdate));
             $this->view->setVariablesToRender(array(
                 'result'
@@ -218,7 +218,7 @@ class ApiController extends BaseController
             $mashup = $this->mashupRepository->findByUid($this->request->getArgument('mashup'));
 
             $gnApi = new GnApi();
-            $gnLoginApi = $gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId, $this->getLanguage());
+            $gnLoginApi = $gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $currentUser->LoginId, GnUtility::getLanguage());
             $validated = $gnLoginApi->IsSecurityTokenValid($token) === TRUE ? TRUE : FALSE;
         }
 
@@ -250,7 +250,7 @@ class ApiController extends BaseController
         $communityTag = $_POST['community'];
 
         if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
-            $nearbyService = new GnNearbyService($this->getLanguage());
+            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $this->view->assign('noses', $nearbyService->GetNosesAroundPage($communityTag, NULL, $pageSize));
         } else {
             $this->view->assign('noses', []);
@@ -280,7 +280,7 @@ class ApiController extends BaseController
         $communityTag = $_POST['community'];
 
         if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
-            $nearbyService = new GnNearbyService($this->getLanguage());
+            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $this->view->assign('impressions', $nearbyService->GetImpressionsAroundPage($communityTag, NULL, $pageSize));
         } else {
             $this->view->assign('impressions', []);
@@ -310,7 +310,7 @@ class ApiController extends BaseController
         $communityTag = $_POST['community'];
 
         if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
-            $nearbyService = new GnNearbyService($this->getLanguage());
+            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $this->view->assign('pois', $nearbyService->GetPoisAroundPage($communityTag, NULL, $pageSize));
         } else {
             $this->view->assign('pois', []);
@@ -340,7 +340,7 @@ class ApiController extends BaseController
         $communityTag = $_POST['community'];
 
         if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
-            $nearbyService = new GnNearbyService($this->getLanguage());
+            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $this->view->assign('tracks', $nearbyService->GetTracksAroundPage($communityTag, NULL, $pageSize));
         } else {
             $this->view->assign('tracks', []);
@@ -370,7 +370,7 @@ class ApiController extends BaseController
         $communityTag = $_POST['community'];
 
         if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
-            $nearbyService = new GnNearbyService($this->getLanguage());
+            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $this->view->assign('events', $nearbyService->GetEventsAroundPage($communityTag, NULL, $pageSize));
         } else {
             $this->view->assign('events', []);

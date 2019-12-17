@@ -3,6 +3,7 @@ namespace SmartNoses\Gpsnose\Controller;
 
 use SmartNoses\Gpsnose\Service\GnCommentService;
 use GpsNose\SDK\Mashup\Model\GnCommentItemType;
+use SmartNoses\Gpsnose\Utility\GnUtility;
 
 /**
  * *
@@ -53,7 +54,7 @@ class CommentController extends BaseController
         $this->view->assign('record', $this->contentObj->data['uid']);
 
         $pageSize = $this->settings['commentsPageSize'];
-        $commentService = new GnCommentService($this->getLanguage());
+        $commentService = new GnCommentService(GnUtility::getLanguage());
         $comments = $commentService->GetCommentsPage(GnCommentItemType::Community, $communityTag, NULL, $pageSize);
         $this->view->assign('comments', json_encode($comments));
 
