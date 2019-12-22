@@ -8,7 +8,6 @@ use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use SmartNoses\Gpsnose\Service\GnCommunityService;
 use SmartNoses\Gpsnose\Utility\GnUtility;
-use GpsNose\SDK\Framework\Logging\GnLogger;
 
 /**
  * *
@@ -38,7 +37,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * @var array
      */
-    protected $extConf;
+    protected $gpsnoseConf;
 
     /**
      * BaseController __construct
@@ -48,9 +47,9 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         parent::__construct();
 
         $this->frontendController = $GLOBALS['TSFE'];
-        $this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['gpsnose'];
-        if ($this->extConf == NULL) {
-            $this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['gpsnose']);
+        $this->gpsnoseConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['gpsnose'];
+        if ($this->gpsnoseConf == NULL) {
+            $this->gpsnoseConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['gpsnose']);
         }
 
         GnUtility::applyExtConf();
@@ -214,5 +213,37 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $url = $this->uriBuilder->setTargetPageUid($pageId)->build();
 
         $this->redirectToUri($url);
+    }
+
+    /**
+     * Returns the response as Web\Response (with the setHeader)
+     */
+    protected function webRequest(): \TYPO3\CMS\Extbase\Mvc\Web\Response
+    {
+        return $this->response;
+    }
+
+    /**
+     * @param $uploadFile
+     */
+    protected function getReferenceFromAttachment($uploadFile)
+    {
+        $storage = $this->storageRepository->findByUid('1');
+        $folder = $this->attachmentFolder;
+        $targetFolder = null;
+        if ($storage->hasFolder($folder)) {
+            $targetFolder = $storage->getFolder($folder);
+        } else {
+            $targetFolder = $storage->createFolder($folder);
+        }
+        $originalFilePath = $uploadFile['tmp_name'];
+        $newFileName = $uploadFile['name'];
+
+        if (file_exists($originalFilePath)) {
+            $movedNewFile = $storage->addFile($originalFilePath, $targetFolder, $newFileName);
+            $newFileReference = $this->objectManager->get('SmartNoses\Gpsnose\Domain\Model\FileReference');
+            $newFileReference->setFile($movedNewFile);
+            return $newFileReference;
+        }
     }
 }

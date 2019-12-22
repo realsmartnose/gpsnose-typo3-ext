@@ -129,10 +129,10 @@ class MashupController extends BaseController
     private function AssureLoggedIn()
     {
         if ($this->_currentUser != NULL) {
-            if (GnUtil::IsNullOrEmpty($this->extConf['backendLockedUser']) || $this->extConf['backendLockedUser'] == $this->_currentUser->LoginName) {
+            if (GnUtil::IsNullOrEmpty($this->gpsnoseConf['backendLockedUser']) || $this->gpsnoseConf['backendLockedUser'] == $this->_currentUser->LoginName) {
                 $this->_gnLoginApi = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId, "");
             } else {
-                $this->addFlashMessage("The module is locked to the user '{$this->extConf['backendLockedUser']}'", '', FlashMessage::WARNING, TRUE);
+                $this->addFlashMessage("The module is locked to the user '{$this->gpsnoseConf['backendLockedUser']}'", '', FlashMessage::WARNING, TRUE);
                 GnAuthentication::Logout();
                 $this->_gnLoginApi = NULL;
                 $this->redirect('login');
@@ -314,8 +314,8 @@ class MashupController extends BaseController
             }
             $this->redirect('list');
         } else {
-            if (!GnUtil::IsNullOrEmpty($this->extConf['backendLockedUser'])) {
-                $this->addFlashMessage("The module is locked to the user '{$this->extConf['backendLockedUser']}'", '', FlashMessage::WARNING, TRUE);
+            if (!GnUtil::IsNullOrEmpty($this->gpsnoseConf['backendLockedUser'])) {
+                $this->addFlashMessage("The module is locked to the user '{$this->gpsnoseConf['backendLockedUser']}'", '', FlashMessage::WARNING, TRUE);
             }
             $this->addFlashMessage('To login, scan this QR code using your mobile GpsNose app please', 'Info', FlashMessage::INFO);
             $loginId = GnUtil::NewGuid();
