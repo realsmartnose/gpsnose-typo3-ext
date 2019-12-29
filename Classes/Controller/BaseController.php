@@ -214,28 +214,4 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $this->redirectToUri($url);
     }
-
-    /**
-     * @param $uploadFile
-     */
-    protected function getReferenceFromAttachment($uploadFile)
-    {
-        $storage = $this->storageRepository->findByUid('1');
-        $folder = $this->attachmentFolder;
-        $targetFolder = null;
-        if ($storage->hasFolder($folder)) {
-            $targetFolder = $storage->getFolder($folder);
-        } else {
-            $targetFolder = $storage->createFolder($folder);
-        }
-        $originalFilePath = $uploadFile['tmp_name'];
-        $newFileName = $uploadFile['name'];
-
-        if (file_exists($originalFilePath)) {
-            $movedNewFile = $storage->addFile($originalFilePath, $targetFolder, $newFileName);
-            $newFileReference = $this->objectManager->get('SmartNoses\Gpsnose\Domain\Model\FileReference');
-            $newFileReference->setFile($movedNewFile);
-            return $newFileReference;
-        }
-    }
 }
