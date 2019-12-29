@@ -1,3 +1,6 @@
+1.7.7
+- UPD: Improve BaseController
+
 1.7.6
 - UPD: Improve BaseController
 

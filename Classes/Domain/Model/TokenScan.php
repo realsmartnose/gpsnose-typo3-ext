@@ -23,7 +23,7 @@ class TokenScan extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * this property will not be persist, its only for hook
      * @var string
      */
-    private $payload = '';
+    protected $payload = '';
     /**
      * @return string
      */

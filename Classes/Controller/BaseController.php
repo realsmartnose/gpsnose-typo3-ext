@@ -216,14 +216,6 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     }
 
     /**
-     * Returns the response as Web\Response (with the setHeader)
-     */
-    protected function webRequest(): \TYPO3\CMS\Extbase\Mvc\Web\Response
-    {
-        return $this->response;
-    }
-
-    /**
      * @param $uploadFile
      */
     protected function getReferenceFromAttachment($uploadFile)
