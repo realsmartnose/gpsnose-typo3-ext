@@ -33,7 +33,7 @@ javascript.imagesloaded                 string      Location of imagesloaded.js,
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 javascript.masonry                      string      Location of masonry.js, if empty, script will not be loaded         EXT:gpsnose/Resources/Public/Mashup/Libs/masonry/4.2.2/masonry.pkgd.min.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-javascript.knockout                     string      Location of knockout.js, if empty, script will not be loaded        EXT:gpsnose/Resources/Public/Mashup/Libs/knockout/3.5.0/knockout.js
+javascript.knockout                     string      Location of knockout.js, if empty, script will not be loaded        EXT:gpsnose/Resources/Public/Mashup/Libs/knockout/3.5.1/knockout.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 javascript.knockoutVm                   string      Location of knockoutVm.js, if empty, script will not be loaded      EXT:gpsnose/Resources/Public/Mashup/Js/gpsnose.knockout.min.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------

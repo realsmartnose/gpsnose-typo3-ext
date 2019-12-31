@@ -254,7 +254,6 @@ ajax_gpsnose_pagenearbyevents {
 gpsnose_callback_page = PAGE
 gpsnose_callback_page {
   typeNum < plugin.tx_gpsnose.settings.mashup.callbackTypeNum
-  #10 < tt_content.list.20.gpsnose_mashupcallback
   config {
     disableAllHeaderCode = 1
     additionalHeaders = Content-type:text/plain

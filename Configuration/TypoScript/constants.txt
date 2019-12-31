@@ -39,7 +39,7 @@ plugin.tx_gpsnose {
     masonry = EXT:gpsnose/Resources/Public/Mashup/Libs/masonry/4.2.2/masonry.pkgd.min.js
 
     # cat=plugin.tx_gpsnose/javascript/070; type=string; label=Location of Knockout.js
-    knockout = EXT:gpsnose/Resources/Public/Mashup/Libs/knockout/3.5.0/knockout.js
+    knockout = EXT:gpsnose/Resources/Public/Mashup/Libs/knockout/3.5.1/knockout.js
 
     # cat=plugin.tx_gpsnose/javascript/080; type=string; label=Location of Knockout ViewModel
     knockoutVm = EXT:gpsnose/Resources/Public/Mashup/Js/gpsnose.knockout.min.js

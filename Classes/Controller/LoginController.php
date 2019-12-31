@@ -117,6 +117,7 @@ class LoginController extends BaseController
                     ->reset()
                     ->setTargetPageUid($redirectPid)
                     ->setCreateAbsoluteUri(TRUE)
+                    ->setLinkAccessRestrictedPages(TRUE)
                     ->build();
                 $this->view->assign('return_url', $uri);
             }

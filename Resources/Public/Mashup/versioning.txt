@@ -1,3 +1,17 @@
+1.0.15
+- FIX: Fix community-button for Bootstrap-V4.4.x
+- UPD: Add knockout 3.5.1
+- UPD: Remove old libs
+
+1.0.14
+- FIX: Fix template version
+
+1.0.13
+- UPD: Add ThumbUrl to KO-DTOs
+
+1.0.12
+- UPD: Update template version
+
 1.0.11
 - UPD: Fix News-Template
 
