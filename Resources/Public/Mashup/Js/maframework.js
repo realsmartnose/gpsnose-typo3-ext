@@ -302,12 +302,12 @@ function IsGeoValid(lat, lon)
 function GetDistanceString(profile)
 {
     if (profile) {
-        var o = profile.DistanceMetersObfuscated;
         var e = profile.DistanceMetersExact;
-        if (o > 0) {
-            return ObfuscatedDistanceStringByNumber(o);
-        } else if (e >= 0) {
+        var o = profile.DistanceMetersObfuscated;
+        if (e > 0) {
             return FormatExactDistance(e);
+        } else if (o >= 0) {
+            return ObfuscatedDistanceStringByNumber(ObfuscatedDistanceByNumber(o));
         }
     }
     return "";
@@ -341,6 +341,47 @@ function ObfuscatedDistanceStringByNumber(distance)
             return ">1000km";
     }
     return FormatExactDistance(distance);
+}
+
+
+function ObfuscatedDistanceByNumber(distance) {
+    var returnInt;
+    switch (distance) {
+        case 0:
+            returnInt = 150;
+            break;
+        case 150:
+            returnInt = 250;
+            break;
+        case 250:
+            returnInt = 500;
+            break;
+        case 500:
+            returnInt = 1000;
+            break;
+        case 1000:
+            returnInt = 5000;
+            break;
+        case 5000:
+            returnInt = 10000;
+            break;
+        case 10000:
+            returnInt = 25000;
+            break;
+        case 25000:
+            returnInt = 50000;
+            break;
+        case 50000:
+            returnInt = 100000;
+            break;
+        case 100000:
+            returnInt = 1000000;
+            break;
+        default:
+            returnInt = 10000000;
+            break;
+    }
+    return returnInt;
 }
 
 

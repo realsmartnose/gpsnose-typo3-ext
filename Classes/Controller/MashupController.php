@@ -957,7 +957,6 @@ class MashupController extends BaseController
         $this->AssureLoggedIn();
 
         try {
-            $updateCount = 0;
             $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), NULL, NULL);
             $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
 
@@ -975,6 +974,11 @@ class MashupController extends BaseController
                     $tokenDto->setValuePerUnit($mashupToken->ValuePerUnit ?: 0);
                     $tokenDto->setCreationTicks($mashupToken->CreationTicks ?: '0');
                     $tokenDto->setCreatedByLoginName($mashupToken->CreatedByLoginName ?: '');
+                    $tokenDto->setMashup($mashup);
+                    $mashup->addToken($tokenDto);
+                    $this->tokenRepository->add($tokenDto);
+                } else {
+                    $this->tokenRepository->update($tokenDto);
                 }
 
                 $tokenScan = $tokenDto->findTokenScanByUserAndTicks($mashupToken->ScannedByLoginName, $mashupToken->ScannedTicks);
@@ -1000,14 +1004,14 @@ class MashupController extends BaseController
                     $tokenScan->setBatchCreationTicks($mashupToken->BatchCreationTicks ?: '0');
 
                     $tokenDto->addTokenScan($tokenScan);
+
+                    $this->persistAll();
+
                     $addedScans[] = $tokenScan;
-
-                    $updateCount++;
                 }
-
-                $mashup->addToken($tokenDto);
             }
-            $this->mashupRepository->update($mashup);
+
+            $this->persistAll();
 
             if (!empty($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'])) {
                 $_params = [
@@ -1019,8 +1023,8 @@ class MashupController extends BaseController
                 }
             }
 
-            if ($updateCount > 0) {
-                $this->addFlashMessage("Added {$updateCount} items", '', FlashMessage::OK, TRUE);
+            if (count($addedScans) > 0) {
+                $this->addFlashMessage("Added {count($addedScans)} items", '', FlashMessage::OK, TRUE);
             } else {
                 $this->addFlashMessage('There where no new scans available for this Mashup', '', FlashMessage::OK, TRUE);
             }

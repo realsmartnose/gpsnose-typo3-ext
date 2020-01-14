@@ -10,6 +10,7 @@ use SmartNoses\Gpsnose\Utility\GnLogListener;
 use SmartNoses\Gpsnose\Domain\Model\Token;
 use SmartNoses\Gpsnose\Domain\Model\TokenScan;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
+use SmartNoses\Gpsnose\Domain\Repository\TokenRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -26,8 +27,14 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             GnCache::$DisableCache = TRUE;
 
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository $mashupRepository */
+
+            /** @var MashupRepository */
             $mashupRepository = $objectManager->get(MashupRepository::class);
+
+            /** @var TokenRepository */
+            $tokenRepository = $objectManager->get(TokenRepository::class);
+
+            /** @var PersistenceManager */
             $persistenceManager = $objectManager->get(PersistenceManager::class);
 
             if ($mashupRepository && $persistenceManager) {
@@ -64,6 +71,11 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                                 $tokenDto->setValuePerUnit($mashupToken->ValuePerUnit ?: 0);
                                 $tokenDto->setCreationTicks($mashupToken->CreationTicks ?: '0');
                                 $tokenDto->setCreatedByLoginName($mashupToken->CreatedByLoginName ?: '');
+                                $tokenDto->setMashup($mashup);
+                                $mashup->addToken($tokenDto);
+                                $tokenRepository->add($tokenDto);
+                            } else {
+                                $tokenRepository->update($tokenDto);
                             }
 
                             $tokenScan = $tokenDto->findTokenScanByUserAndTicks($mashupToken->ScannedByLoginName, $mashupToken->ScannedTicks);
@@ -88,13 +100,13 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                                 $tokenScan->setBatchCreationTicks($mashupToken->BatchCreationTicks ?: '0');
 
                                 $tokenDto->addTokenScan($tokenScan);
+
+                                $persistenceManager->persistAll();
+
                                 $addedScans[] = $tokenScan;
                             }
-
-                            $mashup->addToken($tokenDto);
                         }
 
-                        $mashupRepository->update($mashup);
                         $persistenceManager->persistAll();
 
                         if (!empty($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'])) {

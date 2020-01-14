@@ -1,7 +1,6 @@
 <?php
 namespace SmartNoses\Gpsnose\Domain\Repository;
 
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 /**
  * *
@@ -24,9 +23,7 @@ class TokenRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * @var array
      */
-    protected $defaultOrderings = array(
-        'sorting' => QueryInterface::ORDER_ASCENDING
-    );
+    protected $defaultOrderings = ['crdate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING];
 
     /**
      * findByPayload

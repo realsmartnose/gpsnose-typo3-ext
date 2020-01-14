@@ -105,8 +105,6 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SmartNoses\Gpsnose\Domain\Model\TokenScan>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
-     * @cascade remove
      */
     protected $tokenScans = NULL;
 
@@ -159,7 +157,7 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         if ($this->isCanComment()) {
             $options += GnMashupTokenOptions::CanComment;
         }
-        if ($this->getAskGpsSharing()) {
+        if ($this->isAskGpsSharing()) {
             $options += GnMashupTokenOptions::AskGpsSharing;
         }
         $this->setOptions($options);
@@ -351,7 +349,7 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @return bool
      */
-    public function getAskGpsSharing()
+    public function isAskGpsSharing()
     {
         return $this->askGpsSharing;
     }

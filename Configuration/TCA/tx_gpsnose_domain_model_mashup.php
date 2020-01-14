@@ -6,7 +6,7 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'sortby' => 'sorting',
+        'default_sortby' => 'ORDER BY community_tag ASC',
         'versioningWS' => TRUE,
         'delete' => 'deleted',
         'enablecolumns' => [
@@ -78,6 +78,7 @@ return [
                 'allowLanguageSynchronization' => TRUE
             ]
         ],
+
         'community_tag' => [
             'exclude' => FALSE,
             'label' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_mashup.community_tag',
@@ -168,7 +169,7 @@ return [
                 'foreign_field' => 'mashup',
                 'maxitems' => 9999,
                 'appearance' => [
-                    'collapseAll' => 0,
+                    'collapseAll' => 1,
                     'levelLinksPosition' => 'top',
                     'showSynchronizationLink' => 1,
                     'showPossibleLocalizationRecords' => 1,
@@ -185,7 +186,7 @@ return [
                 'foreign_field' => 'mashup',
                 'maxitems' => 9999,
                 'appearance' => [
-                    'collapseAll' => 0,
+                    'collapseAll' => 1,
                     'levelLinksPosition' => 'top',
                     'showSynchronizationLink' => 1,
                     'showPossibleLocalizationRecords' => 1,
@@ -202,7 +203,7 @@ return [
                 'foreign_field' => 'mashup',
                 'maxitems' => 9999,
                 'appearance' => [
-                    'collapseAll' => 0,
+                    'collapseAll' => 1,
                     'levelLinksPosition' => 'top',
                     'showSynchronizationLink' => 1,
                     'showPossibleLocalizationRecords' => 1,
@@ -219,7 +220,7 @@ return [
                 'foreign_field' => 'mashup3',
                 'maxitems' => 9999,
                 'appearance' => [
-                    'collapseAll' => 0,
+                    'collapseAll' => 1,
                     'levelLinksPosition' => 'top',
                     'showSynchronizationLink' => 1,
                     'showPossibleLocalizationRecords' => 1,
@@ -234,10 +235,10 @@ return [
                 'type' => 'inline',
                 'foreign_table' => 'tx_gpsnose_domain_model_token',
                 'foreign_field' => 'mashup',
-                'foreign_sortby' => 'sorting',
+                'foreign_default_sortby' => 'ORDER BY crdate DESC',
                 'maxitems' => 9999,
                 'appearance' => [
-                    'collapseAll' => 0,
+                    'collapseAll' => 1,
                     'levelLinksPosition' => 'top',
                     'showSynchronizationLink' => 1,
                     'showPossibleLocalizationRecords' => 1,

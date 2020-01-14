@@ -11,10 +11,7 @@ use SmartNoses\Gpsnose\Utility\GnUtility;
 use SmartNoses\Gpsnose\Domain\Model\Token;
 use SmartNoses\Gpsnose\Domain\Model\TokenScan;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use GpsNose\SDK\Framework\Logging\GnLogger;
-use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use GpsNose\SDK\Mashup\Api\GnApi;
 use GpsNose\SDK\Web\Login\GnAuthentication;
 
@@ -54,6 +51,15 @@ class ApiController extends BaseController
      * @inject
      */
     protected $mashupRepository = NULL;
+
+    /**
+     * tokenRepository
+     *
+     * @var \SmartNoses\Gpsnose\Domain\Repository\TokenRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
+     * @inject
+     */
+    protected $tokenRepository = NULL;
 
     /**
      * frontendUserRepository
@@ -389,94 +395,96 @@ class ApiController extends BaseController
     {
         $message = "";
         try {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashup = $this->mashupRepository->findByCommunityTag(GnUtility::getGnSettingsMashupName());
+            if ($mashup) {
+                GnLogger::Verbose("POST: " . json_encode(GeneralUtility::_POST()));
 
-            if ($mashupRepository) {
-                $mashup = $mashupRepository->findByCommunityTag(GnUtility::getGnSettingsMashupName());
-                if ($mashup) {
-                    $payload = GeneralUtility::_POST("payload");
-                    $user = GeneralUtility::_POST("user");
-                    $scannedTicks = GeneralUtility::_POST("scannedTicks");
+                $payload = GeneralUtility::_POST("payload");
+                $user = GeneralUtility::_POST("user");
+                $scannedTicks = GeneralUtility::_POST("scannedTicks");
 
-                    $recordedTicks = GeneralUtility::_POST("recordedTicks");
+                $recordedTicks = GeneralUtility::_POST("recordedTicks");
 
-                    $lat = GeneralUtility::_POST("lat");
-                    $lon = GeneralUtility::_POST("lon");
+                $lat = GeneralUtility::_POST("lat");
+                $lon = GeneralUtility::_POST("lon");
 
-                    $isBatchCompleted = boolval(GeneralUtility::_POST("isBatchCompleted"));
-                    $amount = GeneralUtility::_POST("amount") + 0;
-                    $comment = GeneralUtility::_POST("comment") ?: '';
-                    $isGpsSharingWanted = boolval(GeneralUtility::_POST("isGpsSharingWanted"));
-                    $label = GeneralUtility::_POST("label") ?: '';
-                    $validUntilTicks = GeneralUtility::_POST("validUntilTicks") ?: '0';
-                    $valuePerUnit = GeneralUtility::_POST("valuePerUnit") ?: 0.0;
-                    $createdTicks = GeneralUtility::_POST("createdTicks") ?: '0';
-                    $createdByLoginName = GeneralUtility::_POST("creator") ?: '';
-                    $batchCreationTicks = GeneralUtility::_POST("batchCreationTicks") ?: '0';
-                    $options = intval(GeneralUtility::_POST("options")) ?: GnMashupTokenOptions::NoOptions;
+                $isBatchCompleted = strtolower(GeneralUtility::_POST("isBatchCompleted")) == "true";
+                $amount = GeneralUtility::_POST("amount") + 0;
+                $comment = GeneralUtility::_POST("comment") ?: '';
+                $isGpsSharingWanted = strtolower(GeneralUtility::_POST("isGpsSharingWanted")) == "true";
+                $label = GeneralUtility::_POST("label") ?: '';
+                $validUntilTicks = GeneralUtility::_POST("validUntilTicks") ?: '0';
+                $valuePerUnit = GeneralUtility::_POST("valuePerUnit") ?: 0.0;
+                $createdTicks = GeneralUtility::_POST("createdTicks") ?: '0';
+                $createdByLoginName = GeneralUtility::_POST("creator") ?: '';
+                $batchCreationTicks = GeneralUtility::_POST("batchCreationTicks") ?: '0';
+                $options = intval(GeneralUtility::_POST("options")) ?: GnMashupTokenOptions::NoOptions;
 
-                    if ($payload && $user && $scannedTicks && $lat && $lon) {
-                        $tokenDto = $mashup->findTokenByPayload($payload);
-                        if ($tokenDto == NULL) {
-                            $tokenDto = new Token();
-                            $tokenDto->setPayload($payload);
-                            $tokenDto->setCallbackResponse('');
-                            $tokenDto->setOptions($options);
-                            $tokenDto->setValuePerUnit($valuePerUnit);
-                            $tokenDto->setLabel($label);
-                            $tokenDto->setValidUntilTicks($validUntilTicks);
-                            $tokenDto->setCreationTicks($createdTicks);
-                            $tokenDto->setCreatedByLoginName($createdByLoginName);
-                        }
-                        $message = $tokenDto->getCallbackResponse();
+                if ($payload && $user && $scannedTicks && $lat && $lon) {
+                    $tokenDto = $mashup->findTokenByPayload($payload);
+                    if ($tokenDto == NULL) {
+                        $tokenDto = new Token();
+                        $tokenDto->setPayload($payload);
+                        $tokenDto->setCallbackResponse('');
+                        $tokenDto->setOptions($options);
+                        $tokenDto->setValuePerUnit($valuePerUnit);
+                        $tokenDto->setLabel($label);
+                        $tokenDto->setValidUntilTicks($validUntilTicks);
+                        $tokenDto->setCreationTicks($createdTicks);
+                        $tokenDto->setCreatedByLoginName($createdByLoginName);
+                        $tokenDto->setMashup($mashup);
+                        $mashup->addToken($tokenDto);
+                        $this->tokenRepository->add($tokenDto);
+                    } else {
+                        $this->tokenRepository->update($tokenDto);
+                    }
 
-                        /* @val $tokenScan \SmartNoses\Gpsnose\Domain\Model\TokenScan */
-                        $tokenScan = $tokenDto->findTokenScanByUserAndTicks($user, $scannedTicks);
-                        if ($tokenScan == NULL) {
-                            $tokenScan = new TokenScan();
-                            $tokenScan->setPayload($tokenDto->getPayload());
-                            $tokenScan->setScannedByLoginName($user);
-                            $tokenScan->setScannedTicks($scannedTicks);
-                            $tokenScan->setRecordedTicks($recordedTicks);
-                            $tokenScan->setScannedLatitude($lat);
-                            $tokenScan->setScannedLongitude($lon);
-                            $tokenScan->setCallbackResponseHttpCode(200);
-                            $tokenScan->setCallbackResponseMessage($message);
-                            $tokenScan->setBatchCompleted($isBatchCompleted);
-                            $tokenScan->setAmount($amount);
-                            $tokenScan->setComment($comment);
-                            $tokenScan->setGpsSharingWanted($isGpsSharingWanted);
-                            $tokenScan->setValuePerUnit($valuePerUnit);
-                            $tokenScan->setLabel($label);
-                            $tokenScan->setValidUntilTicks($validUntilTicks);
-                            $tokenScan->setCreationTicks($createdTicks);
-                            $tokenScan->setCreatedByLoginName($createdByLoginName);
-                            $tokenScan->setBatchCreationTicks($batchCreationTicks);
+                    $message = $tokenDto->getCallbackResponse();
 
-                            $tokenDto->addTokenScan($tokenScan);
-                            $mashup->addToken($tokenDto);
-                            $this->mashupRepository->update($mashup);
-                            $objectManager->get(PersistenceManager::class)->persistAll();
+                    /* @val $tokenScan \SmartNoses\Gpsnose\Domain\Model\TokenScan */
+                    $tokenScan = $tokenDto->findTokenScanByUserAndTicks($user, $scannedTicks);
+                    if ($tokenScan == NULL) {
+                        $tokenScan = new TokenScan();
+                        $tokenScan->setPayload($tokenDto->getPayload());
+                        $tokenScan->setScannedByLoginName($user);
+                        $tokenScan->setScannedTicks($scannedTicks);
+                        $tokenScan->setRecordedTicks($recordedTicks);
+                        $tokenScan->setScannedLatitude($lat);
+                        $tokenScan->setScannedLongitude($lon);
+                        $tokenScan->setCallbackResponseHttpCode(200);
+                        $tokenScan->setCallbackResponseMessage($message);
+                        $tokenScan->setBatchCompleted($isBatchCompleted);
+                        $tokenScan->setAmount($amount);
+                        $tokenScan->setComment($comment);
+                        $tokenScan->setGpsSharingWanted($isGpsSharingWanted);
+                        $tokenScan->setValuePerUnit($valuePerUnit);
+                        $tokenScan->setLabel($label);
+                        $tokenScan->setValidUntilTicks($validUntilTicks);
+                        $tokenScan->setCreationTicks($createdTicks);
+                        $tokenScan->setCreatedByLoginName($createdByLoginName);
+                        $tokenScan->setBatchCreationTicks($batchCreationTicks);
 
-                            if (!empty($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'])) {
-                                $_params = [
-                                    'pObj' => &$GLOBALS['TSFE'],
-                                    'addedScans' => [$tokenScan]
-                                ];
-                                foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'] as $_funcRef) {
-                                    $message .= GeneralUtility::callUserFunction($_funcRef, $_params, $GLOBALS['TSFE']);
-                                }
+                        $tokenDto->addTokenScan($tokenScan);
+
+                        $this->persistAll();
+
+                        if (!empty($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'])) {
+                            $_params = [
+                                'pObj' => &$GLOBALS['TSFE'],
+                                'addedScans' => [$tokenScan]
+                            ];
+                            foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['gpsnose']['tokensScanned'] as $_funcRef) {
+                                $message .= GeneralUtility::callUserFunction($_funcRef, $_params, $GLOBALS['TSFE']);
                             }
-                        } else {
-                            throw new \Exception("Token already submitted!");
                         }
                     } else {
-                        throw new \Exception("Missing information to store the token!");
+                        throw new \Exception("Token already submitted!");
                     }
                 } else {
-                    throw new \Exception("Mashup not configured!");
+                    throw new \Exception("Missing information to store the token!");
                 }
+            } else {
+                throw new \Exception("Mashup not configured!");
             }
         } catch (\Exception $e) {
             http_response_code(500);

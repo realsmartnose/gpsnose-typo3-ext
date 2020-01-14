@@ -46,7 +46,7 @@ ko.bindingHandlers.modal = {
             });
         }
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-            jQuery(element).modal("destroy");
+            jQuery(element).modal('hide');
         });
     },
     update: function (element, valueAccessor) {
@@ -275,7 +275,11 @@ var CarouselViewModel = (function (_super) {
     return CarouselViewModel;
 }(BaseComponentsViewModel));
 ko.components.register('ma-gpsnose-carousel', {
-    viewModel: CarouselViewModel,
+    viewModel: {
+        createViewModel: function (params, componentInfo) {
+            return new CarouselViewModel(params);
+        }
+    },
     template: '<header class="header-carousel" data-bind="visible: ! IsHidden()">' +
         '<div id="carousel1" class="carousel" data-ride="carousel" data-interval="10000" data-keyboard="true">' +
         '<ol class="carousel-indicators" data-bind="foreach: Slides, visible: Slides().length > 1">' +
@@ -576,7 +580,11 @@ var CommentsViewModel = (function (_super) {
     return CommentsViewModel;
 }(BaseComponentsViewModel));
 ko.components.register('ma-gpsnose-comments', {
-    viewModel: CommentsViewModel,
+    viewModel: {
+        createViewModel: function (params, componentInfo) {
+            return new CommentsViewModel(params);
+        }
+    },
     template: '<div id="commentsContainer">' +
         '<h3 data-bind="text: GetLangRes(\'Common_lblComments\', \'Comments\'), visible: ! HideTitle"></h3>' +
         '<div data-bind="if: IsAddAllowed() && IsLoggedIn() && ! IsActivated() && ! IsReadonly()">' +
@@ -828,7 +836,11 @@ var FooterViewModel = (function (_super) {
     return FooterViewModel;
 }(BaseComponentsViewModel));
 ko.components.register('ma-gpsnose-footer', {
-    viewModel: FooterViewModel,
+    viewModel: {
+        createViewModel: function (params, componentInfo) {
+            return new FooterViewModel(params);
+        }
+    },
     template: '<div class="container marketing" data-bind="ifnot: IsHidden()">' +
         '<div class="row">' +
         '<div class="col-md-3 col-sm-2"></div>' +
@@ -907,7 +919,11 @@ var KeepAliveViewModel = (function () {
     return KeepAliveViewModel;
 }());
 ko.components.register('ma-gpsnose-keepalive', {
-    viewModel: KeepAliveViewModel,
+    viewModel: {
+        createViewModel: function (params, componentInfo) {
+            return new KeepAliveViewModel(params);
+        }
+    },
     template: '<div data-bind="if: ! IsLoggedIn()">' +
         '<div class="alert alert-danger">' +
         '<i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>' +
@@ -1003,7 +1019,11 @@ var KeywordsViewModel = (function () {
     return KeywordsViewModel;
 }());
 ko.components.register('ma-gpsnose-keywords', {
-    viewModel: KeywordsViewModel,
+    viewModel: {
+        createViewModel: function (params, componentInfo) {
+            return new KeywordsViewModel(params);
+        }
+    },
     template: '<div class="keywords">' +
         '<div data-bind="if: IsEditable()">' +
         '<div data-bind="attr : { \'class\': SearchClasses }">' +
@@ -1056,7 +1076,11 @@ var MoodsControlViewModel = (function () {
     return MoodsControlViewModel;
 }());
 ko.components.register('ma-gpsnose-moods-control', {
-    viewModel: MoodsControlViewModel,
+    viewModel: {
+        createViewModel: function (params, componentInfo) {
+            return new MoodsControlViewModel(params);
+        }
+    },
     template: '<div class="moods-control">' +
         '<div class="btn btn-default mood" data-fancybox data-bind="attr: { \'data-src\': \'#moods-dialog-\' + MoodIndex() }">' +
         '<span data-bind="text: SelectedMood() + \' \'"></span>' +
@@ -1129,7 +1153,11 @@ var NavbarViewModel = (function (_super) {
     return NavbarViewModel;
 }(BaseViewModel));
 ko.components.register('ma-gpsnose-navbar', {
-    viewModel: NavbarViewModel,
+    viewModel: {
+        createViewModel: function (params, componentInfo) {
+            return new NavbarViewModel(params);
+        }
+    },
     template: '<nav class="navbar navbar-default navbar-static" data-bind="visible: ! IsHidden()">' +
         '<div class="container">' +
         '<div class="navbar-header">' +
@@ -1237,7 +1265,11 @@ var RatingViewModel = (function (_super) {
     return RatingViewModel;
 }(BaseComponentsViewModel));
 ko.components.register('ma-gpsnose-rating', {
-    viewModel: RatingViewModel,
+    viewModel: {
+        createViewModel: function (params, componentInfo) {
+            return new RatingViewModel(params);
+        }
+    },
     template: '<div data-bind="if: Count() != 0">' +
         '<div class="rating" data-bind="attr: { title: Title() }">' +
         '<img class="star" data-bind="attr: { src: ImageByPercent(-1) }" />' +

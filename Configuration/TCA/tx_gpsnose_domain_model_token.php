@@ -6,7 +6,7 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'sortby' => 'sorting',
+        'default_sortby' => 'ORDER BY payload ASC',
         'versioningWS' => TRUE,
         'delete' => 'deleted',
         'enablecolumns' => [
@@ -163,15 +163,18 @@ return [
                 'type' => 'inline',
                 'foreign_table' => 'tx_gpsnose_domain_model_tokenscan',
                 'foreign_field' => 'token',
-                'foreign_sortby' => 'sorting',
+                'foreign_default_sortby' => 'ORDER BY crdate DESC',
                 'maxitems' => 9999,
                 'appearance' => [
-                    'collapseAll' => 0,
+                    'collapseAll' => 1,
                     'levelLinksPosition' => 'top',
                     'showSynchronizationLink' => 1,
                     'showPossibleLocalizationRecords' => 1,
                     'showAllLocalizationLink' => 1
-                ]
+                ],
+                'behaviour' => [
+                    'enableCascadingDelete' => FALSE
+                ],
             ]
         ],
         'mashup' => [

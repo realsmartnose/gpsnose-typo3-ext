@@ -25,7 +25,7 @@ class MashupRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @var array
      */
     protected $defaultOrderings = array(
-        'sorting' => QueryInterface::ORDER_ASCENDING
+        'communityTag' => QueryInterface::ORDER_ASCENDING
     );
 
     /**

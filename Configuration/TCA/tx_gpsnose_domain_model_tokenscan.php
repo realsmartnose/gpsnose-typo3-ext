@@ -6,7 +6,7 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'sortby' => 'sorting',
+        'default_sortby' => 'ORDER BY crdate DESC',
         'versioningWS' => TRUE,
         'delete' => 'deleted',
         'enablecolumns' => [

@@ -1,3 +1,9 @@
+1.7.10
+- FIX: Fix sorting of Tokens
+- FIX: Fix Token creation by TokenScan
+- UPD: Update Libs
+- UPD: Update to GpsNose-SDK 1.0.15
+
 1.7.9
 - UPD: Add FileReference for easy fileupload
 - UDP: Update Libs
