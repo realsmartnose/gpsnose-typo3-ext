@@ -111,8 +111,33 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     protected function initFrontend()
     {
+        // gn_data.User
+        $fe_user = $GLOBALS['TSFE']->fe_user->user;
+        $user = array();
+        $user['LoginName'] = $fe_user['gpsnose_loginname'];
+        $user['IsActivated'] = $fe_user['gpsnose_is_activated'];
+        if (!GnUtil::IsNullOrEmpty($fe_user['gpsnose_communities'])) {
+            $user['Communities'] = explode(",", $fe_user['gpsnose_communities']);
+        }
+        GnData::$Settings['User'] = $user;
+        // gn_data.Settings
+        $gnSettings = array();
+        $gnSettings['BaseUrl'] = \GpsNose\SDK\Mashup\GnPaths::$HomeUrl;
+        $gnSettings['BaseDataUrl'] = \GpsNose\SDK\Mashup\GnPaths::$DataUrl;
+        $gnSettings['CommunityMembersPageSize'] = intval($this->settings['membersPageSize']);
+        $gnSettings['NewsPageSize'] = intval($this->settings['newsPageSize']);
+        $gnSettings['CommentsPageSize'] = intval($this->settings['commentsPageSize']);
+        $gnSettings['ImagePath'] = $this->frontendController->absRefPrefix . $this->getFileNameOrPath($this->settings['resources']['imagePath']);
+        $currentUser = \GpsNose\SDK\Web\Login\GnAuthentication::CurrentUser();
+        if ($currentUser != NULL) {
+            $gnSettings['LoginId'] = $currentUser->LoginId;
+        }
+        GnData::$Settings['Settings'] = $gnSettings;
+        // Add gn_data
+        $this->frontendController->additionalFooterData['gpsnose_js_gndata'] = '<script type="text/javascript">var gn_data = ' . json_encode(\SmartNoses\Gpsnose\Utility\GnData::$Settings) . ';</script>';
+
         // Add the image-path
-        $this->view->assign('imagePath', $this->frontendController->absRefPrefix . $this->getFileNameOrPath($this->settings['resources']['imagePath']));
+        $this->view->assign('imagePath', $gnSettings['ImagePath']);
 
         // Add FrontendCss
         $this->addCssToHeader($this->settings['css']['frontendCss']);
@@ -149,33 +174,6 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         // Add knockoutVm
         $this->addJsToFooter($this->settings['javascript']['knockoutVm']);
-
-        // gn_data.User
-        $fe_user = $GLOBALS['TSFE']->fe_user->user;
-        $user = array();
-        $user['LoginName'] = $fe_user['gpsnose_loginname'];
-        $user['IsActivated'] = $fe_user['gpsnose_is_activated'];
-        if (!GnUtil::IsNullOrEmpty($fe_user['gpsnose_communities'])) {
-            $user['Communities'] = explode(",", $fe_user['gpsnose_communities']);
-        }
-        GnData::$Settings['User'] = $user;
-
-        // gn_data.Settings
-        $gnSettings = array();
-        $gnSettings['BaseUrl'] = \GpsNose\SDK\Mashup\GnPaths::$HomeUrl;
-        $gnSettings['BaseDataUrl'] = \GpsNose\SDK\Mashup\GnPaths::$DataUrl;
-        $gnSettings['CommunityMembersPageSize'] = intval($this->settings['membersPageSize']);
-        $gnSettings['NewsPageSize'] = intval($this->settings['newsPageSize']);
-        $gnSettings['CommentsPageSize'] = intval($this->settings['commentsPageSize']);
-        $gnSettings['ImagePath'] = $this->frontendController->absRefPrefix . $this->getFileNameOrPath($this->settings['resources']['imagePath']);
-        $currentUser = \GpsNose\SDK\Web\Login\GnAuthentication::CurrentUser();
-        if ($currentUser != NULL) {
-            $gnSettings['LoginId'] = $currentUser->LoginId;
-        }
-        GnData::$Settings['Settings'] = $gnSettings;
-
-        // Add gn_data
-        $this->frontendController->additionalFooterData['gpsnose_js_gndata'] = '<script type="text/javascript">var gn_data = ' . json_encode(\SmartNoses\Gpsnose\Utility\GnData::$Settings) . ';</script>';
     }
 
     /**
