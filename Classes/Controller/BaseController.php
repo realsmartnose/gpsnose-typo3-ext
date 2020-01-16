@@ -285,7 +285,10 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     protected function redirectToPage($pageId)
     {
-        $url = $this->uriBuilder->setTargetPageUid($pageId)->build();
+        $url = $this->uriBuilder
+            ->setTargetPageUid($pageId)
+            ->setLinkAccessRestrictedPages(TRUE)
+            ->build();
 
         $this->redirectToUri($url);
     }
