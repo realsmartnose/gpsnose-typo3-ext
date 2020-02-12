@@ -65,6 +65,5 @@ class QrscanController extends BaseController
         }
 
         $this->initFrontend();
-        
     }
 }

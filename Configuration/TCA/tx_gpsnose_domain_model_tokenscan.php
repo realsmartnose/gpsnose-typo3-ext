@@ -3,6 +3,8 @@ return [
     'ctrl' => [
         'title' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_tokenscan',
         'label' => 'scanned_ticks',
+        'label_alt' => 'scanned_by_login_name',
+        'label_alt_force' => 1,
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',

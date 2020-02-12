@@ -3,6 +3,8 @@ return [
     'ctrl' => [
         'title' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tx_gpsnose_domain_model_token',
         'label' => 'payload',
+        'label_alt' => 'label',
+        'label_alt_force' => 1,
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',

@@ -2547,6 +2547,49 @@ var SecurityTokenValidatorViewModel = (function (_super) {
             }
         }
     };
+    SecurityTokenValidatorViewModel.prototype.setDefaultDecoder = function (canvas, decoratorWorkerPath) {
+        var _this = this;
+        this.Decoder = canvas.WebCodeCamJQuery({
+            zoom: 1,
+            beep: null,
+            resultFunction: function (result) {
+                _this.ValidateResultCode(result.code);
+            },
+            cameraSuccess: function (stream) {
+                _this.CameraIsNowReady();
+            },
+            canPlayFunction: function () { },
+            getDevicesError: function (error) {
+                _this.IsCameraOn(false);
+                _this.MessageError(error.message);
+            },
+            getUserMediaError: function (error) {
+                _this.IsCameraOn(false);
+                _this.MessageError(error.message);
+            },
+            cameraError: function (error) {
+                _this.IsCameraOn(false);
+                _this.MessageError(error.message);
+            },
+            constraints: {
+                video: {
+                    mandatory: {
+                        maxWidth: 960,
+                        maxHeight: 540
+                    }
+                },
+                audio: false
+            },
+            flipHorizontal: true,
+            decoderWorker: decoratorWorkerPath
+        }).data().plugin_WebCodeCamJQuery;
+        this.OnCameraOn = function (decoder) {
+            decoder.play();
+        };
+        this.OnCameraOff = function (decoder) {
+            decoder.stop();
+        };
+    };
     return SecurityTokenValidatorViewModel;
 }(BaseViewModel));
 var TourDetailViewModel = (function (_super) {

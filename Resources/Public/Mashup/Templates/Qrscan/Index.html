@@ -44,7 +44,7 @@ Replace {record} with a unique id that identifies the entry
                     <button class="btn btn-danger" id="stop" data-bind="disable: ! IsCameraOn() || IsCameraPending(), click: function() {ToggleCamera()}"><i class="fas fa-stop"></i> <span>Stop</span></button>
                 </div>
 
-                <ul class="list-group" data-bind="foreach: SecurityTokens().sort(function (l, r) { return l.ScannedTicks() < r.ScannedTicks() ? 1 : -1 })">
+                <ul class="list-group" data-bind="foreach: SecurityTokens().sort(function (l, r) { return l.ScannedTicks() &lt; r.ScannedTicks() ? 1 : -1 })">
                     <li class="list-group-item" data-bind="css: { 'list-group-item-success': $data.IsValid(), 'list-group-item-warning': !$data.IsValid() && !$data.IsPending(), 'disabled': $data.IsPending() }">
                         <span class="pull-right float-right" data-bind="visible: $data.IsPending()">
                             <i class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></i>
@@ -61,61 +61,21 @@ Replace {record} with a unique id that identifies the entry
 
 <script type="text/javascript">
 var MA_GPSNOSE_IS_MASHUP = true;
+var selector = "#ma-gpsnose-{record}";
 
 $(document).ready(function() {
     if (! gn_data.User) gn_data.User = {};
     var vm = new SecurityTokenValidatorViewModel();
     vm.ValidateUrl = gn_data.Settings.ValidateUrl;
-    var selector = "#ma-gpsnose-{record}";
-    vm.Decoder = $(selector + " #gn-qr-code-scanner canvas").WebCodeCamJQuery({
-        zoom: 1,
-        beep: null,
-        resultFunction: function(result) {
-            vm.ValidateResultCode(result.code);
-        },
-        cameraSuccess: function(stream) {
-            vm.CameraIsNowReady();
-        },
-        canPlayFunction: function() { },
-        getDevicesError: function(error) {
-            vm.IsCameraOn(false);
-            vm.MessageError(error.message);
-        },
-        getUserMediaError: function(error) {
-            vm.IsCameraOn(false);
-            vm.MessageError(error.message);
-        },
-        cameraError: function(error) {
-            vm.IsCameraOn(false);
-            vm.MessageError(error.message);
-        },
-        constraints: {
-            video: {
-                mandatory: {
-                    maxWidth: 960,
-                    maxHeight: 540
-                }
-            },
-            audio: false
-        },
-        flipHorizontal: true,
-        decoderWorker: gn_data.Settings.DecoderWorkerPath
-    }).data().plugin_WebCodeCamJQuery;
+    vm.setDefaultDecoder($(selector + " #gn-qr-code-scanner canvas"), gn_data.Settings.DecoderWorkerPath);
 
-    vm.OnCameraOn = function(decoder) {
-        decoder.play();
-    };
-    vm.OnCameraOff = function(decoder) {
-        decoder.stop();
-    };
     vm.OnValidateComplete = function(tokenIsValide, creatorUserName) {
         var success = tokenIsValide;
         // Customer-Rules here...
-        if (success) {
+        if (success)
             vm.MessageSuccess(GetLangRes('SecurityTokenValidator_validationSuccess', 'The security-token of %user_name% was successfully validated').replace('%user_name%', creatorUserName));
-        } else {
+        else
             vm.MessageError(GetLangRes('SecurityTokenValidator_validationFail', 'The security-token of %user_name% is not valide').replace('%user_name%', creatorUserName));
-        }
     };
 
     ko.applyBindings(vm, $(selector).get(0));
