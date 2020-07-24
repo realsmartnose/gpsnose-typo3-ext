@@ -20,27 +20,33 @@ if (window.gn_data !== undefined && window.gn_data.Settings !== undefined && win
 var MAX_DATE_TIME_TICKS = "3155378975999999999";
 
 
-function MaWaitForLogin(loginVerifyUrl, returnUrl) {
-    $.ajax({
-        type: 'POST',
-        url: loginVerifyUrl,
-        cache: false,
-        dataType: 'json',
-        success: function(result) {
-            if (result.IsOk) {
-                if (returnUrl == '') {
-                    document.location.reload();
-                } else {
-                    window.location.replace(returnUrl);
-                }
-            } else {
-                window.setTimeout(function() { MaWaitForLogin(loginVerifyUrl, returnUrl); }, 3500);
-            }
-        },
-        error: function() {
-            window.setTimeout(function() { MaWaitForLogin(loginVerifyUrl, returnUrl); }, 3500);
+function MaWaitForLogin(loginVerifyUrl, returnUrl, pollingEndTime, onPollingEndFn) {
+    if (pollingEndTime > 0 && new Date().getTime() > pollingEndTime) {
+        if (onPollingEndFn) {
+            onPollingEndFn();
         }
-    });
+    } else {
+        $.ajax({
+            type: 'POST',
+            url: loginVerifyUrl,
+            cache: false,
+            dataType: 'json',
+            success: function(result) {
+                if (result.IsOk) {
+                    if (returnUrl == '') {
+                        document.location.reload();
+                    } else {
+                        window.location.replace(returnUrl);
+                    }
+                } else {
+                    window.setTimeout(function() { MaWaitForLogin(loginVerifyUrl, returnUrl, pollingEndTime, onPollingEndFn); }, 3500);
+                }
+            },
+            error: function() {
+                window.setTimeout(function() { MaWaitForLogin(loginVerifyUrl, returnUrl, pollingEndTime, onPollingEndFn); }, 3500);
+            }
+        });
+    }
 }
 
 
@@ -243,7 +249,7 @@ function SetCookieMinutes(name, value, expiryMinutes)
     var d = new Date();
     d.setTime(d.getTime() + (expiryMinutes * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
-    document.cookie = name + "=" + value + ";path=/;" + expires;
+    document.cookie = name + "=" + value + ";path=/;" + expires + ";SameSite=Strict";
 }
 
 
@@ -439,17 +445,28 @@ function ImageErrorHandler(obj, errorSrc)
 {
     var $obj = jQuery(obj);
     var lazy = $obj.data('lazy-img');
+    var defImg = $obj.data('default');
     if (lazy && lazy != '') {
         setTimeout(function(){
             $obj.attr('src', lazy);
-        }, 500);
+        }, 50);
         $obj.data('lazy-img', '');
         $obj.attr('onerror', 'ImageErrorHandler(this, "'+errorSrc+'")');
+    } else if (defImg && defImg != '') {
+        setTimeout(function(){
+            $obj.attr('src', defImg);
+        }, 50);
+        $obj.data('default', '');
+        $obj.data('lazy-img', null);
+        $obj.attr('onerror', 'ImageErrorHandler(this, "'+errorSrc+'")');
     } else {
+        setTimeout(function(){
+            $obj.attr('src', errorSrc);
+        }, 50);
+        $obj.data('default', null);
         $obj.data('lazy-img', null);
         $obj.attr('onerror', null);
     }
-    $obj.attr('src', errorSrc);
 }
 
 

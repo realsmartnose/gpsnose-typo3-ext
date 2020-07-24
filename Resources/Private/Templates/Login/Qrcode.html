@@ -18,6 +18,8 @@ $(document).ready(function() {
     AddLangRes('Account_Login_lblLoginText', '<f:translate key="Account_Login_lblLoginText" />');
     AddLangRes('Common_lblUnknownError', '<f:translate key="Common_lblUnknownError" />');
     AddLangRes('Common_lblCompanyName', '<f:translate key="Common_lblCompanyName" />');
+    AddLangRes('Common_lblLoginPollingStopped', '<f:translate key="Common_lblLoginPollingStopped" />');
+    AddLangRes('Common_btnRestart', '<f:translate key="Common_btnRestart" />');
     gn_data.Settings.LoginVerifyUrl = tLoginVerifyUrl;
     gn_data.Settings.ReturnUrl = tReturnUrl;
     gn_data.Settings.QrCodeImage = tQrCodeImage;
@@ -30,9 +32,28 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.15">
+<div class="ma-gpsnose" data-gn-version="1.0.16">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-login" data-bind="visible:true" style="display:none;">
+
+        <div id="polling-stopped-message" style="display: none;">
+            <div class="alert alert-danger">
+                <div class="media">
+                    <div class="media-left mr-1">
+                        <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
+                    </div>
+                    <div class="media-body">
+                        <p class="m-0" data-bind="text: ' ' + GetLangRes('Common_lblLoginPollingStopped', 'The polling stopped, please use the button to restart the polling.')"></p>
+                    </div>
+                    <div class="media-right">
+                        <button class="btn btn-sm btn-danger" data-bind="click: function() { document.location.reload(); }">
+                            <i class="glyphicon glyphicon-user fas fa-user"></i>
+                            <span data-bind="text: ' ' + GetLangRes('Common_btnRestart', 'Restart')"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-md-3">
@@ -69,7 +90,9 @@ var MA_GPSNOSE_IS_MASHUP = true;
 $(document).ready(function() {
     if (! gn_data.User) gn_data.User = {};
     ko.applyBindings(new BaseViewModel(), $('#ma-gpsnose-{record}').get(0));
-    window.setTimeout(function() { MaWaitForLogin(gn_data.Settings.LoginVerifyUrl, gn_data.Settings.ReturnUrl); }, 3500);
+    window.setTimeout(function() {
+        MaWaitForLogin(gn_data.Settings.LoginVerifyUrl, gn_data.Settings.ReturnUrl, new Date().getTime() + 60000, function() { $('#polling-stopped-message').show(); });
+    }, 3500);
 });
 </script>
 <!-- MAIN_END -->

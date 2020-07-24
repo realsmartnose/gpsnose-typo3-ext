@@ -13,6 +13,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var BaseViewModel = (function () {
     function BaseViewModel() {
+        this.SupportedDefaultKeywords = [
+            'fireplace',
+            'osm-wc',
+            'pingpongtische-ch',
+            'osm-bicycle'
+        ];
     }
     BaseViewModel.prototype.GetQrCodeUrl = function (content) {
         return gnSettings.BaseUrl + "/Components/QrCode?tag=" + encodeURIComponent(content);
@@ -20,6 +26,64 @@ var BaseViewModel = (function () {
     BaseViewModel.prototype.GetLoginUrl = function (url) {
         var encUrl = encodeURIComponent("/" + window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, ""));
         return (url ? url : '/Account/Login') + '?returnUrl=' + encUrl;
+    };
+    BaseViewModel.prototype.GetHtmlFromString = function (text) {
+        if (!text)
+            return '';
+        text = text.replace(/(?:\r\n|\r|\n)/g, ' <br> ');
+        text = text.replace(/(https?:\/\/[^\s]+)/g, function (url) {
+            return '<a href="' + url + '" data-external>' + url + '</a>';
+        });
+        text = text.replace(/[\w-\.]+@([\w-]+\.)+[\w-]{2,4}/g, function (url) {
+            return '<a href="mailto:' + url + '">' + url + '</a>';
+        });
+        return text;
+    };
+    BaseViewModel.prototype.GetKeywordDisplayName = function (keyword) {
+        if (!keyword)
+            return '';
+        if (keyword.lastIndexOf("i-", 0) === 0 && keyword.length > 2) {
+            return keyword.substr(2);
+        }
+        else if (keyword == "grillstelle-ch") {
+            return "fireplace";
+        }
+        return keyword;
+    };
+    BaseViewModel.prototype.GetDefaultImageFromKeywords = function (keywords) {
+        var _this = this;
+        if (!Array.isArray(keywords) && keywords != undefined) {
+            keywords = keywords.split(';');
+        }
+        if (Array.isArray(keywords)) {
+            var filteredKeywords = keywords.map(function (keyword) {
+                var keywordDisplayName = _this.GetKeywordDisplayName(keyword);
+                if (_this.SupportedDefaultKeywords.indexOf(keywordDisplayName) != -1) {
+                    return keywordDisplayName;
+                }
+                var lastindex1 = keywordDisplayName.lastIndexOf('-');
+                if (lastindex1 > 0) {
+                    var fallbackKeyword1 = keywordDisplayName.substring(0, lastindex1);
+                    if (_this.SupportedDefaultKeywords.indexOf(fallbackKeyword1) != -1) {
+                        return fallbackKeyword1;
+                    }
+                    var lastindex2 = fallbackKeyword1.lastIndexOf('-');
+                    if (lastindex2 > 0) {
+                        var fallbackKeyword2 = fallbackKeyword1.substring(0, lastindex2);
+                        if (_this.SupportedDefaultKeywords.indexOf(fallbackKeyword2) != -1) {
+                            return fallbackKeyword2;
+                        }
+                    }
+                }
+                return null;
+            }).filter(function (keyword) {
+                return keyword != null;
+            });
+            if (filteredKeywords.length > 0 && filteredKeywords[0]) {
+                return gnSettings.ImagePath + '/default_' + filteredKeywords[0].replace(/\-/g, '_') + '.png';
+            }
+        }
+        return "";
     };
     return BaseViewModel;
 }());
@@ -1122,6 +1186,9 @@ var NavbarViewModel = (function (_super) {
         ]);
         return _this;
     }
+    NavbarViewModel.prototype.OpenUrl = function (url) {
+        location.href = url;
+    };
     NavbarViewModel.prototype.SendPoke = function (mood, user) {
         if (!user.IsActivated) {
             dialog.Show(GetLangRes("Common_activationRequired", "Validation required"), GetLangRes("Common_lblActivationRequired", "To use this functionality, it is required to validate your account, please validate your account in the GpsNose-App!"), null);
@@ -1171,7 +1238,9 @@ ko.components.register('ma-gpsnose-navbar', {
         '</div>' +
         '<div class="collapse navbar-collapse" id="gn-navbar-collapse-1">' +
         '<ul class="nav navbar-nav" data-bind="foreach: Navigation">' +
-        '<li data-bind="css: { active: IsActive }"><a data-bind="attr: { href: Url }, text: Text"></a></li>' +
+        '<li data-bind="css: { active: IsActive }">' +
+        '<a href="javascript:;" data-bind="text: Text, click: function() { $parent.OpenUrl(Url) }"></a>' +
+        '</li>' +
         '</ul>' +
         '<span data-bind="foreach: NavigationAccount">' +
         '<a class="btn btn-default navbar-btn" data-bind="attr: { href: Url }, text: Text"></a>' +
@@ -1511,6 +1580,80 @@ var GipViewModel = (function (_super) {
         }
     };
     return GipViewModel;
+}(BaseViewModel));
+var ImportedKeywordsViewModel = (function (_super) {
+    __extends(ImportedKeywordsViewModel, _super);
+    function ImportedKeywordsViewModel() {
+        var _this = _super.call(this) || this;
+        _this.ImportedKeywordsUrl = '/Home/GetAllImportedKeywords';
+        _this.BaseDataUrl = 'http://data.gpsnose.com';
+        _this.CurrentKeyword = ko.observable(null);
+        _this.KeywordScopes = ko.observableArray([]);
+        _this.ImportedKeywords = ko.observableArray([]);
+        _this.ImportedKeywordsRequestActive = ko.observable(false);
+        _this.CurrentKeyword.subscribe(function (newValue) {
+            _this.SelectKeyword(newValue.Keyword);
+        });
+        _this.ImportedKeywords.subscribe(function (newValues) {
+            var scopes = ko.utils.arrayMap(_this.ImportedKeywords(), function (item) {
+                return item.Scope;
+            });
+            _this.KeywordScopes(ko.utils.arrayGetDistinctValues(scopes).sort());
+            _this.CurrentKeyword(newValues[0]);
+        });
+        return _this;
+    }
+    ImportedKeywordsViewModel.prototype.OnSelectKeyword = function (vm, ikey, json) { };
+    ImportedKeywordsViewModel.prototype.SelectKeyword = function (keyword) {
+        var _this = this;
+        var ikey = ko.utils.arrayFirst(this.ImportedKeywords(), function (item) {
+            return item.Keyword == keyword;
+        });
+        jQuery.ajax({
+            url: this.BaseDataUrl + "/impkeysgsjon/" + encodeURI(keyword),
+            dataType: 'json',
+            success: function (data) {
+                if (_this.OnSelectKeyword)
+                    _this.OnSelectKeyword(_this, ikey, data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (_this.OnSelectKeyword)
+                    _this.OnSelectKeyword(_this, ikey, []);
+            }
+        });
+    };
+    ImportedKeywordsViewModel.prototype.ImportedKeywordsWithScope = function (scope) {
+        return ko.utils.arrayFilter(this.ImportedKeywords(), function (item) {
+            return item.Scope == scope;
+        });
+    };
+    ImportedKeywordsViewModel.prototype.LoadImportedKeywords = function () {
+        var _this = this;
+        if (this.ImportedKeywordsRequestActive()) {
+            return;
+        }
+        this.ImportedKeywordsRequestActive(true);
+        jQuery.ajax({
+            type: 'POST',
+            url: this.ImportedKeywordsUrl,
+            cache: false,
+            dataType: 'json',
+            success: function (result) {
+                if (result) {
+                    _this.ImportedKeywords(result);
+                }
+                else {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblUnknownError", "An unknown error is occured!"), null);
+                }
+                _this.ImportedKeywordsRequestActive(false);
+            },
+            error: function () {
+                _this.ImportedKeywordsRequestActive(false);
+                dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblUnknownError", "An unknown error is occured!"), null);
+            }
+        });
+    };
+    return ImportedKeywordsViewModel;
 }(BaseViewModel));
 var IndexViewModel = (function (_super) {
     __extends(IndexViewModel, _super);
@@ -1968,6 +2111,16 @@ var GnMapRectangle = (function () {
     function GnMapRectangle() {
     }
     return GnMapRectangle;
+}());
+var ImportedKeywordDto = (function () {
+    function ImportedKeywordDto() {
+        this.Keyword = "";
+        this.LastUpdatedTicks = "";
+        this.DataSourceInfo = "";
+        this.Scope = "";
+        this.Count = 0;
+    }
+    return ImportedKeywordDto;
 }());
 var KeywordDto = (function () {
     function KeywordDto(name) {

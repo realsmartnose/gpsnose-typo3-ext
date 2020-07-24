@@ -291,6 +291,12 @@
 			<trans-unit id="Common_btnSync" xml:space="preserve">
 				<source><![CDATA[Sync]]></source>
 			</trans-unit>
+			<trans-unit id="Common_btnRestart" xml:space="preserve">
+				<source><![CDATA[Restart]]></source>
+			</trans-unit>
+			<trans-unit id="Common_lblLoginPollingStopped" xml:space="preserve">
+				<source><![CDATA[The polling stopped, please use the button to restart the polling.]]></source>
+			</trans-unit>
 			<trans-unit id="Common_btnUpdate" xml:space="preserve">
 				<source><![CDATA[Update]]></source>
 			</trans-unit>

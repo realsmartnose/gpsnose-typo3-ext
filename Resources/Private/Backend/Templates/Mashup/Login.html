@@ -16,10 +16,32 @@
 
 <f:section name="messages">
     <f:flashMessages />
+    <div class="typo3-messages" id="polling-stopped-message" style="display: none;">
+        <div class="alert alert-danger">
+            <div class="media">
+                <div class="media-left">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-times fa-stack-1x"></i>
+                    </span>
+                </div>
+                <div class="media-body">
+                    <p class="alert-message"><f:translate key="Common_lblLoginPollingStopped" /></p>
+                </div>
+                <div class="media-right">
+                    <f:link.action action="login" class="btn btn-danger">
+                        <core:icon identifier="fa-user" />
+                        <span> <f:translate key="Common_btnRestart" /></span>
+                    </f:link.action>
+                </div>
+            </div>
+        </div>
+    </div>
 </f:section>
 
 
 <f:section name="content">
+
 <div class="row">
     <div class="col-lg-4 col-md-3 col-sm-3 col-xs-12"></div>
     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">

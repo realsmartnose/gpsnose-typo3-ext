@@ -387,6 +387,14 @@
 				<source><![CDATA[Sync]]></source>
 				<target><![CDATA[Sync]]></target>
 			</trans-unit>
+			<trans-unit id="Common_btnRestart" xml:space="preserve">
+				<source><![CDATA[Restart]]></source>
+				<target><![CDATA[Neustarten]]></target>
+			</trans-unit>
+			<trans-unit id="Common_lblLoginPollingStopped" xml:space="preserve">
+				<source><![CDATA[The polling stopped, please use the button to restart the polling.]]></source>
+				<target><![CDATA[Die Abfrage wurde gestoppt. Verwenden Sie die Schaltfläche, um die Abfrage neu zu starten.]]></target>
+			</trans-unit>
 			<trans-unit id="Common_btnUpdate" xml:space="preserve">
 				<source><![CDATA[Update]]></source>
 				<target><![CDATA[Aktualisieren]]></target>

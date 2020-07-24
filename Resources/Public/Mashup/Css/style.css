@@ -109,6 +109,16 @@
     margin-top: 5px;
     margin-bottom: 10px;
     width: 100%; }
+  .ma-gpsnose #imported-keywords-dialog {
+    max-width: 640px; }
+    .ma-gpsnose #imported-keywords-dialog .text {
+      text-align: center;
+      margin-top: 5px;
+      margin-bottom: 10px; }
+    .ma-gpsnose #imported-keywords-dialog img.image {
+      width: 100%; }
+    .ma-gpsnose #imported-keywords-dialog .panel-body {
+      padding: 0; }
   .ma-gpsnose .comment-image-container {
     background: transparent url(../Images/CommentBackground.png) no-repeat center center;
     background-size: contain;
