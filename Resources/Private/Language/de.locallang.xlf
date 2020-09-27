@@ -128,8 +128,8 @@
 				<target><![CDATA[Callback POST-back URL]]></target>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrlFail" xml:space="preserve">
-				<source><![CDATA[You must enter a valid absolute URL (e.g. http://%mashup_site%/end/point) and use a maximum of %max_characters% characters. This is your optional sync-called callback and you have only 2-3 seconds to complete it; the interface and more details can be found on http://wiki.gpsnose.com]]></source>
-				<target><![CDATA[You must enter a valid absolute URL (e.g. http://%mashup_site%/end/point) and use a maximum of %max_characters% characters. This is your optional sync-called callback and you have only 2-3 seconds to complete it; the interface and more details can be found on http://wiki.gpsnose.com]]></target>
+				<source><![CDATA[You must enter a valid absolute URL (e.g. http://%mashup_site%/end/point) and use a maximum of %max_characters% characters. This is your optional sync-called callback and you have only 2-3 seconds to complete it; the interface and more details can be found on https://wiki.gpsnose.com]]></source>
+				<target><![CDATA[You must enter a valid absolute URL (e.g. http://%mashup_site%/end/point) and use a maximum of %max_characters% characters. This is your optional sync-called callback and you have only 2-3 seconds to complete it; the interface and more details can be found on https://wiki.gpsnose.com]]></target>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrlPlaceholder" xml:space="preserve">
 				<source><![CDATA[Enter the Callback URL here (optional)]]></source>
@@ -288,8 +288,8 @@
 				<target><![CDATA[There is already an unvalidated mashup, please remove first the other enrty before you add a new one]]></target>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblValidateCommunityMessage" xml:space="preserve">
-				<source><![CDATA[Add the key %key% to your webpage %mashup% then click Validate. The key can be placed into your website's default home document as a meta-tag named "gpsnose-validation-key" (and content is the key), or as a file named as the key without any extension or with some of the .txt | .htm | .html extensions. See the Wiki page under http://wiki.gpsnose.com for more details.]]></source>
-				<target><![CDATA[Add the key %key% to your webpage %mashup% then click Validate. The key can be placed into your website's default home document as a meta-tag named "gpsnose-validation-key" (and content is the key), or as a file named as the key without any extension or with some of the .txt | .htm | .html extensions. See the Wiki page under http://wiki.gpsnose.com for more details.]]></target>
+				<source><![CDATA[Add the key %key% to your webpage %mashup% then click Validate. The key can be placed into your website's default home document as a meta-tag named "gpsnose-validation-key" (and content is the key), or as a file named as the key without any extension or with some of the .txt | .htm | .html extensions. See the Wiki page under https://wiki.gpsnose.com for more details.]]></source>
+				<target><![CDATA[Add the key %key% to your webpage %mashup% then click Validate. The key can be placed into your website's default home document as a meta-tag named "gpsnose-validation-key" (and content is the key), or as a file named as the key without any extension or with some of the .txt | .htm | .html extensions. See the Wiki page under https://wiki.gpsnose.com for more details.]]></target>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblValidationDate" xml:space="preserve">
 				<source><![CDATA[Validation date]]></source>
@@ -392,7 +392,7 @@
 				<target><![CDATA[Neustarten]]></target>
 			</trans-unit>
 			<trans-unit id="Common_lblLoginPollingStopped" xml:space="preserve">
-				<source><![CDATA[The polling stopped, please use the button to restart the polling.]]></source>
+				<source><![CDATA[The polling was stopped, please use the button to restart the polling.]]></source>
 				<target><![CDATA[Die Abfrage wurde gestoppt. Verwenden Sie die Schaltfläche, um die Abfrage neu zu starten.]]></target>
 			</trans-unit>
 			<trans-unit id="Common_btnUpdate" xml:space="preserve">

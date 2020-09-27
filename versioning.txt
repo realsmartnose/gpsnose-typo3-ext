@@ -1,3 +1,6 @@
+1.7.15
+- CHA: Change the blob-url for images
+
 1.7.14
 - FIX: Fix the template for Login
 - UPD: Update to GpsNose-SDK 1.0.16

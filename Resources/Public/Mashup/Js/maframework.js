@@ -1,6 +1,6 @@
 ﻿var gnSettings = {
     "BaseUrl": "https://www.gpsnose.com",
-    "BaseDataUrl": "http://data.gpsnose.com",
+    "BaseDataUrl": "https://gpsnose.blob.core.windows.net",
     "ImagePath":"/Content/Mashup/Images",
     "MashupsPageSize": 12,
     "NosesPageSize": 12,
@@ -20,7 +20,8 @@ if (window.gn_data !== undefined && window.gn_data.Settings !== undefined && win
 var MAX_DATE_TIME_TICKS = "3155378975999999999";
 
 
-function MaWaitForLogin(loginVerifyUrl, returnUrl, pollingEndTime, onPollingEndFn) {
+function MaWaitForLogin(loginVerifyUrl, returnUrl, pollingEndTime, onPollingEndFn)
+{
     if (pollingEndTime > 0 && new Date().getTime() > pollingEndTime) {
         if (onPollingEndFn) {
             onPollingEndFn();
@@ -50,7 +51,8 @@ function MaWaitForLogin(loginVerifyUrl, returnUrl, pollingEndTime, onPollingEndF
 }
 
 
-function SwitchLanguage(lang) {
+function SwitchLanguage(lang)
+{
     var url;
     var form = jQuery('form:has(div:first[role!="dialog"])')[0];
     if (form == undefined || form.method.toLowerCase() == "get") {
@@ -79,6 +81,10 @@ function GetLangUrl(url, lang)
 function GetCurrentLang()
 {
     var lang = GetCookie("lang");
+    var n = lang.indexOf("-");
+    if (n > 0) {
+        lang = lang.substring(0, n);
+    }
     return lang == undefined ? "en" : lang;
 }
 

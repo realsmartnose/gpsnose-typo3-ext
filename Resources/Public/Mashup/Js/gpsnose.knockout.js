@@ -15,9 +15,11 @@ var BaseViewModel = (function () {
     function BaseViewModel() {
         this.SupportedDefaultKeywords = [
             'fireplace',
-            'osm-wc',
             'pingpongtische-ch',
-            'osm-bicycle'
+            'osm-wc',
+            'osm-bicycle',
+            'osm-medi',
+            'osm-pets'
         ];
     }
     BaseViewModel.prototype.GetQrCodeUrl = function (content) {
@@ -1586,7 +1588,7 @@ var ImportedKeywordsViewModel = (function (_super) {
     function ImportedKeywordsViewModel() {
         var _this = _super.call(this) || this;
         _this.ImportedKeywordsUrl = '/Home/GetAllImportedKeywords';
-        _this.BaseDataUrl = 'http://data.gpsnose.com';
+        _this.BaseDataUrl = 'https://gpsnose.blob.core.windows.net';
         _this.CurrentKeyword = ko.observable(null);
         _this.KeywordScopes = ko.observableArray([]);
         _this.ImportedKeywords = ko.observableArray([]);
