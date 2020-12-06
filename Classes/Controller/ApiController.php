@@ -48,7 +48,6 @@ class ApiController extends BaseController
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
-     * @inject
      */
     protected $mashupRepository = NULL;
 
@@ -57,7 +56,6 @@ class ApiController extends BaseController
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\TokenRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
-     * @inject
      */
     protected $tokenRepository = NULL;
 
@@ -66,7 +64,6 @@ class ApiController extends BaseController
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
-     * @inject
      */
     protected $frontendUserRepository = NULL;
 

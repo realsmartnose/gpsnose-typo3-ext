@@ -83,5 +83,5 @@ call_user_func(
 
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($extKey, 'Configuration/TypoScript', 'GpsNose');
     },
-    $_EXTKEY
+    $_EXTKEY ?? 'gpsnose'
 );

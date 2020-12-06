@@ -81,11 +81,10 @@ function GetLangUrl(url, lang)
 function GetCurrentLang()
 {
     var lang = GetCookie("lang");
-    var n = lang.indexOf("-");
-    if (n > 0) {
-        lang = lang.substring(0, n);
+    if (lang == undefined || lang == null || lang.length < 2) {
+        return "en";
     }
-    return lang == undefined ? "en" : lang;
+    return lang.substring(0, 2);
 }
 
 

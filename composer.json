@@ -4,8 +4,8 @@
     "description": "Extension to integrate GpsNose into TYPO3 - GpsNose connects anonymous people to the real world using the web and mobiles",
     "license": "GPL-2.0-or-later",
     "require": {
-        "typo3/cms-core": "^8.7.8",
-        "smartnoses/gpsnosesdk": "1.0.17"
+        "typo3/cms-core": "^10.4.0",
+        "smartnoses/gpsnosesdk": "1.0.18"
     },
     "extra": {
         "typo3/cms": {

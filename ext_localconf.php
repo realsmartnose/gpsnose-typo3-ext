@@ -273,6 +273,28 @@ call_user_func(
             ]);
         }
 
+        // Extends FrontendUser
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)->registerImplementation(\TYPO3\CMS\Extbase\Domain\Model\FrontendUser::class, \SmartNoses\Gpsnose\Domain\Model\FrontendUser::class);
+
+        // Add GpsNoseBasedAuthenticationService
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
+            $extKey,
+            'auth',
+            \SmartNoses\Gpsnose\Authentication\GpsNoseBasedAuthenticationService::class,
+            [
+                'title' => 'Authentication Service for fe_users',
+                'description' => 'Authentication Service for fe_users',
+                'subtype' => 'authUserFE',
+                'available' => true,
+                'priority' => 90,
+                'quality' => 90,
+                'os' => '',
+                'exec' => '',
+                'className' => \SmartNoses\Gpsnose\Authentication\GpsNoseBasedAuthenticationService::class
+            ]
+        );
+        $GLOBALS['TYPO3_CONF_VARS']['FE']['checkFeUserPid'] = false;
+
         // Caching framework
         if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$extKey])) {
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$extKey] = array();
@@ -289,6 +311,13 @@ call_user_func(
 
         // Hooks
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['GLOBAL']['recStatInfoHooks'][] = \SmartNoses\Gpsnose\Hooks\CmsLayoutHook::class . '->addPluginIcon';
+
+        // Nodes
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry']['1607163852'] = [
+            'nodeName' => 'GpsNoseHintElement',
+            'priority' => 40,
+            'class' => \SmartNoses\Gpsnose\Form\Element\GpsNoseHintElement::class,
+        ];
 
         // Tasks
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\SmartNoses\Gpsnose\Task\GetTokenScans::class] = array(
@@ -442,5 +471,5 @@ call_user_func(
             ['source' => 'EXT:' . $extKey . '/Resources/Public/Icons/user_plugin_qrscan.svg']
         );
     },
-    $_EXTKEY
+    $_EXTKEY ?? 'gpsnose'
 );

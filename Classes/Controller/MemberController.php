@@ -28,7 +28,6 @@ class MemberController extends BaseController
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
-     * @inject
      */
     protected $mashupRepository = NULL;
 

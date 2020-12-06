@@ -12,7 +12,7 @@ Configuration
 
 It is very important to include the static templat "GpsNose (gpsnose)" in your template
 
-If you use another variable for your page in your template (eg. seite), make shure that you use this ts too:
+If you use another variable for your page in your template (eg. seite), make sure that you use this ts too:
 
 .. code-block:: ts
 

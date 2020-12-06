@@ -3,9 +3,6 @@
 #
 CREATE TABLE tx_gpsnose_domain_model_mashup (
 
-    uid int(11) NOT NULL auto_increment,
-    pid int(11) DEFAULT '0' NOT NULL,
-
     community_tag varchar(255) DEFAULT '' NOT NULL,
     validation_key varchar(255) DEFAULT '' NOT NULL,
     app_key varchar(255) DEFAULT '' NOT NULL,
@@ -29,29 +26,12 @@ CREATE TABLE tx_gpsnose_domain_model_mashup (
     starttime int(11) unsigned DEFAULT '0' NOT NULL,
     endtime int(11) unsigned DEFAULT '0' NOT NULL,
 
-    t3ver_oid int(11) DEFAULT '0' NOT NULL,
-    t3ver_id int(11) DEFAULT '0' NOT NULL,
-    t3ver_wsid int(11) DEFAULT '0' NOT NULL,
-    t3ver_label varchar(255) DEFAULT '' NOT NULL,
-    t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
-    t3ver_stage int(11) DEFAULT '0' NOT NULL,
-    t3ver_count int(11) DEFAULT '0' NOT NULL,
-    t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
-    t3ver_move_id int(11) DEFAULT '0' NOT NULL,
-
-    PRIMARY KEY (uid),
-    KEY parent (pid),
-    KEY t3ver_oid (t3ver_oid,t3ver_wsid)
-
 );
 
 #
 # Table structure for table 'tx_gpsnose_domain_model_subcommunity'
 #
 CREATE TABLE tx_gpsnose_domain_model_subcommunity (
-
-    uid int(11) NOT NULL auto_increment,
-    pid int(11) DEFAULT '0' NOT NULL,
 
     mashup int(11) unsigned DEFAULT '0' NOT NULL,
 
@@ -65,29 +45,12 @@ CREATE TABLE tx_gpsnose_domain_model_subcommunity (
     starttime int(11) unsigned DEFAULT '0' NOT NULL,
     endtime int(11) unsigned DEFAULT '0' NOT NULL,
 
-    t3ver_oid int(11) DEFAULT '0' NOT NULL,
-    t3ver_id int(11) DEFAULT '0' NOT NULL,
-    t3ver_wsid int(11) DEFAULT '0' NOT NULL,
-    t3ver_label varchar(255) DEFAULT '' NOT NULL,
-    t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
-    t3ver_stage int(11) DEFAULT '0' NOT NULL,
-    t3ver_count int(11) DEFAULT '0' NOT NULL,
-    t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
-    t3ver_move_id int(11) DEFAULT '0' NOT NULL,
-
-    PRIMARY KEY (uid),
-    KEY parent (pid),
-    KEY t3ver_oid (t3ver_oid,t3ver_wsid)
-
 );
 
 #
 # Table structure for table 'tx_gpsnose_domain_model_host'
 #
 CREATE TABLE tx_gpsnose_domain_model_host (
-
-    uid int(11) NOT NULL auto_increment,
-    pid int(11) DEFAULT '0' NOT NULL,
 
     mashup int(11) unsigned DEFAULT '0' NOT NULL,
 
@@ -101,29 +64,12 @@ CREATE TABLE tx_gpsnose_domain_model_host (
     starttime int(11) unsigned DEFAULT '0' NOT NULL,
     endtime int(11) unsigned DEFAULT '0' NOT NULL,
 
-    t3ver_oid int(11) DEFAULT '0' NOT NULL,
-    t3ver_id int(11) DEFAULT '0' NOT NULL,
-    t3ver_wsid int(11) DEFAULT '0' NOT NULL,
-    t3ver_label varchar(255) DEFAULT '' NOT NULL,
-    t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
-    t3ver_stage int(11) DEFAULT '0' NOT NULL,
-    t3ver_count int(11) DEFAULT '0' NOT NULL,
-    t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
-    t3ver_move_id int(11) DEFAULT '0' NOT NULL,
-
-    PRIMARY KEY (uid),
-    KEY parent (pid),
-    KEY t3ver_oid (t3ver_oid,t3ver_wsid)
-
 );
 
 #
 # Table structure for table 'tx_gpsnose_domain_model_history'
 #
 CREATE TABLE tx_gpsnose_domain_model_history (
-
-    uid int(11) NOT NULL auto_increment,
-    pid int(11) DEFAULT '0' NOT NULL,
 
     mashup int(11) unsigned DEFAULT '0' NOT NULL,
     mashup3 int(11) unsigned DEFAULT '0' NOT NULL,
@@ -149,19 +95,12 @@ CREATE TABLE tx_gpsnose_domain_model_history (
     t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
     t3ver_move_id int(11) DEFAULT '0' NOT NULL,
 
-    PRIMARY KEY (uid),
-    KEY parent (pid),
-    KEY t3ver_oid (t3ver_oid,t3ver_wsid)
-
 );
 
 #
 # Table structure for table 'tx_gpsnose_domain_model_token'
 #
 CREATE TABLE tx_gpsnose_domain_model_token (
-
-    uid int(11) NOT NULL auto_increment,
-    pid int(11) DEFAULT '0' NOT NULL,
 
     mashup int(11) unsigned DEFAULT '0' NOT NULL,
 
@@ -193,19 +132,12 @@ CREATE TABLE tx_gpsnose_domain_model_token (
     t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
     t3ver_move_id int(11) DEFAULT '0' NOT NULL,
 
-    PRIMARY KEY (uid),
-    KEY parent (pid),
-    KEY t3ver_oid (t3ver_oid,t3ver_wsid)
-
 );
 
 #
 # Table structure for table 'tx_gpsnose_domain_model_tokenscan'
 #
 CREATE TABLE tx_gpsnose_domain_model_tokenscan (
-
-    uid int(11) NOT NULL auto_increment,
-    pid int(11) DEFAULT '0' NOT NULL,
 
     token int(11) unsigned DEFAULT '0' NOT NULL,
 
@@ -226,28 +158,6 @@ CREATE TABLE tx_gpsnose_domain_model_tokenscan (
     creation_ticks varchar(20) DEFAULT '0' NOT NULL,
     created_by_login_name varchar(20) DEFAULT '' NOT NULL,
     batch_creation_ticks varchar(20) DEFAULT '0' NOT NULL,
-
-    tstamp int(11) unsigned DEFAULT '0' NOT NULL,
-    crdate int(11) unsigned DEFAULT '0' NOT NULL,
-    cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
-    deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
-    hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
-    starttime int(11) unsigned DEFAULT '0' NOT NULL,
-    endtime int(11) unsigned DEFAULT '0' NOT NULL,
-
-    t3ver_oid int(11) DEFAULT '0' NOT NULL,
-    t3ver_id int(11) DEFAULT '0' NOT NULL,
-    t3ver_wsid int(11) DEFAULT '0' NOT NULL,
-    t3ver_label varchar(255) DEFAULT '' NOT NULL,
-    t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
-    t3ver_stage int(11) DEFAULT '0' NOT NULL,
-    t3ver_count int(11) DEFAULT '0' NOT NULL,
-    t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
-    t3ver_move_id int(11) DEFAULT '0' NOT NULL,
-
-    PRIMARY KEY (uid),
-    KEY parent (pid),
-    KEY t3ver_oid (t3ver_oid,t3ver_wsid)
 
 );
 

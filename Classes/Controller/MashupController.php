@@ -11,6 +11,7 @@ use SmartNoses\Gpsnose\Domain\Model\History;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems;
@@ -48,7 +49,6 @@ class MashupController extends BaseController
      *
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
-     * @inject
      */
     protected $persistenceManager = NULL;
 
@@ -57,7 +57,6 @@ class MashupController extends BaseController
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
-     * @inject
      */
     protected $mashupRepository = NULL;
 
@@ -66,7 +65,6 @@ class MashupController extends BaseController
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\TokenRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
-     * @inject
      */
     protected $tokenRepository = NULL;
 
@@ -75,7 +73,6 @@ class MashupController extends BaseController
      * 
      * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserGroupRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
-     * @inject
      */
     protected $frontendUserGroupRepository = NULL;
 
@@ -329,11 +326,10 @@ class MashupController extends BaseController
      * action loginVerifie
      *
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */
-    public function loginVerifieAction(ServerRequestInterface $request, ResponseInterface $response)
+    public function loginVerifieAction(ServerRequestInterface $request): JsonResponse
     {
         $data = $request->getParsedBody();
 
@@ -351,10 +347,9 @@ class MashupController extends BaseController
                 $isOk = TRUE;
             }
         }
-
-        $response->getBody()->write(json_encode((object)[
+        $response = new JsonResponse([
             "IsOk" => $isOk
-        ]));
+        ]);
 
         return $response;
     }
@@ -363,11 +358,10 @@ class MashupController extends BaseController
      * action keepAlive
      *
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */
-    public function keepAliveAction(ServerRequestInterface $request, ResponseInterface $response)
+    public function keepAliveAction(ServerRequestInterface $request): JsonResponse
     {
         $isOk = FALSE;
         $this->_currentUser = GnAuthentication::CurrentUser();
@@ -379,9 +373,9 @@ class MashupController extends BaseController
             }
         }
 
-        $response->getBody()->write(json_encode((object)[
+        $response = new JsonResponse([
             "IsOk" => $isOk
-        ]));
+        ]);
 
         return $response;
     }
@@ -552,7 +546,6 @@ class MashupController extends BaseController
      *
      * @param Mashup $mashup
      * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("mashup")
-     * @ignorevalidation $mashup
      * @return void
      */
     public function editAction(Mashup $mashup)

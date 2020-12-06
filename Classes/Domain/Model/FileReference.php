@@ -24,9 +24,9 @@ class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
     protected $originalFileIdentifier;
 
     /**
-     * @param \TYPO3\CMS\Core\Resource\FileReference $originalResource
+     * @param \TYPO3\CMS\Core\Resource\ResourceInterface $originalResource
      */
-    public function setOriginalResource(\TYPO3\CMS\Core\Resource\FileReference $originalResource)
+    public function setOriginalResource(\TYPO3\CMS\Core\Resource\ResourceInterface $originalResource)
     {
         parent::setOriginalResource($originalResource);
         $this->originalResource = $originalResource;

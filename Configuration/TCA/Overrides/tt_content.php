@@ -83,7 +83,7 @@ $fields = array(
         'displayCond' => 'FIELD:list_type:IN:gpsnose_loginqrcode',
         'config' => array(
             'type' => 'user',
-            'userFunc' => 'SmartNoses\\Gpsnose\\UserFuncs\\Tca->showInformation',
+            'renderType' => 'GpsNoseHintElement',
             'parameters' => array(
                 'message' => $languageFile . 'tt_content.tx_gpsnose_mashup_login_acl_help'
             )
