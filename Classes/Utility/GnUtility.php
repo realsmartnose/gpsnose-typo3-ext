@@ -79,6 +79,8 @@ class GnUtility
      */
     public static function login(Mashup $mashup, string $loginId)
     {
+        $GLOBALS['TYPO3_CONF_VARS']['FE']['checkFeUserPid'] = false;
+
         $verified = FALSE;
         if ($mashup && !GnUtil::IsNullOrEmpty($loginId)) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);

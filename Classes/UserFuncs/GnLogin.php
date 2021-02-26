@@ -16,13 +16,7 @@ class GnLogin
      */
     public function login($content, $conf)
     {
-        $loginId = $GLOBALS["TSFE"]->fe_user->getKey("ses", "gnlid");
-        if (!$loginId) {
-            $loginId = $_GET["gnlid"];
-        } else {
-            $GLOBALS['TSFE']->fe_user->setKey("ses", "gnlid", NULL);
-        }
-
+        $loginId = $_GET["gnlid"];
         if ($loginId) {
             try {
                 GnUtility::applyExtConf();

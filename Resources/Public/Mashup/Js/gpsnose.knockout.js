@@ -1544,6 +1544,7 @@ var EventDetailViewModel = (function (_super) {
         _this.CreationTicks = GetTicksFromUniqueKey(_this.UniqueKey);
         _this.Entity = new EventDto({ "UniqueKey": _this.UniqueKey });
         _this.NoseDto = new NoseDto({ "LoginName": _this.LoginName });
+        _this.IsOnlineEvent = (eventDto.EventOptions & 16) == 16;
         return _this;
     }
     EventDetailViewModel.prototype.OnAddDates = function (data) { };

@@ -1,4 +1,5 @@
 <?php
+
 namespace SmartNoses\Gpsnose\Controller;
 
 use SmartNoses\Gpsnose\Service\GnNearbyService;
@@ -58,14 +59,6 @@ class ApiController extends BaseController
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $tokenRepository = NULL;
-
-    /**
-     * frontendUserRepository
-     *
-     * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
-    protected $frontendUserRepository = NULL;
 
     /**
      * ApiController __construct
@@ -212,7 +205,8 @@ class ApiController extends BaseController
      *
      * @return void
      */
-    public function validateSecurityTokenAction() {
+    public function validateSecurityTokenAction()
+    {
         $validated = FALSE;
         if ($this->request->hasArgument("mashup")) {
             $token = $_POST['token'];

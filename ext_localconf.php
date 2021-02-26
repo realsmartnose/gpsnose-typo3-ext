@@ -293,7 +293,6 @@ call_user_func(
                 'className' => \SmartNoses\Gpsnose\Authentication\GpsNoseBasedAuthenticationService::class
             ]
         );
-        $GLOBALS['TYPO3_CONF_VARS']['FE']['checkFeUserPid'] = false;
 
         // Caching framework
         if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$extKey])) {
