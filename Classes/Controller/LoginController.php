@@ -87,6 +87,8 @@ class LoginController extends BaseController
                 $this->redirectToUri($_GET['returnUrl']);
             } else if ($redirectPid > 0) {
                 $this->redirectToPage($redirectPid);
+            } else {
+                $this->view->assign('logged_in', TRUE);
             }
         } else {
             $this->initFrontend();
