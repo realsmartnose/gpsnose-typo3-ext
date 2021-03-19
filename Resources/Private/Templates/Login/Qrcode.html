@@ -31,6 +31,9 @@ $(document).ready(function() {
 
 <f:section name="main">
 
+<f:if condition="{logged_in}">
+    <f:then></f:then>
+    <f:else>
 <!-- MAIN_BEG -->
 <div class="ma-gpsnose" data-gn-version="1.0.16">
 
@@ -96,6 +99,8 @@ $(document).ready(function() {
 });
 </script>
 <!-- MAIN_END -->
+    </f:else>
+</f:if>
 
 </f:section>
 
