@@ -122,6 +122,15 @@ class LoginController extends BaseController
                     ->setLinkAccessRestrictedPages(TRUE)
                     ->build();
                 $this->view->assign('return_url', $uri);
+            } else {
+                $currentPid = $GLOBALS['TSFE']->id;
+                $uri = $this->uriBuilder
+                    ->reset()
+                    ->setTargetPageUid($currentPid)
+                    ->setCreateAbsoluteUri(TRUE)
+                    ->setLinkAccessRestrictedPages(TRUE)
+                    ->build();
+                $this->view->assign('return_url', $uri);
             }
         }
     }
