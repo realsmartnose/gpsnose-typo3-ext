@@ -19,7 +19,8 @@ var BaseViewModel = (function () {
             'osm-wc',
             'osm-bicycle',
             'osm-medi',
-            'osm-pets'
+            'osm-pets',
+            'osm-emobility'
         ];
     }
     BaseViewModel.prototype.GetQrCodeUrl = function (content) {
@@ -1396,6 +1397,143 @@ var NewsType;
     NewsType[NewsType["Event"] = 10] = "Event";
     NewsType[NewsType["Mashup"] = 11] = "Mashup";
 })(NewsType || (NewsType = {}));
+var EulaViewModel = (function (_super) {
+    __extends(EulaViewModel, _super);
+    function EulaViewModel() {
+        var _this = _super.call(this) || this;
+        _this.EulaPath = '/eula/';
+        _this.IndexCurrId = 0;
+        _this.UlActive = false;
+        _this.OlActive = false;
+        _this.EulaCurrentVersion = ko.observable(1);
+        _this.EulaLanguage = ko.observable('en');
+        _this.Content = ko.observable('');
+        _this.Index = ko.observableArray([]);
+        return _this;
+    }
+    EulaViewModel.prototype.GetHtml = function (line) {
+        var _a;
+        var ret = '';
+        if (line.substring(0, 1) != '-' && this.UlActive) {
+            if (this.UlActive) {
+                ret += '</ul>';
+                this.UlActive = false;
+            }
+        }
+        var regOl = /^[0-9]*\.\s(.*)$/.exec(line);
+        if (!regOl && this.OlActive) {
+            if (this.OlActive) {
+                ret += '</ol>';
+                this.OlActive = false;
+            }
+        }
+        var hashCount = /^([#]*)\s/.exec(line);
+        if (hashCount) {
+            var h = (_a = hashCount[1]) === null || _a === void 0 ? void 0 : _a.length;
+            ret += this.GetHeader(h, line.substring(h).trim(), h <= 2);
+        }
+        else if (line == '[index]') {
+            ret += '<div id="index_dest"></div>';
+        }
+        else if (line.substring(0, 1) == '-') {
+            if (!this.UlActive) {
+                ret += '<ul>';
+                this.UlActive = true;
+            }
+            ret += '<li>' + jQuery('<div />').text(line.substring(1).trim()).html() + '</li>';
+        }
+        else if (regOl) {
+            if (!this.OlActive) {
+                ret += '<ol>';
+                this.OlActive = true;
+            }
+            ret += '<li>' + jQuery('<div />').text(regOl[1]).html() + '</li>';
+        }
+        else {
+            ret += '<p>' + jQuery('<div />').text(line).html() + '</p>';
+        }
+        return this.linkify(ret);
+    };
+    EulaViewModel.prototype.linkify = function (text) {
+        var mailRegex = /(\b[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)/ig;
+        var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]|www\.gpsnose\.com)/ig;
+        var text = text.replace(urlRegex, function (url) {
+            if (url == 'www.gpsnose.com') {
+                return "<strong>" + url + "</strong>";
+            }
+            return "<a href=\"" + url + "\">" + url + "</a>";
+        });
+        return text.replace(mailRegex, function (mail) {
+            return "<a href=\"" + mail + "\">" + mail + "</a>";
+        });
+    };
+    EulaViewModel.prototype.GetHeader = function (num, text, addToIndex) {
+        var str = jQuery('<div />').text(text).html();
+        this.IndexCurrId++;
+        if (addToIndex) {
+            this.Index.push('<a href="#anc_' + this.IndexCurrId + '" class="index index-' + num + '">' + str + '</a>');
+        }
+        return '<h' + (num + 1) + ' id="anc_' + this.IndexCurrId + '">' + str + '</h' + (num + 1) + '>';
+    };
+    EulaViewModel.prototype.LoadFile = function (onComplete) {
+        var _this = this;
+        var self = this;
+        this.UpdateCurrentVersion(function () {
+            _this.CheckLanguage(function () {
+                jQuery.ajax({
+                    type: 'GET',
+                    url: _this.EulaPath + _this.EulaCurrentVersion() + '_' + _this.EulaLanguage() + '.txt',
+                    dataType: 'text',
+                    success: function (result) {
+                        var lines = result.split("\n");
+                        var content = '';
+                        lines.forEach(function (line) {
+                            if (line.trim().length > 0) {
+                                content += self.GetHtml(line.trim());
+                            }
+                        });
+                        self.Content(content);
+                        onComplete();
+                    },
+                    error: function () {
+                        dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblUnknownError", "An unknown error is occured!"), null);
+                    }
+                });
+            });
+        });
+    };
+    EulaViewModel.prototype.CheckLanguage = function (onComplete) {
+        var newLanguage = GetCurrentLang();
+        var self = this;
+        jQuery.ajax({
+            type: 'HEAD',
+            url: this.EulaPath + this.EulaCurrentVersion() + '_' + newLanguage + '.txt',
+            success: function (message, text, response) {
+                self.EulaLanguage(newLanguage);
+                onComplete();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                onComplete();
+            }
+        });
+    };
+    EulaViewModel.prototype.UpdateCurrentVersion = function (onComplete) {
+        var nextVersion = this.EulaCurrentVersion() + 1;
+        var self = this;
+        jQuery.ajax({
+            type: 'HEAD',
+            url: this.EulaPath + nextVersion + '_en.txt',
+            success: function (message, text, response) {
+                self.EulaCurrentVersion(nextVersion);
+                self.UpdateCurrentVersion(onComplete);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                onComplete();
+            }
+        });
+    };
+    return EulaViewModel;
+}(BaseViewModel));
 var EventDetailViewModel = (function (_super) {
     __extends(EventDetailViewModel, _super);
     function EventDetailViewModel(eventDto) {
@@ -1406,6 +1544,7 @@ var EventDetailViewModel = (function (_super) {
         _this.CreationTicks = GetTicksFromUniqueKey(_this.UniqueKey);
         _this.Entity = new EventDto({ "UniqueKey": _this.UniqueKey });
         _this.NoseDto = new NoseDto({ "LoginName": _this.LoginName });
+        _this.IsOnlineEvent = (eventDto.EventOptions & 16) == 16;
         return _this;
     }
     EventDetailViewModel.prototype.OnAddDates = function (data) { };
@@ -1601,7 +1740,21 @@ var ImportedKeywordsViewModel = (function (_super) {
                 return item.Scope;
             });
             _this.KeywordScopes(ko.utils.arrayGetDistinctValues(scopes).sort());
-            _this.CurrentKeyword(newValues[0]);
+            var keyword = _this.findGetParameter('keyword');
+            if (keyword && keyword.length > 0) {
+                var selKeywords = ko.utils.arrayFilter(_this.ImportedKeywords(), function (item) {
+                    return item.Keyword == keyword;
+                });
+                if (selKeywords[0]) {
+                    _this.CurrentKeyword(selKeywords[0]);
+                }
+                else {
+                    _this.CurrentKeyword(newValues[0]);
+                }
+            }
+            else {
+                _this.CurrentKeyword(newValues[0]);
+            }
         });
         return _this;
     }
@@ -1654,6 +1807,15 @@ var ImportedKeywordsViewModel = (function (_super) {
                 dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblUnknownError", "An unknown error is occured!"), null);
             }
         });
+    };
+    ImportedKeywordsViewModel.prototype.findGetParameter = function (parameterName) {
+        var result = null, tmp = [];
+        location.search.substr(1).split("&").forEach(function (item) {
+            tmp = item.split("=");
+            if (tmp[0] === parameterName)
+                result = decodeURIComponent(tmp[1]);
+        });
+        return result;
     };
     return ImportedKeywordsViewModel;
 }(BaseViewModel));

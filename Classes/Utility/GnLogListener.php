@@ -1,4 +1,5 @@
 <?php
+
 namespace SmartNoses\Gpsnose\Utility;
 
 use GpsNose\SDK\Framework\Logging\GnLogLevel;
@@ -75,20 +76,24 @@ class GnLogListener implements GnILogListener
                 } catch (\Exception $e1) {
                     try {
                         $GLOBALS['BE_USER']->writelog(4, 0, $level, 0, '[gpsnose] ' . utf8_encode($message), []);
-                    } catch (\Exception $e2) {}
+                    } catch (\Exception $e2) {
+                    }
                 }
             }
         } else {
+            /** @var \TYPO3\CMS\Core\Log\Logger */
+            $logger = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Log\LogManager::class)->getLogger(__CLASS__);
             try {
-                GeneralUtility::sysLog($message, 'gpsnose', $level);
+                $logger->debug($message, ['gpsnose', $level]);
             } catch (\Exception $e) {
                 $message = str_replace('%', '%%', $message);
                 try {
-                    GeneralUtility::sysLog($message, 'gpsnose', $level);
+                    $logger->debug($message, ['gpsnose', $level]);
                 } catch (\Exception $e1) {
                     try {
-                        GeneralUtility::sysLog(utf8_encode($message), 'gpsnose', $level);
-                    } catch (\Exception $e2) {}
+                        $logger->debug(utf8_encode($message), ['gpsnose', $level]);
+                    } catch (\Exception $e2) {
+                    }
                 }
             }
         }

@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use TYPO3\CMS\Core\Http\RedirectResponse;
 
 class GpsnoseLogin implements MiddlewareInterface
 {
@@ -15,9 +16,12 @@ class GpsnoseLogin implements MiddlewareInterface
 
         $queryParams = $request->getQueryParams();
         $loginId = $queryParams['gnlid'];
-        if ($loginId) {
-            $GLOBALS['TSFE']->fe_user->setKey("ses", "gnlid", $loginId);
-            $GLOBALS['TSFE']->fe_user->storeSessionData();
+
+        $headers = $response->getHeaders();
+        $redirectUri = $headers["location"][0];
+
+        if ($loginId && !empty($redirectUri) && !strstr($redirectUri, '?gnlid=') && $redirectUri != (string)$request->getUri()->withQuery('')) {
+            return new RedirectResponse($redirectUri . '?gnlid=' . $loginId, 301);
         }
 
         return $response;

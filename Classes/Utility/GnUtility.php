@@ -19,6 +19,7 @@ use GpsNose\SDK\Framework\Logging\GnLogConfig;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use GpsNose\SDK\Framework\GnCryptor;
 use GpsNose\SDK\Framework\Logging\GnLogger;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class GnUtility
 {
@@ -36,7 +37,7 @@ class GnUtility
 
         $extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['gpsnose'];
         if ($extConf == NULL) {
-            $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['gpsnose']);
+            $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['gpsnose']);
         }
 
         if ($extConf['cookieCryptPass']) {
@@ -78,6 +79,8 @@ class GnUtility
      */
     public static function login(Mashup $mashup, string $loginId)
     {
+        $GLOBALS['TYPO3_CONF_VARS']['FE']['checkFeUserPid'] = false;
+
         $verified = FALSE;
         if ($mashup && !GnUtil::IsNullOrEmpty($loginId)) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -147,7 +150,8 @@ class GnUtility
                     $hookName = 'loginUpdateUser';
                 }
                 $objectManager->get(PersistenceManager::class)->persistAll();
-                $verified = self::loginUser($frontendUser->getUsername());
+
+                $verified = self::loginUser($frontendUser->getUsername(), $frontendUser->getPassword());
 
                 $gnAuthData = new GnAuthenticationData();
                 $gnAuthData->LoginId = $loginId;
@@ -175,22 +179,18 @@ class GnUtility
      * Login the fe-user by Loginname / Password
      *
      * @param string $username
+     * @param string $password
      * @return bool
      */
-    private static function loginUser($username)
+    private static function loginUser($username, $password)
     {
-        $frontendController = $GLOBALS['TSFE'];
-        $frontendController->fe_user->checkPid = '';
-        $info = $frontendController->fe_user->getAuthInfoArray();
-        $user = $frontendController->fe_user->fetchUserRecord($info['db_user'], $username);
-        $frontendController->fe_user->createUserSession($user);
-        $reflection = new \ReflectionClass($frontendController->fe_user);
-        $setSessionCookieMethod = $reflection->getMethod('setSessionCookie');
-        $setSessionCookieMethod->setAccessible(TRUE);
-        $setSessionCookieMethod->invoke($frontendController->fe_user);
-        $frontendController->fe_user->user = $frontendController->fe_user->fetchUserSession();
+        $_POST['logintype'] = 'login';
+        $_POST['user'] = $username;
+        $_POST['pass'] = $password;
+        $authService = GeneralUtility::makeInstance(FrontendUserAuthentication::class);
+        $authService->start();
 
-        return self::isUserLoggedIn();
+        return TRUE;
     }
 
     /**

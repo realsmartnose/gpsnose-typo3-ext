@@ -1,3 +1,6 @@
+1.7.16
+- FIX: Login with gnlid
+
 1.7.15
 - CHA: Change the blob-url for images
 
