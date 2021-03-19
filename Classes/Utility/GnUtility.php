@@ -109,7 +109,9 @@ class GnUtility
                     $frontendUser->setPid($mashup->getPid());
                     $isNewUser = TRUE;
                 }
-                $frontendUser->setUsername($gnSettings['login.']['loginNamePrefix'] . $gnLogin->LoginName);
+                if (GnUtil::IsNullOrEmpty($frontendUser->getUsername())) {
+                    $frontendUser->setUsername($gnSettings['login.']['loginNamePrefix'] . $gnLogin->LoginName);
+                }
                 $frontendUser->setGpsnoseLoginname($gnLogin->LoginName);
                 $frontendUser->setGpsnoseIsActivated($gnLogin->IsActivated);
                 $frontendUser->setGpsnoseFullname($gnLogin->FullName);
