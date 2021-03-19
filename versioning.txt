@@ -1,3 +1,6 @@
+1.7.17
+- FIX: Prevent override of username
+
 1.7.16
 - FIX: Login with gnlid
 
