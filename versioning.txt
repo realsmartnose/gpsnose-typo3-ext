@@ -1,3 +1,6 @@
+1.7.18
+- FIX: Prevent override of email
+
 1.7.17
 - FIX: Prevent override of username
 
