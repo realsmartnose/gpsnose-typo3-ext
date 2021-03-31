@@ -87,6 +87,7 @@ class LoginController extends BaseController
                 $this->redirectToPage($redirectPid);
             } else {
                 $this->view->assign('logged_in', TRUE);
+                $this->initFrontend();
             }
         } else {
             $this->initFrontend();
