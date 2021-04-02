@@ -55,6 +55,11 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     protected $gpsnoseLongitude = 0.0;
 
     /**
+     * @var string
+     */
+    protected $gpsnoseEmail = NULL;
+
+    /**
      * @return string
      */
     public function getGpsnoseLoginname()
@@ -164,6 +169,28 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     public function setGpsnoseLongitude($gpsnoseLongitude)
     {
         $this->gpsnoseLongitude = $gpsnoseLongitude + 0;
+    }
+
+    /**
+     * Get the value of gpsnoseEmail
+     *
+     * @return string
+     */
+    public function getGpsnoseEmail()
+    {
+        return $this->gpsnoseEmail;
+    }
+
+    /**
+     * Set the value of gpsnoseEmail
+     *
+     * @param string $gpsnoseEmail 
+     * @return self
+     */
+    public function setGpsnoseEmail(string $gpsnoseEmail)
+    {
+        $this->gpsnoseEmail = $gpsnoseEmail;
+        return $this;
     }
 
     /**

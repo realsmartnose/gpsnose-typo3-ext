@@ -119,7 +119,8 @@ class GnUtility
                 $frontendUser->setGpsnoseIsSafeMode($gnLogin->IsSafeMode);
                 $frontendUser->setGpsnoseLatitude($gnLogin->Latitude);
                 $frontendUser->setGpsnoseLongitude($gnLogin->Longitude);
-                if (! GnUtil::IsNullOrEmpty($gnLogin->Email)) {
+                $frontendUser->setGpsnoseEmail($gnLogin->Email);
+                if (! GnUtil::IsNullOrEmpty($gnLogin->Email) && $gnSettings['login.']['syncEmail']) {
                     $frontendUser->setEmail($gnLogin->Email ?: '');
                 }
                 if (GnUtil::IsNullOrEmpty($frontendUser->getPassword())) {

@@ -35,10 +35,13 @@ var BaseViewModel = (function () {
             return '';
         text = text.replace(/(?:\r\n|\r|\n)/g, ' <br> ');
         text = text.replace(/(https?:\/\/[^\s]+)/g, function (url) {
-            return '<a href="' + url + '" data-external>' + url + '</a>';
+            return '<a href="' + url + '" data-external>' + decodeURI(url) + '</a>';
+        });
+        text = text.replace(/( |^)www\.[^\s]+\.[^\s]+/g, function (url) {
+            return '<a href="https://' + url.trim() + '" data-external>' + decodeURI(url) + '</a>';
         });
         text = text.replace(/[\w-\.]+@([\w-]+\.)+[\w-]{2,4}/g, function (url) {
-            return '<a href="mailto:' + url + '">' + url + '</a>';
+            return '<a href="mailto:' + url + '">' + decodeURI(url) + '</a>';
         });
         return text;
     };

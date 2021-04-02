@@ -185,4 +185,5 @@ CREATE TABLE fe_users (
     gpsnose_is_safe_mode tinyint(4) unsigned DEFAULT NULL,
     gpsnose_latitude double(11,4) DEFAULT '0.0',
     gpsnose_longitude double(11,4) DEFAULT '0.0',
+    gpsnose_email varchar(255) DEFAULT NULL,
 );

@@ -30,6 +30,7 @@ plugin.tx_gpsnose {
       loginPid = {$plugin.tx_gpsnose.login.loginPid}
       groupId = {$plugin.tx_gpsnose.login.groupId}
       loginNamePrefix = {$plugin.tx_gpsnose.login.loginNamePrefix}
+      syncEmail = {$plugin.tx_gpsnose.login.syncEmail}
     }
 
     mashup {

@@ -64,12 +64,22 @@ $temporaryColumns = [
             'max' => 50,
             'eval' => 'num'
         ]
+    ],
+    'gpsnose_email' => [
+        'label' => $languageFile . 'fe_users.gpsnose_email',
+        'config' => [
+            'type' => 'input',
+            'default' => '0.0',
+            'size' => 20,
+            'max' => 50,
+            'eval' => 'num'
+        ]
     ]
 ];
 
 ExtensionManagementUtility::addTCAcolumns('fe_users', $temporaryColumns);
 ExtensionManagementUtility::addToAllTCAtypes('fe_users',
-    '--div--;' . $languageFile . 'fe_users.palette_title;;;;1-1-1, gpsnose_loginname, gpsnose_is_activated, gpsnose_fullname, gpsnose_communities, gpsnose_is_safe_mode, gpsnose_latitude, gpsnose_longitude',
+    '--div--;' . $languageFile . 'fe_users.palette_title;;;;1-1-1, gpsnose_loginname, gpsnose_is_activated, gpsnose_fullname, gpsnose_communities, gpsnose_is_safe_mode, gpsnose_latitude, gpsnose_longitude, gpsnose_email',
     '',
     'after:usergroup'
 );
