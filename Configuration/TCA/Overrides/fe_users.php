@@ -69,10 +69,9 @@ $temporaryColumns = [
         'label' => $languageFile . 'fe_users.gpsnose_email',
         'config' => [
             'type' => 'input',
-            'default' => '0.0',
             'size' => 20,
-            'max' => 50,
-            'eval' => 'num'
+            'max' => 250,
+            'eval' => 'trim'
         ]
     ]
 ];
