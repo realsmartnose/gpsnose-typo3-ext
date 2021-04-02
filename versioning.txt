@@ -1,3 +1,6 @@
+1.7.20
+- FIX: Problem with NULL email
+
 1.7.19
 - FIX: Handle override of email
 
