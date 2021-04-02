@@ -292,6 +292,9 @@
             <trans-unit id="fe_users.gpsnose_longitude">
                 <source>GpsNose Longitude</source>
             </trans-unit>
+            <trans-unit id="fe_users.gpsnose_email">
+                <source>GpsNose Email</source>
+            </trans-unit>
 
             <trans-unit id="customsubcategory.resources">
                 <source>Resources</source>

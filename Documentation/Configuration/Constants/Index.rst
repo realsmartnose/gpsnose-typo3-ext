@@ -54,6 +54,8 @@ login.groupId                           int         UID of the fe-group that is 
 login.loginNamePrefix                   string      prefix for usernam logged in by GpsNose (if the user called foo,    #
                                                     it will be stored as #foo)                                          
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+login.syncEmail                         boolean     If set, the Email will be safed into fe_user email
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 mashup.activeMashup                     string      Defines the name of the active mashup. If the value is empty,
                                                     the system will select the first mashup from GpsNose.
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------

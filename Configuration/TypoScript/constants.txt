@@ -66,6 +66,9 @@ plugin.tx_gpsnose {
 
     # cat=plugin.tx_gpsnose/login/030; type=string; label=Loginname prefix for GpsNose-Users
     loginNamePrefix = #
+
+    # cat=plugin.tx_gpsnose/login/040; type=boolean; label=Use the Email from GpsNose-Users
+    syncEmail = 1
   }
 
   mashup {
