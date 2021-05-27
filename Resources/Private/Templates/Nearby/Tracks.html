@@ -30,36 +30,35 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.16">
+<div class="ma-gpsnose" data-gn-version="1.1.0">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-tracks" data-bind="visible:true" style="display:none;">
 
-        <div class="btn-group btn-group-xs ma-btn-group">
-            <a class="btn btn-default btn-outline-secondary" data-external data-bind="html: Entity.DisplayName(), attr: { href: Entity.DetailUrl() }"></a>
-            <a href="javascript:;" class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
+        <div class="btn-group btn-group-sm ma-btn-group">
+            <a class="btn btn-default btn-outline-primary" data-external data-bind="html: Entity.DisplayName(), attr: { href: Entity.DetailUrl() }"></a>
+            <a href="javascript:void(0);" class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
         </div>
 
         <div data-bind="if: ! gn_data.User.LoginName">
             <div class="alert alert-info">
                 <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                 <span data-bind="text: ' ' + GetLangRes('Common_loginRequired', 'Please login first.')"></span>
-                <button type="button" class="btn btn-info btn-xs pull-right float-right" data-bind="click: function() { document.location.href = $data.GetLoginUrl(gn_data.Settings.LoginUrl); }">
+                <button type="button" class="btn btn-info btn-sm pull-right float-right float-end" data-bind="click: function() { document.location.href = $data.GetLoginUrl(gn_data.Settings.LoginUrl); }">
                     <i class="glyphicon glyphicon-user fas fa-user"></i>
                     <span data-bind="text: ' ' + GetLangRes('Common_btnLogin', 'Login')"></span>
                 </button>
             </div>
         </div>
         <div data-bind="if: gn_data.User.LoginName">
-            <div class="grid" data-bind="PageableTracks.Items().length > 0">
-                <div class="tracks" id="tracksContainer" data-bind="foreach: PageableTracks.Items()">
-                    <!-- ko if: ($index() === 0) -->
-                    <div class="grid-sizer col-lg-4 col-sm-6"></div>
-                    <!-- /ko -->
-                    <div class="grid-item col-lg-4 col-sm-6">
+            <div class="masonry" data-bind="PageableTracks.Items().length > 0">
+                <div class="tracks" id="tracksContainer">
+                    <div class="masonry-sizer col-lg-4 col-sm-6"></div>
+                    <!-- ko foreach: PageableTracks.Items() -->
+                    <div class="masonry-item col-lg-4 col-sm-6">
                         <div data-external data-bind="attr: { 'data-src': $data.DetailUrl() }">
                             <div class="outer">
-                                <div class="media mb-2">
-                                    <div class="media-left mr-2">
+                                <div class="media d-flex mb-2">
+                                    <div class="media-left mr-2 me-2">
                                         <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: window.gn_data.Settings.ImagePath+'/EmptyTour' + $data.TrackType + '.png' }" onerror="ImageErrorHandler(this, window.gn_data.Settings.ImagePath+'/EmptyMap.png')" />
                                     </div>
                                     <div class="media-body">
@@ -73,12 +72,17 @@ $(document).ready(function() {
                                     <ma-gpsnose-rating params="percent: $data.RatingAvgPercent, count: $data.RatingCount, imagePath: gn_data.Settings.ImagePath"></ma-gpsnose-rating>
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-8 col-8" data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></div>
-                                    <div class="col-xs-4 col-4 text-right" data-bind="text: GetDistanceString($data)"></div>
+                                    <div class="col-xs-8 col-8">
+                                        <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
+                                    </div>
+                                    <div class="col-xs-4 col-4 text-right text-end">
+                                        <small data-bind="text: GetDistanceString($data)"></small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- /ko -->
                 </div>
             </div>
 
@@ -109,12 +113,12 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 var MA_GPSNOSE_IS_MASHUP = true;
-$(document).ready(function() {
+$(function() {
     if (! gn_data.User) gn_data.User = {};
     var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
     vm.PageableTracks.ItemPageUrl = gn_data.Settings.NearbyTracksPageUrl;
     vm.PageableTracks.OnAddItems = function() {
-        $('#ma-gpsnose-{record} .grid').imagesLoaded(function() {
+        $('#ma-gpsnose-{record} .masonry').imagesLoaded(function() {
             MasonryReload();
         });
     }

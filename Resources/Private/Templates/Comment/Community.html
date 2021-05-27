@@ -21,6 +21,7 @@ $(document).ready(function() {
     AddLangRes('Common_btnOk', '<f:translate key="Common_btnOk" />');
     AddLangRes('Common_btnSend', '<f:translate key="Common_btnSend" />');
     AddLangRes('Common_btnShowProfile', '<f:translate key="Common_btnShowProfile" />');
+    AddLangRes('Common_lblCommentAdd', '<f:translate key="Common_lblCommentAdd" />');
     AddLangRes('Common_lblCommentAddHint', '<f:translate key="Common_lblCommentAddHint" />');
     AddLangRes('Common_lblCommentEdit', '<f:translate key="Common_lblCommentEdit" />');
     AddLangRes('Common_lblCommentEditHint', '<f:translate key="Common_lblCommentEditHint" />');
@@ -31,6 +32,8 @@ $(document).ready(function() {
     AddLangRes('Common_lblRequestInProgress', '<f:translate key="Common_lblRequestInProgress" />');
     AddLangRes('Common_lblScanToJoin', '<f:translate key="Common_lblScanToJoin" />');
     AddLangRes('Community_loginRequired', '<f:translate key="Community_loginRequired" />');
+    AddLangRes('Common_lblAreYouSureTitle', '<f:translate key="Common_lblAreYouSureTitle" />');
+    AddLangRes('Common_lblAreYouSureMessage', '<f:translate key="Common_lblAreYouSureMessage" />');
     gn_data.Settings.CommentPageUrl = $('<textarea />').html("{f:uri.action(action:'pageComments', controller:'Api', pluginName:'Pagecomments', pageType:'{settings.ajax.pageComments}', arguments:'{ communityTag : communityTag }')}").text();
     gn_data.Settings.CommentSaveUrl = $('<textarea />').html("{f:uri.action(action:'commentSave', controller:'Api', pluginName:'Commentsave', pageType:'{settings.ajax.commentSave}', arguments:'{ communityTag : communityTag }')}").text();
     gn_data.Settings.LoginUrl = $('<textarea />').html("{f:uri.page(pageUid:'{settings.login.loginPid}')}").text();
@@ -43,13 +46,13 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.16">
+<div class="ma-gpsnose" data-gn-version="1.1.0">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-comment" data-bind="visible:true" style="display:none;">
 
-        <div class="btn-group btn-group-xs ma-btn-group">
-            <a class="btn btn-default btn-outline-secondary" data-external data-bind="html: Entity.DisplayName(), attr: { href: Entity.DetailUrl() }"></a>
-            <a href="javascript:;" class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
+        <div class="btn-group btn-group-sm ma-btn-group">
+            <a class="btn btn-default btn-outline-primary" data-external data-bind="html: Entity.DisplayName(), attr: { href: Entity.DetailUrl() }"></a>
+            <a href="javascript:void(0);" class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
         </div>
 
         <ma-gpsnose-comments params="uniqueKey: gn_data.Community.TagName,
@@ -73,7 +76,7 @@ $(document).ready(function() {
 <script type="text/javascript">
 var MA_GPSNOSE_IS_MASHUP = true;
 var vm;
-$(document).ready(function() {
+$(function() {
     if (! gn_data.User) gn_data.User = {};
     vm = new CommunityDetailViewModel(gn_data.Community, gn_data.User);
     ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));

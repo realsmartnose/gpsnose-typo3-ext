@@ -2,10 +2,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -55,7 +57,7 @@ var NoseDto = (function (_super) {
     }
     return NoseDto;
 }(BaseNavigableItem));
-var MAX_DATE_TIME_TICKS = "3155378975999999999";
+window.MAX_DATE_TIME_TICKS = "3155378975999999999";
 var MashupFormTypeEnum;
 (function (MashupFormTypeEnum) {
     MashupFormTypeEnum[MashupFormTypeEnum["None"] = 0] = "None";
@@ -299,22 +301,22 @@ var MashupAdminViewModel = (function () {
         var firstChar = this.GetCommunityPrefix(value);
         switch (firstChar) {
             case "@":
-                icon = "lock fas fa-lock";
+                icon = "fas fa-lock";
                 break;
             case "*":
-                icon = "eye-close fas fa-eye-slash";
+                icon = "fas fa-eye-slash";
                 break;
             case "%":
-                icon = "globe fas fa-globe-americas";
+                icon = "fas fa-globe-americas";
                 break;
         }
         additionalClass = additionalClass ? ' ' + additionalClass : '';
         if (icon != "" && value && value.length > 2) {
             var com = value.substr(1, value.length);
-            return '<i class="glyphicon glyphicon-' + icon + '"></i> <span class="keyword-label' + additionalClass + '"> ' + com + '</span>';
+            return '<i class="' + icon + '"></i> <span class="keyword-label' + additionalClass + '"> ' + com + '</span>';
         }
         else {
-            return '<i class="glyphicon glyphicon-globe fas fa-globe-americas"></i> <span class="keyword-label' + additionalClass + '"> ' + value + '</span>';
+            return '<i class="fas fa-globe-americas"></i> <span class="keyword-label' + additionalClass + '"> ' + value + '</span>';
         }
     };
     MashupAdminViewModel.prototype.GetCommunityPrefix = function (value) {

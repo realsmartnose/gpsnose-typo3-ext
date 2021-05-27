@@ -29,6 +29,8 @@ settings.javascript.moment              string      Location of moment.js, if em
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 settings.javascript.momentLocalePath    string      Path of moment locales, if empty, script will not be loaded         from constant
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+settings.javascript.numeral             string      Path of numeral, if empty, script will not be loaded                from constant
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 settings.javascript.imagesloaded        string      Location of imagesloaded.js, if empty, script will not be loaded    from constant
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 settings.javascript.masonry             string      Location of masonry.js, if empty, script will not be loaded         from constant

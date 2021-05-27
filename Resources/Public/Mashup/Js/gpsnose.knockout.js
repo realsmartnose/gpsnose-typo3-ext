@@ -2,10 +2,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -103,12 +105,10 @@ var BaseComponentsViewModel = (function () {
     };
     return BaseComponentsViewModel;
 }());
-var MAX_DATE_TIME_TICKS = "3155378975999999999";
+window.MAX_DATE_TIME_TICKS = "3155378975999999999";
 ko.bindingHandlers.modal = {
     init: function (element, valueAccessor) {
-        jQuery(element).modal({
-            show: false
-        });
+        jQuery(element).modal();
         var value = valueAccessor();
         if (typeof (value) === 'function') {
             jQuery(element).on('hide.bs.modal', function () {
@@ -132,10 +132,10 @@ ko.bindingHandlers.modal = {
 ko.bindingHandlers.enterkey = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
         var callback = valueAccessor();
-        jQuery(element).keypress(function (event) {
+        jQuery(element).on('keypress', function (event) {
             var keyCode = (event.which ? event.which : event.keyCode);
             if (keyCode === 13) {
-                jQuery(element).blur();
+                jQuery(element).trigger('blur');
                 callback.call(viewModel);
                 return false;
             }
@@ -195,6 +195,31 @@ ko.bindingHandlers.fancyboxAttr = {
         }
     }
 };
+ko.bindingHandlers.dateTimePicker = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        var options = allBindingsAccessor().dateTimePickerOptions || {};
+        var initialValue = ko.utils.unwrapObservable(valueAccessor());
+        if (initialValue) {
+            options.date = initialValue;
+        }
+        jQuery(element).datetimepicker(options);
+        ko.utils.registerEventHandler(element, "change.datetimepicker", function (event) {
+            var value = valueAccessor();
+            if (ko.isObservable(value)) {
+                value(event.date || event.target.value || null);
+            }
+        });
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            jQuery(element).datetimepicker("destroy");
+        });
+    },
+    update: function (element, valueAccessor) {
+        var val = ko.utils.unwrapObservable(valueAccessor());
+        if (jQuery(element).datetimepicker) {
+            jQuery(element).datetimepicker("date", val);
+        }
+    }
+};
 ko.extenders.numeric = function (target, digits) {
     var result = ko.computed({
         read: target,
@@ -220,7 +245,7 @@ var CommunityDetailViewModel = (function (_super) {
         _this.MembersPageUrl = '/Community/Page_Members';
         _this.Members = ko.observableArray();
         _this.MembersPageSize = gnSettings.CommunityMembersPageSize;
-        _this.MembersLastJoinTicks = MAX_DATE_TIME_TICKS;
+        _this.MembersLastJoinTicks = window.MAX_DATE_TIME_TICKS;
         _this.HasMoreMembers = ko.observable(true);
         _this.MembersRequestActive = ko.observable(false);
         _this.MembersRequestActive.subscribe(function (newValue) {
@@ -350,39 +375,7 @@ ko.components.register('ma-gpsnose-carousel', {
             return new CarouselViewModel(params);
         }
     },
-    template: '<header class="header-carousel" data-bind="visible: ! IsHidden()">' +
-        '<div id="carousel1" class="carousel" data-ride="carousel" data-interval="10000" data-keyboard="true">' +
-        '<ol class="carousel-indicators" data-bind="foreach: Slides, visible: Slides().length > 1">' +
-        '<li data-target="#carousel1" data-bind="attr: { \'data-slide-to\': $index() }, css: { active: $index() == 0 }"></li>' +
-        '</ol>' +
-        '<div class="carousel-inner" role="listbox" data-bind="foreach: Slides">' +
-        '<div class="item" data-bind="css: { active: $index() == 0 }">' +
-        '<img data-bind="attr: { src: $parent.ImagePath() + \'/bg\' + $index() + \'.png\', atr: Text }">' +
-        '<div class="container">' +
-        '<div class="carousel-caption">' +
-        '<div class="row">' +
-        '<div class="col-xs-4">' +
-        '<img class="intropage"data-bind="attr: { src: $parent.ImagePath() + \'/fg\' + $index() + \'.png\', atr: Text }">' +
-        '</div>' +
-        '<div class="col-xs-8">' +
-        '<h2 data-bind="text: Title"></h2>' +
-        '<p data-bind="text: Text"></p>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '<a class="left carousel-control" href="#carousel1" role="button" data-slide="prev" data-bind="visible: Slides().length > 1">' +
-        '<i class="glyphicon glyphicon-chevron-left"></i>' +
-        '<span class="sr-only">Previous</span>' +
-        '</a>' +
-        '<a class="right carousel-control" href="#carousel1" role="button" data-slide="next" data-bind="visible: Slides().length > 1">' +
-        '<i class="glyphicon glyphicon-chevron-right"></i>' +
-        '<span class="sr-only">Next</span>' +
-        '</a>' +
-        '</div>' +
-        '</header>'
+    template: "\n<header class=\"header-carousel\" data-bind=\"visible: ! IsHidden()\">\n    <div id=\"carousel1\" class=\"carousel slide carousel-fade\" data-bs-ride=\"carousel\" data-bs-interval=\"10000\" data-bs-keyboard=\"true\">\n        <div class=\"carousel-indicators\" data-bind=\"foreach: Slides, visible: Slides().length > 1\">\n            <button type=\"button\" data-bs-target=\"#carouselExampleCaptions\" data-bind=\"attr: { 'data-bs-slide-to': $index() }, css: { active: $index() == 0 }\"></button>\n        </div>\n        <div class=\"carousel-inner\" data-bind=\"foreach: Slides\">\n            <div class=\"carousel-item\" data-bind=\"css: { active: $index() == 0 }\">\n                <img data-bind=\"attr: { src: $parent.ImagePath() + '/bg' + $index() + '.png', atr: Text }\">\n                <div class=\"container\">\n                    <div class=\"carousel-caption\">\n                        <div class=\"row\">\n                            <div class=\"col-4\">\n                                <img class=\"intropage\"data-bind=\"attr: { src: $parent.ImagePath() + '/fg' + $index() + '.png', atr: Text }\">\n                            </div>\n                            <div class=\"col-8\">\n                                <h2 data-bind=\"text: Title\"></h2>\n                                <p data-bind=\"text: Text\"></p>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <button class=\"carousel-control-prev\" type=\"button\" data-bs-target=\"#carousel1\" data-bs-slide=\"prev\" data-bind=\"visible: Slides().length > 1\">\n            <span class=\"carousel-control-prev-icon\" aria-hidden=\"true\"></span>\n            <span class=\"visually-hidden\">Previous</span>\n        </button>\n        <button class=\"carousel-control-next\" type=\"button\" data-bs-target=\"#carousel1\" data-bs-slide=\"next\" data-bind=\"visible: Slides().length > 1\">\n            <span class=\"carousel-control-next-icon\" aria-hidden=\"true\"></span>\n            <span class=\"visually-hidden\">Next</span>\n        </button>\n    </div>\n</header>"
 });
 var CommentsViewModel = (function (_super) {
     __extends(CommentsViewModel, _super);
@@ -392,7 +385,7 @@ var CommentsViewModel = (function (_super) {
         _this.CommentSaveUrl = '/WebApi/SaveComment';
         _this.Comments = ko.observableArray();
         _this.CommentsPageSize = gnSettings.CommentsPageSize;
-        _this.CommentsLastKnownTicks = MAX_DATE_TIME_TICKS;
+        _this.CommentsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
         _this.HasMoreComments = ko.observable(true);
         _this.CommentsRequestActive = ko.observable(false);
         _this.LoginName = ko.observable("");
@@ -527,7 +520,7 @@ var CommentsViewModel = (function (_super) {
         var _this = this;
         jQuery(document).off('gn.dialog.show').on('gn.dialog.show', function () {
             setTimeout(function () {
-                jQuery('#CommentLongField').select();
+                jQuery('#CommentLongField').trigger('select');
             }, 500);
         });
         dialog.Show(GetLangRes("Common_lblCommentAdd", "Add comment"), '<textarea id="CommentLongField" rows="4" cols="50" maxlength="5000" type="text" class="form-control" placeholder="' + GetLangRes("Common_lblCommentAddHint", "Write comment") + '">' + this.CommentAddText() + '</textarea>', function () {
@@ -559,7 +552,7 @@ var CommentsViewModel = (function (_super) {
         var _this = this;
         jQuery(document).off('gn.dialog.show').on('gn.dialog.show', function () {
             setTimeout(function () {
-                jQuery('#CommentEditField').select();
+                jQuery('#CommentEditField').trigger('select');
             }, 500);
         });
         dialog.Show(GetLangRes("Common_lblCommentEdit", "Edit comment"), '<textarea id="CommentEditField" rows="4" cols="50" maxlength="5000" type="text" class="form-control" placeholder="' + GetLangRes("Common_lblCommentEditHint", "Remove comment") + '">' + comment.Text + '</textarea>', function () {
@@ -667,7 +660,7 @@ ko.components.register('ma-gpsnose-comments', {
         '<div class="alert alert-info">' +
         '<i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Community_loginRequired\', \'Login first to interact\')"></span>' +
-        '<button type="button" class="btn btn-info btn-xs pull-right float-right" data-bind="click: function() { document.location.href = $data.GetLoginUrl($data.LoginUrl); }">' +
+        '<button type="button" class="btn btn-info btn-sm pull-right float-right float-end" data-bind="click: function() { document.location.href = $data.GetLoginUrl($data.LoginUrl); }">' +
         '<i class="glyphicon glyphicon-user fas fa-user"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnLogin\', \'Login\')"></span>' +
         '</button>' +
@@ -675,7 +668,7 @@ ko.components.register('ma-gpsnose-comments', {
         '</div>' +
         '<div data-bind="if: IsAddAllowed() && IsLoggedIn() && IsActivated() && ! IsReadonly()">' +
         '<form onsubmit="AddComment()">' +
-        '<div class="form-group">' +
+        '<div class="form-group mb-3">' +
         '<div class="input-group">' +
         '<div class="input-group-btn input-group-prepend">' +
         '<div class="btn btn-default btn-outline-secondary" type="button" style="letter-spacing:-2px;" data-fancybox data-src="#moods-dialog" data-bind="attr: { \'data-remove\': MA_GPSNOSE_IS_MASHUP }">' +
@@ -697,31 +690,31 @@ ko.components.register('ma-gpsnose-comments', {
         '</div>' +
         '</form>' +
         '<div id="moods-dialog" data-bind="foreach: Moods" style="display:none;" class="moods-dialog">' +
-        '<div class="btn btn-default btn-outline-secondary" data-bind="text: $data, click: function() { if (jQuery().fancybox) jQuery.fancybox.close(true); $parent.CommentAddMood($data); }"></div>' +
+        '<div class="btn btn-default btn-outline-secondary p-1" data-bind="text: $data, click: function() { if (jQuery().fancybox) jQuery.fancybox.close(true); $parent.CommentAddMood($data); }"></div>' +
         '</div>' +
         '</div>' +
         '<div data-bind="if: Comments().length == 0">' +
         '<div class="alert alert-info" data-bind="text: GetLangRes(\'Common_lblNoCommentsAvailable\', \'Currently there are no comments available for this item.\')"></div>' +
         '</div>' +
         '<div class="comments" data-bind="if: Comments().length > 0">' +
-        '<div class="grid row" data-bind="foreach: Comments.sort(function (l, r) { return l.CreationTicks < r.CreationTicks ? 1 : -1 })">' +
+        '<div class="masonry row" data-bind="foreach: Comments.sort(function (l, r) { return l.CreationTicks < r.CreationTicks ? 1 : -1 })">' +
         '<!-- ko if: ($index() === 0) -->' +
-        '<div class="grid-sizer col-md-4 col-sm-6"></div>' +
+        '<div class="masonry-sizer col-md-4 col-sm-6"></div>' +
         '<!-- /ko -->' +
-        '<div class="grid-item col-md-4 col-sm-6">' +
+        '<div class="masonry-item col-md-4 col-sm-6">' +
         '<div class="outer">' +
-        '<div class="media mb-2">' +
-        '<div class="media-left mr-2">' +
+        '<div class="media d-flex mb-2">' +
+        '<div class="media-left mr-2 me-2">' +
         '<img class="media-object img-circle rounded-circle" width="32px" data-bind="attr: { src: $data.NoseDto.ImageUrl() + \'@200\', onerror: \'ImageErrorHandler(this, \\\'\' + $parent.ImagePath() + \'/EmptyUser.png\\\')\' }" />' +
         '</div>' +
-        '<div class="media-body middle" data-bind="text: $data.Creator"></div>' +
-        '<div class="media-body middle mood" data-bind="text: $data.Mood"></div>' +
+        '<div class="media-body middle flex-grow-1" data-bind="text: $data.Creator"></div>' +
+        '<div class="media-body middle flex-grow-1 mood" data-bind="text: $data.Mood"></div>' +
         '<div class="media-right middle" data-bind="text: GetAgeStringFromTicks($data.CreationTicks)"></div>' +
         '</div>' +
         '<div data-bind="text: $data.Text, visible: HasText(), css: ($data.Text && $data.Text.length > 20 ? \'text\' : \'text-big\')"></div>' +
         '<div class="clearfix" data-bind="if: ! $parent.IsReadonly()">' +
         '<img class="ma-crown" data-bind="attr: { src: $parent.ImagePath() + \'/IcActionCrown.png\' }, visible: $parent.Entity.IsUserAdmin($data.Creator)" />' +
-        '<div class="btn-group btn-group-xs pull-right float-right" role="group" aria-label="share">' +
+        '<div class="btn-group btn-group-sm pull-right float-right float-end" role="group" aria-label="share">' +
         '<a class="btn btn-default btn-outline-secondary" data-popup data-bind="attr: { href: $data.NoseDto.DetailUrl(), title: GetLangRes(\'Common_btnShowProfile\', \'Show profile\') }">' +
         '<i class="glyphicon glyphicon-user fas fa-user"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnShowProfile\', \'Show profile\')"></span>' +
@@ -741,7 +734,7 @@ ko.components.register('ma-gpsnose-comments', {
         '</div>' +
         '<div class="text-center" data-bind="if: ! IsReadonly()">' +
         '<div class="btn btn-default btn-outline-secondary btn-lg" data-bind="click: function(){ PageComments() }, visible: HasMoreComments(), attr: { disabled: CommentsRequestActive() }">' +
-        '<div data-bind="visible: ! CommentsRequestActive()">' +
+        '<div data-bind="visible: ! CommentsRequestActive(), click: function () { PageComments(); }">' +
         '<i class="glyphicon glyphicon-cloud-download fas fa-cloud-download-alt"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_lblLoadMore\', \'more..\')"></span>' +
         '</div>' +
@@ -865,20 +858,20 @@ ko.components.register('ma-gpsnose-dialog', {
     viewModel: {
         instance: dialog
     },
-    template: '<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialogModalLabel" data-bind="modal: ShowDialog">' +
+    template: '<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialogModalLabel" data-show="false" data-bind="modal: ShowDialog">' +
         '<div class="modal-dialog" role="document">' +
         '<form data-bind="submit: function(){ ClickOkButton() }">' +
         '<div class="modal-content">' +
         '<div class="modal-header" data-bind="visible: Title().length > 0">' +
-        '<button type="button" class="close d-none" data-dismiss="modal" aria-label="Close" data-bind="attr: { \'aria-label\': GetLangRes(\'Common_btnClose\', \'Close\') }"><span>&times;</span></button>' +
+        '<button type="button" class="close d-none" data-dismiss="modal" data-bind="attr: { \'aria-label\': GetLangRes(\'Common_btnClose\', \'Close\') }"><span>&times;</span></button>' +
         '<h4 class="modal-title" data-bind="text: $data.Title"></h4>' +
-        '<button type="button" class="close hidden" data-dismiss="modal" aria-label="Close" data-bind="attr: { \'aria-label\': GetLangRes(\'Common_btnClose\', \'Close\') }"><span>&times;</span></button>' +
+        '<button type="button" class="close btn-close hidden" data-dismiss="modal" data-bs-dismiss="modal" data-bind="attr: { \'aria-label\': GetLangRes(\'Common_btnClose\', \'Close\') }"><span class="visually-hidden">&times;</span></button>' +
         '</div>' +
         '<div class="modal-body">' +
         '<span data-bind="html: Message"></span>' +
         '</div>' +
         '<div class="modal-footer">' +
-        '<button type="button" class="btn btn-default btn-outline-secondary" data-dismiss="modal">' +
+        '<button type="button" class="btn btn-default btn-outline-secondary" data-dismiss="modal" data-bs-dismiss="modal">' +
         '<i class="glyphicon glyphicon-remove fas fa-times"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnClose\', \'Close\')"></span>' +
         '</button>' +
@@ -911,7 +904,7 @@ ko.components.register('ma-gpsnose-footer', {
             return new FooterViewModel(params);
         }
     },
-    template: '<div class="container marketing" data-bind="ifnot: IsHidden()">' +
+    template: '<div class="container marketing mt-auto" data-bind="ifnot: IsHidden()">' +
         '<div class="row">' +
         '<div class="col-md-3 col-sm-2"></div>' +
         '<div class="col-md-3 col-sm-4">' +
@@ -998,7 +991,7 @@ ko.components.register('ma-gpsnose-keepalive', {
         '<div class="alert alert-danger">' +
         '<i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_lblLoggedOut\', \'You have been logged out. To continue with your work, you have to sign in again.\')"></span>' +
-        '<button type="button" class="btn btn-danger btn-xs pull-right float-right" data-bind="click: function() { location.reload(); }">' +
+        '<button type="button" class="btn btn-danger btn-sm pull-right float-right float-end" data-bind="click: function() { location.reload(); }">' +
         '<i class="glyphicon glyphicon-user fas fa-user"></i>' +
         '<span data-bind="text: \' \' + GetLangRes(\'Common_btnLogin\', \'Login\')"></span>' +
         '</button>' +
@@ -1015,6 +1008,12 @@ var KeywordsViewModel = (function () {
         this.OnKeywordFieldChange = params && params.onKeywordFieldChange || null;
         this.SearchClasses = params && params.searchClasses || "input-group col-lg-3 col-md-6";
         this.IsEditable = ko.observable(params && params.isEditable || false);
+        if (params && ko.isObservable(params.isRequired)) {
+            this.IsRequired = params.isRequired;
+        }
+        else {
+            this.IsRequired = ko.observable(true);
+        }
         this.NoEntryLabel = ko.observable(params && params.noEntryLabel || null);
         this.SelectedKeywords.subscribe(function (changes) {
             if (_this.OnSelectionChange)
@@ -1097,7 +1096,7 @@ ko.components.register('ma-gpsnose-keywords', {
     template: '<div class="keywords">' +
         '<div data-bind="if: IsEditable()">' +
         '<div data-bind="attr : { \'class\': SearchClasses }">' +
-        '<input type="text" name="NewKeyword" class="form-control" data-bind="textInput: NewKeyword, attr: { placeholder: GetLangRes(\'Common_lblAddKeyword\', \'Add new keyword...\') }, enterkey: AddKeyword, event: { blur: AddKeyword }" />' +
+        '<input type="text" name="NewKeyword" class="form-control" data-bind="textInput: NewKeyword, attr: { placeholder: GetLangRes(\'Common_lblAddKeyword\', \'Add new keyword...\') }, enterkey: AddKeyword, event: { blur: AddKeyword }, css: { \'is-invalid\': IsRequired() && SelectedKeywords().length == 0 }" />' +
         '<span class="input-group-btn">' +
         '<div class="btn btn-primary" data-bind="text: GetLangRes(\'Common_btnAdd\', \'Add\'), click: AddKeyword"></div>' +
         '</span>' +
@@ -1111,7 +1110,7 @@ ko.components.register('ma-gpsnose-keywords', {
         '<span data-bind="html: \' \' + NoEntryLabel()"></span>' +
         '</div>' +
         '<div data-bind="foreach: Keywords">' +
-        '<a href="javascript:;" data-type="ajax" data-bind="attr: { \'data-external\': MA_GPSNOSE_IS_MASHUP ? true : null, \'data-src\': (IsCommunity() && ! $parent.IsEditable() && ! MA_GPSNOSE_IS_MASHUP) ? Community.PreviewUrl() : null, \'data-fancybox\': (IsCommunity() && ! $parent.IsEditable() && ! MA_GPSNOSE_IS_MASHUP) ? \'community\' : null }, html: GetHtml(), css: { selected: IsSelected() }, click: function() { if ($parent.IsEditable()) Toggle(); else return true; }"></a>' +
+        '<a href="javascript:void(0);" data-type="ajax" data-bind="attr: { \'data-external\': MA_GPSNOSE_IS_MASHUP ? true : null, \'data-src\': (IsCommunity() && ! $parent.IsEditable() && ! MA_GPSNOSE_IS_MASHUP) ? Community.PreviewUrl() : null, \'data-fancybox\': (IsCommunity() && ! $parent.IsEditable() && ! MA_GPSNOSE_IS_MASHUP) ? \'community\' : null }, html: GetHtml(), css: { selected: IsSelected() }, click: function() { if ($parent.IsEditable()) Toggle(); else return true; }"></a>' +
         '</div>' +
         '<div class="clearfix"></div>' +
         '</div>'
@@ -1152,13 +1151,13 @@ ko.components.register('ma-gpsnose-moods-control', {
         }
     },
     template: '<div class="moods-control">' +
-        '<div class="btn btn-default mood" data-fancybox data-bind="attr: { \'data-src\': \'#moods-dialog-\' + MoodIndex() }">' +
+        '<div class="btn btn-outline-secondary mood" data-fancybox data-bind="attr: { \'data-src\': \'#moods-dialog-\' + MoodIndex() }">' +
         '<span data-bind="text: SelectedMood() + \' \'"></span>' +
         '<span class="caret"></span>' +
         '</div>' +
         '<input type="hidden" name="Mood" data-bind="value: SelectedMood()" />' +
         '<div data-bind="foreach: Moods, attr: { \'id\': \'moods-dialog-\' + MoodIndex() }" style="display: none;" class="moods-dialog">' +
-        '<div class="btn btn-default" data-bind="text: $data, css: { active: $data == $parent.SelectedMood() }, click: function() { $parent.SelectedMood($data); jQuery.fancybox.close(true); }"></div>' +
+        '<div class="btn btn-outline-secondary p-1" data-bind="text: $data, css: { active: $data == $parent.SelectedMood() }, click: function() { $parent.SelectedMood($data); jQuery.fancybox.close(true); }"></div>' +
         '</div>' +
         '</div>'
 });
@@ -1231,88 +1230,7 @@ ko.components.register('ma-gpsnose-navbar', {
             return new NavbarViewModel(params);
         }
     },
-    template: '<nav class="navbar navbar-default navbar-static" data-bind="visible: ! IsHidden()">' +
-        '<div class="container">' +
-        '<div class="navbar-header">' +
-        '<div class="navbar-toggle collapsed" data-toggle="collapse" data-target="#gn-navbar-collapse-1" aria-expanded="false">' +
-        '<span class="sr-only" data-bind="text: GetLangRes(\'Common_lblToggleNavigation\', \'Toggle navigation\')"></span>' +
-        '<span class="icon-bar"></span>' +
-        '<span class="icon-bar"></span>' +
-        '<span class="icon-bar"></span>' +
-        '</div>' +
-        '<a class="visible-xs visible-sm navbar-brand" href="/" data-bind="text: GetLangRes(\'Common_menuHome\', \'Home\')"></a>' +
-        '</div>' +
-        '<div class="collapse navbar-collapse" id="gn-navbar-collapse-1">' +
-        '<ul class="nav navbar-nav" data-bind="foreach: Navigation">' +
-        '<li data-bind="css: { active: IsActive }">' +
-        '<a href="javascript:;" data-bind="text: Text, click: function() { $parent.OpenUrl(Url) }"></a>' +
-        '</li>' +
-        '</ul>' +
-        '<span data-bind="foreach: NavigationAccount">' +
-        '<a class="btn btn-default navbar-btn" data-bind="attr: { href: Url }, text: Text"></a>' +
-        '</span>' +
-        '<ul class="languages nav navbar-nav navbar-right" data-bind="foreach: Languages">' +
-        '<li data-bind="css: { active: GetCurrentLang() == $data }"><a data-bind="attr: { href: \'javascript:\' + (GetCurrentLang() == $data ? \'\' : \'SwitchLanguage(\\\'\'+$data+\'\\\')\') + \';\' }, text: $data"></a></li>' +
-        '</ul>' +
-        '</div>' +
-        '<div data-bind="if: Profile.LoginName">' +
-        '<div class="nav navbar-nav navbar-userinfo" data-bind="if: Profile.LoginName">' +
-        '<div class="row">' +
-        '<div class="col-sm-4 col-xs-5 col-left">' +
-        '<div class="media">' +
-        '<div class="media-left">' +
-        '<a data-bind="attr: { href: NoseDto.ImageUrl() }" data-fancybox>' +
-        '<img class="media-object img-circle" data-bind="attr: { src: NoseDto.ImageUrl() + \'@200\', onerror: \'RemoveFancyboxForImage(this);ImageErrorHandler(this, \\\'\' + ImagePath() + \'/EmptyUser.png\\\');\' }" />' +
-        '</a>' +
-        '</div>' +
-        '<div class="media-body nowrap">' +
-        '<h5 class="media-heading" data-bind="text: Profile.LoginName"></h5>' +
-        '<div data-bind="text: Profile.FullName"></div>' +
-        '<div data-bind="text: GetDistanceString(Profile)"></div>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '<div class="col-sm-4 col-xs-2 col-center">' +
-        '<div class="media text-center">' +
-        '<div class="media-body">' +
-        '<div class="btn-group-vertical btn-group-xs" role="group" aria-label="share">' +
-        '<div class="btn btn-default" data-src="#share" data-fancybox data-bind="attr: { title: GetLangRes(\'Common_btnShare\', \'Share\') }">' +
-        '<i class="glyphicon glyphicon-qrcode"></i><span class="hidden-xs" data-bind="text: \' \' + GetLangRes(\'Common_btnShare\', \'Share\')"></span>' +
-        '</div>' +
-        '<div class="btn btn-default hidden" data-fancybox data-src="#poke-moods-dialog" data-bind="attr: { title: GetLangRes(\'Common_btnPoke\', \'Knock\'), \'data-remove\': ! User.LoginName || Profile.LoginName == User.LoginName }, css: { \'hidden\': ! User.LoginName || Profile.LoginName == User.LoginName }">' +
-        '<i class="glyphicon glyphicon-hand-left"></i><span class="hidden-xs" data-bind="text: \' \' + GetLangRes(\'Common_btnPoke\', \'Knock\')"></span>' +
-        '</div>' +
-        '<a class="btn btn-default hidden" data-bind="attr: { href: GetLoginUrl(null), title: GetLangRes(\'Common_loginToPoke\', \'Login to Knock\'), \'data-remove\': User.LoginName }, css: { \'hidden\': User.LoginName }">' +
-        '<i class="glyphicon glyphicon-hand-left"></i><span class="hidden-xs" data-bind="text: \' \' + GetLangRes(\'Common_loginToPoke\', \'Login to Knock\')"></span>' +
-        '</a>' +
-        '<a class="btn btn-default hidden" data-external data-bind="attr: { href: GetGoogleMapsLink(Profile.LastActivityLatitude, Profile.LastActivityLongitude), title: GetLangRes(\'Common_showOnMap\', \'Show on map\'), \'data-remove\': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }, css: { \'hidden\': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }">' +
-        '<i class="glyphicon glyphicon-map-marker"></i><span class="hidden-xs" data-bind="text: \' \' + GetLangRes(\'Common_showOnMap\', \'Show on map\')"></span>' +
-        '</a>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '<div class="col-sm-4 col-xs-5 col-right">' +
-        '<div class="media text-right">' +
-        '<div class="media-body nowrap">' +
-        '<h5 class="media-heading" data-bind="text: GetLangRes(\'Nose_Profile_lblLastSeen\', \'Last seen\') + \':\'"></h5>' +
-        '<div data-bind="text: GetDateStringFromTicks(Profile.LastActivityUtcDateTime)"></div>' +
-        '<div data-bind="ifnot: Profile.LastActivityUtcDateTime">' +
-        '<a data-bind="attr: { href: GetLoginUrl(null) }, text: GetLangRes(\'Common_loginRequired\', \'Please login first.\')" data-popup></a>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '<div class="poke-moods-dialog">' +
-        '<div id="poke-moods-dialog" data-bind="foreach: PokeMoods" style="display:none;" class="moods-dialog">' +
-        '<div class="btn btn-default" data-bind="text: $data, click: function() { jQuery.fancybox.getInstance(\'close\'); $parent.SendPoke($data, gn_data.User || {}); }"></div>' +
-        '</div>' +
-        '</div>' +
-        '</nav>'
+    template: "\n<div id=\"navbar-sticky\">\n    <nav class=\"navbar navbar-expand-lg navbar navbar-light bg-light\" data-bind=\"visible: ! IsHidden()\">\n        <div class=\"container\">\n            <a class=\"d-inline d-lg-none navbar-brand\" href=\"/\" data-bind=\"text: GetLangRes('Common_menuHome', 'Home')\"></a>\n            <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#gn-navbar-collapse-1\" aria-controls=\"gn-navbar-collapse-1\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n                <span class=\"navbar-toggler-icon\"></span>\n            </button>\n            <div class=\"collapse navbar-collapse\" id=\"gn-navbar-collapse-1\">\n                <ul class=\"navbar-nav mb-2 mb-lg-0\" data-bind=\"foreach: Navigation\">\n                    <li class=\"nav-item\">\n                        <a class=\"nav-link\" aria-current=\"page\" href=\"javascript:void(0);\" data-bind=\"text: Text, click: function() { $parent.OpenUrl(Url) }\", css: { active: IsActive }\">Home</a>\n                    </li>\n                </ul>\n                <span data-bind=\"foreach: NavigationAccount\" class=\"ms-md-4 me-auto\">\n                    <a class=\"btn btn-outline-secondary navbar-btn\" data-bind=\"attr: { href: Url }, text: Text\"></a>\n                </span>\n                <ul class=\"languages navbar-nav\" data-bind=\"foreach: Languages\">\n                    <li class=\"nav-item\">\n                        <a class=\"nav-link\" aria-current=\"language\" data-bind=\"attr: { href: 'javascript:' + (GetCurrentLang() == $data ? '' : 'SwitchLanguage('+$data+')') + ';' }, text: $data, css: { active: GetCurrentLang() == $data }\"></a>\n                    </li>\n                </ul>\n            </div>\n        </div>\n    </nav>\n    <div class=\"bg-light\" data-bind=\"if: Profile.LoginName\">\n        <div class=\"container\">\n            <div class=\"navbar-userinfo py-2\" data-bind=\"if: Profile.LoginName\">\n                <div class=\"row\">\n                    <div class=\"col-sm-4 col-5\">\n                        <div class=\"d-flex\">\n                            <div class=\"me-2\">\n                                <a data-bind=\"attr: { href: NoseDto.ImageUrl() }\" data-fancybox>\n                                    <img class=\"media-object rounded-circle\" data-bind=\"attr: { src: NoseDto.ImageUrl() + '@200', onerror: 'RemoveFancyboxForImage(this);ImageErrorHandler(this, ImagePath() + \\'/EmptyUser.png\\');' }\" />\n                                </a>\n                            </div>\n                            <div class=\"text-nowrap\">\n                                <h5 class=\"m-0\" data-bind=\"text: Profile.LoginName\"></h5>\n                                <div data-bind=\"text: Profile.FullName\"></div>\n                                <div data-bind=\"text: GetDistanceString(Profile)\"></div>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 col-2\">\n                        <div class=\"text-center\">\n                            <div class=\"btn-group-vertical btn-group-sm\" role=\"group\" aria-label=\"share\">\n                                <div class=\"btn btn-outline-secondary py-0\" data-src=\"#share\" data-fancybox data-bind=\"attr: { title: GetLangRes('Common_btnShare', 'Share') }\">\n                                    <i class=\"fas fa-qrcode\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_btnShare', 'Share')\"></span>\n                                </div>\n                                <div class=\"btn btn-outline-secondary py-0 visually-hidden\" data-fancybox data-src=\"#poke-moods-dialog\" data-bind=\"attr: { title: GetLangRes('Common_btnPoke', 'Knock'), 'data-remove': ! User.LoginName || Profile.LoginName == User.LoginName }, css: { 'visually-hidden': ! User.LoginName || Profile.LoginName == User.LoginName }\">\n                                    <i class=\"far fa-hand-point-left\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_btnPoke', 'Knock')\"></span>\n                                </div>\n                                <a class=\"btn btn-outline-secondary py-0 visually-hidden\" data-bind=\"attr: { href: GetLoginUrl(null), title: GetLangRes('Common_loginToPoke', 'Login to Knock'), 'data-remove': User.LoginName }, css: { 'visually-hidden': User.LoginName }\">\n                                    <i class=\"far fa-hand-point-left\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_loginToPoke', 'Login to Knock')\"></span>\n                                </a>\n                                <a class=\"btn btn-outline-secondary py-0 visually-hidden\" data-external data-bind=\"attr: { href: GetGoogleMapsLink(Profile.LastActivityLatitude, Profile.LastActivityLongitude), title: GetLangRes('Common_showOnMap', 'Show on map'), 'data-remove': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }, css: { 'visually-hidden': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }\">\n                                    <i class=\"fas fa-map-marker-alt\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_showOnMap', 'Show on map')\"></span>\n                                </a>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 col-5\">\n                        <div class=\"text-end\">\n                            <div class=\"text-nowrap\">\n                                <h5 data-bind=\"text: GetLangRes('Nose_Profile_lblLastSeen', 'Last seen') + ':'\"></h5>\n                                <div data-bind=\"text: GetDateStringFromTicks(Profile.LastActivityUtcDateTime)\"></div>\n                                <div data-bind=\"ifnot: Profile.LastActivityUtcDateTime\">\n                                    <a data-bind=\"attr: { href: GetLoginUrl(null) }, text: GetLangRes('Common_loginRequired', 'Please login first.')\" data-popup></a>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<div class=\"poke-moods-dialog\">\n    <div id=\"poke-moods-dialog\" data-bind=\"foreach: PokeMoods\" style=\"display:none;\" class=\"moods-dialog\">\n        <div class=\"btn btn-outline-secondary p-1\" data-bind=\"text: $data, click: function() { jQuery.fancybox.getInstance('close'); $parent.SendPoke($data, gn_data.User || {}); }\"></div>\n    </div>\n</div>"
 });
 var RatingViewModel = (function (_super) {
     __extends(RatingViewModel, _super);
@@ -1842,14 +1760,14 @@ var IndexViewModel = (function (_super) {
         _this.NosePageUrl = '/Home/Page_Noses';
         _this.Noses = ko.observableArray();
         _this.NosesPageSize = gnSettings.NosesPageSize;
-        _this.NosesLastKnownTicks = MAX_DATE_TIME_TICKS;
+        _this.NosesLastKnownTicks = window.MAX_DATE_TIME_TICKS;
         _this.HasMoreNoses = ko.observable(true);
         _this.NosesRequestActive = ko.observable(false);
         _this.ShowNoses = ko.observable(true);
         _this.NewsPageUrl = '/Home/Page_News';
         _this.News = ko.observableArray();
         _this.NewsPageSize = gnSettings.NewsPageSize;
-        _this.NewsLastKnownTicks = MAX_DATE_TIME_TICKS;
+        _this.NewsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
         _this.HasMoreNews = ko.observable(true);
         _this.NewsRequestActive = ko.observable(false);
         _this.ShowNews = ko.observable(true);
@@ -2304,7 +2222,7 @@ var KeywordDto = (function () {
         var icon = this.GetIcon();
         if (icon != '' && value && value.length > 2) {
             var com = value.substr(1, value.length);
-            return '<i class="glyphicon glyphicon-' + icon + '"></i> <span class="keyword-label">' + com + '</span>';
+            return '<i class="' + icon + '"></i> <span class="keyword-label">' + com + '</span>';
         }
         else {
             return value;
@@ -2319,13 +2237,13 @@ var KeywordDto = (function () {
         var firstChar = value.charAt(0);
         switch (firstChar) {
             case "@":
-                icon = "lock fas fa-lock";
+                icon = "glyphicon glyphicon-lock fas fa-lock";
                 break;
             case "*":
-                icon = "eye-close fas fa-eye-slash";
+                icon = "glyphicon glyphicon-eye-close fas fa-eye-slash";
                 break;
             case "%":
-                icon = "globe fas fa-globe-americas";
+                icon = "glyphicon glyphicon-globe fas fa-globe-americas";
                 break;
         }
         return icon;
@@ -2514,7 +2432,7 @@ var NoseDto = (function (_super) {
 var PageableItem = (function () {
     function PageableItem(TagName, ItemPageUrl, ItemPageSize, newItem) {
         this.Items = ko.observableArray();
-        this.ItemLastKnownTicks = MAX_DATE_TIME_TICKS;
+        this.ItemLastKnownTicks = window.MAX_DATE_TIME_TICKS;
         this.HasMoreItems = ko.observable(true);
         this.ItemsRequestActive = ko.observable(false);
         this.TagName = TagName;
@@ -3319,7 +3237,7 @@ var UserDetailViewModel = (function (_super) {
         _this.loginName = loginName;
         _this.PhotoBlogs = ko.observableArray([]);
         _this.PhotoBlogsPageSize = gnSettings.PhotoBlogsPageSize;
-        _this.PhotoBlogsLastKnownTicks = MAX_DATE_TIME_TICKS;
+        _this.PhotoBlogsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
         _this.HasMorePhotoBlogs = ko.observable(true);
         _this.PhotoBlogsRequestActive = ko.observable(false);
         _this.PhotoBlogsGroupValueTemp = ko.observable(0);
@@ -3360,13 +3278,13 @@ var UserDetailViewModel = (function (_super) {
             var photoBlogsGroupValue = _this.PhotoBlogsGroupValue();
             return photoBlogsGroupType == GroupTypeEnum.None || (photoBlogsGroupType == GroupTypeEnum.Custom && photoBlogsGroupValue < 1);
         });
-        _this.PhotoBlogsStartTicksValue = ko.observable(MAX_DATE_TIME_TICKS);
+        _this.PhotoBlogsStartTicksValue = ko.observable(window.MAX_DATE_TIME_TICKS);
         _this.PhotoBlogsStartDate = ko.observable("");
         _this.ShareUrl = ko.pureComputed(function () {
             var params = new Array();
             if (_this.PhotoBlogsGroupValue() > 0)
                 params.push("bg=" + _this.PhotoBlogsGroupValue());
-            if (_this.PhotoBlogsStartTicksValue() != MAX_DATE_TIME_TICKS)
+            if (_this.PhotoBlogsStartTicksValue() != window.MAX_DATE_TIME_TICKS)
                 params.push("bs=" + _this.PhotoBlogsStartTicksValue());
             if (_this.PhotoBlogsGroupType() != GroupTypeEnum.None)
                 params.push("bgt=" + _this.PhotoBlogsGroupType());
@@ -3374,17 +3292,17 @@ var UserDetailViewModel = (function (_super) {
         }, _this);
         _this.Pois = ko.observableArray();
         _this.PoisPageSize = gnSettings.PoisPageSize;
-        _this.PoisLastKnownTicks = MAX_DATE_TIME_TICKS;
+        _this.PoisLastKnownTicks = window.MAX_DATE_TIME_TICKS;
         _this.HasMorePois = ko.observable(true);
         _this.PoisRequestActive = ko.observable(false);
         _this.Tours = ko.observableArray();
         _this.ToursPageSize = gnSettings.ToursPageSize;
-        _this.ToursLastKnownTicks = MAX_DATE_TIME_TICKS;
+        _this.ToursLastKnownTicks = window.MAX_DATE_TIME_TICKS;
         _this.HasMoreTours = ko.observable(true);
         _this.ToursRequestActive = ko.observable(false);
         _this.Events = ko.observableArray();
         _this.EventsPageSize = gnSettings.EventsPageSize;
-        _this.EventsLastKnownTicks = MAX_DATE_TIME_TICKS;
+        _this.EventsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
         _this.HasMoreEvents = ko.observable(true);
         _this.EventsRequestActive = ko.observable(false);
         _this.PhotoBlogsRequestActive.subscribe(function (newValue) {
@@ -3416,12 +3334,13 @@ var UserDetailViewModel = (function (_super) {
             _this.HasMorePhotoBlogs(true);
             _this.PageBlogs();
         });
-        _this.PhotoBlogsStartDate.subscribe(function (newValue) {
-            if (!newValue) {
-                _this.PhotoBlogsStartTicksValue(MAX_DATE_TIME_TICKS);
+        _this.PhotoBlogsStartDate.subscribe(function (newDate) {
+            if (!newDate) {
+                _this.PhotoBlogsStartTicksValue(window.MAX_DATE_TIME_TICKS);
             }
             else {
-                var ticks = GetTicksFromDate(moment.utc(newValue).add(1, "d").toDate());
+                var copiedDate = moment(newDate).tz("UTC").add(1, "d").startOf('day').toDate();
+                var ticks = GetTicksFromDate(copiedDate);
                 _this.PhotoBlogsStartTicksValue(ticks);
             }
         });
@@ -3487,7 +3406,7 @@ var UserDetailViewModel = (function (_super) {
             photoBlog.IsLastIncompleteGroup(false);
             var bTicks = new BigNumber(photoBlog.CreationTicks);
             var bStart = new BigNumber(_this.PhotoBlogsStartTicksValue());
-            if (_this.PhotoBlogsScrollAutoLoad() && _this.PhotoBlogsGroupValue() < 1 && _this.PhotoBlogsStartTicksValue() == MAX_DATE_TIME_TICKS) {
+            if (_this.PhotoBlogsScrollAutoLoad() && _this.PhotoBlogsGroupValue() < 1 && _this.PhotoBlogsStartTicksValue() == window.MAX_DATE_TIME_TICKS) {
                 groupCount++;
                 photoBlog.IsGrouped(false);
                 photoBlog.GroupCount(1);

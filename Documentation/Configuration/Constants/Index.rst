@@ -20,20 +20,22 @@ resources.imagePath                     string      Defines the path where the i
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 css.frontendCss                         string      Defines the path where the partials are located                     EXT:gpsnose/Resources/Public/Mashup/Css/style.min.css
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-javascript.jquery                       string      Location of jQuery.js, if you allready included jQuery in           EXT:gpsnose/Resources/Public/Mashup/Libs/jquery/3.4.1/jquery.min.js
+javascript.jquery                       string      Location of jQuery.js, if you allready included jQuery in           EXT:EXT:gpsnose/Resources/Public/Mashup/Libs/jquery/jquery.min.js
                                                     your setup, place an empty string here
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-javascript.bignumber                    string      Location of bignumber.js, if empty, script will not be loaded       EXT:gpsnose/Resources/Public/Mashup/Libs/bignumber-rev4/js/bignumber.min.js
+javascript.bignumber                    string      Location of bignumber.js, if empty, script will not be loaded       EXT:gpsnose/Resources/Public/Mashup/Libs/bignumber-rev4/bignumber.min.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-javascript.moment                       string      Location of moment.js, if empty, script will not be loaded          EXT:gpsnose/Resources/Public/Mashup/Libs/moment/2.24.0/moment.min.js
+javascript.moment                       string      Location of moment.js, if empty, script will not be loaded          EXT:gpsnose/Resources/Public/Mashup/Libs/moment/moment.min.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-javascript.momentLocalePath             string      Path of moment locales, if empty, script will not be loaded         EXT:gpsnose/Resources/Public/Mashup/Libs/moment/2.24.0/locale/
+javascript.momentLocalePath             string      Path of moment locales, if empty, script will not be loaded         EXT:gpsnose/Resources/Public/Mashup/Libs/moment/locale/
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-javascript.imagesloaded                 string      Location of imagesloaded.js, if empty, script will not be loaded    EXT:gpsnose/Resources/Public/Mashup/Libs/imagesloaded/4.1.4/imagesloaded.pkgd.min.js
+javascript.numeral                      string      Path of numeral, if empty, script will not be loaded                EXT:gpsnose/Resources/Public/Mashup/Libs/numeral/numeral.min.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-javascript.masonry                      string      Location of masonry.js, if empty, script will not be loaded         EXT:gpsnose/Resources/Public/Mashup/Libs/masonry/4.2.2/masonry.pkgd.min.js
+javascript.imagesloaded                 string      Location of imagesloaded.js, if empty, script will not be loaded    EXT:gpsnose/Resources/Public/Mashup/Libs/imagesloaded/imagesloaded.pkgd.min.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
-javascript.knockout                     string      Location of knockout.js, if empty, script will not be loaded        EXT:gpsnose/Resources/Public/Mashup/Libs/knockout/3.5.1/knockout.js
+javascript.masonry                      string      Location of masonry.js, if empty, script will not be loaded         EXT:gpsnose/Resources/Public/Mashup/Libs/masonry-layout/masonry.pkgd.min.js
+--------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
+javascript.knockout                     string      Location of knockout.js, if empty, script will not be loaded        EXT:gpsnose/Resources/Public/Mashup/Libs/knockout/knockout-latest.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------
 javascript.knockoutVm                   string      Location of knockoutVm.js, if empty, script will not be loaded      EXT:gpsnose/Resources/Public/Mashup/Js/gpsnose.knockout.min.js
 --------------------------------------  ----------  ------------------------------------------------------------------  ------------------------------------------------------------------------------------

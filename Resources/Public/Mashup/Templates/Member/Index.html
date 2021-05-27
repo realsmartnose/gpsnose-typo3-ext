@@ -27,17 +27,17 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.16">
+<div class="ma-gpsnose" data-gn-version="1.1.0">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-members" data-bind="visible:true" style="display:none;">
 
-        <div class="btn-group btn-group-xs ma-btn-group">
-            <a class="btn btn-default btn-outline-secondary" data-external data-bind="html: Entity.DisplayName(), attr: { href: Entity.DetailUrl() }"></a>
-            <a href="javascript:;" class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
+        <div class="btn-group btn-group-sm ma-btn-group">
+            <a class="btn btn-default btn-outline-primary" data-external data-bind="html: Entity.DisplayName(), attr: { href: Entity.DetailUrl() }"></a>
+            <a href="javascript:void(0);" class="btn btn-primary" tabindex="0" data-bind="text: GetLangRes('Common_btnJoinCommunity', 'Join community'), attr: { 'data-popover-img': gn_data.Community.QrCodeJoinImage, 'data-popover-text': GetLangRes('Common_lblScanToJoin', 'To join the community, scan this QR code using your mobile GpsNose app please'), 'data-remove': ! gn_data.Community.QrCodeJoinImage }"></a>
         </div>
 
         <div class="row publishers" data-bind="foreach: Members">
-            <div class="grid-item col-lg-2 col-md-3 col-sm-4 col-xs-6 col-6">
+            <div class="masonry-item col-lg-2 col-md-3 col-sm-4 col-xs-6 col-6">
                 <div class="outer" data-external="true" data-bind="attr: { 'data-src': $data.NoseDto.DetailUrl() }">
                     <div class="thumbnail">
                         <img data-bind="attr: { src: $data.NoseDto.ThumbUrl() }" onerror="this.src=window.gn_data.Settings.ImagePath+'/EmptyUser.png'" />
@@ -78,7 +78,7 @@ Replace {record} with a unique id that identifies the entry
 
 <script type="text/javascript">
 var MA_GPSNOSE_IS_MASHUP = true;
-$(document).ready(function() {
+$(function() {
     if (! gn_data.User) gn_data.User = {};
     var vm = new CommunityDetailViewModel(gn_data.Community, gn_data.User);
     vm.MembersPageUrl = gn_data.Settings.MembersPageUrl;
