@@ -48,10 +48,10 @@ var NoseDto = (function (_super) {
             return "/nose/preview/" + encodeURIComponent(_this.LoginName);
         };
         _this.DetailUrl = function () {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/n/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
         };
         _this.ShareUrl = function () {
-            return gnSettings.BaseUrl + "/" + encodeURIComponent(_this.LoginName);
+            return gnSettings.BaseUrl + "/n/" + encodeURIComponent(_this.LoginName);
         };
         return _this;
     }
@@ -247,7 +247,11 @@ var MashupAdminViewModel = (function () {
             },
             dataType: 'json',
             success: function (result) {
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddMashupTokens(result);
                 }
                 else {
@@ -615,7 +619,7 @@ var MashupAdminViewModel = (function () {
             if (self.CreateMashupTokenOptions() > GnMashupTokenOptions.NoOptions) {
                 params['options'] = self.CreateMashupTokenOptions();
             }
-            if (self.CreateMashupTokenDate() != '') {
+            if (self.CreateMashupTokenDate() && self.CreateMashupTokenDate().length > 0) {
                 params['validToTicks'] = GetTicksFromDate(moment.utc(self.CreateMashupTokenDate()).add(1, "d").toDate());
             }
             var queryString = Object.keys(params).map(function (key) {
@@ -625,6 +629,10 @@ var MashupAdminViewModel = (function () {
             var img = new Image();
             img.onload = function () {
                 self.CreateMashupTokenSrc(src);
+                self.RequestActiveMashupTokenNew(false);
+            };
+            img.onerror = function () {
+                dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
                 self.RequestActiveMashupTokenNew(false);
             };
             img.src = src;

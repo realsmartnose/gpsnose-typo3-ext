@@ -121,7 +121,9 @@ $(function() {
 
     ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
 
-    if (gn_data.Events) {
+    if (typeof gn_data.Events != 'object') {
+        if (console) console.warn(gn_data.Events);
+    } else if (gn_data.Events) {
         vm.PageableEvents.AddItems(gn_data.Events);
     } else if (gn_data.User.LoginName) {
         vm.PageableEvents.PageItems();

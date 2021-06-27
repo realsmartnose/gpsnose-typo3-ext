@@ -297,7 +297,11 @@ var CommunityDetailViewModel = (function (_super) {
             },
             dataType: 'json',
             success: function (result) {
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddMembers(result);
                 }
                 else {
@@ -375,7 +379,7 @@ ko.components.register('ma-gpsnose-carousel', {
             return new CarouselViewModel(params);
         }
     },
-    template: "\n<header class=\"header-carousel\" data-bind=\"visible: ! IsHidden()\">\n    <div id=\"carousel1\" class=\"carousel slide carousel-fade\" data-bs-ride=\"carousel\" data-bs-interval=\"10000\" data-bs-keyboard=\"true\">\n        <div class=\"carousel-indicators\" data-bind=\"foreach: Slides, visible: Slides().length > 1\">\n            <button type=\"button\" data-bs-target=\"#carouselExampleCaptions\" data-bind=\"attr: { 'data-bs-slide-to': $index() }, css: { active: $index() == 0 }\"></button>\n        </div>\n        <div class=\"carousel-inner\" data-bind=\"foreach: Slides\">\n            <div class=\"carousel-item\" data-bind=\"css: { active: $index() == 0 }\">\n                <img data-bind=\"attr: { src: $parent.ImagePath() + '/bg' + $index() + '.png', atr: Text }\">\n                <div class=\"container\">\n                    <div class=\"carousel-caption\">\n                        <div class=\"row\">\n                            <div class=\"col-4\">\n                                <img class=\"intropage\"data-bind=\"attr: { src: $parent.ImagePath() + '/fg' + $index() + '.png', atr: Text }\">\n                            </div>\n                            <div class=\"col-8\">\n                                <h2 data-bind=\"text: Title\"></h2>\n                                <p data-bind=\"text: Text\"></p>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <button class=\"carousel-control-prev\" type=\"button\" data-bs-target=\"#carousel1\" data-bs-slide=\"prev\" data-bind=\"visible: Slides().length > 1\">\n            <span class=\"carousel-control-prev-icon\" aria-hidden=\"true\"></span>\n            <span class=\"visually-hidden\">Previous</span>\n        </button>\n        <button class=\"carousel-control-next\" type=\"button\" data-bs-target=\"#carousel1\" data-bs-slide=\"next\" data-bind=\"visible: Slides().length > 1\">\n            <span class=\"carousel-control-next-icon\" aria-hidden=\"true\"></span>\n            <span class=\"visually-hidden\">Next</span>\n        </button>\n    </div>\n</header>"
+    template: "\n<header class=\"header-carousel\" data-bind=\"visible: ! IsHidden()\">\n    <div id=\"carousel1\" class=\"carousel slide carousel-fade\" data-bs-ride=\"carousel\" data-bs-interval=\"10000\" data-bs-keyboard=\"true\">\n        <div class=\"carousel-indicators\" data-bind=\"foreach: Slides, visible: Slides().length > 1\">\n            <button type=\"button\" data-bs-target=\"#carouselExampleCaptions\" data-bind=\"attr: { 'data-bs-slide-to': $index() }, css: { active: $index() == 0 }\"></button>\n        </div>\n        <div class=\"carousel-inner\" data-bind=\"foreach: Slides\">\n            <div class=\"carousel-item\" data-bind=\"css: { active: $index() == 0 }\">\n                <img data-bind=\"attr: { src: $parent.ImagePath() + '/bg' + $index() + '.png', atr: Text }\">\n                <div class=\"container\">\n                    <div class=\"carousel-caption\">\n                        <div class=\"d-flex\">\n                            <div class=\"me-3\">\n                                <img class=\"intropage\"data-bind=\"attr: { src: $parent.ImagePath() + '/fg' + $index() + '.png', atr: Text }\">\n                            </div>\n                            <div class=\"flx-grow-1\">\n                                <h2 data-bind=\"text: Title\"></h2>\n                                <p data-bind=\"text: Text\"></p>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <button class=\"carousel-control-prev\" type=\"button\" data-bs-target=\"#carousel1\" data-bs-slide=\"prev\" data-bind=\"visible: Slides().length > 1\">\n            <span class=\"carousel-control-prev-icon\" aria-hidden=\"true\"></span>\n            <span class=\"visually-hidden\">Previous</span>\n        </button>\n        <button class=\"carousel-control-next\" type=\"button\" data-bs-target=\"#carousel1\" data-bs-slide=\"next\" data-bind=\"visible: Slides().length > 1\">\n            <span class=\"carousel-control-next-icon\" aria-hidden=\"true\"></span>\n            <span class=\"visually-hidden\">Next</span>\n        </button>\n    </div>\n</header>"
 });
 var CommentsViewModel = (function (_super) {
     __extends(CommentsViewModel, _super);
@@ -482,7 +486,11 @@ var CommentsViewModel = (function (_super) {
             },
             dataType: 'json',
             success: function (result) {
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddComments(result);
                 }
                 else {
@@ -1171,18 +1179,16 @@ var NavbarViewModel = (function (_super) {
         _this.Profile = _this.params && _this.params.profile || {};
         _this.NoseDto = new NoseDto({ "LoginName": _this.Profile.LoginName });
         _this.Languages = ko.observableArray(_this.params && _this.params.languages || []);
-        _this.Navigation = ko.observableArray();
-        _this.NavigationAccount = ko.observableArray();
+        _this.Navigation = ko.observableArray([]);
         _this.PokeMoods = ko.observableArray([]);
-        ko.utils.arrayForEach(_this.params && _this.params.navigation || {}, function (navItem) {
-            if (!navItem.IsAccount) {
-                _this.Navigation.push(new NavBarDto(navItem.Url, navItem.Text, navItem.IsActive));
-            }
-            else {
-                _this.NavigationAccount.push(new NavBarDto(_this.GetLoginUrl(navItem.Url), navItem.Text, navItem.IsActive));
-            }
-        });
         _this.User = new UserDto(params && params.user || {});
+        _this.Navigation([
+            new NavBarDto('/', GetLangRes('Common_menuHome', 'Home'), 'fas fa-home', /^\/$|^\/home\/?$|^\/home\/index\/?/i),
+            new NavBarDto('/Home/ImportedKeywords', GetLangRes('Common_menuImportedKeywords', 'POIs'), 'fas fa-hashtag', /^\/home\/importedkeywords\/?/i),
+            new NavBarDto((_this.User.LoginName ? '/PhotoUploader/Index' : '/Home/PhotoUploaderAbout'), GetLangRes('Common_menuPhotoUploader', 'Upload photos'), 'fas fa-camera', /^\/photouploader\/?/i),
+            new NavBarDto('/Developer', GetLangRes('Common_menuDeveloperIndex', 'For developers'), 'fas fa-laptop-code', /^\/developer\/?/i),
+            new NavBarDto('/Home/About', GetLangRes('Common_menuSiteAbout', 'Help'), 'fas fa-question-circle', /^\/home\/about\/?/i),
+        ]);
         _this.PokeMoods = ko.observableArray([
             '😊', '😁', '😂', '😆', '😉', '😋', '😍', '😜', '😠',
             '😔', '😥', '😫', '😓', '😖', '😷', '😢', '😭', '😱',
@@ -1230,7 +1236,7 @@ ko.components.register('ma-gpsnose-navbar', {
             return new NavbarViewModel(params);
         }
     },
-    template: "\n<div id=\"navbar-sticky\">\n    <nav class=\"navbar navbar-expand-lg navbar navbar-light bg-light\" data-bind=\"visible: ! IsHidden()\">\n        <div class=\"container\">\n            <a class=\"d-inline d-lg-none navbar-brand\" href=\"/\" data-bind=\"text: GetLangRes('Common_menuHome', 'Home')\"></a>\n            <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#gn-navbar-collapse-1\" aria-controls=\"gn-navbar-collapse-1\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n                <span class=\"navbar-toggler-icon\"></span>\n            </button>\n            <div class=\"collapse navbar-collapse\" id=\"gn-navbar-collapse-1\">\n                <ul class=\"navbar-nav mb-2 mb-lg-0\" data-bind=\"foreach: Navigation\">\n                    <li class=\"nav-item\">\n                        <a class=\"nav-link\" aria-current=\"page\" href=\"javascript:void(0);\" data-bind=\"text: Text, click: function() { $parent.OpenUrl(Url) }\", css: { active: IsActive }\">Home</a>\n                    </li>\n                </ul>\n                <span data-bind=\"foreach: NavigationAccount\" class=\"ms-md-4 me-auto\">\n                    <a class=\"btn btn-outline-secondary navbar-btn\" data-bind=\"attr: { href: Url }, text: Text\"></a>\n                </span>\n                <ul class=\"languages navbar-nav\" data-bind=\"foreach: Languages\">\n                    <li class=\"nav-item\">\n                        <a class=\"nav-link\" aria-current=\"language\" data-bind=\"attr: { href: 'javascript:' + (GetCurrentLang() == $data ? '' : 'SwitchLanguage('+$data+')') + ';' }, text: $data, css: { active: GetCurrentLang() == $data }\"></a>\n                    </li>\n                </ul>\n            </div>\n        </div>\n    </nav>\n    <div class=\"bg-light\" data-bind=\"if: Profile.LoginName\">\n        <div class=\"container\">\n            <div class=\"navbar-userinfo py-2\" data-bind=\"if: Profile.LoginName\">\n                <div class=\"row\">\n                    <div class=\"col-sm-4 col-5\">\n                        <div class=\"d-flex\">\n                            <div class=\"me-2\">\n                                <a data-bind=\"attr: { href: NoseDto.ImageUrl() }\" data-fancybox>\n                                    <img class=\"media-object rounded-circle\" data-bind=\"attr: { src: NoseDto.ImageUrl() + '@200', onerror: 'RemoveFancyboxForImage(this);ImageErrorHandler(this, ImagePath() + \\'/EmptyUser.png\\');' }\" />\n                                </a>\n                            </div>\n                            <div class=\"text-nowrap\">\n                                <h5 class=\"m-0\" data-bind=\"text: Profile.LoginName\"></h5>\n                                <div data-bind=\"text: Profile.FullName\"></div>\n                                <div data-bind=\"text: GetDistanceString(Profile)\"></div>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 col-2\">\n                        <div class=\"text-center\">\n                            <div class=\"btn-group-vertical btn-group-sm\" role=\"group\" aria-label=\"share\">\n                                <div class=\"btn btn-outline-secondary py-0\" data-src=\"#share\" data-fancybox data-bind=\"attr: { title: GetLangRes('Common_btnShare', 'Share') }\">\n                                    <i class=\"fas fa-qrcode\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_btnShare', 'Share')\"></span>\n                                </div>\n                                <div class=\"btn btn-outline-secondary py-0 visually-hidden\" data-fancybox data-src=\"#poke-moods-dialog\" data-bind=\"attr: { title: GetLangRes('Common_btnPoke', 'Knock'), 'data-remove': ! User.LoginName || Profile.LoginName == User.LoginName }, css: { 'visually-hidden': ! User.LoginName || Profile.LoginName == User.LoginName }\">\n                                    <i class=\"far fa-hand-point-left\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_btnPoke', 'Knock')\"></span>\n                                </div>\n                                <a class=\"btn btn-outline-secondary py-0 visually-hidden\" data-bind=\"attr: { href: GetLoginUrl(null), title: GetLangRes('Common_loginToPoke', 'Login to Knock'), 'data-remove': User.LoginName }, css: { 'visually-hidden': User.LoginName }\">\n                                    <i class=\"far fa-hand-point-left\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_loginToPoke', 'Login to Knock')\"></span>\n                                </a>\n                                <a class=\"btn btn-outline-secondary py-0 visually-hidden\" data-external data-bind=\"attr: { href: GetGoogleMapsLink(Profile.LastActivityLatitude, Profile.LastActivityLongitude), title: GetLangRes('Common_showOnMap', 'Show on map'), 'data-remove': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }, css: { 'visually-hidden': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }\">\n                                    <i class=\"fas fa-map-marker-alt\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_showOnMap', 'Show on map')\"></span>\n                                </a>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 col-5\">\n                        <div class=\"text-end\">\n                            <div class=\"text-nowrap\">\n                                <h5 data-bind=\"text: GetLangRes('Nose_Profile_lblLastSeen', 'Last seen') + ':'\"></h5>\n                                <div data-bind=\"text: GetDateStringFromTicks(Profile.LastActivityUtcDateTime)\"></div>\n                                <div data-bind=\"ifnot: Profile.LastActivityUtcDateTime\">\n                                    <a data-bind=\"attr: { href: GetLoginUrl(null) }, text: GetLangRes('Common_loginRequired', 'Please login first.')\" data-popup></a>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<div class=\"poke-moods-dialog\">\n    <div id=\"poke-moods-dialog\" data-bind=\"foreach: PokeMoods\" style=\"display:none;\" class=\"moods-dialog\">\n        <div class=\"btn btn-outline-secondary p-1\" data-bind=\"text: $data, click: function() { jQuery.fancybox.getInstance('close'); $parent.SendPoke($data, gn_data.User || {}); }\"></div>\n    </div>\n</div>"
+    template: "\n<div id=\"navbar-sticky\">\n    <nav class=\"navbar navbar-expand-lg navbar navbar-light bg-light\" data-bind=\"visible: ! IsHidden()\">\n        <div class=\"container\">\n            <a class=\"d-inline d-lg-none navbar-brand\" href=\"/\" data-bind=\"text: GetLangRes('Common_menuHome', 'Home')\"></a>\n            <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#gn-navbar-collapse-1\" aria-controls=\"gn-navbar-collapse-1\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n                <span class=\"navbar-toggler-icon\"></span>\n            </button>\n            <div class=\"collapse navbar-collapse\" id=\"gn-navbar-collapse-1\">\n                <ul class=\"navbar-nav\">\n                    <!-- ko foreach: Navigation -->\n                        <li class=\"nav-item\">\n                            <a class=\"nav-link\" aria-current=\"page\" href=\"javascript:void(0);\" data-bind=\"click: function() { $parent.OpenUrl(Url()) }, css: { active: IsActive() }\">\n                                <i class=\"d-lg-none\" data-bind=\"class: Icon(), if: Icon()\"></i>\n                                <span data-bind=\"text: Text()\"></span>\n                            </a>\n                        </li>\n                    <!-- /ko -->\n                    <!-- ko if: User.LoginName -->\n                        <li class=\"nav-item dropdown ms-lg-3 mt-lg-0 mt-3\">\n                            <a class=\"nav-link dropdown-toggle p-1\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">\n                                <img class=\"rounded-circle mr-1 me-1\" width=\"32\" data-bind=\"attr: { src: User.ImageUrl() + '@200', onerror: 'RemoveFancyboxForImage(this);ImageErrorHandler(this, \\'' + ImagePath() + '/EmptyUser.png\\');' }\" />\n                                <span data-bind=\"text: User.LoginName\"></span>\n                            </a>\n                            <ul class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\n                                <li>\n                                    <a class=\"dropdown-item\" data-bind=\"attr: { href: '/n/' + User.LoginName }\">\n                                        <i class=\"fas fa-user-circle\"></i>\n                                        <span data-bind=\"text: GetLangRes('Common_btnShowProfile', 'Show Profile')\"></span>\n                                    </a>\n                                </li>\n                                <li><hr class=\"dropdown-divider\"></li>\n                                <li>\n                                    <a class=\"dropdown-item text-danger\" data-bind=\"attr: { href: '/Account/Logout' }\">\n                                        <i class=\"fas fa-sign-out-alt\"></i>\n                                        <span data-bind=\"text: GetLangRes('Common_menuLogout', 'Logout')\"></span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </li>\n                    <!-- /ko -->\n                </ul>\n                <!-- ko if: !User.LoginName -->\n                    <span class=\"d-inline-block ms-lg-3 mt-3 mt-lg-0\">\n                        <a class=\"btn btn-outline-secondary navbar-btn\" data-bind=\"attr: { href: GetLoginUrl(null) }\">\n                            <i class=\"fas fa-sign-in-alt me-1\"></i>\n                            <span data-bind=\"text: GetLangRes('Common_menuLogin', 'Login')\"></span>\n                        </a>\n                    </span>\n                <!-- /ko -->\n                <ul class=\"languages navbar-nav ms-auto mt-3 mt-lg-0\" data-bind=\"foreach: Languages\">\n                    <li class=\"nav-item\">\n                        <a class=\"nav-link\" aria-current=\"language\" data-bind=\"attr: { href: 'javascript:' + (GetCurrentLang() == $data ? '' : 'SwitchLanguage(\\''+$data+'\\')') + ';' }, text: $data, css: { active: GetCurrentLang() == $data }\"></a>\n                    </li>\n                </ul>\n            </div>\n        </div>\n    </nav>\n    <div class=\"bg-light\" data-bind=\"if: Profile.LoginName\">\n        <div class=\"container\">\n            <div class=\"navbar-userinfo py-2\" data-bind=\"if: Profile.LoginName\">\n                <div class=\"row\">\n                    <div class=\"col-sm-4 col-5\">\n                        <div class=\"d-flex\">\n                            <div class=\"me-2\">\n                                <a data-bind=\"attr: { href: NoseDto.ImageUrl() }\" data-fancybox>\n                                    <img class=\"media-object rounded-circle\" data-bind=\"attr: { src: NoseDto.ImageUrl() + '@200', onerror: 'RemoveFancyboxForImage(this);ImageErrorHandler(this, \\'' + ImagePath() + '/EmptyUser.png\\');' }\" />\n                                </a>\n                            </div>\n                            <div class=\"text-nowrap\">\n                                <h5 class=\"m-0\" data-bind=\"text: Profile.LoginName\"></h5>\n                                <div data-bind=\"text: Profile.FullName\"></div>\n                                <div data-bind=\"text: GetDistanceString(Profile)\"></div>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 col-2\">\n                        <div class=\"text-center\">\n                            <div class=\"btn-group-vertical btn-group-sm\" role=\"group\" aria-label=\"share\">\n                                <div class=\"btn btn-outline-secondary py-0\" data-src=\"#share\" data-fancybox data-bind=\"attr: { title: GetLangRes('Common_btnShare', 'Share') }\">\n                                    <i class=\"fas fa-qrcode\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_btnShare', 'Share')\"></span>\n                                </div>\n                                <div class=\"btn btn-outline-secondary py-0 visually-hidden\" data-fancybox data-src=\"#poke-moods-dialog\" data-bind=\"attr: { title: GetLangRes('Common_btnPoke', 'Knock'), 'data-remove': ! User.LoginName || Profile.LoginName == User.LoginName }, css: { 'visually-hidden': ! User.LoginName || Profile.LoginName == User.LoginName }\">\n                                    <i class=\"far fa-hand-point-left\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_btnPoke', 'Knock')\"></span>\n                                </div>\n                                <a class=\"btn btn-outline-secondary py-0 visually-hidden\" data-bind=\"attr: { href: GetLoginUrl(null), title: GetLangRes('Common_loginToPoke', 'Login to Knock'), 'data-remove': User.LoginName }, css: { 'visually-hidden': User.LoginName }\">\n                                    <i class=\"far fa-hand-point-left\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_loginToPoke', 'Login to Knock')\"></span>\n                                </a>\n                                <a class=\"btn btn-outline-secondary py-0 visually-hidden\" data-external data-bind=\"attr: { href: GetGoogleMapsLink(Profile.LastActivityLatitude, Profile.LastActivityLongitude), title: GetLangRes('Common_showOnMap', 'Show on map'), 'data-remove': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }, css: { 'visually-hidden': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }\">\n                                    <i class=\"fas fa-map-marker-alt\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_showOnMap', 'Show on map')\"></span>\n                                </a>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 col-5\">\n                        <div class=\"text-end\">\n                            <div class=\"text-nowrap\">\n                                <h5 data-bind=\"text: GetLangRes('Nose_Profile_lblLastSeen', 'Last seen') + ':'\"></h5>\n                                <div data-bind=\"text: GetDateStringFromTicks(Profile.LastActivityUtcDateTime)\"></div>\n                                <div data-bind=\"ifnot: Profile.LastActivityUtcDateTime\">\n                                    <a data-bind=\"attr: { href: GetLoginUrl(null) }, text: GetLangRes('Common_loginRequired', 'Please login first.')\" data-popup></a>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<div class=\"poke-moods-dialog\">\n    <div id=\"poke-moods-dialog\" data-bind=\"foreach: PokeMoods\" style=\"display:none;\" class=\"moods-dialog\">\n        <div class=\"btn btn-outline-secondary p-1\" data-bind=\"text: $data, click: function() { jQuery.fancybox.getInstance('close'); $parent.SendPoke($data, gn_data.User || {}); }\"></div>\n    </div>\n</div>"
 });
 var RatingViewModel = (function (_super) {
     __extends(RatingViewModel, _super);
@@ -1817,7 +1823,11 @@ var IndexViewModel = (function (_super) {
             },
             dataType: 'json',
             success: function (result) {
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddPublicMashups(result);
                 }
                 else {
@@ -1865,7 +1875,11 @@ var IndexViewModel = (function (_super) {
             },
             dataType: 'json',
             success: function (result) {
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddClosedMashups(result);
                 }
                 else {
@@ -1914,7 +1928,11 @@ var IndexViewModel = (function (_super) {
             },
             dataType: 'json',
             success: function (result) {
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddNoses(result);
                 }
                 else {
@@ -1963,7 +1981,11 @@ var IndexViewModel = (function (_super) {
             },
             dataType: 'json',
             success: function (result) {
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddNews(result);
                 }
                 else {
@@ -2254,10 +2276,17 @@ var KeywordDto = (function () {
     return KeywordDto;
 }());
 var NavBarDto = (function () {
-    function NavBarDto(Url, Text, IsActive) {
-        this.Url = Url;
-        this.Text = Text;
-        this.IsActive = IsActive;
+    function NavBarDto(url, text, icon, regActive) {
+        this.Url = ko.observable('');
+        this.Text = ko.observable('');
+        this.Icon = ko.observable('');
+        this.IsActive = ko.observable(false);
+        this.Url(url);
+        this.Text(text);
+        this.Icon(icon);
+        if (window.location.pathname.match(regActive)) {
+            this.IsActive(true);
+        }
     }
     return NavBarDto;
 }());
@@ -2420,10 +2449,10 @@ var NoseDto = (function (_super) {
             return "/nose/preview/" + encodeURIComponent(_this.LoginName);
         };
         _this.DetailUrl = function () {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/n/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
         };
         _this.ShareUrl = function () {
-            return gnSettings.BaseUrl + "/" + encodeURIComponent(_this.LoginName);
+            return gnSettings.BaseUrl + "/n/" + encodeURIComponent(_this.LoginName);
         };
         return _this;
     }
@@ -2476,7 +2505,11 @@ var PageableItem = (function () {
             },
             dataType: 'json',
             success: function (result) {
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddItems(result);
                 }
                 else {
@@ -2614,6 +2647,10 @@ var TourDto = (function (_super) {
 }(BaseNavigableItem));
 var UserDto = (function () {
     function UserDto(data) {
+        var _this = this;
+        this.ImageUrl = function () {
+            return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(_this.LoginName);
+        };
         this.LoginName = data.LoginName;
         this.IsActivated = data.IsActivated;
     }
@@ -3546,7 +3583,11 @@ var UserDetailViewModel = (function (_super) {
             dataType: 'json',
             success: function (result) {
                 _this.PhotoBlogsRequestActive(false);
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddPhotoBlogs(result);
                 }
                 else {
@@ -3602,7 +3643,11 @@ var UserDetailViewModel = (function (_super) {
             },
             dataType: 'json',
             success: function (result) {
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddPois(result);
                 }
                 else {
@@ -3653,7 +3698,11 @@ var UserDetailViewModel = (function (_super) {
             },
             dataType: 'json',
             success: function (result) {
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddTours(result);
                 }
                 else {
@@ -3704,7 +3753,11 @@ var UserDetailViewModel = (function (_super) {
             },
             dataType: 'json',
             success: function (result) {
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddEvents(result);
                 }
                 else {

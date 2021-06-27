@@ -125,7 +125,9 @@ $(function() {
 
     ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
 
-    if (gn_data.Tracks) {
+    if (typeof gn_data.Tracks != 'object') {
+        if (console) console.warn(gn_data.Tracks);
+    } else if (gn_data.Tracks) {
         vm.PageableTracks.AddItems(gn_data.Tracks);
     } else if (gn_data.User.LoginName) {
         vm.PageableTracks.PageItems();

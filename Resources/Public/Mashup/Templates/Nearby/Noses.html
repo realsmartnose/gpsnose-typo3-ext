@@ -105,7 +105,9 @@ $(function() {
     vm.PageableNoses.ItemPageUrl = gn_data.Settings.NearbyNosesPageUrl;
     ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
 
-    if (gn_data.Noses) {
+    if (typeof gn_data.Noses != 'object') {
+        if (console) console.warn(gn_data.Noses);
+    } else if (gn_data.Noses) {
         vm.PageableNoses.AddItems(gn_data.Noses);
     } else if (gn_data.User.LoginName) {
         vm.PageableNoses.PageItems();
