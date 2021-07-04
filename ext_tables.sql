@@ -167,6 +167,7 @@ CREATE TABLE tx_gpsnose_domain_model_tokenscan (
 #
 CREATE TABLE tt_content (
     tx_gpsnose_community_tag varchar(255) DEFAULT '' NOT NULL,
+    tx_gpsnose_community_track_type int(11) DEFAULT '9999' NOT NULL,
     tx_gpsnose_mashup_login_acl int(11) DEFAULT '0' NOT NULL,
     tx_gpsnose_mashup_login_option_must_join tinyint(4) unsigned DEFAULT '0' NOT NULL,
     tx_gpsnose_mashup_login_option_needs_activation tinyint(4) unsigned DEFAULT '0' NOT NULL,

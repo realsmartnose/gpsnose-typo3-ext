@@ -1,6 +1,7 @@
 <?php
 namespace SmartNoses\Gpsnose\Controller;
 
+use GpsNose\SDK\Mashup\Model\CreatedEntities\GnTrackType;
 use SmartNoses\Gpsnose\Service\GnNearbyService;
 use SmartNoses\Gpsnose\Utility\GnData;
 use SmartNoses\Gpsnose\Utility\GnUtility;
@@ -130,11 +131,13 @@ class NearbyController extends BaseController
 
         $this->view->assign('communityTag', $communityTag);
         $this->view->assign('record', $this->contentObj->data['uid']);
+        $trackType = $this->contentObj->data['tx_gpsnose_community_track_type'] ?? GnTrackType::Unspecified;
+        $this->view->assign('trackType', $trackType);
 
         if ($this->isUserLoggedIn()) {
             $pageSize = $this->settings['nearbyTracksPageSize'];
             $nearbyService = new GnNearbyService(GnUtility::getLanguage());
-            $tracks = $nearbyService->GetTracksAroundPage($communityTag, NULL, $pageSize);
+            $tracks = $nearbyService->GetTracksAroundPage($communityTag, NULL, $pageSize, $trackType);
             $this->view->assign('tracks', json_encode($tracks));
         }
 

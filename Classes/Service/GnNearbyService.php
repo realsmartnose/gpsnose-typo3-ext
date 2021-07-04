@@ -4,6 +4,7 @@ namespace SmartNoses\Gpsnose\Service;
 use GpsNose\SDK\Framework\Logging\GnLogger;
 use GpsNose\SDK\Web\Login\GnAuthentication;
 use GpsNose\SDK\Mashup\Framework\GnSettings;
+use GpsNose\SDK\Mashup\Model\CreatedEntities\GnTrackType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
@@ -165,9 +166,10 @@ class GnNearbyService extends GnBaseService
      * @param string $communityTag
      * @param int $lastKnownTicks
      * @param int $pageSize
+     * @param int $trackType
      * @return array(\GpsNose\SDK\Mashup\Model\CreatedEntities\GnTrack)
      */
-    public function GetTracksAroundPage(string $communityTag, int $lastKnownTicks = NULL, int $pageSize = NULL)
+    public function GetTracksAroundPage(string $communityTag, int $lastKnownTicks = NULL, int $pageSize = NULL, int $trackType = GnTrackType::Unspecified)
     {
         try {
             if ($communityTag) {
@@ -191,7 +193,7 @@ class GnNearbyService extends GnBaseService
                     $gnLogin = $gnLoginApi->GetVerified();
                     if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
                         // TODO: $lastKnownTicks and $pageSize is not possible at the moment in the API, but perhaps in the future?
-                        $items = $gnLoginApi->GetNearbyApi()->GetTracksAround($communityTag);
+                        $items = $gnLoginApi->GetNearbyApi()->GetTracksAround($communityTag, $trackType);
                     } else {
                         GnAuthentication::Logout();
                         $this->logoffUser();

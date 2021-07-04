@@ -21,6 +21,7 @@ $(document).ready(function() {
     AddLangRes('Nearby_lblNoTracks', '<f:translate key="Nearby_lblNoTracks" />');
     gn_data.Settings.LoginUrl = $('<textarea />').html("{f:uri.page(pageUid:'{settings.login.loginPid}')}").text();
     gn_data.Settings.NearbyTracksPageUrl = $('<textarea />').html("{f:uri.action(action:'pageNearbyTracks', controller:'Api', pluginName:'Pagenearbytracks', pageType:'{settings.ajax.pageNearbyTracks}', arguments:'{ communityTag : communityTag }')}").text();
+    gn_data.Settings.NearbyTracksTrackType = parseInt('{trackType}');
 });
 </script>
 
@@ -115,7 +116,9 @@ $(document).ready(function() {
 var MA_GPSNOSE_IS_MASHUP = true;
 $(function() {
     if (! gn_data.User) gn_data.User = {};
-    var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
+    var vm = new NearbyViewModel(gn_data.Community, gn_data.User, {
+        'trackType': gn_data.Settings.NearbyTracksTrackType
+    });
     vm.PageableTracks.ItemPageUrl = gn_data.Settings.NearbyTracksPageUrl;
     vm.PageableTracks.OnAddItems = function() {
         $('#ma-gpsnose-{record} .masonry').imagesLoaded(function() {

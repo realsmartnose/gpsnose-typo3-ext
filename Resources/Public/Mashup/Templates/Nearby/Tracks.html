@@ -15,6 +15,7 @@ gn_data.Settings.BaseDataUrl (URL to SDK-Images)
 gn_data.Settings.ImagePath (Path to the images)
 gn_data.Settings.NearbyTracksPageSize (Integer with the count per page for Nearby-Tracks)
 gn_data.Settings.NearbyTracksPageUrl (URL for AJAX call for Nearby-Tracks-Page)
+gn_data.Settings.NearbyTracksTrackType (Track type filter, see GnTrackType enum)
 gn_data.Settings.LoginUrl (URL to the Login-Page)
 gn_data.Settings.LoginId (String with the LoginId of the currently logged in user)
 
@@ -113,7 +114,9 @@ Replace {record} with a unique id that identifies the entry
 var MA_GPSNOSE_IS_MASHUP = true;
 $(function() {
     if (! gn_data.User) gn_data.User = {};
-    var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
+    var vm = new NearbyViewModel(gn_data.Community, gn_data.User, {
+        'trackType': gn_data.Settings.NearbyTracksTrackType
+    });
     vm.PageableTracks.ItemPageUrl = gn_data.Settings.NearbyTracksPageUrl;
     vm.PageableTracks.OnAddItems = function() {
         $('#ma-gpsnose-{record} .masonry').imagesLoaded(function() {

@@ -2459,7 +2459,7 @@ var NoseDto = (function (_super) {
     return NoseDto;
 }(BaseNavigableItem));
 var PageableItem = (function () {
-    function PageableItem(TagName, ItemPageUrl, ItemPageSize, newItem) {
+    function PageableItem(TagName, ItemPageUrl, ItemPageSize, PageData, newItem) {
         this.Items = ko.observableArray();
         this.ItemLastKnownTicks = window.MAX_DATE_TIME_TICKS;
         this.HasMoreItems = ko.observable(true);
@@ -2467,6 +2467,7 @@ var PageableItem = (function () {
         this.TagName = TagName;
         this.ItemPageUrl = ItemPageUrl;
         this.ItemPageSize = ItemPageSize;
+        this.PageData = PageData;
         this.NewItem = newItem;
     }
     PageableItem.prototype.NewItem = function (data) { return null; };
@@ -2494,15 +2495,19 @@ var PageableItem = (function () {
         if (this.ItemsRequestActive() || !this.HasMoreItems())
             return;
         this.ItemsRequestActive(true);
+        var data = {
+            lastKnownTicks: this.ItemLastKnownTicks,
+            pageSize: this.ItemPageSize,
+            community: this.TagName
+        };
+        if (this.PageData) {
+            data = jQuery.extend(data, this.PageData);
+        }
         jQuery.ajax({
             type: 'POST',
             url: this.ItemPageUrl,
             cache: false,
-            data: {
-                lastKnownTicks: this.ItemLastKnownTicks,
-                pageSize: this.ItemPageSize,
-                community: this.TagName
-            },
+            data: data,
             dataType: 'json',
             success: function (result) {
                 if (typeof result != 'object') {
@@ -2658,26 +2663,26 @@ var UserDto = (function () {
 }());
 var NearbyViewModel = (function (_super) {
     __extends(NearbyViewModel, _super);
-    function NearbyViewModel(communityDto, user) {
+    function NearbyViewModel(communityDto, user, pageData) {
         var _this = _super.call(this) || this;
         _this.Entity = new CommunityDto(communityDto, user);
         _this.TagName = _this.Entity.TagName();
         _this.NoseDto = new NoseDto({ "LoginName": _this.Entity.CreatorLoginName() });
-        _this.PageableNoses = new PageableItem(_this.Entity.TagName(), '/Nearby/Noses', gnSettings.NearbyNosesPageSize, function (data) {
+        _this.PageableNoses = new PageableItem(_this.Entity.TagName(), '/Nearby/Noses', gnSettings.NearbyNosesPageSize, pageData, function (data) {
             var nose = new NoseDto(data);
             nose.IsAdmin = nose.LoginName == _this.Entity.CreatorLoginName() || (_this.Entity.Admins() && jQuery.inArray(nose.LoginName, _this.Entity.Admins()) != -1);
             return nose;
         });
-        _this.PageablePois = new PageableItem(_this.Entity.TagName(), '/Nearby/Pois', gnSettings.NearbyPoisPageSize, function (data) {
+        _this.PageablePois = new PageableItem(_this.Entity.TagName(), '/Nearby/Pois', gnSettings.NearbyPoisPageSize, pageData, function (data) {
             return new PoiDto(data);
         });
-        _this.PageableImpressions = new PageableItem(_this.Entity.TagName(), '/Nearby/Impressions', gnSettings.NearbyImpressionsPageSize, function (data) {
+        _this.PageableImpressions = new PageableItem(_this.Entity.TagName(), '/Nearby/Impressions', gnSettings.NearbyImpressionsPageSize, pageData, function (data) {
             return new PhotoBlogDto(data);
         });
-        _this.PageableTracks = new PageableItem(_this.Entity.TagName(), '/Nearby/Tracks', gnSettings.NearbyToursPageSize, function (data) {
+        _this.PageableTracks = new PageableItem(_this.Entity.TagName(), '/Nearby/Tracks', gnSettings.NearbyToursPageSize, pageData, function (data) {
             return new TourDto(data);
         });
-        _this.PageableEvents = new PageableItem(_this.Entity.TagName(), '/Nearby/Events', gnSettings.NearbyEventsPageSize, function (data) {
+        _this.PageableEvents = new PageableItem(_this.Entity.TagName(), '/Nearby/Events', gnSettings.NearbyEventsPageSize, pageData, function (data) {
             return new EventDto(data);
         });
         return _this;

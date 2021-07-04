@@ -335,10 +335,11 @@ class ApiController extends BaseController
         }
 
         $communityTag = $_POST['community'];
+        $trackType = $_POST['trackType'];
 
         if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
             $nearbyService = new GnNearbyService(GnUtility::getLanguage());
-            $this->view->assign('tracks', $nearbyService->GetTracksAroundPage($communityTag, NULL, $pageSize));
+            $this->view->assign('tracks', $nearbyService->GetTracksAroundPage($communityTag, NULL, $pageSize, $trackType));
         } else {
             $this->view->assign('tracks', []);
         }
