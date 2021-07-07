@@ -11,11 +11,7 @@ var gnSettings = {
     "EventsPageSize": 12,
     "CommentsPageSize": 12,
     "CommunityMembersPageSize": 12,
-    "NearbyNosesPageSize": 12,
-    "NearbyPoisPageSize": 12,
-    "NearbyImpressionsPageSize": 12,
-    "NearbyToursPageSize": 12,
-    "NearbyEventsPageSize": 12,
+    "NearbyPageSize": 50,
     "MashupTokensPageSize": 12
 };
 if (window.gn_data !== undefined && window.gn_data.Settings !== undefined && window.gn_data.Settings != null)

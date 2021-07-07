@@ -13,16 +13,11 @@ gn_data.User.Communities (Array with the communities the user is in)
 gn_data.Settings.BaseUrl (URL to SDK-Server)
 gn_data.Settings.BaseDataUrl (URL to SDK-Images)
 gn_data.Settings.ImagePath (Path to the images)
-gn_data.Settings.NearbyNosesPageSize (Integer with the count per page for Nearby-Noses)
-gn_data.Settings.NearbyNosesPageUrl (URL for AJAX call for Nearby-Noses-Page)
 gn_data.Settings.LoginUrl (URL to the Login-Page)
 gn_data.Settings.LoginId (String with the LoginId of the currently logged in user)
 
 Optional:
 gn_data.Noses (Array with Noses)
-
-Server-Enpoint:
-gn_data.Settings.NearbyNosesPageUrl POST (string lastKnownTicks, int pageSize, string community)
 
 Replace {record} with a unique id that identifies the entry
 -->
@@ -72,25 +67,11 @@ Replace {record} with a unique id that identifies the entry
                 </div>
             </div>
 
-            <div class="alert alert-info" data-bind="visible: PageableNoses.Items().length == 0 && ! PageableNoses.ItemsRequestActive()">
+            <div class="alert alert-info" data-bind="visible: PageableNoses.Items().length == 0">
                 <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                 <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoNoses', 'Currently there are no other Noses around')"></span>
             </div>
 
-            <div class="text-center">
-
-                <div class="btn btn-default btn-outline-secondary btn-lg" data-bind="click: function(){ PageableNoses.PageItems() }, visible: PageableNoses.HasMoreItems(), attr: { disabled: PageableNoses.ItemsRequestActive() }">
-                    <div data-bind="visible: ! PageableNoses.ItemsRequestActive()">
-                        <i class="glyphicon glyphicon-cloud-download fas fa-cloud-download-alt"></i>
-                        <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
-                    </div>
-                    <div data-bind="visible: PageableNoses.ItemsRequestActive()">
-                        <i class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></i>
-                        <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
-                    </div>
-                </div>
-
-            </div>
         </div>
 
     </div>
@@ -102,15 +83,12 @@ var MA_GPSNOSE_IS_MASHUP = true;
 $(function() {
     if (! gn_data.User) gn_data.User = {};
     var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
-    vm.PageableNoses.ItemPageUrl = gn_data.Settings.NearbyNosesPageUrl;
     ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
 
     if (typeof gn_data.Noses != 'object') {
         if (console) console.warn(gn_data.Noses);
     } else if (gn_data.Noses) {
         vm.PageableNoses.AddItems(gn_data.Noses);
-    } else if (gn_data.User.LoginName) {
-        vm.PageableNoses.PageItems();
     }
 });
 </script>

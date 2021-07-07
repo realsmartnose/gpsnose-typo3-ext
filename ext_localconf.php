@@ -82,24 +82,10 @@ call_user_func(
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'SmartNoses.Gpsnose',
-            'Pagenearbynoses',
-            ['Api' => 'pageNearbyNoses'],
-            ['Api' => 'pageNearbyNoses']
-        );
-
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'SmartNoses.Gpsnose',
             'Nearbyimpressions',
             ['Nearby' => 'impressions'],
             ['Nearby' => 'impressions']
         );
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'SmartNoses.Gpsnose',
-            'Pagenearbyimpressions',
-            ['Api' => 'pageNearbyImpressions'],
-            ['Api' => 'pageNearbyImpressions']
-        );
-
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'SmartNoses.Gpsnose',
             'Nearbypois',
@@ -108,35 +94,15 @@ call_user_func(
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'SmartNoses.Gpsnose',
-            'Pagenearbypois',
-            ['Api' => 'pageNearbyPois'],
-            ['Api' => 'pageNearbyPois']
-        );
-
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'SmartNoses.Gpsnose',
             'Nearbytracks',
             ['Nearby' => 'tracks'],
             ['Nearby' => 'tracks']
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'SmartNoses.Gpsnose',
-            'Pagenearbytracks',
-            ['Api' => 'pageNearbyTracks'],
-            ['Api' => 'pageNearbyTracks']
-        );
-
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'SmartNoses.Gpsnose',
             'Nearbyevents',
             ['Nearby' => 'events'],
             ['Nearby' => 'events']
-        );
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'SmartNoses.Gpsnose',
-            'Pagenearbyevents',
-            ['Api' => 'pageNearbyEvents'],
-            ['Api' => 'pageNearbyEvents']
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(

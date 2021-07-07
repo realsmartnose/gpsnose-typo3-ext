@@ -20,8 +20,6 @@ $(document).ready(function() {
     AddLangRes('Common_loginRequired', '<f:translate key="Common_loginRequired" />');
     AddLangRes('Nearby_lblNoTracks', '<f:translate key="Nearby_lblNoTracks" />');
     gn_data.Settings.LoginUrl = $('<textarea />').html("{f:uri.page(pageUid:'{settings.login.loginPid}')}").text();
-    gn_data.Settings.NearbyTracksPageUrl = $('<textarea />').html("{f:uri.action(action:'pageNearbyTracks', controller:'Api', pluginName:'Pagenearbytracks', pageType:'{settings.ajax.pageNearbyTracks}', arguments:'{ communityTag : communityTag }')}").text();
-    gn_data.Settings.NearbyTracksTrackType = parseInt('{trackType}');
 });
 </script>
 
@@ -87,25 +85,11 @@ $(document).ready(function() {
                 </div>
             </div>
 
-            <div class="alert alert-info" data-bind="visible: PageableTracks.Items().length == 0 && ! PageableTracks.ItemsRequestActive()">
+            <div class="alert alert-info" data-bind="visible: PageableTracks.Items().length == 0">
                 <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                 <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoTracks', 'Currently there are no Tracks around')"></span>
             </div>
 
-            <div class="text-center">
-
-                <div class="btn btn-default btn-outline-secondary btn-lg" data-bind="click: function(){ PageableTracks.PageItems() }, visible: PageableTracks.HasMoreItems(), attr: { disabled: PageableTracks.ItemsRequestActive() }">
-                    <div data-bind="visible: ! PageableTracks.ItemsRequestActive()">
-                        <i class="glyphicon glyphicon-cloud-download fas fa-cloud-download-alt"></i>
-                        <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
-                    </div>
-                    <div data-bind="visible: PageableTracks.ItemsRequestActive()">
-                        <i class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></i>
-                        <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
-                    </div>
-                </div>
-
-            </div>
         </div>
 
     </div>
@@ -116,10 +100,7 @@ $(document).ready(function() {
 var MA_GPSNOSE_IS_MASHUP = true;
 $(function() {
     if (! gn_data.User) gn_data.User = {};
-    var vm = new NearbyViewModel(gn_data.Community, gn_data.User, {
-        'trackType': gn_data.Settings.NearbyTracksTrackType
-    });
-    vm.PageableTracks.ItemPageUrl = gn_data.Settings.NearbyTracksPageUrl;
+    var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
     vm.PageableTracks.OnAddItems = function() {
         $('#ma-gpsnose-{record} .masonry').imagesLoaded(function() {
             MasonryReload();
@@ -132,8 +113,6 @@ $(function() {
         if (console) console.warn(gn_data.Tracks);
     } else if (gn_data.Tracks) {
         vm.PageableTracks.AddItems(gn_data.Tracks);
-    } else if (gn_data.User.LoginName) {
-        vm.PageableTracks.PageItems();
     }
 });
 </script>

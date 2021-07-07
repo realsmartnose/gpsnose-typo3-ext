@@ -13,17 +13,11 @@ gn_data.User.Communities (Array with the communities the user is in)
 gn_data.Settings.BaseUrl (URL to SDK-Server)
 gn_data.Settings.BaseDataUrl (URL to SDK-Images)
 gn_data.Settings.ImagePath (Path to the images)
-gn_data.Settings.NearbyTracksPageSize (Integer with the count per page for Nearby-Tracks)
-gn_data.Settings.NearbyTracksPageUrl (URL for AJAX call for Nearby-Tracks-Page)
-gn_data.Settings.NearbyTracksTrackType (Track type filter, see GnTrackType enum)
 gn_data.Settings.LoginUrl (URL to the Login-Page)
 gn_data.Settings.LoginId (String with the LoginId of the currently logged in user)
 
 Optional:
 gn_data.Tracks (Array with Tracks)
-
-Server-Enpoint:
-gn_data.Settings.NearbyTracksPageUrl POST (string lastKnownTicks, int pageSize, string community)
 
 Replace {record} with a unique id that identifies the entry
 -->
@@ -85,25 +79,11 @@ Replace {record} with a unique id that identifies the entry
                 </div>
             </div>
 
-            <div class="alert alert-info" data-bind="visible: PageableTracks.Items().length == 0 && ! PageableTracks.ItemsRequestActive()">
+            <div class="alert alert-info" data-bind="visible: PageableTracks.Items().length == 0">
                 <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                 <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoTracks', 'Currently there are no Tracks around')"></span>
             </div>
 
-            <div class="text-center">
-
-                <div class="btn btn-default btn-outline-secondary btn-lg" data-bind="click: function(){ PageableTracks.PageItems() }, visible: PageableTracks.HasMoreItems(), attr: { disabled: PageableTracks.ItemsRequestActive() }">
-                    <div data-bind="visible: ! PageableTracks.ItemsRequestActive()">
-                        <i class="glyphicon glyphicon-cloud-download fas fa-cloud-download-alt"></i>
-                        <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
-                    </div>
-                    <div data-bind="visible: PageableTracks.ItemsRequestActive()">
-                        <i class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></i>
-                        <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
-                    </div>
-                </div>
-
-            </div>
         </div>
 
     </div>
@@ -114,10 +94,7 @@ Replace {record} with a unique id that identifies the entry
 var MA_GPSNOSE_IS_MASHUP = true;
 $(function() {
     if (! gn_data.User) gn_data.User = {};
-    var vm = new NearbyViewModel(gn_data.Community, gn_data.User, {
-        'trackType': gn_data.Settings.NearbyTracksTrackType
-    });
-    vm.PageableTracks.ItemPageUrl = gn_data.Settings.NearbyTracksPageUrl;
+    var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
     vm.PageableTracks.OnAddItems = function() {
         $('#ma-gpsnose-{record} .masonry').imagesLoaded(function() {
             MasonryReload();
@@ -130,8 +107,6 @@ $(function() {
         if (console) console.warn(gn_data.Tracks);
     } else if (gn_data.Tracks) {
         vm.PageableTracks.AddItems(gn_data.Tracks);
-    } else if (gn_data.User.LoginName) {
-        vm.PageableTracks.PageItems();
     }
 });
 </script>

@@ -20,7 +20,6 @@ $(document).ready(function() {
     AddLangRes('Common_loginRequired', '<f:translate key="Common_loginRequired" />');
     AddLangRes('Nearby_lblNoEvents', '<f:translate key="Nearby_lblNoEvents" />');
     gn_data.Settings.LoginUrl = $('<textarea />').html("{f:uri.page(pageUid:'{settings.login.loginPid}')}").text();
-    gn_data.Settings.NearbyEventsPageUrl = $('<textarea />').html("{f:uri.action(action:'pageNearbyEvents', controller:'Api', pluginName:'Pagenearbyevents', pageType:'{settings.ajax.pageNearbyEvents}', arguments:'{ communityTag : communityTag }')}").text();
 });
 </script>
 
@@ -84,24 +83,9 @@ $(document).ready(function() {
                 </div>
             </div>
 
-            <div class="alert alert-info" data-bind="visible: PageableEvents.Items().length == 0 && ! PageableEvents.ItemsRequestActive()">
+            <div class="alert alert-info" data-bind="visible: PageableEvents.Items().length == 0">
                 <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                 <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoEvents', 'Currently there are no Events around')"></span>
-            </div>
-
-            <div class="text-center">
-
-                <div class="btn btn-default btn-outline-secondary btn-lg" data-bind="click: function(){ PageableEvents.PageItems() }, visible: PageableEvents.HasMoreItems(), attr: { disabled: PageableEvents.ItemsRequestActive() }">
-                    <div data-bind="visible: ! PageableEvents.ItemsRequestActive()">
-                        <i class="glyphicon glyphicon-cloud-download fas fa-cloud-download-alt"></i>
-                        <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
-                    </div>
-                    <div data-bind="visible: PageableEvents.ItemsRequestActive()">
-                        <i class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></i>
-                        <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -114,7 +98,6 @@ var MA_GPSNOSE_IS_MASHUP = true;
 $(function() {
     if (! gn_data.User) gn_data.User = {};
     var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
-    vm.PageableEvents.ItemPageUrl = gn_data.Settings.NearbyEventsPageUrl;
     vm.PageableEvents.OnAddItems = function() {
         $('#ma-gpsnose-{record} .masonry').imagesLoaded(function() {
             MasonryReload();
@@ -127,8 +110,6 @@ $(function() {
         if (console) console.warn(gn_data.Events);
     } else if (gn_data.Events) {
         vm.PageableEvents.AddItems(gn_data.Events);
-    } else if (gn_data.User.LoginName) {
-        vm.PageableEvents.PageItems();
     }
 });
 </script>

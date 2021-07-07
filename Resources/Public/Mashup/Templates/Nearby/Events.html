@@ -13,16 +13,11 @@ gn_data.User.Communities (Array with the communities the user is in)
 gn_data.Settings.BaseUrl (URL to SDK-Server)
 gn_data.Settings.BaseDataUrl (URL to SDK-Images)
 gn_data.Settings.ImagePath (Path to the images)
-gn_data.Settings.NearbyEventsPageSize (Integer with the count per page for Nearby-Events)
-gn_data.Settings.NearbyEventsPageUrl (URL for AJAX call for Nearby-Events-Page)
 gn_data.Settings.LoginUrl (URL to the Login-Page)
 gn_data.Settings.LoginId (String with the LoginId of the currently logged in user)
 
 Optional:
 gn_data.Events (Array with Events)
-
-Server-Enpoint:
-gn_data.Settings.NearbyEventsPageUrl POST (string lastKnownTicks, int pageSize, string community)
 
 Replace {record} with a unique id that identifies the entry
 -->
@@ -82,24 +77,9 @@ Replace {record} with a unique id that identifies the entry
                 </div>
             </div>
 
-            <div class="alert alert-info" data-bind="visible: PageableEvents.Items().length == 0 && ! PageableEvents.ItemsRequestActive()">
+            <div class="alert alert-info" data-bind="visible: PageableEvents.Items().length == 0">
                 <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                 <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoEvents', 'Currently there are no Events around')"></span>
-            </div>
-
-            <div class="text-center">
-
-                <div class="btn btn-default btn-outline-secondary btn-lg" data-bind="click: function(){ PageableEvents.PageItems() }, visible: PageableEvents.HasMoreItems(), attr: { disabled: PageableEvents.ItemsRequestActive() }">
-                    <div data-bind="visible: ! PageableEvents.ItemsRequestActive()">
-                        <i class="glyphicon glyphicon-cloud-download fas fa-cloud-download-alt"></i>
-                        <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
-                    </div>
-                    <div data-bind="visible: PageableEvents.ItemsRequestActive()">
-                        <i class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></i>
-                        <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -112,7 +92,6 @@ var MA_GPSNOSE_IS_MASHUP = true;
 $(function() {
     if (! gn_data.User) gn_data.User = {};
     var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
-    vm.PageableEvents.ItemPageUrl = gn_data.Settings.NearbyEventsPageUrl;
     vm.PageableEvents.OnAddItems = function() {
         $('#ma-gpsnose-{record} .masonry').imagesLoaded(function() {
             MasonryReload();
@@ -125,8 +104,6 @@ $(function() {
         if (console) console.warn(gn_data.Events);
     } else if (gn_data.Events) {
         vm.PageableEvents.AddItems(gn_data.Events);
-    } else if (gn_data.User.LoginName) {
-        vm.PageableEvents.PageItems();
     }
 });
 </script>

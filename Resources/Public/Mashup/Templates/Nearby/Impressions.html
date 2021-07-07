@@ -13,16 +13,11 @@ gn_data.User.Communities (Array with the communities the user is in)
 gn_data.Settings.BaseUrl (URL to SDK-Server)
 gn_data.Settings.BaseDataUrl (URL to SDK-Images)
 gn_data.Settings.ImagePath (Path to the images)
-gn_data.Settings.NearbyImpressionsPageSize (Integer with the count per page for Nearby-Impressions)
-gn_data.Settings.NearbyImpressionsPageUrl (URL for AJAX call for Nearby-Impressions-Page)
 gn_data.Settings.LoginUrl (URL to the Login-Page)
 gn_data.Settings.LoginId (String with the LoginId of the currently logged in user)
 
 Optional:
 gn_data.Impressions (Array with Impressions)
-
-Server-Enpoint:
-gn_data.Settings.NearbyImpressionsPageUrl POST (string lastKnownTicks, int pageSize, string community)
 
 Replace {record} with a unique id that identifies the entry
 -->
@@ -79,25 +74,11 @@ Replace {record} with a unique id that identifies the entry
                 </div>
             </div>
 
-            <div class="alert alert-info" data-bind="visible: PageableImpressions.Items().length == 0 && ! PageableImpressions.ItemsRequestActive()">
+            <div class="alert alert-info" data-bind="visible: PageableImpressions.Items().length == 0">
                 <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                 <span data-bind="text: ' ' + GetLangRes('Nearby_lblNoImpressions', 'Currently there are no Impressions around')"></span>
             </div>
 
-            <div class="text-center">
-
-                <div class="btn btn-default btn-outline-secondary btn-lg" data-bind="click: function(){ PageableImpressions.PageItems() }, visible: PageableImpressions.HasMoreItems(), attr: { disabled: PageableImpressions.ItemsRequestActive() }">
-                    <div data-bind="visible: ! PageableImpressions.ItemsRequestActive()">
-                        <i class="glyphicon glyphicon-cloud-download fas fa-cloud-download-alt"></i>
-                        <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
-                    </div>
-                    <div data-bind="visible: PageableImpressions.ItemsRequestActive()">
-                        <i class="glyphicon glyphicon-repeat gly-spin fas fa-redo-alt"></i>
-                        <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Loading')"></span>
-                    </div>
-                </div>
-
-            </div>
         </div>
 
     </div>
@@ -109,7 +90,6 @@ var MA_GPSNOSE_IS_MASHUP = true;
 $(function() {
     if (! gn_data.User) gn_data.User = {};
     var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
-    vm.PageableImpressions.ItemPageUrl = gn_data.Settings.NearbyImpressionsPageUrl;
     vm.PageableImpressions.OnAddItems = function() {
         $('#ma-gpsnose-{record} .masonry').imagesLoaded(function() {
             MasonryReload();
@@ -122,8 +102,6 @@ $(function() {
         if (console) console.warn(gn_data.Impressions);
     } else if (gn_data.Impressions) {
         vm.PageableImpressions.AddItems(gn_data.Impressions);
-    } else if (gn_data.User.LoginName) {
-        vm.PageableImpressions.PageItems();
     }
 });
 </script>
