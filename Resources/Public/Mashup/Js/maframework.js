@@ -423,7 +423,7 @@ jQuery(function () {
         });
         jQuery('body').on('click', '[data-external]', function (e) {
             var link = jQuery(this).attr('href');
-            if (!link)
+            if (!link || link.startsWith('javascript'))
                 link = jQuery(this).data('src');
             if (link && !jQuery(this).attr('disabled')) {
                 window.open(link, '_blank');
