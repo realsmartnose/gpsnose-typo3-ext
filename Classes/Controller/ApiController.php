@@ -49,7 +49,6 @@ class ApiController extends BaseController
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
-     * @inject
      */
     protected $mashupRepository = NULL;
 
@@ -58,7 +57,6 @@ class ApiController extends BaseController
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\TokenRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
-     * @inject
      */
     protected $tokenRepository = NULL;
 
@@ -226,156 +224,6 @@ class ApiController extends BaseController
         ]);
         $this->view->setVariablesToRender(array(
             'validated'
-        ));
-    }
-
-    /**
-     * pageNearbyNoses
-     *
-     * @return void
-     */
-    public function pageNearbyNosesAction()
-    {
-        $pageSize = $_POST['pageSize'] + 0;
-        if ($pageSize < 1) {
-            $pageSize = $this->settings['nearbyNosesPageSize'];
-        }
-
-        $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
-        if ($lastKnownTicks < 1) {
-            $lastKnownTicks = NULL;
-        }
-
-        $communityTag = $_POST['community'];
-
-        if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
-            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
-            $this->view->assign('noses', $nearbyService->GetNosesAroundPage($communityTag, NULL, $pageSize));
-        } else {
-            $this->view->assign('noses', []);
-        }
-        $this->view->setVariablesToRender(array(
-            'noses'
-        ));
-    }
-
-    /**
-     * pageNearbyImpressions
-     *
-     * @return void
-     */
-    public function pageNearbyImpressionsAction()
-    {
-        $pageSize = $_POST['pageSize'] + 0;
-        if ($pageSize < 1) {
-            $pageSize = $this->settings['nearbyImpressionsPageSize'];
-        }
-
-        $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
-        if ($lastKnownTicks < 1) {
-            $lastKnownTicks = NULL;
-        }
-
-        $communityTag = $_POST['community'];
-
-        if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
-            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
-            $this->view->assign('impressions', $nearbyService->GetImpressionsAroundPage($communityTag, NULL, $pageSize));
-        } else {
-            $this->view->assign('impressions', []);
-        }
-        $this->view->setVariablesToRender(array(
-            'impressions'
-        ));
-    }
-
-    /**
-     * pageNearbyPois
-     *
-     * @return void
-     */
-    public function pageNearbyPoisAction()
-    {
-        $pageSize = $_POST['pageSize'] + 0;
-        if ($pageSize < 1) {
-            $pageSize = $this->settings['nearbyPoisPageSize'];
-        }
-
-        $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
-        if ($lastKnownTicks < 1) {
-            $lastKnownTicks = NULL;
-        }
-
-        $communityTag = $_POST['community'];
-
-        if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
-            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
-            $this->view->assign('pois', $nearbyService->GetPoisAroundPage($communityTag, NULL, $pageSize));
-        } else {
-            $this->view->assign('pois', []);
-        }
-        $this->view->setVariablesToRender(array(
-            'pois'
-        ));
-    }
-
-    /**
-     * pageNearbyTracks
-     *
-     * @return void
-     */
-    public function pageNearbyTracksAction()
-    {
-        $pageSize = $_POST['pageSize'] + 0;
-        if ($pageSize < 1) {
-            $pageSize = $this->settings['nearbyTracksPageSize'];
-        }
-
-        $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
-        if ($lastKnownTicks < 1) {
-            $lastKnownTicks = NULL;
-        }
-
-        $communityTag = $_POST['community'];
-
-        if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
-            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
-            $this->view->assign('tracks', $nearbyService->GetTracksAroundPage($communityTag, NULL, $pageSize));
-        } else {
-            $this->view->assign('tracks', []);
-        }
-        $this->view->setVariablesToRender(array(
-            'tracks'
-        ));
-    }
-
-    /**
-     * pageNearbyEvents
-     *
-     * @return void
-     */
-    public function pageNearbyEventsAction()
-    {
-        $pageSize = $_POST['pageSize'] + 0;
-        if ($pageSize < 1) {
-            $pageSize = $this->settings['nearbyEventsPageSize'];
-        }
-
-        $lastKnownTicks = $_POST['lastKnownTicks'] + 0;
-        if ($lastKnownTicks < 1) {
-            $lastKnownTicks = NULL;
-        }
-
-        $communityTag = $_POST['community'];
-
-        if ($this->isUserLoggedIn() && !GnUtil::IsNullOrEmpty($communityTag)) {
-            $nearbyService = new GnNearbyService(GnUtility::getLanguage());
-            $this->view->assign('events', $nearbyService->GetEventsAroundPage($communityTag, NULL, $pageSize));
-        } else {
-            $this->view->assign('events', []);
-        }
-        $this->view->setVariablesToRender(array(
-            'events'
         ));
     }
 

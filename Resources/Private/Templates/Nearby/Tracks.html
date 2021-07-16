@@ -20,7 +20,6 @@ $(document).ready(function() {
     AddLangRes('Common_loginRequired', '<f:translate key="Common_loginRequired" />');
     AddLangRes('Nearby_lblNoTracks', '<f:translate key="Nearby_lblNoTracks" />');
     gn_data.Settings.LoginUrl = $('<textarea />').html("{f:uri.page(pageUid:'{settings.login.loginPid}')}").text();
-    gn_data.Settings.NearbyTracksPageUrl = $('<textarea />').html("{f:uri.action(action:'pageNearbyTracks', controller:'Api', pluginName:'Pagenearbytracks', pageType:'{settings.ajax.pageNearbyTracks}', arguments:'{ communityTag : communityTag }')}").text();
 });
 </script>
 

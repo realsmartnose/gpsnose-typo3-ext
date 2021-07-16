@@ -235,6 +235,36 @@
             <trans-unit id="tt_content.tx_gpsnose_community_tag">
                 <source>Community</source>
             </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_community_track_type">
+                <source>Track type</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_community_track_type.I.Hiking">
+                <source>Hiking</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_community_track_type.I.Bike">
+                <source>Bike</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_community_track_type.I.Motorcycle">
+                <source>Motorcycle</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_community_track_type.I.Car">
+                <source>Car</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_community_track_type.I.Boat">
+                <source>Boat</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_community_track_type.I.Aircraft">
+                <source>Aircraft</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_community_track_type.I.CrossCountrySkiing">
+                <source>Cross country skiing</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_community_track_type.I.Other">
+                <source>Other</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_gpsnose_community_track_type.I.Unspecified">
+                <source>All types</source>
+            </trans-unit>
             <trans-unit id="tt_content.tx_gpsnose_mashup_login_acl">
                 <source>Login ACL</source>
             </trans-unit>

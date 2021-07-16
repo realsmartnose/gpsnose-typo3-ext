@@ -24,7 +24,6 @@ class History extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
-     * @validate NotEmpty
      */
     protected $ticks = '';
 
@@ -33,7 +32,6 @@ class History extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var int
      * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
-     * @validate NotEmpty
      */
     protected $count = 0;
 

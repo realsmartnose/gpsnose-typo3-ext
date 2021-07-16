@@ -49,18 +49,6 @@ plugin.tx_gpsnose {
     commentsPageSize = 12
 
     # max 100
-    nearbyNosesPageSize = 100
-
-    # max 100
-    nearbyImpressionsPageSize = 100
-
-    # max 100
-    nearbyPoisPageSize = 100
-
-    # max 100
-    nearbyTracksPageSize = 100
-
-    # max 100
     nearbyEventsPageSize = 100
 
     # ajax page types
@@ -70,11 +58,6 @@ plugin.tx_gpsnose {
       pageComments = 10003
       commentSave = 10004
       loginVerifie = 10005
-      pageNearbyNoses = 10006
-      pageNearbyImpressions = 10007
-      pageNearbyPois = 10008
-      pageNearbyTracks = 10009
-      pageNearbyEvents = 10010
       validateSecurityToken = 10011
     }
 
@@ -213,41 +196,6 @@ ajax_gpsnose_validate_security_token < ajax_gpsnose_pagemembers
 ajax_gpsnose_validate_security_token {
   typeNum < plugin.tx_gpsnose.settings.ajax.validateSecurityToken
   10 < tt_content.list.20.gpsnose_validatesecuritytoken
-}
-
-# ajax action page-nearby-noses
-ajax_gpsnose_pagenearbynoses < ajax_gpsnose_pagemembers
-ajax_gpsnose_pagenearbynoses {
-  typeNum < plugin.tx_gpsnose.settings.ajax.pageNearbyNoses
-  10 < tt_content.list.20.gpsnose_pagenearbynoses
-}
-
-# ajax action page-nearby-impressions
-ajax_gpsnose_pagenearbyimpressions < ajax_gpsnose_pagemembers
-ajax_gpsnose_pagenearbyimpressions {
-  typeNum < plugin.tx_gpsnose.settings.ajax.pageNearbyImpressions
-  10 < tt_content.list.20.gpsnose_pagenearbyimpressions
-}
-
-# ajax action page-nearby-pois
-ajax_gpsnose_pagenearbypois < ajax_gpsnose_pagemembers
-ajax_gpsnose_pagenearbypois {
-  typeNum < plugin.tx_gpsnose.settings.ajax.pageNearbyPois
-  10 < tt_content.list.20.gpsnose_pagenearbypois
-}
-
-# ajax action page-nearby-tracks
-ajax_gpsnose_pagenearbytracks < ajax_gpsnose_pagemembers
-ajax_gpsnose_pagenearbytracks {
-  typeNum < plugin.tx_gpsnose.settings.ajax.pageNearbyTracks
-  10 < tt_content.list.20.gpsnose_pagenearbytracks
-}
-
-# ajax action page-nearby-events
-ajax_gpsnose_pagenearbyevents < ajax_gpsnose_pagemembers
-ajax_gpsnose_pagenearbyevents {
-  typeNum < plugin.tx_gpsnose.settings.ajax.pageNearbyEvents
-  10 < tt_content.list.20.gpsnose_pagenearbyevents
 }
 
 

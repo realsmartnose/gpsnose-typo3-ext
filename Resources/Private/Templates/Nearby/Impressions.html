@@ -19,8 +19,8 @@ $(document).ready(function() {
     AddLangRes('Common_lblScanToJoin', '<f:translate key="Common_lblScanToJoin" />');
     AddLangRes('Common_loginRequired', '<f:translate key="Common_loginRequired" />');
     AddLangRes('Nearby_lblNoImpressions', '<f:translate key="Nearby_lblNoImpressions" />');
+    AddLangRes('Common_lblErrorCannotPage', '<f:translate key="Common_lblErrorCannotPage" />');
     gn_data.Settings.LoginUrl = $('<textarea />').html("{f:uri.page(pageUid:'{settings.login.loginPid}')}").text();
-    gn_data.Settings.NearbyImpressionsPageUrl = $('<textarea />').html("{f:uri.action(action:'pageNearbyImpressions', controller:'Api', pluginName:'Pagenearbyimpressions', pageType:'{settings.ajax.pageNearbyImpressions}', arguments:'{ communityTag : communityTag }')}").text();
 });
 </script>
 

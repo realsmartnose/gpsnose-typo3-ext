@@ -21,6 +21,54 @@ $fields = array(
             'maxitems' => 1
         )
     ),
+    'tx_gpsnose_community_track_type' => array(
+        'label' => $languageFile . 'tt_content.tx_gpsnose_community_track_type',
+        'exclude' => FALSE,
+        'displayCond' => 'FIELD:list_type:IN:gpsnose_nearbytracks',
+        'config' => array(
+            'type' => 'select',
+            'renderType' => 'selectSingle',
+            'items' => [
+                [
+                    $languageFile . 'tt_content.tx_gpsnose_community_track_type.I.Unspecified',
+                    '9999'
+                ],
+                [
+                    $languageFile . 'tt_content.tx_gpsnose_community_track_type.I.Hiking',
+                    '0'
+                ],
+                [
+                    $languageFile . 'tt_content.tx_gpsnose_community_track_type.I.Bike',
+                    '1'
+                ],
+                [
+                    $languageFile . 'tt_content.tx_gpsnose_community_track_type.I.Motorcycle',
+                    '2'
+                ],
+                [
+                    $languageFile . 'tt_content.tx_gpsnose_community_track_type.I.Car',
+                    '3'
+                ],
+                [
+                    $languageFile . 'tt_content.tx_gpsnose_community_track_type.I.Boat',
+                    '4'
+                ],
+                [
+                    $languageFile . 'tt_content.tx_gpsnose_community_track_type.I.Aircraft',
+                    '5'
+                ],
+                [
+                    $languageFile . 'tt_content.tx_gpsnose_community_track_type.I.CrossCountrySkiing',
+                    '6'
+                ],
+                [
+                    $languageFile . 'tt_content.tx_gpsnose_community_track_type.I.Other',
+                    '99'
+                ],
+            ],
+            'cols' => 1
+        )
+    ),
     'tx_gpsnose_mashup_login_option_must_join' => array(
         'label' => $languageFile . 'tt_content.tx_gpsnose_mashup_login_option_must_join',
         'exclude' => FALSE,
@@ -119,6 +167,7 @@ $fields = array(
 // Make fields visible in the TCEforms:
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('tt_content', '--div--;LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:tt_content.palette_title,
 	--palette--;;tx_gpsnose_community,
+	--palette--;;tx_gpsnose_track_type,
 	--palette--;;tx_gpsnose_login_option_fields,
 	--palette--;;tx_gpsnose_login_acl_fields,
 	--palette--;;tx_gpsnose_login_redirect', 'list', 'after:recursive');
@@ -127,6 +176,10 @@ $fields = array(
 $GLOBALS['TCA']['tt_content']['palettes']['tx_gpsnose_community'] = array(
     'showitem' => 'tx_gpsnose_community_tag'
 );
+$GLOBALS['TCA']['tt_content']['palettes']['tx_gpsnose_track_type'] = array(
+    'showitem' => 'tx_gpsnose_community_track_type'
+);
+
 $GLOBALS['TCA']['tt_content']['palettes']['tx_gpsnose_login_redirect'] = array(
     'showitem' => 'tx_gpsnose_mashup_login_redirect'
 );

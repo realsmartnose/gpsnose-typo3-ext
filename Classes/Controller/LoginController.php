@@ -29,7 +29,6 @@ class LoginController extends BaseController
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
-     * @inject
      */
     protected $mashupRepository = NULL;
 
@@ -38,7 +37,6 @@ class LoginController extends BaseController
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
-     * @inject
      */
     protected $frontendUserRepository = NULL;
 
@@ -89,6 +87,7 @@ class LoginController extends BaseController
                 $this->redirectToPage($redirectPid);
             } else {
                 $this->view->assign('logged_in', TRUE);
+                $this->initFrontend();
             }
         } else {
             $this->initFrontend();
