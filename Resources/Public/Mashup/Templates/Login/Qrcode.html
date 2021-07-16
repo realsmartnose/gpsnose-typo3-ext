@@ -14,17 +14,17 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.0.16">
+<div class="ma-gpsnose" data-gn-version="1.1.0">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-login" data-bind="visible:true" style="display:none;">
 
         <div id="polling-stopped-message" style="display: none;">
             <div class="alert alert-danger">
-                <div class="media">
-                    <div class="media-left mr-1">
+                <div class="media d-flex">
+                    <div class="media-left mr-2 me-2">
                         <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
                     </div>
-                    <div class="media-body">
+                    <div class="media-body flex-grow-1">
                         <p class="m-0" data-bind="text: ' ' + GetLangRes('Common_lblLoginPollingStopped', 'The polling stopped, please use the button to restart the polling.')"></p>
                     </div>
                     <div class="media-right">
@@ -69,7 +69,7 @@ Replace {record} with a unique id that identifies the entry
 
 <script type="text/javascript">
 var MA_GPSNOSE_IS_MASHUP = true;
-$(document).ready(function() {
+$(function() {
     if (! gn_data.User) gn_data.User = {};
     ko.applyBindings(new BaseViewModel(), $('#ma-gpsnose-{record}').get(0));
     window.setTimeout(function() {

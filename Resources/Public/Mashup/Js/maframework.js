@@ -1,7 +1,7 @@
-﻿var gnSettings = {
+var gnSettings = {
     "BaseUrl": "https://www.gpsnose.com",
     "BaseDataUrl": "https://gpsnose.blob.core.windows.net",
-    "ImagePath":"/Content/Mashup/Images",
+    "ImagePath": "/Content/Mashup/Images",
     "MashupsPageSize": 12,
     "NosesPageSize": 12,
     "NewsPageSize": 12,
@@ -11,64 +11,58 @@
     "EventsPageSize": 12,
     "CommentsPageSize": 12,
     "CommunityMembersPageSize": 12,
-    "NearbyNosesPageSize": 100,
+    "NearbyPageSize": 50,
     "MashupTokensPageSize": 12
 };
 if (window.gn_data !== undefined && window.gn_data.Settings !== undefined && window.gn_data.Settings != null)
     jQuery.extend(gnSettings, window.gn_data.Settings);
-
-var MAX_DATE_TIME_TICKS = "3155378975999999999";
-
-
-function MaWaitForLogin(loginVerifyUrl, returnUrl, pollingEndTime, onPollingEndFn)
-{
+window.MAX_DATE_TIME_TICKS = "3155378975999999999";
+function MaWaitForLogin(loginVerifyUrl, returnUrl, pollingEndTime, onPollingEndFn) {
     if (pollingEndTime > 0 && new Date().getTime() > pollingEndTime) {
         if (onPollingEndFn) {
             onPollingEndFn();
         }
-    } else {
+    }
+    else {
         $.ajax({
             type: 'POST',
             url: loginVerifyUrl,
             cache: false,
             dataType: 'json',
-            success: function(result) {
+            success: function (result) {
                 if (result.IsOk) {
                     if (returnUrl == '') {
                         document.location.reload();
-                    } else {
+                    }
+                    else {
                         window.location.replace(returnUrl);
                     }
-                } else {
-                    window.setTimeout(function() { MaWaitForLogin(loginVerifyUrl, returnUrl, pollingEndTime, onPollingEndFn); }, 3500);
+                }
+                else {
+                    window.setTimeout(function () { MaWaitForLogin(loginVerifyUrl, returnUrl, pollingEndTime, onPollingEndFn); }, 3500);
                 }
             },
-            error: function() {
-                window.setTimeout(function() { MaWaitForLogin(loginVerifyUrl, returnUrl, pollingEndTime, onPollingEndFn); }, 3500);
+            error: function () {
+                window.setTimeout(function () { MaWaitForLogin(loginVerifyUrl, returnUrl, pollingEndTime, onPollingEndFn); }, 3500);
             }
         });
     }
 }
-
-
-function SwitchLanguage(lang)
-{
+function SwitchLanguage(lang) {
     var url;
     var form = jQuery('form:has(div:first[role!="dialog"])')[0];
     if (form == undefined || form.method.toLowerCase() == "get") {
         url = GetLangUrl(window.location.href, lang);
         window.location.href = url;
-    } else {
+    }
+    else {
         jQuery(form).append('<input type="hidden" name="langSwitch" value="true" />');
         url = GetLangUrl(form.action, lang);
         form.action = url;
         form.submit();
     }
 }
-
-
-function GetLangUrl(url, lang)
-{
+function GetLangUrl(url, lang) {
     var args = GetArgsFromUrl(url);
     if (args["lang"] == undefined)
         args.push("lang");
@@ -76,20 +70,14 @@ function GetLangUrl(url, lang)
     var urlNew = GetUrlFromArgs(url, args);
     return urlNew;
 }
-
-
-function GetCurrentLang()
-{
+function GetCurrentLang() {
     var lang = GetCookie("lang");
     if (lang == undefined || lang == null || lang.length < 2) {
         return "en";
     }
     return lang.substring(0, 2);
 }
-
-
-function GetArgsFromUrl(url)
-{
+function GetArgsFromUrl(url) {
     var vars = [], hash;
     var pos = url.indexOf('?') + 1;
     if (pos > 0) {
@@ -104,10 +92,7 @@ function GetArgsFromUrl(url)
     }
     return vars;
 }
-
-
-function GetUrlFromArgs(url, args)
-{
+function GetUrlFromArgs(url, args) {
     var s = url.indexOf('?') == -1 ? url : url.substring(0, url.indexOf('?'));
     if (url.indexOf('#') != -1)
         s = s.substring(0, s.indexOf('#'));
@@ -127,77 +112,60 @@ function GetUrlFromArgs(url, args)
     }
     return s;
 }
-
-
-function GetTimeZoneName()
-{
+function GetTimeZoneName() {
     var dt = new Date().toString();
     var rule = /(.())\((.*)\)(.*)/g;
     var match = rule.exec(dt);
     return match[3];
 }
-
-
-function GetTimeZoneOffsetMinutes()
-{
+function GetTimeZoneOffsetMinutes() {
     return new Date().getTimezoneOffset();
 }
-
-
-function GetDateStringFromTicks(ticks)
-{
-    if (ticks == "0" || ticks == undefined) return "";
+function GetDateStringFromTicks(ticks) {
+    if (ticks == "0" || ticks == undefined)
+        return "";
     var dateTicks = new BigNumber(ticks);
     var date = moment(parseInt(dateTicks.subtract(621355968000000000).divide(10000).valueOf()));
     return date.format('LLL');
 }
-
-
-function GetTicksFromDate(date)
-{
+function GetTicksFromDate(date) {
     var unixTimeStamp = new BigNumber(date.getTime() ? date.getTime() : 0);
     return unixTimeStamp.multiply(10000).add(621355968000000000).valueOf();
 }
-
-
-function GetDateFromTicks(ticks)
-{
+function GetDateFromTicks(ticks) {
     var dateTicks = new BigNumber(ticks);
     return moment.utc(parseInt(dateTicks.subtract(621355968000000000).divide(10000).valueOf())).toDate();
 }
-
-
-function GetAgeStringFromTicks(ticks)
-{
-    if (ticks == "0") return "";
+function GetAgeStringFromTicks(ticks) {
+    if (ticks == "0")
+        return "";
     var bigNumberFromTicks = new BigNumber(ticks);
     var date = moment(parseInt(bigNumberFromTicks.subtract(621355968000000000).divide(10000).valueOf()));
-    var age = moment.duration(moment() - date);
+    var age = moment.duration(moment().diff(date));
     if (age.asDays() > 30) {
-        return date.format('l');;
-    } else if (age.asDays() > 1) {
+        return date.format('l');
+        ;
+    }
+    else if (age.asDays() > 1) {
         return Math.floor(age.asDays()) + "d";
-    } else if (age.asHours() > 1) {
+    }
+    else if (age.asHours() > 1) {
         return Math.floor(age.asHours()) + "h";
-    } else if (age.asMinutes() > 1) {
+    }
+    else if (age.asMinutes() > 1) {
         return Math.floor(age.asMinutes()) + "min";
-    } else {
+    }
+    else {
         return (age.asSeconds() < 0 ? 0 : Math.floor(age.asSeconds())) + "s";
     }
 }
-
-
-function GetAgeString(ticksFrom, ticksTo, withPrefix, withSeconds)
-{
+function GetAgeString(ticksFrom, ticksTo, withPrefix, withSeconds) {
     var bigNumberFrom = new BigNumber(ticksFrom);
     var bigNumberTo = new BigNumber(ticksTo);
-    var age = moment.duration(parseInt(bigNumberTo.subtract(bigNumberFrom).divide(10000).valueOf()));
+    var age = moment.duration(parseInt(bigNumberTo.subtract(bigNumberFrom.valueOf()).divide(10000).valueOf()));
     return GetAgeStringFromSecond(age.asSeconds(), withPrefix, withSeconds);
 }
-
-
-function GetAgeStringFromSecond(seconds, withPrefix, withSeconds)
-{
+function GetAgeStringFromSecond(seconds, withPrefix, withSeconds) {
     var h = Math.floor(seconds / 3600);
     var m = Math.floor((seconds % 3600) / 60);
     var s = Math.floor((seconds % 3600) % 60);
@@ -205,128 +173,90 @@ function GetAgeStringFromSecond(seconds, withPrefix, withSeconds)
         return (withPrefix ? "+" : "") + Math.floor(seconds) + "s";
     return (withPrefix ? "+" : "") + (h < 10 ? "0" : "") + h + ":" + (m < 10 ? "0" : "") + m + (withSeconds ? ":" + (s < 10 ? "0" : "") + s : "");
 }
-
-
-function GetLoginNameFromUniqueKey(uniqueKey)
-{
+function GetLoginNameFromUniqueKey(uniqueKey) {
     if (uniqueKey) {
         var res = uniqueKey.split("_");
         return res[0];
     }
     return null;
 }
-
-
-function GetTicksFromUniqueKey(uniqueKey)
-{
+function GetTicksFromUniqueKey(uniqueKey) {
     if (uniqueKey) {
         var res = uniqueKey.split("_");
         var diff = res[1];
         if (diff && diff.length > 0) {
-            var maxDateTicks = new BigNumber(MAX_DATE_TIME_TICKS);
+            var maxDateTicks = new BigNumber(window.MAX_DATE_TIME_TICKS);
             return maxDateTicks.subtract(diff).valueOf();
         }
     }
     return "0";
 }
-
-
-function GetUniqueKey(loginName, date)
-{
+function GetUniqueKey(loginName, date) {
     if (date != null) {
-        var maxDateTicks = new BigNumber(MAX_DATE_TIME_TICKS);
+        var maxDateTicks = new BigNumber(window.MAX_DATE_TIME_TICKS);
         var dateTicks = new BigNumber(typeof date === 'string' ? date : GetTicksFromDate(date));
-        return loginName + "_" + maxDateTicks.subtract(dateTicks).valueOf();
-    } else {
+        return loginName + "_" + maxDateTicks.subtract(dateTicks.valueOf()).valueOf();
+    }
+    else {
         return loginName + "_" + date;
     }
 }
-
-
-function SetCookieDays(name, value, expiryDays)
-{
+function SetCookieDays(name, value, expiryDays) {
     SetCookieMinutes(name, value, expiryDays * 24 * 60);
 }
-
-
-function SetCookieMinutes(name, value, expiryMinutes)
-{
+function SetCookieMinutes(name, value, expiryMinutes) {
     var d = new Date();
     d.setTime(d.getTime() + (expiryMinutes * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
     document.cookie = name + "=" + value + ";path=/;" + expires + ";SameSite=Strict";
 }
-
-
-function GetCookie(name)
-{
+function GetCookie(name) {
     var value = "; " + document.cookie;
     var parts = value.split("; " + name + "=");
     if (parts.length == 2)
         return parts.pop().split(";").shift();
 }
-
-
-/**
- * Language wrapper
- */
-function GetLangRes(key, defaultText)
-{
-    if (! window.language || ! window.language[key]) {
-        if (console) console.log('Missing language-key: "' + key + '":"' + defaultText + '"');
+function GetLangRes(key, defaultText) {
+    if (!window.language || !window.language[key]) {
+        if (console)
+            console.log('Missing language-key: "' + key + '":"' + defaultText + '"');
         return defaultText;
     }
     return window.language[key];
 }
-
-function AddLangRes(key, value)
-{
-    if (! window.language) {
+function AddLangRes(key, value) {
+    if (!window.language) {
         window.language = [];
     }
     window.language[key] = value;
 }
-
-
-function GetGoogleMapsLink(lat, lon)
-{
+function GetGoogleMapsLink(lat, lon) {
     var latS = numeral(lat).format('0.00000[00000]');
     var lonS = numeral(lon).format('0.00000[00000]');
-    return IsGeoValid(lat, lon) ? "http://maps.google.com/?q=" + latS + "," + lonS : "javascript:;";
+    return IsGeoValid(lat, lon) ? "https://maps.google.com/?q=" + latS + "," + lonS : "javascript:void(0);";
 }
-
-
-function GetStaticMapUrl(lat, lon)
-{
+function GetStaticMapUrl(lat, lon) {
     var latS = numeral(lat).format('0.00000[00000]');
     var lonS = numeral(lon).format('0.00000[00000]');
-    return IsGeoValid(lat, lon) ? "http://staticmap.openstreetmap.de/staticmap.php?center=" + latS + "," + lonS + "&zoom=13&size=100x100&maptype=osma&markers=" + latS + "," + lonS + ",red-pushpin" : "/Content/Mashup/Images/EmptyMap.png";
+    return IsGeoValid(lat, lon) ? "https://staticmap.openstreetmap.de/staticmap.php?center=" + latS + "," + lonS + "&zoom=13&size=100x100&maptype=osma&markers=" + latS + "," + lonS + ",red-pushpin" : "/Content/Mashup/Images/EmptyMap.png";
 }
-
-
-function IsGeoValid(lat, lon)
-{
+function IsGeoValid(lat, lon) {
     return lat != null && lon != null && !(lat === 0 && lon === 0);
 }
-
-
-function GetDistanceString(profile)
-{
+function GetDistanceString(profile) {
     if (profile) {
         var e = profile.DistanceMetersExact;
         var o = profile.DistanceMetersObfuscated;
         if (e > 0) {
             return FormatExactDistance(e);
-        } else if (o >= 0) {
+        }
+        else if (o >= 0) {
             return ObfuscatedDistanceStringByNumber(ObfuscatedDistanceByNumber(o));
         }
     }
     return "";
 }
-
-
-function ObfuscatedDistanceStringByNumber(distance)
-{
+function ObfuscatedDistanceStringByNumber(distance) {
     switch (distance) {
         case 150:
             return "<150m";
@@ -353,8 +283,6 @@ function ObfuscatedDistanceStringByNumber(distance)
     }
     return FormatExactDistance(distance);
 }
-
-
 function ObfuscatedDistanceByNumber(distance) {
     var returnInt;
     switch (distance) {
@@ -394,78 +322,61 @@ function ObfuscatedDistanceByNumber(distance) {
     }
     return returnInt;
 }
-
-
-function FormatExactDistance(distanceMeters)
-{
+function FormatExactDistance(distanceMeters) {
     if (distanceMeters < 0)
         return "0m";
-
     if (distanceMeters < 1000)
         return distanceMeters.toFixed(0) + "m";
-
     return +(distanceMeters / 1000).toFixed(1) + "km";
 }
-
-
-function FormatSpeed(speed)
-{
+function FormatSpeed(speed) {
     return (speed > 10 ? Math.floor(speed) : +(speed).toFixed(1)) + "km/h";
 }
-
-
-function IsValidDomain(domain, maxLength)
-{
+function IsValidDomain(domain, maxLength) {
     return /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(domain) && domain.length <= maxLength;
 }
-
-function IsValidUrl(url, maxLength, domain)
-{
+function IsValidUrl(url, maxLength, domain) {
     if (domain) {
         domain = domain.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
         var re = new RegExp('https?:\/\/' + domain + '([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)');
         return re.test(url) && url.length <= maxLength;
-    } else {
+    }
+    else {
         return /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/.test(url) && url.length <= maxLength;
     }
 }
-
-function IsValidCommunity(community, maxLength)
-{
+function IsValidCommunity(community, maxLength) {
     return /^[a-z0-9\-]+$/.test(community) && community.length <= maxLength;
 }
-
-
-function ShowPreviewPageLoad(show)
-{
+function ShowPreviewPageLoad(show) {
     if (show) {
         jQuery('body').addClass('preview-page-load');
-    } else {
+    }
+    else {
         jQuery('body').removeClass('preview-page-load');
     }
 }
-
-
-function ImageErrorHandler(obj, errorSrc)
-{
+function ImageErrorHandler(obj, errorSrc) {
     var $obj = jQuery(obj);
     var lazy = $obj.data('lazy-img');
     var defImg = $obj.data('default');
     if (lazy && lazy != '') {
-        setTimeout(function(){
+        setTimeout(function () {
             $obj.attr('src', lazy);
         }, 50);
         $obj.data('lazy-img', '');
-        $obj.attr('onerror', 'ImageErrorHandler(this, "'+errorSrc+'")');
-    } else if (defImg && defImg != '') {
-        setTimeout(function(){
+        $obj.attr('onerror', 'ImageErrorHandler(this, "' + errorSrc + '")');
+    }
+    else if (defImg && defImg != '') {
+        setTimeout(function () {
             $obj.attr('src', defImg);
         }, 50);
         $obj.data('default', '');
         $obj.data('lazy-img', null);
-        $obj.attr('onerror', 'ImageErrorHandler(this, "'+errorSrc+'")');
-    } else {
-        setTimeout(function(){
+        $obj.attr('onerror', 'ImageErrorHandler(this, "' + errorSrc + '")');
+    }
+    else {
+        setTimeout(function () {
             $obj.attr('src', errorSrc);
         }, 50);
         $obj.data('default', null);
@@ -473,86 +384,67 @@ function ImageErrorHandler(obj, errorSrc)
         $obj.attr('onerror', null);
     }
 }
-
-
-if (window.jQuery) {
-    jQuery('body').on('click', '[data-popup]', function(e) {
-        var link = jQuery(this).attr('href');
-        if (! link) link = jQuery(this).data('src');
-        if (link && ! jQuery(this).attr('disabled')) {
-            if (window.MA_GPSNOSE_IS_MASHUP != undefined && window.MA_GPSNOSE_IS_MASHUP)
-                window.open(link, '_blank');
-            else
-                window.location.href = link;
-        }
-        e.preventDefault();
-    });
-
-    jQuery('body').on('click', '[data-external]', function(e) {
-        var link = jQuery(this).attr('href');
-        if (! link) link = jQuery(this).data('src');
-        if (link && ! jQuery(this).attr('disabled')) {
-            window.open(link, '_blank');
-        }
-        e.preventDefault();
-    });
-
-    jQuery(document).ready(function() {
-        jQuery('[data-remove]').remove();
-    });
-
-    jQuery(document).ajaxComplete(function() {
-        jQuery('[data-remove]').remove();
-    });
-
-    if (jQuery.fn.popover) {
-        jQuery(document).popover({
-            selector: '[data-popover-img]',
-            trigger: 'focus',
-            html: true,
-            placement: 'auto',
-            content: function () {
-                return '<img class="ma-popover-image" src="'+jQuery(this).data('popover-img')+'" />' +
-                    (jQuery(this).data('popover-text') ? '<p class="text-center">'+jQuery(this).data('popover-text')+'</p>' : '');
-            }
-        });
-    }
-}
-
-
-/**
- * Masonry
- */
 function MasonryStart() {
     if (jQuery().masonry) {
-        jQuery('.grid').masonry({
-            itemSelector: '.grid-item',
-            columnWidth: '.grid-sizer',
+        jQuery('.masonry').masonry({
+            itemSelector: '.masonry-item',
+            columnWidth: '.masonry-sizer',
             percentPosition: true
         });
     }
 }
-
 function MasonryReload() {
     if (jQuery().masonry) {
-        jQuery.each(jQuery('.grid'), function(index, item) {
-            var instance = jQuery.data(jQuery(item), 'masonry');
-            if (! instance) {
-                MasonryStart();
-            }
-            jQuery(item).masonry('reloadItems');
-            jQuery(item).masonry('layout');
-        });
-        /*
-        jQuery.each(jQuery('.grid'), function(index, item) {
+        jQuery.each(jQuery('.masonry'), function (index, item) {
             var instance = jQuery.data(jQuery(item), 'masonry');
             if (!instance) {
                 MasonryStart();
-            } else {
+            }
+            setTimeout(function () {
                 jQuery(item).masonry('reloadItems');
                 jQuery(item).masonry('layout');
-            }
+            }, 50);
         });
-        */
     }
 }
+jQuery(function () {
+    if (window.jQuery) {
+        jQuery('body').on('click', '[data-popup]', function (e) {
+            var link = jQuery(this).attr('href');
+            if (!link)
+                link = jQuery(this).data('src');
+            if (link && !jQuery(this).attr('disabled')) {
+                if (window.MA_GPSNOSE_IS_MASHUP != undefined && window.MA_GPSNOSE_IS_MASHUP)
+                    window.open(link, '_blank');
+                else
+                    window.location.href = link;
+            }
+            e.preventDefault();
+        });
+        jQuery('body').on('click', '[data-external]', function (e) {
+            var link = jQuery(this).attr('href');
+            if (!link || link.startsWith('javascript'))
+                link = jQuery(this).data('src');
+            if (link && !jQuery(this).attr('disabled')) {
+                window.open(link, '_blank');
+            }
+            e.preventDefault();
+        });
+        jQuery('[data-remove]').remove();
+        jQuery(document).ajaxComplete(function () {
+            jQuery('[data-remove]').remove();
+        });
+        if (jQuery.fn.popover) {
+            jQuery('[data-popover-img]').popover({
+                trigger: 'focus',
+                html: true,
+                placement: 'auto',
+                content: function () {
+                    return '<img class="ma-popover-image" src="' + jQuery(this).data('popover-img') + '" />' +
+                        (jQuery(this).data('popover-text') ? '<p class="text-center">' + jQuery(this).data('popover-text') + '</p>' : '');
+                }
+            });
+        }
+    }
+});
+//# sourceMappingURL=maframework.js.map

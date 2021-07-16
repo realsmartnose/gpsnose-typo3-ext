@@ -2,10 +2,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -46,16 +48,16 @@ var NoseDto = (function (_super) {
             return "/nose/preview/" + encodeURIComponent(_this.LoginName);
         };
         _this.DetailUrl = function () {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/n/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
         };
         _this.ShareUrl = function () {
-            return gnSettings.BaseUrl + "/" + encodeURIComponent(_this.LoginName);
+            return gnSettings.BaseUrl + "/n/" + encodeURIComponent(_this.LoginName);
         };
         return _this;
     }
     return NoseDto;
 }(BaseNavigableItem));
-var MAX_DATE_TIME_TICKS = "3155378975999999999";
+window.MAX_DATE_TIME_TICKS = "3155378975999999999";
 var MashupFormTypeEnum;
 (function (MashupFormTypeEnum) {
     MashupFormTypeEnum[MashupFormTypeEnum["None"] = 0] = "None";
@@ -245,7 +247,11 @@ var MashupAdminViewModel = (function () {
             },
             dataType: 'json',
             success: function (result) {
-                if (result && result.length > 0) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
                     _this.AddMashupTokens(result);
                 }
                 else {
@@ -299,22 +305,22 @@ var MashupAdminViewModel = (function () {
         var firstChar = this.GetCommunityPrefix(value);
         switch (firstChar) {
             case "@":
-                icon = "lock fas fa-lock";
+                icon = "fas fa-lock";
                 break;
             case "*":
-                icon = "eye-close fas fa-eye-slash";
+                icon = "fas fa-eye-slash";
                 break;
             case "%":
-                icon = "globe fas fa-globe-americas";
+                icon = "fas fa-globe-americas";
                 break;
         }
         additionalClass = additionalClass ? ' ' + additionalClass : '';
         if (icon != "" && value && value.length > 2) {
             var com = value.substr(1, value.length);
-            return '<i class="glyphicon glyphicon-' + icon + '"></i> <span class="keyword-label' + additionalClass + '"> ' + com + '</span>';
+            return '<i class="' + icon + '"></i> <span class="keyword-label' + additionalClass + '"> ' + com + '</span>';
         }
         else {
-            return '<i class="glyphicon glyphicon-globe fas fa-globe-americas"></i> <span class="keyword-label' + additionalClass + '"> ' + value + '</span>';
+            return '<i class="fas fa-globe-americas"></i> <span class="keyword-label' + additionalClass + '"> ' + value + '</span>';
         }
     };
     MashupAdminViewModel.prototype.GetCommunityPrefix = function (value) {
@@ -613,7 +619,7 @@ var MashupAdminViewModel = (function () {
             if (self.CreateMashupTokenOptions() > GnMashupTokenOptions.NoOptions) {
                 params['options'] = self.CreateMashupTokenOptions();
             }
-            if (self.CreateMashupTokenDate() != '') {
+            if (self.CreateMashupTokenDate() && self.CreateMashupTokenDate().length > 0) {
                 params['validToTicks'] = GetTicksFromDate(moment.utc(self.CreateMashupTokenDate()).add(1, "d").toDate());
             }
             var queryString = Object.keys(params).map(function (key) {
@@ -623,6 +629,10 @@ var MashupAdminViewModel = (function () {
             var img = new Image();
             img.onload = function () {
                 self.CreateMashupTokenSrc(src);
+                self.RequestActiveMashupTokenNew(false);
+            };
+            img.onerror = function () {
+                dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
                 self.RequestActiveMashupTokenNew(false);
             };
             img.src = src;

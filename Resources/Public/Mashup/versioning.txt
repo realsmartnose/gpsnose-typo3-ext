@@ -1,3 +1,6 @@
+1.1.0
+- UPD: Update to Bootstrap V5
+
 1.0.15
 - FIX: Fix community-button for Bootstrap-V4.4.x
 - UPD: Add knockout 3.5.1
