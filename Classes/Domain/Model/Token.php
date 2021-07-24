@@ -41,7 +41,7 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @var float
      */
-    protected $valuePerUnit = 0.0;
+    protected $valuePerUnit = null;
 
     /**
      * @var string
@@ -218,7 +218,7 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @return int
+     * @return float|null
      */
     public function getValuePerUnit()
     {
@@ -226,7 +226,7 @@ class Token extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @param int $valuePerUnit
+     * @param float $valuePerUnit
      */
     public function setValuePerUnit($valuePerUnit)
     {

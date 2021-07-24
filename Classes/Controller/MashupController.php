@@ -921,10 +921,10 @@ class MashupController extends BaseController
         if ($gnLogin != NULL && $gnLoginApi->getIsLoggedIn()) {
             try {
                 $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
-                $qr_code_image = $mashupTokensApi->GenerateQrTokenForMashup($token->getPayload(), intval($token->getValidUntilTicks()), $token->getValuePerUnit(), $token->getLabel(), $token->getOptions());
+                $qr_code_image = $mashupTokensApi->GenerateQrTokenForMashup($token->getPayload(), intval($token->getValidUntilTicks()), floatval($token->getValuePerUnit()), $token->getLabel(), $token->getOptions());
                 $this->view->assign('qr_code_image', base64_encode($qr_code_image));
 
-                $qr_code_text = $mashupTokensApi->GenerateQrTokenForMashupAsTextLink($token->getPayload(), intval($token->getValidUntilTicks()), $token->getValuePerUnit(), $token->getLabel(), $token->getOptions());
+                $qr_code_text = $mashupTokensApi->GenerateQrTokenForMashupAsTextLink($token->getPayload(), intval($token->getValidUntilTicks()), floatval($token->getValuePerUnit()), $token->getLabel(), $token->getOptions());
                 $this->view->assign('qr_code_text', $qr_code_text);
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
@@ -1095,7 +1095,7 @@ class MashupController extends BaseController
 
         $token->setCheckboxByOption();
 
-        if (!GnUtil::IsNullOrEmpty($token->getValidUntilTicks())) {
+        if (!GnUtil::IsNullOrEmpty($token->getValidUntilTicks()) && $token->getValidUntilTicks() != '0') {
             $validUntilDate = GnUtil::DateFromTicks($token->getValidUntilTicks());
             $token->setValidUntilDateString($validUntilDate->format("Y-m-d"));
         }
