@@ -29,6 +29,9 @@ var BaseViewModel = (function () {
         return gnSettings.BaseUrl + "/Components/QrCode?tag=" + encodeURIComponent(content);
     };
     BaseViewModel.prototype.GetLoginUrl = function (url) {
+        if (window.location.href.indexOf('/Account/Login') > -1) {
+            return url;
+        }
         var encUrl = encodeURIComponent("/" + window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, ""));
         return (url ? url : '/Account/Login') + '?returnUrl=' + encUrl;
     };
