@@ -18,9 +18,6 @@ return [
         'iconfile' => 'EXT:gpsnose/Resources/Public/Icons/tx_gpsnose_domain_model_mashup.gif',
         'readOnly' => 1
     ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden, community_tag, validation_key, app_key, validation_ticks, max_calls_daily, max_calls_monthly, max_sub_sites, max_hosts, mashup_token_callback_url, sub_communities, hosts, call_history, exceeded_quota_history, tokens'
-    ],
     'types' => [
         '1' => [
             'showitem' => 'hidden, community_tag, validation_key, app_key, validation_ticks, max_calls_daily, max_calls_monthly, max_sub_sites, max_hosts, mashup_token_callback_url, sub_communities, hosts, call_history, exceeded_quota_history, tokens, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'

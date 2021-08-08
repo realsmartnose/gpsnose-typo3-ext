@@ -1,5 +1,6 @@
 2.1.1
 - FIX: Fix token properties
+- FIX: Fix deprecations
 
 2.1.0
 - ADD: Compatibility for Bootstrap 3, 4 and 5
