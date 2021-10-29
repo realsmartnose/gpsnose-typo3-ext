@@ -2,7 +2,6 @@
 
 namespace SmartNoses\Gpsnose\Controller;
 
-use SmartNoses\Gpsnose\Service\GnNearbyService;
 use SmartNoses\Gpsnose\Service\GnCommentService;
 use GpsNose\SDK\Mashup\Framework\GnUtil;
 use GpsNose\SDK\Mashup\Model\GnMashupTokenOptions;
@@ -15,6 +14,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use GpsNose\SDK\Framework\Logging\GnLogger;
 use GpsNose\SDK\Mashup\Api\GnApi;
 use GpsNose\SDK\Web\Login\GnAuthentication;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
+use SmartNoses\Gpsnose\Domain\Repository\TokenRepository;
 
 /**
  * *
@@ -48,7 +50,6 @@ class ApiController extends BaseController
      * mashupRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $mashupRepository = NULL;
 
@@ -56,7 +57,6 @@ class ApiController extends BaseController
      * tokenRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\TokenRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $tokenRepository = NULL;
 
@@ -66,6 +66,9 @@ class ApiController extends BaseController
     public function __construct()
     {
         parent::__construct();
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->mashupRepository = $objectManager->get(MashupRepository::class);
+        $this->tokenRepository = $objectManager->get(TokenRepository::class);
     }
 
     /**

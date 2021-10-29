@@ -14,6 +14,8 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
+use SmartNoses\Gpsnose\Domain\Repository\TokenRepository;
+use SmartNoses\Gpsnose\Domain\Repository\FrontendUserGroupRepository;
 use TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems;
 use GpsNose\SDK\Mashup\Framework\GnSettings;
 use GpsNose\SDK\Mashup\Model\GnMashupTokenOptions;
@@ -25,6 +27,7 @@ use GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 use GpsNose\SDK\Framework\Logging\GnLogger;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 /**
  * *
@@ -48,7 +51,6 @@ class MashupController extends BaseController
      * persistenceManager
      *
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
-     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $persistenceManager = NULL;
 
@@ -56,7 +58,6 @@ class MashupController extends BaseController
      * mashupRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $mashupRepository = NULL;
 
@@ -64,7 +65,6 @@ class MashupController extends BaseController
      * tokenRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\TokenRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $tokenRepository = NULL;
 
@@ -72,7 +72,6 @@ class MashupController extends BaseController
      * frontendUserGroupRepository
      * 
      * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserGroupRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $frontendUserGroupRepository = NULL;
 
@@ -111,6 +110,12 @@ class MashupController extends BaseController
     public function __construct()
     {
         parent::__construct();
+
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->mashupRepository = $objectManager->get(MashupRepository::class);
+        $this->tokenRepository = $objectManager->get(TokenRepository::class);
+        $this->frontendUserGroupRepository = $objectManager->get(FrontendUserGroupRepository::class);
+        $this->persistenceManager = $objectManager->get(PersistenceManager::class);
 
         $this->_gnApi = new GnApi();
 

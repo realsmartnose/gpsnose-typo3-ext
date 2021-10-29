@@ -5,6 +5,10 @@ use GpsNose\SDK\Mashup\Api\GnApi;
 use GpsNose\SDK\Web\Login\GnAuthentication;
 use GpsNose\SDK\Mashup\Framework\GnUtil;
 use SmartNoses\Gpsnose\Utility\GnUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository;
+use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 
 /**
  * *
@@ -28,7 +32,6 @@ class LoginController extends BaseController
      * mashupRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $mashupRepository = NULL;
 
@@ -36,7 +39,6 @@ class LoginController extends BaseController
      * frontendUserRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $frontendUserRepository = NULL;
 
@@ -61,6 +63,9 @@ class LoginController extends BaseController
     public function __construct()
     {
         parent::__construct();
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->mashupRepository = $objectManager->get(MashupRepository::class);
+        $this->frontendUserRepository = $objectManager->get(FrontendUserRepository::class);
 
         $this->_gnApi = new GnApi();
 
