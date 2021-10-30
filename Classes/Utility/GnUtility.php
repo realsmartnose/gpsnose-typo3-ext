@@ -20,6 +20,7 @@ use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use GpsNose\SDK\Framework\GnCryptor;
 use GpsNose\SDK\Framework\Logging\GnLogger;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 class GnUtility
 {
@@ -194,6 +195,13 @@ class GnUtility
         $_POST['pass'] = $password;
         $authService = GeneralUtility::makeInstance(FrontendUserAuthentication::class);
         $authService->start();
+        if ($authService->loginFailure) {
+            return false;
+        }
+
+        if (self::isVersion11() && $authService->setCookie !== null) {
+            header('Set-Cookie: ' . $authService->setCookie->__toString());
+        }
 
         return TRUE;
     }
@@ -305,4 +313,31 @@ class GnUtility
     {
         $GLOBALS['TSFE']->fe_user->logoff();
     }
-}
+
+    /**
+     * Check for TYPO3 Version 10
+     *
+     * @return bool $isVersion10 True if TYPO3 is version 10
+     */
+    public static function isVersion10(): bool
+    {
+        $typo3versionAsInt = VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getCurrentTypo3Version());
+        if ($typo3versionAsInt > 10000000 && $typo3versionAsInt < 11000000) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check for TYPO3 Version 11
+     *
+     * @return bool $isVersion11 True if TYPO3 is version 11
+     */
+    public static function isVersion11(): bool
+    {
+        $typo3versionAsInt = VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getCurrentTypo3Version());
+        if ($typo3versionAsInt > 11000000 && $typo3versionAsInt < 12000000) {
+            return true;
+        }
+        return false;
+    }}

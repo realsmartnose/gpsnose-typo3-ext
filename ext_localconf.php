@@ -244,7 +244,7 @@ call_user_func(
 
         // Add GpsNoseBasedAuthenticationService
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
-            $extKey,
+            'gnLogin',
             'auth',
             \SmartNoses\Gpsnose\Authentication\GpsNoseBasedAuthenticationService::class,
             [
