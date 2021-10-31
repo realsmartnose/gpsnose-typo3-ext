@@ -4,112 +4,112 @@ defined('TYPO3_MODE') || die('Access denied.');
 call_user_func(
     function ($extKey) {
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Members',
-            [\SmartNoses\Gpsnose\Controller\MemberController::class => 'index'],
-            [\SmartNoses\Gpsnose\Controller\MemberController::class => 'index']
+            ['Member' => 'index'],
+            ['Member' => 'index']
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Pagemembers',
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'pageMembers'],
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'pageMembers']
+            ['Api' => 'pageMembers'],
+            ['Api' => 'pageMembers']
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'News',
-            [\SmartNoses\Gpsnose\Controller\NewsController::class => 'index'],
-            [\SmartNoses\Gpsnose\Controller\NewsController::class => 'index']
+            ['News' => 'index'],
+            ['News' => 'index']
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Pagenews',
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'pageNews'],
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'pageNews']
+            ['Api' => 'pageNews'],
+            ['Api' => 'pageNews']
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Commentscommunity',
-            [\SmartNoses\Gpsnose\Controller\CommentController::class => 'community'],
-            [\SmartNoses\Gpsnose\Controller\CommentController::class => 'community']
+            ['Comment' => 'community'],
+            ['Comment' => 'community']
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Pagecomments',
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'pageComments'],
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'pageComments']
+            ['Api' => 'pageComments'],
+            ['Api' => 'pageComments']
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Commentsave',
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'commentSave'],
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'commentSave']
+            ['Api' => 'commentSave'],
+            ['Api' => 'commentSave']
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Loginqrcode',
-            [\SmartNoses\Gpsnose\Controller\LoginController::class => 'qrcode'],
-            [\SmartNoses\Gpsnose\Controller\LoginController::class => 'qrcode']
+            ['Login' => 'qrcode'],
+            ['Login' => 'qrcode']
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Loginverifie',
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'loginVerifie'],
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'loginVerifie']
+            ['Api' => 'loginVerifie'],
+            ['Api' => 'loginVerifie']
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Qrscanindex',
-            [\SmartNoses\Gpsnose\Controller\QrscanController::class => 'index'],
-            [\SmartNoses\Gpsnose\Controller\QrscanController::class => 'index']
+            ['Qrscan' => 'index'],
+            ['Qrscan' => 'index']
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Validatesecuritytoken',
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'validateSecurityToken'],
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'validateSecurityToken']
+            ['Api' => 'validateSecurityToken'],
+            ['Api' => 'validateSecurityToken']
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Nearbynoses',
-            [\SmartNoses\Gpsnose\Controller\NearbyController::class => 'noses'],
-            [\SmartNoses\Gpsnose\Controller\NearbyController::class => 'noses']
+            ['Nearby' => 'noses'],
+            ['Nearby' => 'noses']
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Nearbyimpressions',
-            [\SmartNoses\Gpsnose\Controller\NearbyController::class => 'impressions'],
-            [\SmartNoses\Gpsnose\Controller\NearbyController::class => 'impressions']
+            ['Nearby' => 'impressions'],
+            ['Nearby' => 'impressions']
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Nearbypois',
-            [\SmartNoses\Gpsnose\Controller\NearbyController::class => 'pois'],
-            [\SmartNoses\Gpsnose\Controller\NearbyController::class => 'pois']
+            ['Nearby' => 'pois'],
+            ['Nearby' => 'pois']
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Nearbytracks',
-            [\SmartNoses\Gpsnose\Controller\NearbyController::class => 'tracks'],
-            [\SmartNoses\Gpsnose\Controller\NearbyController::class => 'tracks']
+            ['Nearby' => 'tracks'],
+            ['Nearby' => 'tracks']
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Nearbyevents',
-            [\SmartNoses\Gpsnose\Controller\NearbyController::class => 'events'],
-            [\SmartNoses\Gpsnose\Controller\NearbyController::class => 'events']
+            ['Nearby' => 'events'],
+            ['Nearby' => 'events']
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Gpsnose',
+            'SmartNoses.Gpsnose',
             'Mashupcallback',
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'mashupCallback'],
-            [\SmartNoses\Gpsnose\Controller\ApiController::class => 'mashupCallback']
+            ['Api' => 'mashupCallback'],
+            ['Api' => 'mashupCallback']
         );
 
         // wizards
