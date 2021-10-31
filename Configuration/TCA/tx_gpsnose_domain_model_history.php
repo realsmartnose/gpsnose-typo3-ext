@@ -17,9 +17,6 @@ return [
         'iconfile' => 'EXT:gpsnose/Resources/Public/Icons/tx_gpsnose_domain_model_history.gif',
         'readOnly' => 1
     ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden, ticks, count'
-    ],
     'types' => [
         '1' => [
             'showitem' => 'hidden, ticks, count, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'

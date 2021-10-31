@@ -17,9 +17,6 @@ return [
         'iconfile' => 'EXT:gpsnose/Resources/Public/Icons/tx_gpsnose_domain_model_host.gif',
         'readOnly' => 1
     ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden, domain'
-    ],
     'types' => [
         '1' => [
             'showitem' => 'hidden, domain, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'

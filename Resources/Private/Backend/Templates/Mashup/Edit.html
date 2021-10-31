@@ -1,4 +1,6 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
     xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
     xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
     data-namespace-typo3-fluid="true">
@@ -11,12 +13,10 @@
 
 <f:section name="buttons">
     <f:link.action action="list" class="btn btn-default">
-        <core:icon identifier="fa-chevron-left" />
-        <f:translate key="Common_btnBackToList" />
+        <core:icon identifier="fa-chevron-left" /> <f:translate key="Common_btnBackToList" />
     </f:link.action>
     <f:link.action action="edit" arguments="{mashup : mashup}" class="btn btn-default">
         <core:icon identifier="fa-refresh" />
-        <f:translate key="Common_btnRefresh" />
     </f:link.action>
 </f:section>
 
@@ -59,14 +59,13 @@
                                     <div class="input-group">
 
                                         <div class="input-group-btn">
-                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <span class="keyword-label" id="description"></span>
-                                                <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <f:for each="{visibilities}" as="description" key="visibility">
                                                     <li>
-                                                        <a href="javascript:changeVisibility('{visibility}', '{description}');"><span class="keyword-label"><nose:community.label tag="{visibility}{description}" /></span></a>
+                                                        <a href="javascript:changeVisibility('{visibility}', '{description}');" class="dropdown-item"><span class="keyword-label"><nose:community.label tag="{visibility}{description}" /></span></a>
                                                     </li>
                                                 </f:for>
                                             </ul>

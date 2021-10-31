@@ -37,7 +37,7 @@ define(['jquery', 'maframework'], function($) {
         if (callbackUrl != '') {
             $('#mashupTokenCallbackUrl').val(callbackUrl).trigger('input');
         } else {
-            alert('The mashup-callback-url could not be generated, please set hte mashup.callbackPid in constants');
+            alert('The mashup-callback-url could not be generated, please set the mashup.callbackPid in constants');
         }
     });
 

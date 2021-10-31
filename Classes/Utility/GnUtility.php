@@ -194,8 +194,11 @@ class GnUtility
         $_POST['pass'] = $password;
         $authService = GeneralUtility::makeInstance(FrontendUserAuthentication::class);
         $authService->start();
+        if ($authService->loginFailure) {
+            return false;
+        }
 
-        return TRUE;
+        return true;
     }
 
     /**

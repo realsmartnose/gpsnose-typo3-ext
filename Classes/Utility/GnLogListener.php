@@ -34,7 +34,7 @@ class GnLogListener implements GnILogListener
 
             case GnLogLevel::Information:
                 $this->logger->info($message, []);
-                $this->WriteSystemLog($message, 1);
+                $this->WriteSystemLog($message, 0);
                 break;
 
             case GnLogLevel::Warning:
@@ -44,7 +44,7 @@ class GnLogListener implements GnILogListener
 
             case GnLogLevel::Error:
                 $this->logger->error($message, []);
-                $this->WriteSystemLog($message, 2);
+                $this->WriteSystemLog($message, 1);
                 break;
 
             case GnLogLevel::Critical:

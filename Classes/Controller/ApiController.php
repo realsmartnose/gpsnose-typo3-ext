@@ -2,7 +2,6 @@
 
 namespace SmartNoses\Gpsnose\Controller;
 
-use SmartNoses\Gpsnose\Service\GnNearbyService;
 use SmartNoses\Gpsnose\Service\GnCommentService;
 use GpsNose\SDK\Mashup\Framework\GnUtil;
 use GpsNose\SDK\Mashup\Model\GnMashupTokenOptions;

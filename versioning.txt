@@ -1,5 +1,7 @@
 1.8.1
+- FIX: Fix Backend-Template
 - FIX: Fix token properties
+- FIX: Fix deprecations
 
 1.8.0
 - ADD: Compatibility for Bootstrap 3, 4 and 5

@@ -20,9 +20,6 @@ return [
         'iconfile' => 'EXT:gpsnose/Resources/Public/Icons/tx_gpsnose_domain_model_token.gif',
         'readOnly' => 1
     ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden, payload, options, value_per_unit, label, valid_until_ticks, creation_ticks, created_by_login_name, callback_response, token_scans'
-    ],
     'types' => [
         '1' => [
             'showitem' => 'hidden, payload, options, value_per_unit, label, valid_until_ticks, creation_ticks, created_by_login_name, callback_response, token_scans, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'

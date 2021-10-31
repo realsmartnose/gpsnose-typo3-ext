@@ -20,9 +20,6 @@ return [
         'iconfile' => 'EXT:gpsnose/Resources/Public/Icons/tx_gpsnose_domain_model_tokenscan.gif',
         'readOnly' => 1
     ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden, scanned_by_login_name, scanned_ticks, recorded_ticks, scanned_latitude, scanned_longitude, callback_response_http_code, callback_response_message, is_batch_completed, amount, comment, is_gps_sharing_wanted, value_per_unit, label, valid_until_ticks, creation_ticks, created_by_login_name, batch_creation_ticks, token'
-    ],
     'types' => [
         '1' => [
             'showitem' => 'hidden, scanned_by_login_name, scanned_ticks, recorded_ticks, scanned_latitude, scanned_longitude, callback_response_http_code, callback_response_message, is_batch_completed, amount, comment, is_gps_sharing_wanted, value_per_unit, label, valid_until_ticks, creation_ticks, created_by_login_name, batch_creation_ticks, token, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'
