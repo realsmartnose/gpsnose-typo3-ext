@@ -76,7 +76,8 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         if (file_exists($originalFilePath)) {
             $movedNewFile = $storage->addFile($originalFilePath, $targetFolder, $newFileName);
-            $newFileReference = $this->objectManager->get('SmartNoses\Gpsnose\Domain\Model\FileReference');
+            /** @var \SmartNoses\Gpsnose\Domain\Model\FileReference */
+            $newFileReference = $this->objectManager->get(\SmartNoses\Gpsnose\Domain\Model\FileReference::class);
             $newFileReference->setFile($movedNewFile);
             return $newFileReference;
         }
