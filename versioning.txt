@@ -1,3 +1,6 @@
+2.1.2
+- FIX: Fix pageMembers
+
 2.1.1
 - FIX: Fix v11 compatibility
 - FIX: Fix token properties

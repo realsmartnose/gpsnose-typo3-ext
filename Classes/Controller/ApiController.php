@@ -88,7 +88,7 @@ class ApiController extends BaseController
             $lastKnownTicks = NULL;
         }
 
-        $communityTag = $_POST['community'];
+        $communityTag = $_POST['profileTag'];
 
         if (!GnUtil::IsNullOrEmpty($communityTag)) {
             $memberService = new GnMemberService(GnUtility::getLanguage());
