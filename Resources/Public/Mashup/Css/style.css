@@ -24,6 +24,8 @@
     border: 1px solid #ddd;
     border-radius: 6px;
     padding: 6px; }
+    .ma-gpsnose .outer > div {
+      overflow: hidden; }
   .ma-gpsnose .inactive {
     opacity: 0.4; }
   .ma-gpsnose .thumbnail {
