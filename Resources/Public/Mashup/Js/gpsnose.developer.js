@@ -240,12 +240,13 @@ var MashupAdminViewModel = (function () {
             type: 'POST',
             url: this.MashupTokenPageUrl,
             cache: false,
-            data: {
+            data: JSON.stringify({
                 appKey: this.CurrentMashup().AppKey(),
                 lastKnownScanTicks: this.MashupTokensLastKnownTicks,
                 pageSize: this.MashupTokensPageSize
-            },
+            }),
             dataType: 'json',
+            contentType: 'application/json',
             success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
@@ -292,6 +293,8 @@ var MashupAdminViewModel = (function () {
     ;
     MashupAdminViewModel.prototype.MashupToken = function (mashup) {
         this.CurrentMashup(mashup);
+        this.HasMoreMashupTokens(true);
+        this.MashupTokens([]);
         this.FormType(MashupFormTypeEnum.MashupToken);
         if (this.OnMashupToken) {
             this.OnMashupToken(mashup);
@@ -338,8 +341,9 @@ var MashupAdminViewModel = (function () {
             type: 'POST',
             url: '/MashupAdmin/GetOwnMashups',
             cache: false,
-            data: {},
+            data: JSON.stringify({}),
             dataType: 'json',
+            contentType: 'application/json',
             success: function (result) {
                 self.RequestActiveOwnMashups(false);
                 if (result.ErrorCode > 0) {
@@ -376,10 +380,11 @@ var MashupAdminViewModel = (function () {
                 type: 'POST',
                 url: '/MashupAdmin/RegisterCommunityWeb',
                 cache: false,
-                data: {
+                data: JSON.stringify({
                     tag: tag
-                },
+                }),
                 dataType: 'json',
+                contentType: 'application/json',
                 success: function (result) {
                     self.RequestActiveRegisterCommunity(false);
                     if (result.ErrorCode > 0) {
@@ -412,10 +417,11 @@ var MashupAdminViewModel = (function () {
             type: 'POST',
             url: '/MashupAdmin/ValidateCommunityWeb',
             cache: false,
-            data: {
+            data: JSON.stringify({
                 tag: tag
-            },
+            }),
             dataType: "json",
+            contentType: 'application/json',
             success: function (result) {
                 self.RequestActiveValidateCommunity(false);
                 if (result.ErrorCode > 0) {
@@ -469,12 +475,13 @@ var MashupAdminViewModel = (function () {
                 type: 'POST',
                 url: '/MashupAdmin/UpdateCommunityWeb',
                 cache: false,
-                data: {
+                data: JSON.stringify({
                     tag: self.CurrentMashup().CommunityTag(),
                     hosts: this.Hosts().slice(0),
                     mashupTokenCallbackUrl: self.MashupTokenCallbackUrlValue()
-                },
+                }),
                 dataType: 'json',
+                contentType: 'application/json',
                 success: function (result) {
                     self.RequestActiveUpdateCommunity(false);
                     if (self.CurrentMashup()) {
@@ -505,10 +512,11 @@ var MashupAdminViewModel = (function () {
                     type: 'POST',
                     url: '/MashupAdmin/RegenerateAppKey',
                     cache: false,
-                    data: {
+                    data: JSON.stringify({
                         tag: tag
-                    },
+                    }),
                     dataType: 'json',
+                    contentType: 'application/json',
                     success: function (result) {
                         self.RequestActiveRegenerateAppKey(false);
                         if (result.ErrorCode > 0) {
@@ -540,10 +548,11 @@ var MashupAdminViewModel = (function () {
                     type: 'POST',
                     url: '/MashupAdmin/AddSubCommunity',
                     cache: false,
-                    data: {
+                    data: JSON.stringify({
                         tag: tag
-                    },
+                    }),
                     dataType: 'json',
+                    contentType: 'application/json',
                     success: function (result) {
                         self.RequestActiveAddSubCommunity(false);
                         if (result.ErrorCode > 0) {
@@ -580,10 +589,11 @@ var MashupAdminViewModel = (function () {
                 type: 'POST',
                 url: '/MashupAdmin/DelSubCommunity',
                 cache: false,
-                data: {
+                data: JSON.stringify({
                     tag: tag
-                },
+                }),
                 dataType: 'json',
+                contentType: 'application/json',
                 success: function (result) {
                     self.RequestActiveDelSubCommunity(false);
                     if (result.ErrorCode > 0) {

@@ -970,8 +970,9 @@ var KeepAliveViewModel = (function () {
             type: 'POST',
             url: '/Login/IsStillLoggedIn',
             cache: false,
-            data: {},
+            data: JSON.stringify({}),
             dataType: 'json',
+            contentType: 'application/json',
             success: function (result) {
                 if (onFinish != null)
                     onFinish(result);
