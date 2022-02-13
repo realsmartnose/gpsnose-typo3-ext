@@ -1,4 +1,5 @@
 <?php
+
 namespace SmartNoses\Gpsnose\UserFuncs;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -9,6 +10,13 @@ use GpsNose\SDK\Framework\Logging\GnLogger;
 
 class GnLogin
 {
+    /**
+     * Reference to the parent (calling) cObject set from TypoScript
+     *
+     * @var ContentObjectRenderer
+     */
+    public $cObj;
+
     /**
      * @param  mixed $content
      * @param  mixed $conf
@@ -45,7 +53,7 @@ class GnLogin
                 GnLogger::LogException($e);
             }
 
-            if (isset($conf['output.'])) {
+            if (isset($conf['output.']) && $this->cObj) {
                 return $this->cObj->stdWrap($conf['output'], $conf['output.']);
             } else if (isset($conf['output'])) {
                 return $conf['output'];
