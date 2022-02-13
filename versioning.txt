@@ -1,5 +1,6 @@
 2.1.3
 - UPD: Update SDK to 1.1.3
+- FIX: Fix Login from App
 
 2.1.2
 - FIX: Fix pageMembers
