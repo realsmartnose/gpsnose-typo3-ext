@@ -632,20 +632,36 @@ var MashupAdminViewModel = (function () {
             if (self.CreateMashupTokenDate() && self.CreateMashupTokenDate().length > 0) {
                 params['validToTicks'] = GetTicksFromDate(moment.utc(self.CreateMashupTokenDate()).add(1, "d").toDate());
             }
-            var queryString = Object.keys(params).map(function (key) {
-                return key + '=' + encodeURIComponent(params[key]);
-            }).join('&');
-            var src = "/MashupApi/GenerateQrTokenForMashup?" + queryString;
-            var img = new Image();
-            img.onload = function () {
-                self.CreateMashupTokenSrc(src);
-                self.RequestActiveMashupTokenNew(false);
-            };
-            img.onerror = function () {
-                dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
-                self.RequestActiveMashupTokenNew(false);
-            };
-            img.src = src;
+            var src = "/MashupApi/GenerateQrTokenForMashup";
+            $.ajax({
+                type: "POST",
+                url: src,
+                data: JSON.stringify(params),
+                contentType: 'application/json',
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.responseType = 'blob';
+                    return xhr;
+                },
+                success: function (data) {
+                    try {
+                        var reader_1 = new FileReader();
+                        reader_1.addEventListener("load", function () {
+                            self.CreateMashupTokenSrc(reader_1.result);
+                            self.RequestActiveMashupTokenNew(false);
+                        }, false);
+                        reader_1.readAsDataURL(data);
+                    }
+                    catch (error) {
+                        dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
+                        self.RequestActiveMashupTokenNew(false);
+                    }
+                },
+                error: function () {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
+                    self.RequestActiveMashupTokenNew(false);
+                }
+            });
         }
         else {
             self.CreateMashupTokenSrc("");

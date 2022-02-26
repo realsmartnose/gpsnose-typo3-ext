@@ -41,7 +41,9 @@ class GnBaseService
     public function __construct($langId)
     {
         $this->_langId = $langId;
-        $this->frontendController = $GLOBALS['TSFE'];
+        if (isset($GLOBALS['TSFE'])) {
+            $this->frontendController = $GLOBALS['TSFE'];
+        }
 
         $this->_gnApi = new GnApi();
         GnLogConfig::AddListener(new GnLogListener());

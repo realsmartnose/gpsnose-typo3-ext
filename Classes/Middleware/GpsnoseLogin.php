@@ -14,11 +14,17 @@ class GpsnoseLogin implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
+        $loginId = null;
         $queryParams = $request->getQueryParams();
-        $loginId = $queryParams['gnlid'];
+        if (isset($queryParams['gnlid'])) {
+            $loginId = $queryParams['gnlid'];
+        }
 
+        $redirectUri = null;
         $headers = $response->getHeaders();
-        $redirectUri = $headers["location"][0];
+        if (isset($headers["location"])) {
+            $redirectUri = $headers["location"][0];
+        }
 
         if ($loginId && !empty($redirectUri) && !strstr($redirectUri, '?gnlid=') && $redirectUri != (string)$request->getUri()->withQuery('')) {
             return new RedirectResponse($redirectUri . '?gnlid=' . $loginId, 301);

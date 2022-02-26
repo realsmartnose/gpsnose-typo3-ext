@@ -49,7 +49,9 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function __construct()
     {
-        $this->frontendController = $GLOBALS['TSFE'];
+        if (isset($GLOBALS['TSFE'])) {
+            $this->frontendController = $GLOBALS['TSFE'];
+        }
         $this->gpsnoseConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['gpsnose'];
         if ($this->gpsnoseConf == NULL) {
             $this->gpsnoseConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['gpsnose']);

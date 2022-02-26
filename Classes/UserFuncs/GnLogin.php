@@ -24,7 +24,10 @@ class GnLogin
      */
     public function login($content, $conf)
     {
-        $loginId = $_GET["gnlid"];
+        $loginId = null;
+        if (isset($_GET["gnlid"])) {
+            $loginId = $_GET["gnlid"];
+        }
         if ($loginId) {
             try {
                 GnUtility::applyExtConf();
