@@ -713,7 +713,7 @@ ko.components.register('ma-gpsnose-comments', {
         '<div class="masonry-sizer col-md-4 col-sm-6"></div>' +
         '<!-- /ko -->' +
         '<div class="masonry-item col-md-4 col-sm-6">' +
-        '<div class="outer">' +
+        '<div class="outer shadow-sm">' +
         '<div class="media d-flex mb-2">' +
         '<div class="media-left mr-2 me-2">' +
         '<img class="media-object img-circle rounded-circle" width="32px" data-bind="attr: { src: $data.NoseDto.ImageUrl() + \'@200\', onerror: \'ImageErrorHandler(this, \\\'\' + $parent.ImagePath() + \'/EmptyUser.png\\\')\' }" />' +
