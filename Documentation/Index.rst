@@ -63,4 +63,5 @@ GpsNose
 	UsersManual/Index
 	KnownProblems/Index
 	TodoList/Index
+	ChangeLog/Index
 	Links
