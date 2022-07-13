@@ -29,7 +29,7 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.1.0">
+<div class="ma-gpsnose" data-gn-version="1.1.1">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-tracks" data-bind="visible:true" style="display:none;">
 
@@ -58,7 +58,7 @@ $(document).ready(function() {
                             <div class="outer">
                                 <div class="media d-flex mb-2">
                                     <div class="media-left mr-2 me-2">
-                                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: window.gn_data.Settings.ImagePath+'/EmptyTour' + $data.TrackType + '.png' }" onerror="ImageErrorHandler(this, window.gn_data.Settings.ImagePath+'/EmptyMap.png')" />
+                                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: $data.ImageUrl() }" onerror="ImageErrorHandler(this, window.gn_data.Settings.ImagePath+'/EmptyTour.png')" />
                                     </div>
                                     <div class="media-body">
                                         <div class="media-height">
@@ -70,11 +70,12 @@ $(document).ready(function() {
                                 <div class="text-center">
                                     <ma-gpsnose-rating params="percent: $data.RatingAvgPercent, count: $data.RatingCount, imagePath: gn_data.Settings.ImagePath"></ma-gpsnose-rating>
                                 </div>
-                                <div class="row">
-                                    <div class="col-xs-8 col-8">
+                                <div class="d-flex">
+                                    <img class="ma-tour-icon mr-1 me-1" width="24px" data-bind="attr: { src: gn_data.Settings.ImagePath+'/TourType' + $data.TrackType + '.png' }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/TourType99.png')" />
+                                    <div class="flex-grow-1">
                                         <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
                                     </div>
-                                    <div class="col-xs-4 col-4 text-right text-end">
+                                    <div>
                                         <small data-bind="text: GetDistanceString($data)"></small>
                                     </div>
                                 </div>

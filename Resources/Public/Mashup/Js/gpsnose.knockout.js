@@ -1079,7 +1079,7 @@ var KeywordsViewModel = (function () {
     };
     KeywordsViewModel.prototype.AddKeyword = function () {
         if (this.NewKeyword().length > 0) {
-            var newKeywordStrings = this.NewKeyword().replace(/[^a-zA-Z0-9\ \.\-_]/gi, '');
+            var newKeywordStrings = this.NewKeyword().replace(/[^a-zA-Z0-9À-ÿ\ \.\-_]/gi, '');
             var keywordsArray = [];
             var i = 0;
             ko.utils.arrayForEach(newKeywordStrings.split(' '), function (newKeywordString) {
@@ -2574,10 +2574,10 @@ var TourDto = (function (_super) {
         var _this = _super.call(this, data) || this;
         _this.ThumbSize = "";
         _this.ImageUrl = function () {
-            return "";
+            return gnSettings.BaseDataUrl + "/toursimg/" + encodeURIComponent(_this.UniqueKey);
         };
         _this.ThumbUrl = function () {
-            return "";
+            return _this.ImageUrl() + _this.ThumbSize;
         };
         _this.PreviewUrl = function () {
             return "/track/preview/" + encodeURIComponent(_this.UniqueKey);

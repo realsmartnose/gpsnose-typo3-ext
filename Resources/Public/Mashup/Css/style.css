@@ -1,6 +1,10 @@
 .ma-gpsnose {
   margin-bottom: 25px;
 }
+.ma-gpsnose .ma-tour-icon {
+  width: 24px;
+  height: auto;
+}
 .ma-gpsnose .ma-btn-group {
   margin-bottom: 15px;
 }

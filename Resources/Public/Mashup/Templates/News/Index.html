@@ -23,7 +23,7 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.1.0">
+<div class="ma-gpsnose" data-gn-version="1.1.1">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-news" data-bind="visible:true" style="display: none;">
 
@@ -238,7 +238,7 @@ $(function() {
             <div data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media d-flex mb-2">
                     <div class="media-left mr-2 me-2">
-                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: gn_data.Settings.ImagePath+'/EmptyTour' + $data.Track_TrackType + '.png' }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyMap.png')" />
+                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyTour.png')" />
                     </div>
                     <div class="media-body">
                         <div class="media-height">
@@ -247,8 +247,13 @@ $(function() {
                         </div>
                     </div>
                 </div>
-                <div class="text-center">
-                    <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
+                <div class="d-flex">
+                    <img class="ma-tour-icon" width="24px" data-bind="attr: { src: gn_data.Settings.ImagePath+'/TourType' + $data.Track_TrackType + '.png' }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/TourType99.png')" />
+                    <div class="flex-grow-1">
+                        <div class="text-center">
+                            <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -261,7 +266,7 @@ $(function() {
             <div data-external data-bind="attr: { 'data-src': $data.DetailUrl(), disabled: $data.IsNowDeleted }">
                 <div class="media d-flex mb-2">
                     <div class="media-left mr-2 me-2">
-                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: $data.ThumbUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyEvent.png')" />
+                        <img class="media-object img-rounded rounded media-height" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyEvent.png')" />
                     </div>
                     <div class="media-body">
                         <div>
@@ -286,7 +291,7 @@ $(function() {
                 <div>
                     <div class="comment-image-container clearfix">
                         <div data-bind="if: Comment_CommentItemType == 'Tour'">
-                            <img class="img-rounded comment-image-right" data-bind="attr: { src: gn_data.Settings.ImagePath+'/EmptyMap.png' }" />
+                            <img class="img-rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyTour.png')" />
                         </div>
                         <div data-bind="if: Comment_CommentItemType == 'FavoriteLocation'">
                             <img class="img-rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyPoi.png')" />
@@ -316,7 +321,7 @@ $(function() {
                 <div>
                     <div class="comment-image-container clearfix">
                         <div data-bind="if: Rating_RatedItemType == 'Tour'">
-                            <img class="img-rounded comment-image-right" data-bind="attr: { src: gn_data.Settings.ImagePath+'/EmptyMap.png' }" />
+                            <img class="img-rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyTour.png')" />
                         </div>
                         <div data-bind="if: Rating_RatedItemType == 'FavoriteLocation'">
                             <img class="img-rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }" onerror="ImageErrorHandler(this, gn_data.Settings.ImagePath+'/EmptyPoi.png')" />

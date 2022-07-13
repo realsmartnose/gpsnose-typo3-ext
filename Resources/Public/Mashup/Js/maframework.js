@@ -162,6 +162,9 @@ function GetAgeStringFromTicks(ticks) {
 function GetAgeString(ticksFrom, ticksTo, withPrefix, withSeconds) {
     var bigNumberFrom = new BigNumber(ticksFrom);
     var bigNumberTo = new BigNumber(ticksTo);
+    if (bigNumberFrom.compare(bigNumberTo) > 0) {
+        return GetAgeStringFromSecond(0, withPrefix, withSeconds);
+    }
     var age = moment.duration(parseInt(bigNumberTo.subtract(bigNumberFrom.valueOf()).divide(10000).valueOf()));
     return GetAgeStringFromSecond(age.asSeconds(), withPrefix, withSeconds);
 }
