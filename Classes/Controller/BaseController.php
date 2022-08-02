@@ -1,4 +1,5 @@
 <?php
+
 namespace SmartNoses\Gpsnose\Controller;
 
 use GpsNose\SDK\Mashup\Framework\GnUtil;
@@ -98,10 +99,13 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             if ($community) {
                 $communityArr = array();
                 $communityArr['TagName'] = $communityTag;
-                $communityArr['CreatorLoginName'] = $community->CreatorLoginName;
-                $communityArr['Acls'] = $community->AclsInt;
-                $communityArr['Admins'] = $community->Admins;
-                $communityArr['QrCodeJoinImage'] = 'data:image/png;base64,' . base64_encode($communityService->GetQrCodeJoinImage($communityTag));
+                $communityArr['CreatorLoginName'] = GnUtil::GetSaveProperty($community, "CreatorLoginName");
+                $communityArr['Acls'] = GnUtil::GetSaveProperty($community, "AclsInt");
+                $communityArr['Admins'] = GnUtil::GetSaveProperty($community, "Admins");
+                $getQrCode = $communityService->GetQrCodeJoinImage($communityTag);
+                if ($getQrCode) {
+                    $communityArr['QrCodeJoinImage'] = 'data:image/png;base64,' . base64_encode($communityService->GetQrCodeJoinImage($communityTag));
+                }
                 GnData::$Settings['Community'] = $communityArr;
             }
         }
@@ -115,10 +119,12 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         // gn_data.User
         $fe_user = $GLOBALS['TSFE']->fe_user->user;
         $user = array();
-        $user['LoginName'] = $fe_user['gpsnose_loginname'];
-        $user['IsActivated'] = $fe_user['gpsnose_is_activated'];
-        if (!GnUtil::IsNullOrEmpty($fe_user['gpsnose_communities'])) {
-            $user['Communities'] = explode(",", $fe_user['gpsnose_communities']);
+        if ($fe_user) {
+            $user['LoginName'] = $fe_user['gpsnose_loginname'];
+            $user['IsActivated'] = $fe_user['gpsnose_is_activated'];
+            if (!GnUtil::IsNullOrEmpty($fe_user['gpsnose_communities'])) {
+                $user['Communities'] = explode(",", $fe_user['gpsnose_communities']);
+            }
         }
         GnData::$Settings['User'] = $user;
         // gn_data.Settings

@@ -1,3 +1,6 @@
+1.1.2
+- UPD: Add app-type and tour-linked-items
+
 1.1.1
 - UPD: Add image for tours
 

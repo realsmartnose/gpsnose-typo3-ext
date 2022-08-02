@@ -54,7 +54,7 @@ var BaseViewModel = (function () {
         if (!keyword)
             return '';
         if (keyword.lastIndexOf("i-", 0) === 0 && keyword.length > 2) {
-            return keyword.substr(2);
+            return keyword.substring(2);
         }
         else if (keyword == "grillstelle-ch") {
             return "fireplace";
@@ -105,6 +105,40 @@ var BaseComponentsViewModel = (function () {
     BaseComponentsViewModel.prototype.GetLoginUrl = function (url) {
         var encUrl = encodeURIComponent("/" + window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, ""));
         return (url ? url : '/Account/Login') + '?returnUrl=' + encUrl;
+    };
+    BaseComponentsViewModel.prototype.GetPackageTitle = function (keywords) {
+        var appType = this.GetAppKeywordMarkFromKeywords(keywords);
+        if ((appType === null || appType === void 0 ? void 0 : appType.toLowerCase()) == "primaguide$") {
+            return GetLangRes('AppType_lblPrimaGuideTitle', 'PrimaGuide');
+        }
+        return null;
+    };
+    BaseComponentsViewModel.prototype.GetPackageMessage = function (keywords) {
+        var appType = this.GetAppKeywordMarkFromKeywords(keywords);
+        if ((appType === null || appType === void 0 ? void 0 : appType.toLowerCase()) == "primaguide$") {
+            return GetLangRes('AppType_lblPrimaGuideMessage', 'Download PrimaGuide, its free!');
+        }
+        return null;
+    };
+    BaseComponentsViewModel.prototype.GetPackageForAndroid = function (keywords) {
+        var appType = this.GetAppKeywordMarkFromKeywords(keywords);
+        if ((appType === null || appType === void 0 ? void 0 : appType.toLowerCase()) == "primaguide$") {
+            return "com.gpsnose.app.primaguide";
+        }
+        return null;
+    };
+    BaseComponentsViewModel.prototype.GetPackageForIos = function (keywords) {
+        var appType = this.GetAppKeywordMarkFromKeywords(keywords);
+        if ((appType === null || appType === void 0 ? void 0 : appType.toLowerCase()) == "primaguide$") {
+            return "1629067997";
+        }
+        return null;
+    };
+    BaseComponentsViewModel.prototype.GetAppKeywordMarkFromKeywords = function (keywords) {
+        var keyword = keywords === null || keywords === void 0 ? void 0 : keywords.find(function (keyword) {
+            return keyword.indexOf("$") > 0;
+        });
+        return keyword;
     };
     return BaseComponentsViewModel;
 }());
@@ -322,6 +356,48 @@ var CommunityDetailViewModel = (function (_super) {
     };
     return CommunityDetailViewModel;
 }(BaseViewModel));
+var AppTypeComponent = (function (_super) {
+    __extends(AppTypeComponent, _super);
+    function AppTypeComponent(params) {
+        var _this = this;
+        var _a;
+        _this = _super.call(this, params && params.imagePath || null) || this;
+        _this.Keywords = ko.observableArray((_a = params === null || params === void 0 ? void 0 : params.keywords) !== null && _a !== void 0 ? _a : []);
+        _this.PackageTitle = ko.observable(_this.GetPackageTitle(params === null || params === void 0 ? void 0 : params.keywords));
+        _this.PackageMessage = ko.observable(_this.GetPackageMessage(params === null || params === void 0 ? void 0 : params.keywords));
+        _this.PackageForIos = ko.observable(_this.GetPackageForIos(params === null || params === void 0 ? void 0 : params.keywords));
+        _this.PackageForAndroid = ko.observable(_this.GetPackageForAndroid(params === null || params === void 0 ? void 0 : params.keywords));
+        return _this;
+    }
+    return AppTypeComponent;
+}(BaseComponentsViewModel));
+ko.components.register('ma-gpsnose-apptype', {
+    viewModel: {
+        createViewModel: function (params, componentInfo) {
+            return new AppTypeComponent(params);
+        }
+    },
+    template: '<li class="list-group-item p-2" class="row" data-bind="if: PackageForIos || PackageForAndroid">' +
+        '<h3 class="text-center" data-bind="text: PackageTitle()"></h3>' +
+        '<p class="text-center" data-bind="text: PackageMessage()"></p>' +
+        '<div class="row">' +
+        '<div class="col-6">' +
+        '<div class="text-right text-end">' +
+        '<a data-bind="attr: { href: `https://itunes.apple.com/us/app/id` + PackageForIos() }" data-external role="button">' +
+        '<img height="40" alt="App Store" data-bind="attr: { src: ImagePath() + \'/badge_app_store.png\' }">' +
+        '</a>' +
+        '</div>' +
+        '</div>' +
+        '<div class="col-6">' +
+        '<div class="text-left text-start">' +
+        '<a data-bind="attr: { href: `https://play.google.com/store/apps/details?id=` + PackageForAndroid() }" data-external role="button">' +
+        '<img height="40" alt="Google Play" data-bind="attr: { src: ImagePath() + \'/badge_google_play.png\' }">' +
+        '</a>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</li>'
+});
 var CarouselViewModel = (function (_super) {
     __extends(CarouselViewModel, _super);
     function CarouselViewModel(params) {
@@ -1052,7 +1128,7 @@ var KeywordsViewModel = (function () {
         ko.utils.arrayForEach(data, function (newKeyword) {
             var addItem = true;
             ko.utils.arrayForEach(_this.Keywords() || [], function (keywordDto) {
-                if (newKeyword == keywordDto.Name()) {
+                if (newKeyword == keywordDto.Name() || newKeyword.indexOf('$') > 0) {
                     addItem = false;
                 }
             });
@@ -1390,12 +1466,12 @@ var EulaViewModel = (function (_super) {
         var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]|www\.gpsnose\.com)/ig;
         var text = text.replace(urlRegex, function (url) {
             if (url == 'www.gpsnose.com') {
-                return "<strong>" + url + "</strong>";
+                return "<strong>".concat(url, "</strong>");
             }
-            return "<a href=\"" + url + "\">" + url + "</a>";
+            return "<a href=\"".concat(url, "\">").concat(url, "</a>");
         });
         return text.replace(mailRegex, function (mail) {
-            return "<a href=\"" + mail + "\">" + mail + "</a>";
+            return "<a href=\"".concat(mail, "\">").concat(mail, "</a>");
         });
     };
     EulaViewModel.prototype.GetHeader = function (num, text, addToIndex) {

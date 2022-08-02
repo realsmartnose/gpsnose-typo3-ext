@@ -78,8 +78,6 @@ class FrontendUserGroupRepository
      * 
      * @param string $title
      *            Title of the FrontendUserGroup
-     * 
-     * @return \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup
      */
     public function addIfNotExistByTitle($title)
     {
@@ -89,7 +87,6 @@ class FrontendUserGroupRepository
             $userGroup->setDescription("Created by GpsNose");
             $this->repository->add($userGroup);
         }
-        return $userGroup;
     }
 
     /**

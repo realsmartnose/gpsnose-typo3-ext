@@ -66,18 +66,14 @@ class GnLogListener implements GnILogListener
      */
     private function WriteSystemLog(string $message = NULL, int $level = 0)
     {
+        $message = str_replace('%', '[percent]', $message);
         if ($GLOBALS['BE_USER']) {
             try {
                 $GLOBALS['BE_USER']->writelog(4, 0, $level, 0, '[gpsnose] ' . $message, []);
             } catch (\Exception $e) {
-                $message = str_replace('%', '%%', $message);
                 try {
-                    $GLOBALS['BE_USER']->writelog(4, 0, $level, 0, '[gpsnose] ' . $message, []);
-                } catch (\Exception $e1) {
-                    try {
-                        $GLOBALS['BE_USER']->writelog(4, 0, $level, 0, '[gpsnose] ' . utf8_encode($message), []);
-                    } catch (\Exception $e2) {
-                    }
+                    $GLOBALS['BE_USER']->writelog(4, 0, $level, 0, '[gpsnose] ' . utf8_encode($message), []);
+                } catch (\Exception $e2) {
                 }
             }
         } else {
@@ -86,14 +82,9 @@ class GnLogListener implements GnILogListener
             try {
                 $logger->debug($message, ['gpsnose', $level]);
             } catch (\Exception $e) {
-                $message = str_replace('%', '%%', $message);
                 try {
-                    $logger->debug($message, ['gpsnose', $level]);
-                } catch (\Exception $e1) {
-                    try {
-                        $logger->debug(utf8_encode($message), ['gpsnose', $level]);
-                    } catch (\Exception $e2) {
-                    }
+                    $logger->debug(utf8_encode($message), ['gpsnose', $level]);
+                } catch (\Exception $e2) {
                 }
             }
         }

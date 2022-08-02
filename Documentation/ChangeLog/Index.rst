@@ -7,6 +7,10 @@ Change log
 ==========
 
 
+Version 2.2.0
+-------------
+FIX: Add compatibility for PHP8
+
 Version 2.1.4
 -------------
 FIX: Bugfix
