@@ -7,9 +7,13 @@ Change log
 ==========
 
 
+Version 2.2.1
+-------------
+FIX: Fix return value for PHP 7.4
+
 Version 2.2.0
 -------------
-FIX: Add compatibility for PHP8
+UPD: Add compatibility for PHP8
 
 Version 2.1.4
 -------------

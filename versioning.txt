@@ -1,5 +1,8 @@
+2.2.1
+- FIX: Fix return value for PHP 7.4
+
 2.2.0
-- FIX: Add compatibility for PHP8
+- UPD: Add compatibility for PHP8
 
 2.1.4
 - FIX: Bugfix
