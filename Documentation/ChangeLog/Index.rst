@@ -7,6 +7,10 @@ Change log
 ==========
 
 
+Version 2.2.2
+-------------
+UPD: Update SDK to 1.2.2
+
 Version 2.2.1
 -------------
 FIX: Fix return value for PHP 7.4
