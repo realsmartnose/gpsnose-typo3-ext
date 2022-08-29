@@ -1128,11 +1128,11 @@ var KeywordsViewModel = (function () {
         ko.utils.arrayForEach(data, function (newKeyword) {
             var addItem = true;
             ko.utils.arrayForEach(_this.Keywords() || [], function (keywordDto) {
-                if (newKeyword == keywordDto.Name() || newKeyword.indexOf('$') > 0) {
+                if (newKeyword == keywordDto.Name()) {
                     addItem = false;
                 }
             });
-            if (addItem) {
+            if (addItem && newKeyword.indexOf('$') == -1) {
                 var selected = allSelected;
                 ko.utils.arrayForEach(_this.SelectedKeywords(), function (selectedKeyword) {
                     if (selectedKeyword == newKeyword) {
