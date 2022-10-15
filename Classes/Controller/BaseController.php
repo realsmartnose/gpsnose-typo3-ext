@@ -118,7 +118,7 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         // gn_data.User
         $fe_user = $GLOBALS['TSFE']->fe_user->user;
-        $user = array();
+        $user = [];
         if ($fe_user) {
             $user['LoginName'] = $fe_user['gpsnose_loginname'];
             $user['IsActivated'] = $fe_user['gpsnose_is_activated'];
@@ -270,7 +270,11 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     protected function isUserLoggedIn()
     {
-        return $this->frontendController->fe_user->user["uid"] > 0;
+        $fe_user = $this->frontendController->fe_user;
+        if ($fe_user && $fe_user->user && isset($fe_user->user["uid"])) {
+            return $fe_user->user["uid"] > 0;
+        }
+        return false;
     }
 
     /**
@@ -280,7 +284,10 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     protected function logoffUser()
     {
-        $this->frontendController->fe_user->logoff();
+        $fe_user = $this->frontendController->fe_user;
+        if ($fe_user) {
+            $this->frontendController->fe_user->logoff();
+        }
     }
 
     /**

@@ -100,11 +100,81 @@ var BaseViewModel = (function () {
 }());
 var BaseComponentsViewModel = (function () {
     function BaseComponentsViewModel(imagePath) {
+        this.SupportedDefaultKeywords = [
+            'fireplace',
+            'pingpongtische-ch',
+            'osm-wc',
+            'osm-bicycle',
+            'osm-medi',
+            'osm-pets',
+            'osm-emobility'
+        ];
         this.ImagePath = ko.observable(imagePath || '/Content/Mashup/Images');
     }
     BaseComponentsViewModel.prototype.GetLoginUrl = function (url) {
         var encUrl = encodeURIComponent("/" + window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, ""));
         return (url ? url : '/Account/Login') + '?returnUrl=' + encUrl;
+    };
+    BaseComponentsViewModel.prototype.GetHtmlFromString = function (text) {
+        if (!text)
+            return '';
+        text = text.replace(/(?:\r\n|\r|\n)/g, ' <br> ');
+        text = text.replace(/(https?:\/\/[^\s]+)/g, function (url) {
+            return '<a href="' + url + '" data-external>' + decodeURI(url) + '</a>';
+        });
+        text = text.replace(/( |^)www\.[^\s]+\.[^\s]+/g, function (url) {
+            return '<a href="https://' + url.trim() + '" data-external>' + decodeURI(url) + '</a>';
+        });
+        text = text.replace(/[\w-\.]+@([\w-]+\.)+[\w-]{2,4}/g, function (url) {
+            return '<a href="mailto:' + url + '">' + decodeURI(url) + '</a>';
+        });
+        return text;
+    };
+    BaseComponentsViewModel.prototype.GetKeywordDisplayName = function (keyword) {
+        if (!keyword)
+            return '';
+        if (keyword.lastIndexOf("i-", 0) === 0 && keyword.length > 2) {
+            return keyword.substring(2);
+        }
+        else if (keyword == "grillstelle-ch") {
+            return "fireplace";
+        }
+        return keyword;
+    };
+    BaseComponentsViewModel.prototype.GetDefaultImageFromKeywords = function (keywords) {
+        var _this = this;
+        if (!Array.isArray(keywords) && keywords != undefined) {
+            keywords = keywords.split(';');
+        }
+        if (Array.isArray(keywords)) {
+            var filteredKeywords = keywords.map(function (keyword) {
+                var keywordDisplayName = _this.GetKeywordDisplayName(keyword);
+                if (_this.SupportedDefaultKeywords.indexOf(keywordDisplayName) != -1) {
+                    return keywordDisplayName;
+                }
+                var lastindex1 = keywordDisplayName.lastIndexOf('-');
+                if (lastindex1 > 0) {
+                    var fallbackKeyword1 = keywordDisplayName.substring(0, lastindex1);
+                    if (_this.SupportedDefaultKeywords.indexOf(fallbackKeyword1) != -1) {
+                        return fallbackKeyword1;
+                    }
+                    var lastindex2 = fallbackKeyword1.lastIndexOf('-');
+                    if (lastindex2 > 0) {
+                        var fallbackKeyword2 = fallbackKeyword1.substring(0, lastindex2);
+                        if (_this.SupportedDefaultKeywords.indexOf(fallbackKeyword2) != -1) {
+                            return fallbackKeyword2;
+                        }
+                    }
+                }
+                return null;
+            }).filter(function (keyword) {
+                return keyword != null;
+            });
+            if (filteredKeywords.length > 0 && filteredKeywords[0]) {
+                return gnSettings.ImagePath + '/default_' + filteredKeywords[0].replace(/\-/g, '_') + '.png';
+            }
+        }
+        return "";
     };
     BaseComponentsViewModel.prototype.GetPackageTitle = function (keywords) {
         var appType = this.GetAppKeywordMarkFromKeywords(keywords);
@@ -285,6 +355,7 @@ var CommunityDetailViewModel = (function (_super) {
         _this.MembersLastJoinTicks = window.MAX_DATE_TIME_TICKS;
         _this.HasMoreMembers = ko.observable(true);
         _this.MembersRequestActive = ko.observable(false);
+        _this.NewsCurrentPage = ko.observable(0);
         _this.MembersRequestActive.subscribe(function (newValue) {
             ShowPreviewPageLoad(newValue);
         });
@@ -295,6 +366,9 @@ var CommunityDetailViewModel = (function (_super) {
     }
     CommunityDetailViewModel.prototype.DisplayName = function () {
         return this.Entity.DisplayName();
+    };
+    CommunityDetailViewModel.prototype.PageNews = function () {
+        this.NewsCurrentPage(this.NewsCurrentPage() + 1);
     };
     CommunityDetailViewModel.prototype.OnAddMembers = function (data) { };
     ;
@@ -798,7 +872,7 @@ ko.components.register('ma-gpsnose-comments', {
         '<div class="media-body middle flex-grow-1 mood" data-bind="text: $data.Mood"></div>' +
         '<div class="media-right middle" data-bind="text: GetAgeStringFromTicks($data.CreationTicks)"></div>' +
         '</div>' +
-        '<div data-bind="text: $data.Text, visible: HasText(), css: ($data.Text && $data.Text.length > 20 ? \'text\' : \'text-big\')"></div>' +
+        '<div data-bind="html: $parent.GetHtmlFromString($data.Text), visible: HasText(), css: ($data.Text && $data.Text.length > 20 ? \'text\' : \'text-big\')"></div>' +
         '<div class="clearfix" data-bind="if: ! $parent.IsReadonly()">' +
         '<img class="ma-crown" data-bind="attr: { src: $parent.ImagePath() + \'/IcActionCrown.png\' }, visible: $parent.Entity.IsUserAdmin($data.Creator)" />' +
         '<div class="btn-group btn-group-sm pull-right float-right float-end" role="group" aria-label="share">' +
@@ -978,7 +1052,7 @@ var FooterViewModel = (function (_super) {
         var _this = _super.call(this, params && params.imagePath || null) || this;
         _this.IsHidden = ko.observable(params && params.isHidden);
         var d = new Date();
-        _this.Copyright = '&copy; ' + d.getFullYear() + ' ' + GetLangRes('Common_lblCompanyName', 'Nemanicnedanic, Inc.');
+        _this.Copyright = '&copy; ' + d.getFullYear() + ' ' + GetLangRes('Common_lblCompanyName', 'SwizzBits s.r.o.');
         _this.HideCopyright = ko.observable(params && params.hideCopyright);
         _this.HideSupportMail = ko.observable(params && params.hideSupportMail);
         return _this;
@@ -1317,6 +1391,241 @@ ko.components.register('ma-gpsnose-navbar', {
         }
     },
     template: "\n<div id=\"navbar-sticky\">\n    <nav class=\"navbar navbar-expand-lg navbar navbar-light bg-light\" data-bind=\"visible: ! IsHidden()\">\n        <div class=\"container\">\n            <a class=\"d-inline d-lg-none navbar-brand\" href=\"/\" data-bind=\"text: GetLangRes('Common_menuHome', 'Home')\"></a>\n            <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#gn-navbar-collapse-1\" aria-controls=\"gn-navbar-collapse-1\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n                <span class=\"navbar-toggler-icon\"></span>\n            </button>\n            <div class=\"collapse navbar-collapse\" id=\"gn-navbar-collapse-1\">\n                <ul class=\"navbar-nav\">\n                    <!-- ko foreach: Navigation -->\n                        <li class=\"nav-item\">\n                            <a class=\"nav-link\" aria-current=\"page\" href=\"javascript:void(0);\" data-bind=\"click: function() { $parent.OpenUrl(Url()) }, css: { active: IsActive() }\">\n                                <i class=\"d-lg-none\" data-bind=\"class: Icon(), if: Icon()\"></i>\n                                <span data-bind=\"text: Text()\"></span>\n                            </a>\n                        </li>\n                    <!-- /ko -->\n                    <!-- ko if: User.LoginName -->\n                        <li class=\"nav-item dropdown ms-lg-3 mt-lg-0 mt-3\">\n                            <a class=\"nav-link dropdown-toggle p-1\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">\n                                <img class=\"rounded-circle mr-1 me-1\" width=\"32\" data-bind=\"attr: { src: User.ImageUrl() + '@200', onerror: 'RemoveFancyboxForImage(this);ImageErrorHandler(this, \\'' + ImagePath() + '/EmptyUser.png\\');' }\" />\n                                <span data-bind=\"text: User.LoginName\"></span>\n                            </a>\n                            <ul class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\n                                <li>\n                                    <a class=\"dropdown-item\" data-bind=\"attr: { href: '/n/' + User.LoginName }\">\n                                        <i class=\"fas fa-user-circle\"></i>\n                                        <span data-bind=\"text: GetLangRes('Common_btnShowProfile', 'Show Profile')\"></span>\n                                    </a>\n                                </li>\n                                <li><hr class=\"dropdown-divider\"></li>\n                                <li>\n                                    <a class=\"dropdown-item text-danger\" data-bind=\"attr: { href: '/Account/Logout' }\">\n                                        <i class=\"fas fa-sign-out-alt\"></i>\n                                        <span data-bind=\"text: GetLangRes('Common_menuLogout', 'Logout')\"></span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </li>\n                    <!-- /ko -->\n                </ul>\n                <!-- ko if: !User.LoginName -->\n                    <span class=\"d-inline-block ms-lg-3 mt-3 mt-lg-0\">\n                        <a class=\"btn btn-outline-secondary navbar-btn\" data-bind=\"attr: { href: GetLoginUrl(null) }\">\n                            <i class=\"fas fa-sign-in-alt me-1\"></i>\n                            <span data-bind=\"text: GetLangRes('Common_menuLogin', 'Login')\"></span>\n                        </a>\n                    </span>\n                <!-- /ko -->\n                <ul class=\"languages navbar-nav ms-auto mt-3 mt-lg-0\" data-bind=\"foreach: Languages\">\n                    <li class=\"nav-item\">\n                        <a class=\"nav-link\" aria-current=\"language\" data-bind=\"attr: { href: 'javascript:' + (GetCurrentLang() == $data ? '' : 'SwitchLanguage(\\''+$data+'\\')') + ';' }, text: $data, css: { active: GetCurrentLang() == $data }\"></a>\n                    </li>\n                </ul>\n            </div>\n        </div>\n    </nav>\n    <div class=\"bg-light\" data-bind=\"if: Profile.LoginName\">\n        <div class=\"container\">\n            <div class=\"navbar-userinfo py-2\" data-bind=\"if: Profile.LoginName\">\n                <div class=\"row\">\n                    <div class=\"col-sm-4 col-5\">\n                        <div class=\"d-flex\">\n                            <div class=\"me-2\">\n                                <a data-bind=\"attr: { href: NoseDto.ImageUrl() }\" data-fancybox>\n                                    <img class=\"media-object rounded-circle\" data-bind=\"attr: { src: NoseDto.ImageUrl() + '@200', onerror: 'RemoveFancyboxForImage(this);ImageErrorHandler(this, \\'' + ImagePath() + '/EmptyUser.png\\');' }\" />\n                                </a>\n                            </div>\n                            <div class=\"text-nowrap\">\n                                <h5 class=\"m-0\" data-bind=\"text: Profile.LoginName\"></h5>\n                                <div data-bind=\"text: Profile.FullName\"></div>\n                                <div data-bind=\"text: GetDistanceString(Profile)\"></div>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 col-2\">\n                        <div class=\"text-center\">\n                            <div class=\"btn-group-vertical btn-group-sm\" role=\"group\" aria-label=\"share\">\n                                <div class=\"btn btn-outline-secondary py-0\" data-src=\"#share\" data-fancybox data-bind=\"attr: { title: GetLangRes('Common_btnShare', 'Share') }\">\n                                    <i class=\"fas fa-qrcode\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_btnShare', 'Share')\"></span>\n                                </div>\n                                <div class=\"btn btn-outline-secondary py-0 visually-hidden\" data-fancybox data-src=\"#poke-moods-dialog\" data-bind=\"attr: { title: GetLangRes('Common_btnPoke', 'Knock'), 'data-remove': ! User.LoginName || Profile.LoginName == User.LoginName }, css: { 'visually-hidden': ! User.LoginName || Profile.LoginName == User.LoginName }\">\n                                    <i class=\"far fa-hand-point-left\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_btnPoke', 'Knock')\"></span>\n                                </div>\n                                <a class=\"btn btn-outline-secondary py-0 visually-hidden\" data-bind=\"attr: { href: GetLoginUrl(null), title: GetLangRes('Common_loginToPoke', 'Login to Knock'), 'data-remove': User.LoginName }, css: { 'visually-hidden': User.LoginName }\">\n                                    <i class=\"far fa-hand-point-left\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_loginToPoke', 'Login to Knock')\"></span>\n                                </a>\n                                <a class=\"btn btn-outline-secondary py-0 visually-hidden\" data-external data-bind=\"attr: { href: GetGoogleMapsLink(Profile.LastActivityLatitude, Profile.LastActivityLongitude), title: GetLangRes('Common_showOnMap', 'Show on map'), 'data-remove': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }, css: { 'visually-hidden': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }\">\n                                    <i class=\"fas fa-map-marker-alt\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_showOnMap', 'Show on map')\"></span>\n                                </a>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 col-5\">\n                        <div class=\"text-end\">\n                            <div class=\"text-nowrap\">\n                                <h5 data-bind=\"text: GetLangRes('Nose_Profile_lblLastSeen', 'Last seen') + ':'\"></h5>\n                                <div data-bind=\"text: GetDateStringFromTicks(Profile.LastActivityUtcDateTime)\"></div>\n                                <div data-bind=\"ifnot: Profile.LastActivityUtcDateTime\">\n                                    <a data-bind=\"attr: { href: GetLoginUrl(null) }, text: GetLangRes('Common_loginRequired', 'Please login first.')\" data-popup></a>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<div class=\"poke-moods-dialog\">\n    <div id=\"poke-moods-dialog\" data-bind=\"foreach: PokeMoods\" style=\"display:none;\" class=\"moods-dialog\">\n        <div class=\"btn btn-outline-secondary p-1\" data-bind=\"text: $data, click: function() { jQuery.fancybox.getInstance('close'); $parent.SendPoke($data, gn_data.User || {}); }\"></div>\n    </div>\n</div>"
+});
+var NewsComponent = (function (_super) {
+    __extends(NewsComponent, _super);
+    function NewsComponent(params) {
+        var _this = _super.call(this, params && params.imagePath || null) || this;
+        _this.NewsPageUrl = '/Home/Page_News';
+        _this.News = ko.observableArray();
+        _this.NewsPageSize = gnSettings.NewsPageSize;
+        _this.NewsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMoreNews = ko.observable(true);
+        _this.NewsRequestActive = ko.observable(false);
+        _this.CommunityTag = ko.observable('');
+        _this.CommunityTag(params && params.communityTag || "");
+        _this.NewsRequestActive.subscribe(function (newValue) {
+            ShowPreviewPageLoad(newValue);
+        });
+        if (params && params.onAddNews) {
+            _this.OnAddNews = params.onAddNews;
+        }
+        if (params && params.newsPageUrl) {
+            _this.NewsPageUrl = params.newsPageUrl;
+        }
+        if (params && params.page) {
+            params.page.subscribe(function () {
+                if (_this.HasMoreNews()) {
+                    _this.PageNews();
+                }
+            });
+        }
+        if (params && params.news && params.news.length > 0) {
+            _this.AddNews(params.news);
+        }
+        else if (params && params.news) {
+            _this.HasMoreNews(false);
+        }
+        else {
+            _this.PageNews();
+        }
+        return _this;
+    }
+    NewsComponent.prototype.OnAddNews = function () { };
+    NewsComponent.prototype.AddNews = function (data) {
+        var _this = this;
+        if (data == null)
+            return;
+        var timeout = true;
+        if (this.News.length > 0) {
+            timeout = false;
+        }
+        if (data.length > 0) {
+            this.NewsLastKnownTicks = data[data.length - 1].CreationTicks;
+            for (var i in data) {
+                this.News.push(new NewsDto(data[i]));
+            }
+            if (data.length % this.NewsPageSize != 0) {
+                this.HasMoreNews(false);
+            }
+        }
+        else {
+            this.HasMoreNews(false);
+        }
+        if (this.OnAddNews) {
+            if (timeout) {
+                setTimeout(function () {
+                    _this.OnAddNews();
+                }, 100);
+            }
+            else {
+                this.OnAddNews();
+            }
+        }
+    };
+    NewsComponent.prototype.PageNews = function () {
+        var _this = this;
+        if (this.NewsRequestActive() || !this.HasMoreNews())
+            return;
+        this.NewsRequestActive(true);
+        jQuery.ajax({
+            type: 'POST',
+            url: this.NewsPageUrl,
+            cache: false,
+            data: {
+                lastKnownTicks: this.NewsLastKnownTicks,
+                pageSize: this.NewsPageSize,
+                community: this.CommunityTag()
+            },
+            dataType: 'json',
+            success: function (result) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
+                    _this.AddNews(result);
+                }
+                else {
+                    _this.HasMoreNews(false);
+                }
+                _this.NewsRequestActive(false);
+            },
+            error: function (jqxhr) {
+                if (jqxhr.status != 429) {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                }
+                _this.NewsRequestActive(false);
+            }
+        });
+    };
+    return NewsComponent;
+}(BaseComponentsViewModel));
+ko.components.register('ma-gpsnose-news', {
+    viewModel: {
+        createViewModel: function (params, componentInfo) {
+            return new NewsComponent(params);
+        }
+    },
+    template: "\n<div id=\"newsContainer\" class=\"masonry row\">\n    <div class=\"masonry-sizer col-lg-3 col-md-4 col-6\"></div>\n    <!-- ko foreach: News -->\n    <div data-bind=\"template: { name: TemplateName() }\"></div>\n    <!-- /ko -->\n</div>\n\n<div class=\"text-center\">\n    <div class=\"btn btn-outline-secondary btn-lg\" data-bind=\"click: function(){ PageNews() }, visible: HasMoreNews(), attr: { disabled: NewsRequestActive() }\">\n        <div data-bind=\"visible: ! NewsRequestActive()\">\n            <i class=\"fas fa-cloud-download-alt\"></i>\n            <span data-bind=\"text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')\"></span>\n        </div>\n        <div data-bind=\"visible: NewsRequestActive()\">\n            <i class=\"fas fa-redo-alt gly-spin\"></i>\n            <span data-bind=\"text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Request in progress')\"></span>\n        </div>\n    </div>\n</div>\n\n<div class=\"alert alert-info\" data-bind=\"visible: News().length == 0 && ! NewsRequestActive()\">\n    <i class=\"fas fa-info-circle\"></i>\n    <span data-bind=\"text: ' ' + GetLangRes('Home_Index_lblNoNews', 'There are currently no such news in your area.')\"></span>\n</div>\n\n\n\n<script type=\"text/html\" id=\"UnknownTemplate\">\n    <div class=\"UnknownNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\">\n            <div class=\"card-body p-2\">\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetLangRes('Home_Index_lblUnknownNews', 'Unknown news')\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"AboutNewsTemplate\">\n    <div class=\"AboutNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded-circle media-height\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <div class=\"flow-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"ProfileImageNewsTemplate\">\n    <div class=\"ProfileImageNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <img class=\"image\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"NewGuestUserNewsTemplate\">\n    <div class=\"NewGuestUserNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded media-height\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <div class=\"flow-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"ProfileActivatedTemplate\">\n    <div class=\"ProfileActivated masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded media-height\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <div class=\"flex-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"PhotoBlogNewsTemplate\">\n    <div class=\"PhotoBlogNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP, disabled:$data.IsNowDeleted\">\n            <img class=\"card-img-top\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"this.style.display='none'\" />\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"flex-grow-1\" data-bind=\"html: $parent.GetHtmlFromString($data.Impression_Text)\"></div>\n                    <div class=\"text-end\" data-bind=\"text: $data.Impression_Mood\"></div>\n                </div>\n                <div class=\"text-end mt-2\">\n                    <span class=\"align-middle\" data-bind=\"text: NoseDto.LoginName\"></span>\n                    <img class=\"rounded-circle\" width=\"32\" data-bind=\"attr: { src: NoseDto.ImageUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"PoIPublishedNewsTemplate\">\n    <div class=\"PoIPublishedNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP, disabled:$data.IsNowDeleted\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded media-height\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')\" />\n                    </div>\n                    <div class=\"flex-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"TourNewsTemplate\">\n    <div class=\"TourNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP, disabled:$data.IsNowDeleted\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded media-height\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')\" />\n                    </div>\n                    <div class=\"flow-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"d-flex\">\n                        <img class=\"ma-tour-icon\" width=\"24px\" data-bind=\"attr: { src: '/Content/Mashup/Images/TourType' + $data.Track_TrackType + '.png' }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/TourType99.png')\" />\n                        <div class=\"flex-grow-1\">\n                            <div class=\"text-center\">\n                                <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"EventNewsTemplate\">\n    <div class=\"AboutNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded media-height\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyEvent.png')\" />\n                    </div>\n                    <div class=\"flow-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                        <p data-bind=\"text: $data.Event_LocationAddress\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"CommentNewsTemplate\">\n    <div class=\"CommentNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"attr: {'data-src': MA_GPSNOSE_IS_MASHUP ? $data.DetailUrl() : '#comment-' + $index() }, fancyboxAttr: $data, fancyboxType: null, group: 'news', external: MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <div>\n                    <div class=\"comment-image-container me-2\">\n                        <div data-bind=\"if: Comment_CommentItemType == 'Tour'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')\" />\n                        </div>\n                        <div data-bind=\"if: Comment_CommentItemType == 'FavoriteLocation'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')\" />\n                        </div>\n                        <div data-bind=\"if: Comment_CommentItemType == 'PhotoBlog'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyImage.png')\" />\n                        </div>\n                        <div data-bind=\"if: Comment_CommentItemType == 'Community'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')\" />\n                        </div>\n                        <img class=\"rounded comment-image-left\" data-bind=\"attr: { src: NoseDto.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <p data-bind=\"html: $parent.GetHtmlFromString(CommentText())\"></p>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"visually-hidden\">\n        <div data-bind=\"attr: { id: 'comment-' + $index() }\">\n            <div class=\"CommentNews gn-detail-inline\">\n                <div>\n                    <div class=\"comment-image-container\">\n                        <div data-bind=\"if: Comment_CommentItemType == 'Tour'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-src': DetailInlineUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')\" />\n                        </div>\n                        <div data-bind=\"if: Comment_CommentItemType == 'FavoriteLocation'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-src': DetailInlineUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')\" />\n                        </div>\n                        <div data-bind=\"if: Comment_CommentItemType == 'PhotoBlog'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-src': DetailInlineUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyImage.png')\" />\n                        </div>\n                        <div data-bind=\"if: Comment_CommentItemType == 'Community'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-src': DetailInlineUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')\" />\n                        </div>\n                        <img class=\"rounded comment-image-left\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: NoseDto.ThumbUrl(), 'data-src': NoseDto.PreviewUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <p data-bind=\"html: $parent.GetHtmlFromString(CommentText())\"></p>\n                </div>\n                <div class=\"text-center mt-2\">\n                    <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"RatingNewsTemplate\">\n    <div class=\"RatingNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"attr: {'data-src': MA_GPSNOSE_IS_MASHUP ? $data.DetailUrl() : '#rating-' + $index() }, fancyboxAttr: $data, fancyboxType: null, group: 'news', external: MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <div>\n                    <div class=\"comment-image-container\">\n                        <div data-bind=\"if: Rating_RatedItemType == 'Tour'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')\" />\n                        </div>\n                        <div data-bind=\"if: Rating_RatedItemType == 'FavoriteLocation'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')\" />\n                        </div>\n                        <div data-bind=\"if: Rating_RatedItemType == 'PhotoBlog'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyImage.png')\" />\n                        </div>\n                        <div data-bind=\"if: Rating_RatedItemType == 'Community'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')\" />\n                        </div>\n                        <img class=\"rounded comment-image-left\" data-bind=\"attr: { src: NoseDto.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <div class=\"rating-stars-container\">\n                        <!-- ko component: {\n                                name: \"ma-gpsnose-rating\",\n                                params: {\n                                    percent: $data.Rating_Percent,\n                                    count: -1\n                                }\n                            } -->\n                        <!-- /ko -->\n                    </div>\n                    <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"visually-hidden\">\n        <div data-bind=\"attr: { id: 'rating-' + $index() }\">\n            <div class=\"RatingNews gn-detail-inline\">\n                <div>\n                    <div class=\"comment-image-container\">\n                        <div data-bind=\"if: Rating_RatedItemType == 'Tour'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: ThumbUrl(), 'data-src': DetailInlineUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')\" />\n                        </div>\n                        <div data-bind=\"if: Rating_RatedItemType == 'FavoriteLocation'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: ThumbUrl(), 'data-src': DetailInlineUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')\" />\n                        </div>\n                        <div data-bind=\"if: Rating_RatedItemType == 'PhotoBlog'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: ThumbUrl(), 'data-src': DetailInlineUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyImage.png')\" />\n                        </div>\n                        <div data-bind=\"if: Rating_RatedItemType == 'Community'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: ThumbUrl(), 'data-src': DetailInlineUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')\" />\n                        </div>\n                        <img class=\"rounded comment-image-left\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: NoseDto.ThumbUrl(), 'data-src': NoseDto.PreviewUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <div class=\"rating-stars-container\">\n                        <!-- ko component: {\n                                name: \"ma-gpsnose-rating\",\n                                params: {\n                                    percent: $data.Rating_Percent,\n                                    count: -1\n                                }\n                            } -->\n                        <!-- /ko -->\n                    </div>\n                    <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                </div>\n                <div class=\"text-center mt-2\">\n                    <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"MashupNewsTemplate\">\n    <div class=\"MashupNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group: 'news', external: MA_GPSNOSE_IS_MASHUP, disabled: $data.IsNowDeleted\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded media-height\" data-bind=\"attr: { src: ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')\" />\n                    </div>\n                    <div class=\"flow-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n"
+});
+var NosesComponent = (function (_super) {
+    __extends(NosesComponent, _super);
+    function NosesComponent(params) {
+        var _this = _super.call(this, params && params.imagePath || null) || this;
+        _this.NosePageUrl = '/Home/Page_Noses';
+        _this.Noses = ko.observableArray();
+        _this.NosesPageSize = gnSettings.NosesPageSize;
+        _this.NosesLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMoreNoses = ko.observable(true);
+        _this.NosesRequestActive = ko.observable(false);
+        _this.ShowNoses = ko.observable(true);
+        _this.CommunityTag = ko.observable('');
+        _this.CommunityTag(params && params.communityTag || "");
+        _this.NosesRequestActive.subscribe(function (newValue) {
+            ShowPreviewPageLoad(newValue);
+        });
+        if (params && params.onAddNoses) {
+            _this.OnAddNoses = params.onAddNoses;
+        }
+        if (params && params.nosePageUrl) {
+            _this.NosePageUrl = params.nosePageUrl;
+        }
+        if (params && params.page) {
+            params.page.subscribe(function () {
+                if (_this.HasMoreNoses()) {
+                    _this.PageNoses();
+                }
+            });
+        }
+        if (params && params.noses && params.noses.length > 0) {
+            _this.AddNoses(params.noses);
+        }
+        else if (params && params.noses) {
+            _this.HasMoreNoses(false);
+        }
+        else {
+            _this.PageNoses();
+        }
+        return _this;
+    }
+    NosesComponent.prototype.OnAddNoses = function () { };
+    NosesComponent.prototype.AddNoses = function (data) {
+        var _this = this;
+        if (data == null)
+            return;
+        var timeout = true;
+        if (this.Noses.length > 0) {
+            timeout = false;
+        }
+        if (data.length > 0) {
+            this.NosesLastKnownTicks = data[data.length - 1].CreationTicks;
+            for (var i in data) {
+                this.Noses.push(new NoseDto(data[i]));
+            }
+            if (data.length % this.NosesPageSize != 0) {
+                this.HasMoreNoses(false);
+            }
+        }
+        else {
+            this.HasMoreNoses(false);
+        }
+        if (this.OnAddNoses) {
+            if (timeout) {
+                setTimeout(function () {
+                    _this.OnAddNoses();
+                }, 100);
+            }
+            else {
+                this.OnAddNoses();
+            }
+        }
+    };
+    NosesComponent.prototype.PageNoses = function () {
+        var _this = this;
+        if (!this.ShowNoses() || this.NosesRequestActive() || !this.HasMoreNoses())
+            return;
+        this.NosesRequestActive(true);
+        jQuery.ajax({
+            type: 'POST',
+            url: this.NosePageUrl,
+            cache: false,
+            data: {
+                lastKnownTicks: this.NosesLastKnownTicks,
+                pageSize: this.NosesPageSize,
+                community: this.CommunityTag()
+            },
+            dataType: 'json',
+            success: function (result) {
+                if (typeof result != 'object') {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                    console === null || console === void 0 ? void 0 : console.warn(result);
+                }
+                else if (result && result.length > 0) {
+                    _this.AddNoses(result);
+                }
+                else {
+                    _this.HasMoreNoses(false);
+                }
+                _this.NosesRequestActive(false);
+            },
+            error: function (jqxhr) {
+                if (jqxhr.status != 429) {
+                    dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
+                }
+                _this.NosesRequestActive(false);
+            }
+        });
+    };
+    return NosesComponent;
+}(BaseComponentsViewModel));
+ko.components.register('ma-gpsnose-noses', {
+    viewModel: {
+        createViewModel: function (params, componentInfo) {
+            return new NosesComponent(params);
+        }
+    },
+    template: "\n<div id=\"publishersContainer\" class=\"row g-3 mb-3\" data-bind=\"foreach: Noses\">\n    <div class=\"col-lg-2 col-md-3 col-sm-4 col-6\">\n        <div class=\"card border-0 shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'nose', external:MA_GPSNOSE_IS_MASHUP\">\n            <img class=\"card-img-top\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n            <div class=\"card-body p-0\">\n                <div class=\"loginname text-white bg-primary text-center\" data-bind=\"text: $data.LoginName\"></div>\n            </div>\n        </div>\n    </div>\n</div>\n\n<div class=\"text-center\">\n    <div class=\"btn btn-outline-secondary btn-lg\" data-bind=\"click: function(){ PageNoses() }, visible: HasMoreNoses(), attr: { disabled: NosesRequestActive() }\">\n        <div data-bind=\"visible: ! NosesRequestActive()\">\n            <i class=\"fas fa-cloud-download-alt\"></i>\n            <span data-bind=\"text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')\"></span>\n        </div>\n        <div data-bind=\"visible: NosesRequestActive()\">\n            <i class=\"fas fa-redo-alt gly-spin\"></i>\n            <span data-bind=\"text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Request in progress')\"></span>\n        </div>\n    </div>\n</div>\n\n<div class=\"alert alert-info\" data-bind=\"visible: Noses().length == 0 && ! NosesRequestActive()\">\n    <i class=\"fas fa-info-circle\"></i>\n    <span data-bind=\"text: ' ' + GetLangRes('Home_Index_lblNoPublishers', 'There are currently no such noses in your area, but you can give the mobile app to your friends to see them here.')\"></span>\n</div>"
 });
 var RatingViewModel = (function (_super) {
     __extends(RatingViewModel, _super);
@@ -1850,6 +2159,7 @@ var IndexViewModel = (function (_super) {
         _this.HasMoreNoses = ko.observable(true);
         _this.NosesRequestActive = ko.observable(false);
         _this.ShowNoses = ko.observable(true);
+        _this.NosesCurrentPage = ko.observable(0);
         _this.NewsPageUrl = '/Home/Page_News';
         _this.News = ko.observableArray();
         _this.NewsPageSize = gnSettings.NewsPageSize;
@@ -1857,12 +2167,7 @@ var IndexViewModel = (function (_super) {
         _this.HasMoreNews = ko.observable(true);
         _this.NewsRequestActive = ko.observable(false);
         _this.ShowNews = ko.observable(true);
-        _this.NosesRequestActive.subscribe(function (newValue) {
-            ShowPreviewPageLoad(newValue);
-        });
-        _this.NewsRequestActive.subscribe(function (newValue) {
-            ShowPreviewPageLoad(newValue);
-        });
+        _this.NewsCurrentPage = ko.observable(0);
         _this.CommunityEntity = new CommunityDto({}, new NoseDto({}));
         _this.CommunityTag.subscribe(function (newValue) {
             _this.CommunityEntity = new CommunityDto({ 'TagName': newValue }, new NoseDto({}));
@@ -1997,6 +2302,7 @@ var IndexViewModel = (function (_super) {
         if (!this.ShowNoses() || this.NosesRequestActive() || !this.HasMoreNoses())
             return;
         this.NosesRequestActive(true);
+        this.NosesCurrentPage(this.NosesCurrentPage() + 1);
         jQuery.ajax({
             type: 'POST',
             url: this.NosePageUrl,
@@ -2050,6 +2356,7 @@ var IndexViewModel = (function (_super) {
         if (!this.ShowNews() || this.NewsRequestActive() || !this.HasMoreNews())
             return;
         this.NewsRequestActive(true);
+        this.NewsCurrentPage(this.NewsCurrentPage() + 1);
         jQuery.ajax({
             type: 'POST',
             url: this.NewsPageUrl,
@@ -2153,6 +2460,9 @@ var CommunityDto = (function () {
         };
         this.ShareUrl = function () {
             return gnSettings.BaseUrl + "/community/index?profileTag=" + encodeURIComponent(_this.TagName());
+        };
+        this.JoinUrl = function () {
+            return gnSettings.BaseUrl + "/tag/" + encodeURIComponent(_this.TagName());
         };
         this.IsLoginNameAdmin = function () {
             return _this.LoginName() == _this.CreatorLoginName() || jQuery.inArray(_this.LoginName(), _this.Admins()) != -1;
@@ -3420,16 +3730,16 @@ var UserDetailViewModel = (function (_super) {
     UserDetailViewModel.prototype.LengthBasedContent = function (value) {
         if (value) {
             if (value.length > 200) {
-                return '<p>' + value + '</p>';
+                return '<p>' + this.GetHtmlFromString(value) + '</p>';
             }
             else if (value.length > 100) {
-                return '<h5 class="text-center">' + value + '</h5>';
+                return '<h5 class="text-center">' + this.GetHtmlFromString(value) + '</h5>';
             }
             else if (value.length > 50) {
-                return '<h4 class="text-center">' + value + '</h4>';
+                return '<h4 class="text-center">' + this.GetHtmlFromString(value) + '</h4>';
             }
             else {
-                return '<h3 class="text-center">' + value + '</h3>';
+                return '<h3 class="text-center">' + this.GetHtmlFromString(value) + '</h3>';
             }
         }
         return "";

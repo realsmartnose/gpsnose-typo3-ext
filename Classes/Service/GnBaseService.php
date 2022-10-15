@@ -61,7 +61,11 @@ class GnBaseService
      */
     protected function isUserLoggedIn()
     {
-        return $this->frontendController->fe_user->user["uid"] > 0;
+        $fe_user = $this->frontendController->fe_user;
+        if ($fe_user && $fe_user->user && isset($fe_user->user["uid"])) {
+            return $fe_user->user["uid"] > 0;
+        }
+        return false;
     }
 
     /**
@@ -69,6 +73,9 @@ class GnBaseService
      */
     protected function logoffUser()
     {
-        $this->frontendController->fe_user->logoff();
+        $fe_user = $this->frontendController->fe_user;
+        if ($fe_user) {
+            $fe_user->logoff();
+        }
     }
 }

@@ -289,7 +289,7 @@
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblValidateCommunityMessage" xml:space="preserve">
 				<source><![CDATA[Add the key %key% to your webpage %mashup% then click Validate. The key can be placed into your website's default home document as a meta-tag named "gpsnose-validation-key" (and content is the key), or as a file named as the key without any extension or with some of the .txt | .htm | .html extensions. See the Wiki page under https://wiki.gpsnose.com for more details.]]></source>
-				<target><![CDATA[Add the key %key% to your webpage %mashup% then click Validate. The key can be placed into your website's default home document as a meta-tag named "gpsnose-validation-key" (and content is the key), or as a file named as the key without any extension or with some of the .txt | .htm | .html extensions. See the Wiki page under https://wiki.gpsnose.com for more details.]]></target>
+				<target><![CDATA[Add the key %key% to your webpage %mashup% then click Validate. The key can be placed into your website's default home document as a meta-tag named 'gpsnose-validation-key' (and content is the key), or as a file named as the key without any extension or with some of the .txt | .htm | .html extensions. See the Wiki page under https://wiki.gpsnose.com for more details.]]></target>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblValidationDate" xml:space="preserve">
 				<source><![CDATA[Validation date]]></source>
@@ -428,8 +428,8 @@
 				<target><![CDATA[Komentáre]]></target>
 			</trans-unit>
 			<trans-unit id="Common_lblCompanyName" xml:space="preserve">
-				<source><![CDATA[Nemanicnedanic, Inc.]]></source>
-				<target><![CDATA[Nemanicnedanic, Inc.]]></target>
+				<source><![CDATA[SwizzBits s.r.o.]]></source>
+				<target><![CDATA[SwizzBits s.r.o.]]></target>
 			</trans-unit>
 			<trans-unit id="Common_lblError" xml:space="preserve">
 				<source><![CDATA[Error]]></source>
@@ -464,7 +464,7 @@
 				<target><![CDATA[Načítavam]]></target>
 			</trans-unit>
 			<trans-unit id="Common_lblScanToJoin" xml:space="preserve">
-				<source><![CDATA[To join the community, scan this QR-code using your mobile GpsNose app please]]></source>
+				<source><![CDATA[To join this community, scan this QR-code using your mobile GpsNose app please]]></source>
 				<target><![CDATA[Ak sa chceš pripojiť do komunity, naskenuj prosím tento QR-kód pomocou mobilnej aplikácie GpsNose]]></target>
 			</trans-unit>
 			<trans-unit id="Common_lblUnknownError" xml:space="preserve">

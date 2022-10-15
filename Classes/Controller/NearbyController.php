@@ -45,6 +45,7 @@ class NearbyController extends BaseController
         $this->view->assign('communityTag', $communityTag);
         $this->view->assign('record', $this->contentObj->data['uid']);
 
+        $noses = [];
         if ($this->isUserLoggedIn()) {
             $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $noses = $nearbyService->GetNosesAroundPage($communityTag);
@@ -73,6 +74,7 @@ class NearbyController extends BaseController
         $this->view->assign('communityTag', $communityTag);
         $this->view->assign('record', $this->contentObj->data['uid']);
 
+        $impressions = [];
         if ($this->isUserLoggedIn()) {
             $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $impressions = $nearbyService->GetImpressionsAroundPage($communityTag);
@@ -101,6 +103,7 @@ class NearbyController extends BaseController
         $this->view->assign('communityTag', $communityTag);
         $this->view->assign('record', $this->contentObj->data['uid']);
 
+        $pois = [];
         if ($this->isUserLoggedIn()) {
             $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $pois = $nearbyService->GetPoisAroundPage($communityTag);
@@ -130,6 +133,7 @@ class NearbyController extends BaseController
         $this->view->assign('record', $this->contentObj->data['uid']);
         $trackType = $this->contentObj->data['tx_gpsnose_community_track_type'] ?? GnTrackType::Unspecified;
 
+        $tracks = [];
         if ($this->isUserLoggedIn()) {
             $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $tracks = $nearbyService->GetTracksAroundPage($communityTag, $trackType);
@@ -158,6 +162,7 @@ class NearbyController extends BaseController
         $this->view->assign('communityTag', $communityTag);
         $this->view->assign('record', $this->contentObj->data['uid']);
 
+        $events = [];
         if ($this->isUserLoggedIn()) {
             $nearbyService = new GnNearbyService(GnUtility::getLanguage());
             $events = $nearbyService->GetEventsAroundPage($communityTag);

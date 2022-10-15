@@ -193,9 +193,20 @@ class GnUtility
         $_POST['logintype'] = 'login';
         $_POST['user'] = $username;
         $_POST['pass'] = $password;
+        /** @var FrontendUserAuthentication */
         $authService = GeneralUtility::makeInstance(FrontendUserAuthentication::class);
         $authService->start();
-        if ($authService->loginFailure) {
+
+        $hasUser = false;
+        if (isset($authService->user)) {
+            $hasUser = $authService->user['uid'] > 0;
+        }
+        $hasLoginFailure = false;
+        if (isset($authService->loginFailure)) {
+            $hasLoginFailure = $authService->loginFailure;
+        }
+
+        if (! $hasUser || $hasLoginFailure) {
             return false;
         }
 
@@ -203,7 +214,7 @@ class GnUtility
             header('Set-Cookie: ' . $authService->setCookie->__toString());
         }
 
-        return TRUE;
+        return true;
     }
 
     /**

@@ -322,7 +322,7 @@
 				<source><![CDATA[Comments]]></source>
 			</trans-unit>
 			<trans-unit id="Common_lblCompanyName" xml:space="preserve">
-				<source><![CDATA[Nemanicnedanic, Inc.]]></source>
+				<source><![CDATA[SwizzBits s.r.o.]]></source>
 			</trans-unit>
 			<trans-unit id="Common_lblError" xml:space="preserve">
 				<source><![CDATA[Error]]></source>
@@ -349,7 +349,7 @@
 				<source><![CDATA[Loading]]></source>
 			</trans-unit>
 			<trans-unit id="Common_lblScanToJoin" xml:space="preserve">
-				<source><![CDATA[To join the community, scan this QR-code using your mobile GpsNose app please]]></source>
+				<source><![CDATA[To join this community, scan this QR-code using your mobile GpsNose app please]]></source>
 			</trans-unit>
 			<trans-unit id="Common_lblUnknownError" xml:space="preserve">
 				<source><![CDATA[An unknown error is occured!]]></source>
