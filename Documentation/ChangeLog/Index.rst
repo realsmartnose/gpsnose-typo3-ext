@@ -9,7 +9,7 @@ Change log
 
 Version 2.2.3
 -------------
-UPD: Update SDK to 1.2.2
+UPD: Update SDK to 1.2.3
 FIX: Fix PHP 8.x warning
 
 Version 2.2.2
