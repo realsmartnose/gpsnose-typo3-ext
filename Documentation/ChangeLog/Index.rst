@@ -6,6 +6,9 @@
 Change log
 ==========
 
+Version 2.2.4
+-------------
+- UPD: Update template
 
 Version 2.2.3
 -------------

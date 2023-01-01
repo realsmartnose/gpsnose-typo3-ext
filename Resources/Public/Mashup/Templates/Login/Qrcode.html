@@ -14,7 +14,7 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.1.4">
+<div class="ma-gpsnose" data-gn-version="1.2.0">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-login" data-bind="visible:true" style="display:none;">
 
@@ -61,7 +61,23 @@ Replace {record} with a unique id that identifies the entry
         </div>
 
         <br />
-        <ma-gpsnose-footer params="hideCopyright:true, hideSupportMail:true, imagePath:gn_data.Settings.ImagePath"></ma-gpsnose-footer>
+
+        <div class="row my-2">
+            <div class="col-6">
+                <div class="text-end text-right">
+                    <a href="#" data-external role="button" data-bind="attr: { 'href': AppleLink }">
+                        <img data-bind="attr: { src: gn_data.Settings.ImagePath + '/badge_app_store.png' }" alt="App Store">
+                    </a>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="text-start text-left">
+                    <a href="#" data-external role="button" data-bind="attr: { 'href': GoogleLink }">
+                        <img data-bind="attr: { src: gn_data.Settings.ImagePath + '/badge_google_play.png' }" alt="Google Play">
+                    </a>
+                </div>
+            </div>
+        </div>
 
     </div>
 

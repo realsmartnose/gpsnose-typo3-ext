@@ -403,7 +403,7 @@ function MasonryReload() {
             if (!instance) {
                 MasonryStart();
             }
-            setTimeout(function () {
+            setTimeout(() => {
                 jQuery(item).masonry('reloadItems');
                 jQuery(item).masonry('layout');
             }, 50);

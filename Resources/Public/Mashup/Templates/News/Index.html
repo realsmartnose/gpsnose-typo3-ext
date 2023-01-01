@@ -23,7 +23,7 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.1.4">
+<div class="ma-gpsnose" data-gn-version="1.2.0">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-news" data-bind="visible:true" style="display: none;">
 
@@ -54,7 +54,7 @@ Replace {record} with a unique id that identifies the entry
 
         <div class="alert alert-info" data-bind="visible: News().length == 0 && ! NewsRequestActive()">
             <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
-            <span data-bind="text: ' ' + GetLangRes('Home_Index_lblNoNews', 'There are currently no such news in your area.')"></span>
+            <span data-bind="text: ' ' + GetLangRes('Home_Overview_lblNoNews', 'There are currently no such news in your area.')"></span>
         </div>
 
     </div>
@@ -65,7 +65,7 @@ Replace {record} with a unique id that identifies the entry
 var MA_GPSNOSE_IS_MASHUP = true;
 $(function() {
     if (! gn_data.User) gn_data.User = {};
-    var vm = new IndexViewModel();
+    var vm = new OverviewViewModel();
     vm.NewsPageUrl = gn_data.Settings.NewsPageUrl;
     if (gn_data.Community && gn_data.Community.TagName) vm.CommunityTag(gn_data.Community.TagName);
     vm.OnAddNews = function() {
@@ -90,7 +90,7 @@ $(function() {
         <div class="outer">
             <div>
                 <div class="text-center">
-                    <span data-bind="text: GetLangRes('Home_Index_lblUnknownNews', 'Unknown news')"></span>
+                    <span data-bind="text: GetLangRes('Common_lblUnknownNews', 'Unknown news')"></span>
                 </div>
             </div>
         </div>

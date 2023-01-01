@@ -1,3 +1,6 @@
+2.2.4
+- UPD: Update template
+
 2.2.3
 - UPD: Update SDK to 1.2.3
 - FIX: Fix PHP 8.x warning

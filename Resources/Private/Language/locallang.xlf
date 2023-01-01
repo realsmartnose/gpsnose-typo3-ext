@@ -22,13 +22,13 @@
 				<source><![CDATA[Load page]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_btnRegenerateAppKey" xml:space="preserve">
-				<source><![CDATA[Get new App-Key]]></source>
+				<source><![CDATA[Get new app-key]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_btnValidateCommunity" xml:space="preserve">
 				<source><![CDATA[Validate]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblAddFail" xml:space="preserve">
-				<source><![CDATA[To add a mashup-site, make sure you entered a valide url without protocol (e.g.: www.example.com) and use a maximum of %max_characters% characters]]></source>
+				<source><![CDATA[To add a mashup-site, enter a valide url without the protocol (e.g.: www.example.com) and use a maximum of %max_characters% characters]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblAddHostPlaceholder" xml:space="preserve">
 				<source><![CDATA[Add new host]]></source>
@@ -37,13 +37,13 @@
 				<source><![CDATA[Add new sub-community]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblAddTitle" xml:space="preserve">
-				<source><![CDATA[Add new Mashup]]></source>
+				<source><![CDATA[Add new mashup]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblAllowedHosts" xml:space="preserve">
 				<source><![CDATA[Allowed hosts]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblAppKey" xml:space="preserve">
-				<source><![CDATA[App-Key]]></source>
+				<source><![CDATA[App-key]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblChartCalls" xml:space="preserve">
 				<source><![CDATA[Calls]]></source>
@@ -64,7 +64,7 @@
 				<source><![CDATA[Edit Mashup]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblHostsHint" xml:space="preserve">
-				<source><![CDATA[Enter the domain of the new host here and click add, the data for this community will only be accessible from these hosts]]></source>
+				<source><![CDATA[Enter the new host here and click add, so the community-data is accessible only from these hosts]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblListTitleChilds" xml:space="preserve">
 				<source><![CDATA[Entries]]></source>
@@ -91,16 +91,16 @@
 				<source><![CDATA[Callback response]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenCallbackResponsePlaceholder" xml:space="preserve">
-				<source><![CDATA[Enter text for successfully scan token]]></source>
+				<source><![CDATA[Enter text for successfully scanned token]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrl" xml:space="preserve">
 				<source><![CDATA[Callback POST-back URL]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrlFail" xml:space="preserve">
-				<source><![CDATA[You must enter a valid absolute URL (e.g. http://%mashup_site%/end/point) and use a maximum of %max_characters% characters. This is your optional sync-called callback and you have only 2-3 seconds to complete it; the interface and more details can be found on https://wiki.gpsnose.com]]></source>
+				<source><![CDATA[You must enter a valid absolute URL (e.g. https://%mashup_site%/end_point) with a maximum of %max_characters% characters. This is your optional sync-called callback, which must be completed in 2-3 seconds on your server for a successful processing; the interface and more details can be found on https://wiki.gpsnose.com]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenCallbackUrlPlaceholder" xml:space="preserve">
-				<source><![CDATA[Enter the Callback URL here (optional)]]></source>
+				<source><![CDATA[Enter the callback URL here (optional)]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenEditTitle" xml:space="preserve">
 				<source><![CDATA[Edit mashup-token]]></source>
@@ -142,7 +142,7 @@
 				<source><![CDATA[None]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenPayloadHint" xml:space="preserve">
-				<source><![CDATA[The identifier is required and a maximum of %max_characters% characters is allowed]]></source>
+				<source><![CDATA[An identifier with a maximum of %max_characters% characters is is required]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenPayloadLabel" xml:space="preserve">
 				<source><![CDATA[Token identifier]]></source>
@@ -151,7 +151,7 @@
 				<source><![CDATA[Enter token identifier here]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenResponseCodeLabel" xml:space="preserve">
-				<source><![CDATA[Res.]]></source>
+				<source><![CDATA[Response]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenScanDateLabel" xml:space="preserve">
 				<source><![CDATA[Date]]></source>
@@ -169,7 +169,7 @@
 				<source><![CDATA[Mashup-token]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenValidUntilDateHint" xml:space="preserve">
-				<source><![CDATA[Set the date until the token should be valid, empty means, it will remain until the eternity]]></source>
+				<source><![CDATA[Enter token's expiration date; leave empty for non-expiring token]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblMashupTokenValidUntilDateLabel" xml:space="preserve">
 				<source><![CDATA[Expiration date]]></source>
@@ -187,34 +187,34 @@
 				<source><![CDATA[Mashup name]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblNoMashupToken" xml:space="preserve">
-				<source><![CDATA[There are no scanned tokens availabel!]]></source>
+				<source><![CDATA[No scanned tokens available]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblNoMoreMashupToken" xml:space="preserve">
-				<source><![CDATA[There are no more scanned tokens!]]></source>
+				<source><![CDATA[There are no more scanned tokens]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblQuotaLimit" xml:space="preserve">
 				<source><![CDATA[Quota = %quota%]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblRegisterCommunityPlaceholder" xml:space="preserve">
-				<source><![CDATA[Insert Sitename here]]></source>
+				<source><![CDATA[Insert the site-name here]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblSubCommunities" xml:space="preserve">
 				<source><![CDATA[Sub Communities]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblSubCommunitiesFail" xml:space="preserve">
-				<source><![CDATA[To add a sub-community, make sure you only use the characters '0-9 a-z and -' and a maximum of %max_characters% characters]]></source>
+				<source><![CDATA[For sub-community name, use only the characters '0-9 a-z' and '-', max. %max_characters% characters]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblSubCommunitiesHint" xml:space="preserve">
-				<source><![CDATA[Enter the name of the new subcommunity here and click add, it will show as community@subcommunity]]></source>
+				<source><![CDATA[Enter the name of the new subcommunity and click add; it will show as community@subcommunity]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblSubHostsFail" xml:space="preserve">
-				<source><![CDATA[To add a host, make sure you entered a valide url without protocol (e.g.: www.example.com) and use a maximum of %max_characters% characters]]></source>
+				<source><![CDATA[For host-name, enter a valid URL without protocol (e.g.: www.example.com), max. %max_characters% characters]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblTitle" xml:space="preserve">
-				<source><![CDATA[Mashup Admin]]></source>
+				<source><![CDATA[Mashup admin]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblUnvalidatedMashup" xml:space="preserve">
-				<source><![CDATA[There is already an unvalidated mashup, please remove first the other enrty before you add a new one]]></source>
+				<source><![CDATA[There is already an unvalidated mashup with this name: to add it anew, please remove first the other entry]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblValidateCommunityMessage" xml:space="preserve">
 				<source><![CDATA[Add the key %key% to your webpage %mashup% then click Validate. The key can be placed into your website's default home document as a meta-tag named "gpsnose-validation-key" (and content is the key), or as a file named as the key without any extension or with some of the .txt | .htm | .html extensions. See the Wiki page under https://wiki.gpsnose.com for more details.]]></source>
@@ -223,7 +223,7 @@
 				<source><![CDATA[Validation date]]></source>
 			</trans-unit>
 			<trans-unit id="MashupAdmin_lblValidationKey" xml:space="preserve">
-				<source><![CDATA[Validation-Key]]></source>
+				<source><![CDATA[Validation key]]></source>
 			</trans-unit>
 			<trans-unit id="NewsPart_Load_lblBlogWasDeleted" xml:space="preserve">
 				<source><![CDATA[Impression was deleted]]></source>
@@ -282,6 +282,9 @@
 			<trans-unit id="Common_btnRemove" xml:space="preserve">
 				<source><![CDATA[Remove]]></source>
 			</trans-unit>
+			<trans-unit id="Common_btnRestart" xml:space="preserve">
+				<source><![CDATA[Restart]]></source>
+			</trans-unit>
 			<trans-unit id="Common_btnSend" xml:space="preserve">
 				<source><![CDATA[Send]]></source>
 			</trans-unit>
@@ -290,12 +293,6 @@
 			</trans-unit>
 			<trans-unit id="Common_btnSync" xml:space="preserve">
 				<source><![CDATA[Sync]]></source>
-			</trans-unit>
-			<trans-unit id="Common_btnRestart" xml:space="preserve">
-				<source><![CDATA[Restart]]></source>
-			</trans-unit>
-			<trans-unit id="Common_lblLoginPollingStopped" xml:space="preserve">
-				<source><![CDATA[The polling was stopped, please use the button to restart the polling.]]></source>
 			</trans-unit>
 			<trans-unit id="Common_btnUpdate" xml:space="preserve">
 				<source><![CDATA[Update]]></source>
@@ -336,6 +333,9 @@
 			<trans-unit id="Common_lblLoggedOut" xml:space="preserve">
 				<source><![CDATA[You have been logged out. To continue with your work, you have to sign in again.]]></source>
 			</trans-unit>
+			<trans-unit id="Common_lblLoginPollingStopped" xml:space="preserve">
+				<source><![CDATA[The polling was stopped, please use the button to restart the polling.]]></source>
+			</trans-unit>
 			<trans-unit id="Common_lblMaxCountReached" xml:space="preserve">
 				<source><![CDATA[You have reached the maximum count of allowed entries. If you need more, contact us at info@gpsnose.com]]></source>
 			</trans-unit>
@@ -354,6 +354,9 @@
 			<trans-unit id="Common_lblUnknownError" xml:space="preserve">
 				<source><![CDATA[An unknown error is occured!]]></source>
 			</trans-unit>
+			<trans-unit id="Common_lblUnknownNews" xml:space="preserve">
+				<source><![CDATA[Unknown news]]></source>
+			</trans-unit>
 			<trans-unit id="Common_loginRequired" xml:space="preserve">
 				<source><![CDATA[Please login first.]]></source>
 			</trans-unit>
@@ -363,11 +366,11 @@
 			<trans-unit id="Community_loginRequired" xml:space="preserve">
 				<source><![CDATA[Login first to interact]]></source>
 			</trans-unit>
-			<trans-unit id="Home_Index_lblNoNews" xml:space="preserve">
+			<trans-unit id="Home_Overview_lblNoNews" xml:space="preserve">
 				<source><![CDATA[There are currently no such news in your area.]]></source>
 			</trans-unit>
-			<trans-unit id="Home_Index_lblNoPublishers" xml:space="preserve">
-				<source><![CDATA[There are currently no such noses in your area, but you can give the mobile app to your friends to see them here.]]></source>
+			<trans-unit id="Home_Overview_lblNoPublishers" xml:space="preserve">
+				<source><![CDATA[There are currently no such users in your area, but you can give the mobile app to your friends to see them here.]]></source>
 			</trans-unit>
 			<trans-unit id="Nearby_lblNoEvents" xml:space="preserve">
 				<source><![CDATA[Currently there are no events around available]]></source>
@@ -376,7 +379,7 @@
 				<source><![CDATA[Currently there are no impressions around, but you can be the first here to create some…]]></source>
 			</trans-unit>
 			<trans-unit id="Nearby_lblNoNoses" xml:space="preserve">
-				<source><![CDATA[Currently there are no other Noses around]]></source>
+				<source><![CDATA[Currently there are no other users around]]></source>
 			</trans-unit>
 			<trans-unit id="Nearby_lblNoPois" xml:space="preserve">
 				<source><![CDATA[Currently there are no places around available]]></source>

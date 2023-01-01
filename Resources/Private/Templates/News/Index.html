@@ -15,7 +15,7 @@ $(document).ready(function() {
     AddLangRes('Common_lblLoadMore', '<f:translate key="Common_lblLoadMore" />');
     AddLangRes('Common_lblRequestInProgress', '<f:translate key="Common_lblRequestInProgress" />');
     AddLangRes('Common_lblScanToJoin', '<f:translate key="Common_lblScanToJoin" />');
-    AddLangRes('Home_Index_lblNoNews', '<f:translate key="Home_Index_lblNoNews" />');
+    AddLangRes('Home_Overview_lblNoNews', '<f:translate key="Home_Overview_lblNoNews" />');
     AddLangRes('NewsPart_Load_lblBlogWasDeleted', '<f:translate key="NewsPart_Load_lblBlogWasDeleted" />');
     AddLangRes('NewsPart_Load_lblCommentWasDeleted', '<f:translate key="NewsPart_Load_lblCommentWasDeleted" />');
     gn_data.Settings.NewsPageUrl = $('<textarea />').html("{f:uri.action(action:'pageNews', controller:'Api', pluginName:'Pagenews', pageType:'{settings.ajax.pageNews}', arguments:'{ communityTag : communityTag }')}").text();
@@ -28,7 +28,7 @@ $(document).ready(function() {
 <f:section name="main">
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.1.4">
+<div class="ma-gpsnose" data-gn-version="1.2.0">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-news" data-bind="visible:true" style="display: none;">
 
@@ -59,7 +59,7 @@ $(document).ready(function() {
 
         <div class="alert alert-info" data-bind="visible: News().length == 0 && ! NewsRequestActive()">
             <i class="glyphicon glyphicon-info-sign fas fa-info-circle"></i>
-            <span data-bind="text: ' ' + GetLangRes('Home_Index_lblNoNews', 'There are currently no such news in your area.')"></span>
+            <span data-bind="text: ' ' + GetLangRes('Home_Overview_lblNoNews', 'There are currently no such news in your area.')"></span>
         </div>
 
     </div>
@@ -70,7 +70,7 @@ $(document).ready(function() {
 var MA_GPSNOSE_IS_MASHUP = true;
 $(function() {
     if (! gn_data.User) gn_data.User = {};
-    var vm = new IndexViewModel();
+    var vm = new OverviewViewModel();
     vm.NewsPageUrl = gn_data.Settings.NewsPageUrl;
     if (gn_data.Community && gn_data.Community.TagName) vm.CommunityTag(gn_data.Community.TagName);
     vm.OnAddNews = function() {
@@ -95,7 +95,7 @@ $(function() {
         <div class="outer">
             <div>
                 <div class="text-center">
-                    <span data-bind="text: GetLangRes('Home_Index_lblUnknownNews', 'Unknown news')"></span>
+                    <span data-bind="text: GetLangRes('Common_lblUnknownNews', 'Unknown news')"></span>
                 </div>
             </div>
         </div>
