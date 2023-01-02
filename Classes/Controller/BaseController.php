@@ -62,31 +62,6 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     }
 
     /**
-     * @param $uploadFile
-     */
-    protected function getReferenceFromAttachment($uploadFile)
-    {
-        $storage = $this->storageRepository->findByUid('1');
-        $folder = $this->attachmentFolder;
-        $targetFolder = null;
-        if ($storage->hasFolder($folder)) {
-            $targetFolder = $storage->getFolder($folder);
-        } else {
-            $targetFolder = $storage->createFolder($folder);
-        }
-        $originalFilePath = $uploadFile['tmp_name'];
-        $newFileName = $uploadFile['name'];
-
-        if (file_exists($originalFilePath)) {
-            $movedNewFile = $storage->addFile($originalFilePath, $targetFolder, $newFileName);
-            /** @var \SmartNoses\Gpsnose\Domain\Model\FileReference */
-            $newFileReference = $this->objectManager->get(\SmartNoses\Gpsnose\Domain\Model\FileReference::class);
-            $newFileReference->setFile($movedNewFile);
-            return $newFileReference;
-        }
-    }
-
-    /**
      * @param string $communityTag
      */
     protected function SetCommunity(string $communityTag = NULL)

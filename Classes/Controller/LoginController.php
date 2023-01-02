@@ -82,8 +82,8 @@ class LoginController extends BaseController
      */
     public function qrcodeAction()
     {
-        $this->contentObj = $this->configurationManager->getContentObject();
-        $redirectPid = $this->contentObj->data['tx_gpsnose_mashup_login_redirect'];
+        $contentObj = $this->configurationManager->getContentObject();
+        $redirectPid = $contentObj->data['tx_gpsnose_mashup_login_redirect'];
 
         if ($this->isUserLoggedIn()) {
             if (isset($_GET['returnUrl'])) {
@@ -104,16 +104,16 @@ class LoginController extends BaseController
                 $loginId = GnUtil::NewGuid();
                 $appKey = $mashup->getAppKey();
 
-                $mustJoin = $this->contentObj->data['tx_gpsnose_mashup_login_option_must_join'];
-                $needsActivation = $this->contentObj->data['tx_gpsnose_mashup_login_option_needs_activation'];
-                $acls = $this->contentObj->data['tx_gpsnose_mashup_login_acl'];
+                $mustJoin = $contentObj->data['tx_gpsnose_mashup_login_option_must_join'];
+                $needsActivation = $contentObj->data['tx_gpsnose_mashup_login_option_needs_activation'];
+                $acls = $contentObj->data['tx_gpsnose_mashup_login_acl'];
 
                 $loginApi = $this->_gnApi->GetLoginApiForEndUser($appKey, $loginId, GnUtility::getLanguage());
                 $this->view->assign('qr_code_image', 'data:image/png;base64,' . base64_encode($loginApi->GenerateQrCode($mustJoin, $needsActivation, $acls)));
                 $this->view->assign('login_id', $loginId);
 
                 $this->view->assign('mashup', $mashup);
-                $this->view->assign('record', $this->contentObj->data['uid']);
+                $this->view->assign('record', $contentObj->data['uid']);
             }
 
             if (isset($_GET["returnUrl"])) {

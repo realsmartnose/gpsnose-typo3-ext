@@ -1,5 +1,9 @@
 <?php
-defined('TYPO3_MODE') || die('Access denied.');
+defined('TYPO3') || die('Access denied.');
+
+use Psr\Http\Message\ServerRequestInterface;
+use SmartNoses\Gpsnose\Utility\GnUtility;
+use TYPO3\CMS\Core\Http\ApplicationType;
 
 call_user_func(
     function ($extKey) {
@@ -225,7 +229,18 @@ call_user_func(
            }'
         );
 
-        if (TYPO3_MODE === 'BE' && !(TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_CLI)) {
+        $addModule = false;
+        if (GnUtility::isVersion11()) {
+            if (TYPO3_MODE === 'BE' && !(TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_CLI)) {
+                $addModule = true;
+            }
+        } else if (isset($GLOBALS['TYPO3_REQUEST']) && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
+            if ($GLOBALS['TYPO3_REQUEST'] instanceof ServerRequestInterface) {
+            } else {
+                $addModule = true;
+            }
+        }
+        if ($addModule) {
             \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class)->addRequireJsConfiguration([
                 'paths' => [
                     'maframework' => \TYPO3\CMS\Core\Utility\PathUtility::getAbsoluteWebPath(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('gpsnose', 'Resources/Public/Mashup/Js/')) . 'maframework.min'
@@ -240,7 +255,9 @@ call_user_func(
         }
 
         // Extends FrontendUser
-        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)->registerImplementation(\TYPO3\CMS\Extbase\Domain\Model\FrontendUser::class, \SmartNoses\Gpsnose\Domain\Model\FrontendUser::class);
+        if (GnUtility::isVersion11()) {
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)->registerImplementation(\TYPO3\CMS\Extbase\Domain\Model\FrontendUser::class, \SmartNoses\Gpsnose\Domain\Model\FrontendUser::class);
+        }
 
         // Add GpsNoseBasedAuthenticationService
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
@@ -294,114 +311,119 @@ call_user_func(
         /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
         $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
         $iconRegistry->registerIcon(
-            'fa-link',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'link']
+            'link-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/link.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-share',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'share']
+            'share-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/share-alt.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-plus',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'plus']
+            'plus-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/plus.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-wrench',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'wrench']
+            'wrench-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/wrench.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-folder-open',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'folder-open']
+            'folder-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/folder-open.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-trash',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'trash']
+            'trash-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/trash.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-play',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'play']
+            'play-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/play.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-globe',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'globe']
+            'globe-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/globe.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-lock',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'lock']
+            'lock-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/lock.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-eye-slash',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'eye-slash']
+            'eye-slash-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/eye-slash.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-refresh',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'refresh']
+            'sync-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/sync.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-cloud',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'cloud']
+            'cloud-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/cloud.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-sign-out',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'sign-out']
+            'sign-out-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/sign-out-alt.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-chevron-left',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'chevron-left']
+            'chevron-left-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/chevron-left.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-user',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'user']
+            'user-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/user.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-qrcode',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'qrcode']
+            'qrcode-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/qrcode.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-tag',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'tag']
+            'tag-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/tag.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-calendar',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'calendar']
+            'calendar-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/calendar.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-check',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'check']
+            'check-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/check.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-chevron-right',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'chevron-right']
+            'chevron-right-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/chevron-right.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-info-circle',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'info-circle']
+            'info-circle-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/info-circle.svg']
         );
         $iconRegistry->registerIcon(
-            'fa-edit',
-            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-            ['name' => 'edit']
+            'edit-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/edit.svg']
+        );
+        $iconRegistry->registerIcon(
+            'refresh-svg',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:gpsnose/Resources/Public/Libs/fontawesome-free/svgs/refresh.svg']
         );
 
         // Plugin-Icons

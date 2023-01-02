@@ -38,17 +38,17 @@ class LabelViewHelper extends AbstractViewHelper
         $bootstrapIconClass = '';
         switch (substr($tag, 0, 1)) {
             case GnSettings::PUBLIC_COMMUNITY_PREFIX:
-                $iconName = 'fa-globe';
+                $iconName = 'globe-svg';
                 $bootstrapIconClass = 'glyphicon glyphicon-globe';
                 break;
 
             case GnSettings::CLOSED_COMMUNITY_PREFIX:
-                $iconName = 'fa-lock';
+                $iconName = 'lock-svg';
                 $bootstrapIconClass = 'glyphicon glyphicon-lock';
                 break;
 
             case GnSettings::PRIVATE_COMMUNITY_PREFIX:
-                $iconName = 'fa-eye-slash';
+                $iconName = 'eye-slash-svg';
                 $bootstrapIconClass = 'glyphicon glyphicon-eye-close';
                 break;
         }

@@ -13,10 +13,10 @@
 
 <f:section name="buttons">
     <f:link.action action="list" class="btn btn-default">
-        <core:icon identifier="fa-chevron-left" /> <f:translate key="Common_btnBackToList" />
+        <core:icon identifier="chevron-left-svg" /> <f:translate key="Common_btnBackToList" />
     </f:link.action>
     <f:link.action action="edit" arguments="{mashup : mashup}" class="btn btn-default">
-        <core:icon identifier="fa-refresh" />
+        <core:icon identifier="sync-svg" />
     </f:link.action>
 </f:section>
 
@@ -44,7 +44,7 @@
                 <f:if condition="{mashup.subCommunities -> f:count()} >= {mashup.maxSubSites}">
                     <f:then>
                         <div class="alert alert-info">
-                            <core:icon identifier="fa-info-circle" />
+                            <core:icon identifier="info-circle-svg" />
                             <span><f:translate key="Common_lblMaxCountReached" /></span>
                         </div>
                     </f:then>
@@ -75,7 +75,7 @@
                                         <f:form.textfield property="tempSubCommunity" id="subCommunityField" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblAddSubCommunityPlaceholder')}" />
                                         <span class="input-group-btn">
                                             <button type="submit" id="addSubCommunityButton" class="btn btn-primary" disabled="disabled">
-                                                <core:icon identifier="fa-plus" />
+                                                <core:icon identifier="plus-svg" />
                                                 <span class="hidden-xs">
                                                     <f:translate key="Common_btnAdd" />
                                                 </span>
@@ -92,7 +92,7 @@
                     <f:for each="{mashup.subCommunities}" as="subCommunity">
                         <li class="list-group-item">
                             <f:link.action action="removeSubCommunity" arguments="{mashup : mashup, subCommunity : subCommunity}" class="btn btn-danger btn-xs">
-                                <core:icon identifier="fa-trash" />
+                                <core:icon identifier="trash-svg" />
                                 <span> <f:translate key="Common_btnRemove" /></span>
                             </f:link.action>
                             <span><nose:community.label tag="{subCommunity.name}" /></span>
@@ -112,7 +112,7 @@
                 <f:if condition="{mashup.hosts -> f:count()} >= {mashup.maxHosts}">
                     <f:then>
                         <div class="alert alert-info">
-                            <core:icon identifier="fa-info-circle" />
+                            <core:icon identifier="info-circle-svg" />
                             <span><f:translate key="Common_lblMaxCountReached" /></span>
                         </div>
                     </f:then>
@@ -127,7 +127,7 @@
                                         <f:form.textfield property="tempHost" id="hostField" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblAddHostPlaceholder')}" />
                                         <span class="input-group-btn">
                                             <button type="submit" id="addHostButton" class="btn btn-primary" disabled="disabled">
-                                                <core:icon identifier="fa-plus" />
+                                                <core:icon identifier="plus-svg" />
                                                 <span class="hidden-xs">
                                                     <f:translate key="Common_btnAdd" />
                                                 </span>
@@ -144,7 +144,7 @@
                     <f:for each="{mashup.hosts}" as="host">
                         <li class="list-group-item">
                             <f:link.action action="removeHost" arguments="{mashup : mashup, host : host}" class="btn btn-danger btn-xs">
-                                <core:icon identifier="fa-trash" />
+                                <core:icon identifier="trash-svg" />
                                 <span> <f:translate key="Common_btnRemove" /></span>
                             </f:link.action>
                             <span>{host.domain}</span>

@@ -38,11 +38,11 @@ class NewsController extends BaseController
      */
     public function indexAction()
     {
-        $this->contentObj = $this->configurationManager->getContentObject();
-        $communityTag = $this->contentObj->data['tx_gpsnose_community_tag'];
+        $contentObj = $this->configurationManager->getContentObject();
+        $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
 
         $this->view->assign('communityTag', $communityTag);
-        $this->view->assign('record', $this->contentObj->data['uid']);
+        $this->view->assign('record', $contentObj->data['uid']);
 
         $pageSize = $this->settings['newsPageSize'];
         $newsService = new GnNewsService(GnUtility::getLanguage());

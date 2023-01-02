@@ -49,8 +49,8 @@ class QrscanController extends BaseController
      */
     public function indexAction()
     {
-        $this->contentObj = $this->configurationManager->getContentObject();
-        $this->view->assign('record', $this->contentObj->data['uid']);
+        $contentObj = $this->configurationManager->getContentObject();
+        $this->view->assign('record', $contentObj->data['uid']);
 
         /** @var \SmartNoses\Gpsnose\Domain\Model\Mashup */
         $mashup = $this->mashupRepository->findByCommunityTag(GnUtility::getGnSettingsMashupName());

@@ -197,6 +197,7 @@ class MashupController extends BaseController
                             $this->frontendUserGroupRepository->addIfNotExistByTitle($subCommunity);
                         }
                         // Remove items not in result
+                        /** @var \SmartNoses\Gpsnose\Domain\Model\SubCommunity $subCommunityDto */
                         foreach ($mashupDto->getSubCommunities() as $subCommunityDto) {
                             if (!in_array($subCommunityDto->getName(), $mashup->SubCommunities)) {
                                 // Remove the FrontendUserGroup
@@ -215,6 +216,7 @@ class MashupController extends BaseController
                             $mashupDto->addHost($t);
                         }
                         // Remove items not in result
+                        /** @var \SmartNoses\Gpsnose\Domain\Model\Host $hostDto */
                         foreach ($mashupDto->getHosts() as $hostDto) {
                             if (!in_array($hostDto->getDomain(), $mashup->Hosts)) {
                                 $mashupDto->removeHost($hostDto);
@@ -565,9 +567,8 @@ class MashupController extends BaseController
 
         $settings = GnUtility::getGnSetting();
         if ($settings['mashup.']['callbackPid'] > 0) {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
-            $uriBuilder = $objectManager->get(UriBuilder::class);
+            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
             $uri = $uriBuilder->reset()
                 ->setTargetPageUid($settings['mashup.']['callbackPid'])
                 ->setCreateAbsoluteUri(TRUE)
@@ -591,6 +592,7 @@ class MashupController extends BaseController
         $newSubCommunity = $mashup->getVisibility() . $mashup->getCommunityTagSufix() . '@' . $mashup->getTempSubCommunity();
 
         $addItem = TRUE;
+        /** @var \SmartNoses\Gpsnose\Domain\Model\SubCommunity $subCommunity */
         foreach ($mashup->getSubCommunities() as $subCommunity) {
             if ($subCommunity->getName() === $newSubCommunity) {
                 $addItem = FALSE;
@@ -681,6 +683,7 @@ class MashupController extends BaseController
         $hosts = [];
         $i = 0;
         $addItem = TRUE;
+        /** @var \SmartNoses\Gpsnose\Domain\Model\Host $host */
         foreach ($mashup->getHosts() as $host) {
             $hosts[$i] = $host->getDomain();
             if ($host->getDomain() === $newHost) {
@@ -736,6 +739,7 @@ class MashupController extends BaseController
             try {
                 $hosts = [];
                 $i = 0;
+                /** @var \SmartNoses\Gpsnose\Domain\Model\Host $mHost */
                 foreach ($mashup->getHosts() as $mHost) {
                     if ($mHost->getDomain() !== $host->getDomain()) {
                         $hosts[$i] = $mHost->getDomain();
@@ -812,6 +816,7 @@ class MashupController extends BaseController
             try {
                 $hosts = [];
                 $i = 0;
+                /** @var \SmartNoses\Gpsnose\Domain\Model\Host $host */
                 foreach ($mashup->getHosts() as $host) {
                     $hosts[$i] = $host->getDomain();
                     $i++;

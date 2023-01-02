@@ -13,13 +13,13 @@
 
 <f:section name="buttons">
     <f:link.action action="logout" class="btn btn-danger">
-        <core:icon identifier="fa-sign-out" /> <f:translate key="Common_btnLogout" />
+        <core:icon identifier="sign-out-svg" /> <f:translate key="Common_btnLogout" />
     </f:link.action>
     <f:link.action action="refresh" class="btn btn-default">
-        <core:icon identifier="fa-cloud" /> <f:translate key="Common_btnSync" />
+        <core:icon identifier="cloud-svg" /> <f:translate key="Common_btnSync" />
     </f:link.action>
     <f:link.action action="list" class="btn btn-default">
-        <core:icon identifier="fa-refresh" />
+        <core:icon identifier="sync-svg" />
     </f:link.action>
 </f:section>
 
@@ -35,7 +35,7 @@
         <tr>
             <th class="col-md-2 col-sm-1 col-xs-3">
                 <f:link.action action="new" class="btn btn-primary btn-xs">
-                    <core:icon identifier="fa-plus" /> <f:translate key="Common_btnAdd" />
+                    <core:icon identifier="plus-svg" /> <f:translate key="Common_btnAdd" />
                 </f:link.action>
             </th>
             <th class="col-md-4 col-sm-5 col-xs-7">
@@ -49,12 +49,12 @@
             <tr>
                 <td>
                     <div class="btn-group btn-group-xs">
-                        <f:link.action action="edit" arguments="{mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="fa-wrench" /></f:link.action>
-                        <f:link.action action="show" arguments="{mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="fa-folder-open" /></f:link.action>
-                        <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="fa-qrcode" /></f:link.action>
+                        <f:link.action action="edit" arguments="{mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="wrench-svg" /></f:link.action>
+                        <f:link.action action="show" arguments="{mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="folder-svg" /></f:link.action>
+                        <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="qrcode-svg" /></f:link.action>
                         <f:if condition="{mashup.appKey} == ''">
-                            <f:link.action action="validate" arguments="{mashup : mashup}" class="btn btn-icon btn-warning" title="{f:translate(key: 'MashupAdmin_btnValidateCommunity')}"><core:icon identifier="fa-play" /></f:link.action>
-                            <f:link.action action="delete" arguments="{mashup : mashup}" class="btn btn-icon btn-danger"><core:icon identifier="fa-trash" /></f:link.action>
+                            <f:link.action action="validate" arguments="{mashup : mashup}" class="btn btn-icon btn-warning" title="{f:translate(key: 'MashupAdmin_btnValidateCommunity')}"><core:icon identifier="play-svg" /></f:link.action>
+                            <f:link.action action="delete" arguments="{mashup : mashup}" class="btn btn-icon btn-danger"><core:icon identifier="trash-svg" /></f:link.action>
                         </f:if>
                     </div>
                 </td>
@@ -65,11 +65,11 @@
                 <td class="visible-lg visible-md">{f:format.date(format:'Y-m-d H:i', date:'{mashup.validationDate}')}</td>
                 <td>
                     <span class="badge" title="{nose:string.replace(value: '{f:translate(key:\'MashupAdmin_lblListTitleSubCommunitiesCount\')}', search:'%count%', replace:'{mashup.subCommunities -> f:count()}')}">
-                        <core:icon identifier="fa-link" />
+                        <core:icon identifier="link-svg" />
                         <span><f:count subject="{mashup.subCommunities}" /></span>
                     </span>
                     <span class="badge" title="{nose:string.replace(value: '{f:translate(key:\'MashupAdmin_lblListTitleHostsCount\')}', search:'%count%', replace:'{mashup.hosts -> f:count()}')}">
-                        <core:icon identifier="fa-share" />
+                        <core:icon identifier="share-svg" />
                         <span><f:count subject="{mashup.hosts}" /></span>
                     </span>
                 </td>

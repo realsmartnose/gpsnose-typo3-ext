@@ -19,6 +19,7 @@ use GpsNose\SDK\Framework\Logging\GnLogConfig;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use GpsNose\SDK\Framework\GnCryptor;
 use GpsNose\SDK\Framework\Logging\GnLogger;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
@@ -155,7 +156,7 @@ class GnUtility
                     $frontendUserRepository->update($frontendUser);
                     $hookName = 'loginUpdateUser';
                 }
-                $objectManager->get(PersistenceManager::class)->persistAll();
+                GeneralUtility::makeInstance(PersistenceManager::class)->persistAll();
 
                 $verified = self::loginUser($frontendUser->getUsername(), $frontendUser->getPassword());
 
@@ -195,14 +196,14 @@ class GnUtility
         $_POST['pass'] = $password;
         /** @var FrontendUserAuthentication */
         $authService = GeneralUtility::makeInstance(FrontendUserAuthentication::class);
-        $authService->start();
+        $authService->start(($GLOBALS['TYPO3_REQUEST'] ?? null));
 
         $hasUser = false;
         if (isset($authService->user)) {
             $hasUser = $authService->user['uid'] > 0;
         }
         $hasLoginFailure = false;
-        if (isset($authService->loginFailure)) {
+        if (property_exists($authService, "loginFailure")) {
             $hasLoginFailure = $authService->loginFailure;
         }
 
@@ -224,8 +225,7 @@ class GnUtility
      */
     public static function getGnSetting()
     {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $configurationManager = $objectManager->get(ConfigurationManager::class);
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
         $settings = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         return $settings['plugin.']['tx_gpsnose.']['settings.'] ?? [];
     }
@@ -290,7 +290,10 @@ class GnUtility
     public static function getLanguage()
     {
         $lang = NULL;
-        if (TYPO3_MODE === 'FE') {
+        if (
+            ((GnUtility::isVersion10() || GnUtility::isVersion11()) && TYPO3_MODE === 'FE') ||
+            isset($GLOBALS['TYPO3_REQUEST']) && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()
+        ) {
             try {
                 if (isset($GLOBALS['TYPO3_REQUEST']) && $GLOBALS['TYPO3_REQUEST']->getAttribute('language')) {
                     $lang = $GLOBALS['TYPO3_REQUEST']->getAttribute('language')->getTwoLetterIsoCode();
@@ -328,27 +331,33 @@ class GnUtility
     /**
      * Check for TYPO3 Version 10
      *
-     * @return bool $isVersion10 True if TYPO3 is version 10
+     * @return bool True if TYPO3 is version 10
      */
     public static function isVersion10(): bool
     {
         $typo3versionAsInt = VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getCurrentTypo3Version());
-        if ($typo3versionAsInt > 10000000 && $typo3versionAsInt < 11000000) {
-            return true;
-        }
-        return false;
+        return $typo3versionAsInt > 10000000 && $typo3versionAsInt < 11000000;
     }
 
     /**
      * Check for TYPO3 Version 11
      *
-     * @return bool $isVersion11 True if TYPO3 is version 11
+     * @return bool True if TYPO3 is version 11
      */
     public static function isVersion11(): bool
     {
         $typo3versionAsInt = VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getCurrentTypo3Version());
-        if ($typo3versionAsInt > 11000000 && $typo3versionAsInt < 12000000) {
-            return true;
-        }
-        return false;
-    }}
+        return $typo3versionAsInt > 11000000 && $typo3versionAsInt < 12000000;
+    }
+
+    /**
+     * Check for TYPO3 Version 12
+     *
+     * @return bool True if TYPO3 is version 12
+     */
+    public static function isVersion12(): bool
+    {
+        $typo3versionAsInt = VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getCurrentTypo3Version());
+        return $typo3versionAsInt > 12000000 && $typo3versionAsInt < 13000000;
+    }
+}

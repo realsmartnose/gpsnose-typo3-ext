@@ -1,7 +1,5 @@
 <?php
-if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
-}
+defined('TYPO3') || die();
 
 $languageFile = 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_db.xlf:';
 

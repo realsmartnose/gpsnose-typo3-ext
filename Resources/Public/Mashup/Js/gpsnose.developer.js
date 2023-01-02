@@ -1,5 +1,20 @@
-class BaseNavigableItem {
-    constructor(data) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var BaseNavigableItem = (function () {
+    function BaseNavigableItem(data) {
         if (data)
             jQuery.extend(this, data);
         if (!this.LoginName && data.Creator) {
@@ -13,31 +28,35 @@ class BaseNavigableItem {
             this.UniqueKey = GetUniqueKey(this.LoginName, this.CreationTicks);
         }
     }
-}
-class NoseDto extends BaseNavigableItem {
-    constructor(data) {
-        super(data);
-        this.IsInCommunity = (community) => {
-            return this.Communities && jQuery.inArray(community, this.Communities) != -1;
+    return BaseNavigableItem;
+}());
+var NoseDto = (function (_super) {
+    __extends(NoseDto, _super);
+    function NoseDto(data) {
+        var _this = _super.call(this, data) || this;
+        _this.IsInCommunity = function (community) {
+            return _this.Communities && jQuery.inArray(community, _this.Communities) != -1;
         };
-        this.ThumbSize = "@200";
-        this.ImageUrl = () => {
-            return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(this.LoginName);
+        _this.ThumbSize = "@200";
+        _this.ImageUrl = function () {
+            return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(_this.LoginName);
         };
-        this.ThumbUrl = () => {
-            return this.ImageUrl() + this.ThumbSize;
+        _this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
         };
-        this.PreviewUrl = () => {
-            return "/nose/preview/" + encodeURIComponent(this.LoginName);
+        _this.PreviewUrl = function () {
+            return "/nose/preview/" + encodeURIComponent(_this.LoginName);
         };
-        this.DetailUrl = () => {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/n/" + encodeURIComponent(this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+        _this.DetailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/n/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
         };
-        this.ShareUrl = () => {
-            return gnSettings.BaseUrl + "/n/" + encodeURIComponent(this.LoginName);
+        _this.ShareUrl = function () {
+            return gnSettings.BaseUrl + "/n/" + encodeURIComponent(_this.LoginName);
         };
+        return _this;
     }
-}
+    return NoseDto;
+}(BaseNavigableItem));
 window.MAX_DATE_TIME_TICKS = "3155378975999999999";
 var MashupFormTypeEnum;
 (function (MashupFormTypeEnum) {
@@ -55,8 +74,9 @@ var GnMashupTokenOptions;
     GnMashupTokenOptions[GnMashupTokenOptions["CanComment"] = 4] = "CanComment";
     GnMashupTokenOptions[GnMashupTokenOptions["AskGpsSharing"] = 8] = "AskGpsSharing";
 })(GnMashupTokenOptions || (GnMashupTokenOptions = {}));
-class MashupAdminViewModel {
-    constructor(params) {
+var MashupAdminViewModel = (function () {
+    function MashupAdminViewModel(params) {
+        var _this = this;
         this.OwnMashups = ko.observableArray([]);
         this.CurrentMashup = ko.observable();
         this.MashupTokenCallbackUrlValue = ko.observable('n/a');
@@ -92,20 +112,20 @@ class MashupAdminViewModel {
         this.CreateMashupTokenValuePerUnit = ko.observable("");
         this.CreateMashupTokenDate = ko.observable("");
         this.CreateMashupTokenSrc = ko.observable("");
-        this.CreateMashupTokenPayloadIsValid = ko.computed(() => {
-            var payload = this.CreateMashupTokenPayload();
-            return payload.length > 0 && payload.length <= this.CreateMashupTokenMaxPayloadChars();
+        this.CreateMashupTokenPayloadIsValid = ko.computed(function () {
+            var payload = _this.CreateMashupTokenPayload();
+            return payload.length > 0 && payload.length <= _this.CreateMashupTokenMaxPayloadChars();
         });
-        this.CreateMashupTokenLabelIsValid = ko.computed(() => {
-            var label = this.CreateMashupTokenLabel();
-            return label.length <= this.CreateMashupTokenMaxLabelChars();
+        this.CreateMashupTokenLabelIsValid = ko.computed(function () {
+            var label = _this.CreateMashupTokenLabel();
+            return label.length <= _this.CreateMashupTokenMaxLabelChars();
         });
-        this.CreateMashupTokenValuePerUnitIsValid = ko.computed(() => {
-            var valuePerUnit = this.CreateMashupTokenValuePerUnit();
+        this.CreateMashupTokenValuePerUnitIsValid = ko.computed(function () {
+            var valuePerUnit = _this.CreateMashupTokenValuePerUnit();
             return /^\d{0,6}(\.\d{1,3})?$/.test(valuePerUnit);
         });
-        this.CreateMashupTokenIsValid = ko.computed(() => {
-            return this.CreateMashupTokenPayloadIsValid() && this.CreateMashupTokenLabelIsValid() && this.CreateMashupTokenValuePerUnitIsValid();
+        this.CreateMashupTokenIsValid = ko.computed(function () {
+            return _this.CreateMashupTokenPayloadIsValid() && _this.CreateMashupTokenLabelIsValid() && _this.CreateMashupTokenValuePerUnitIsValid();
         });
         this.CreateMashupTokenBatchScanning = ko.observable(false);
         this.CreateMashupTokenCanSelectAmount = ko.observable(false);
@@ -113,11 +133,11 @@ class MashupAdminViewModel {
         this.CreateMashupTokenAskGpsSharing = ko.observable(false);
         this.CreateMashupTokenOptions = ko.computed({
             owner: this,
-            read: () => {
-                var isBatchScanning = this.CreateMashupTokenBatchScanning();
-                var isCanSelectAmount = this.CreateMashupTokenCanSelectAmount();
-                var isCanComment = this.CreateMashupTokenCanComment();
-                var isAskGpsSharing = this.CreateMashupTokenAskGpsSharing();
+            read: function () {
+                var isBatchScanning = _this.CreateMashupTokenBatchScanning();
+                var isCanSelectAmount = _this.CreateMashupTokenCanSelectAmount();
+                var isCanComment = _this.CreateMashupTokenCanComment();
+                var isAskGpsSharing = _this.CreateMashupTokenAskGpsSharing();
                 var num = GnMashupTokenOptions.NoOptions;
                 num += isBatchScanning ? GnMashupTokenOptions.BatchScanning : 0;
                 num += isCanSelectAmount ? GnMashupTokenOptions.CanSelectAmount : 0;
@@ -125,11 +145,11 @@ class MashupAdminViewModel {
                 num += isAskGpsSharing ? GnMashupTokenOptions.AskGpsSharing : 0;
                 return num;
             },
-            write: (value) => {
-                this.CreateMashupTokenBatchScanning((value & GnMashupTokenOptions.BatchScanning) == GnMashupTokenOptions.BatchScanning);
-                this.CreateMashupTokenCanSelectAmount((value & GnMashupTokenOptions.CanSelectAmount) == GnMashupTokenOptions.CanSelectAmount);
-                this.CreateMashupTokenCanComment((value & GnMashupTokenOptions.CanComment) == GnMashupTokenOptions.CanComment);
-                this.CreateMashupTokenAskGpsSharing((value & GnMashupTokenOptions.AskGpsSharing) == GnMashupTokenOptions.AskGpsSharing);
+            write: function (value) {
+                _this.CreateMashupTokenBatchScanning((value & GnMashupTokenOptions.BatchScanning) == GnMashupTokenOptions.BatchScanning);
+                _this.CreateMashupTokenCanSelectAmount((value & GnMashupTokenOptions.CanSelectAmount) == GnMashupTokenOptions.CanSelectAmount);
+                _this.CreateMashupTokenCanComment((value & GnMashupTokenOptions.CanComment) == GnMashupTokenOptions.CanComment);
+                _this.CreateMashupTokenAskGpsSharing((value & GnMashupTokenOptions.AskGpsSharing) == GnMashupTokenOptions.AskGpsSharing);
             }
         });
         this.MashupTokenPageUrl = '/MashupApi/GetMashupTokensPage';
@@ -138,14 +158,14 @@ class MashupAdminViewModel {
         this.MashupTokensLastKnownTicks = "0";
         this.HasMoreMashupTokens = ko.observable(true);
         this.MashupTokensRequestActive = ko.observable(false);
-        this.IsAddAllowed = ko.computed(() => {
-            return this.OwnMashups().length < this.AddMaxCount();
+        this.IsAddAllowed = ko.computed(function () {
+            return _this.OwnMashups().length < _this.AddMaxCount();
         });
-        this.IsAddSubCommunityAllowed = ko.computed(() => {
-            return this.CurrentMashup() != null && this.CurrentMashup().SubCommunities().length < this.CurrentMashup().MaxSubSites();
+        this.IsAddSubCommunityAllowed = ko.computed(function () {
+            return _this.CurrentMashup() != null && _this.CurrentMashup().SubCommunities().length < _this.CurrentMashup().MaxSubSites();
         });
-        this.IsAddHostAllowed = ko.computed(() => {
-            return this.CurrentMashup() != null && this.Hosts().length < this.CurrentMashup().MaxHosts();
+        this.IsAddHostAllowed = ko.computed(function () {
+            return _this.CurrentMashup() != null && _this.Hosts().length < _this.CurrentMashup().MaxHosts();
         });
         this.AddMaxCount(params.MaxMashups ? params.MaxMashups : 1);
         this.AddMaxChars(100);
@@ -157,41 +177,41 @@ class MashupAdminViewModel {
         this.PrivacyDropdownItems.push('%' + GetLangRes('Common_lblCommunityPublic', 'Public'));
         this.PrivacyDropdownItems.push('@' + GetLangRes('Common_lblCommunityClosed', 'Closed'));
         this.PrivacyDropdownItems.push('*' + GetLangRes('Common_lblCommunityPrivate', 'Private'));
-        this.PrivacyIndex.subscribe((newValue) => {
-            this.PrivacyLabel(this.PrivacyDropdownItems()[newValue]);
+        this.PrivacyIndex.subscribe(function (newValue) {
+            _this.PrivacyLabel(_this.PrivacyDropdownItems()[newValue]);
         });
         this.PrivacyIndex(0);
-        this.RegisterCommunityValue.subscribe((newValue) => {
-            var isValid = IsValidDomain(newValue, this.AddMaxChars());
-            this.RegisterCommunityIsValid(isValid);
-            this.CurrentMashup(null);
+        this.RegisterCommunityValue.subscribe(function (newValue) {
+            var isValid = IsValidDomain(newValue, _this.AddMaxChars());
+            _this.RegisterCommunityIsValid(isValid);
+            _this.CurrentMashup(null);
         });
-        this.AddSubCommunityValue.subscribe((newValue) => {
-            var isValid = IsValidCommunity(newValue, this.AddSubCommunityMaxChars());
-            this.AddSubCommunityIsValid(isValid);
+        this.AddSubCommunityValue.subscribe(function (newValue) {
+            var isValid = IsValidCommunity(newValue, _this.AddSubCommunityMaxChars());
+            _this.AddSubCommunityIsValid(isValid);
         });
-        this.AddHostValue.subscribe((newValue) => {
-            var isValid = IsValidDomain(newValue, this.AddHostMaxChars());
-            this.AddHostIsValid(isValid);
+        this.AddHostValue.subscribe(function (newValue) {
+            var isValid = IsValidDomain(newValue, _this.AddHostMaxChars());
+            _this.AddHostIsValid(isValid);
         });
-        this.CreateMashupTokenPayload.subscribe((newValue) => {
-            this.CreateMashupTokenSrc("");
+        this.CreateMashupTokenPayload.subscribe(function (newValue) {
+            _this.CreateMashupTokenSrc("");
         });
-        this.CreateMashupTokenDate.subscribe((newValue) => {
-            this.CreateMashupTokenSrc("");
+        this.CreateMashupTokenDate.subscribe(function (newValue) {
+            _this.CreateMashupTokenSrc("");
         });
-        this.CreateMashupTokenOptions.subscribe((newValue) => {
-            this.CreateMashupTokenSrc("");
+        this.CreateMashupTokenOptions.subscribe(function (newValue) {
+            _this.CreateMashupTokenSrc("");
         });
-        this.MashupTokenCallbackUrlValue.subscribe((newValue) => {
-            var domain = this.CurrentMashup() ? this.CurrentMashup().CommunityTagSufix() : null;
-            var isValid = newValue.length == 0 || IsValidUrl(newValue, this.MashupTokenCallbackUrlMaxChars(), domain);
-            this.MashupTokenCallbackUrlIsValid(isValid);
+        this.MashupTokenCallbackUrlValue.subscribe(function (newValue) {
+            var domain = _this.CurrentMashup() ? _this.CurrentMashup().CommunityTagSufix() : null;
+            var isValid = newValue.length == 0 || IsValidUrl(newValue, _this.MashupTokenCallbackUrlMaxChars(), domain);
+            _this.MashupTokenCallbackUrlIsValid(isValid);
         });
     }
-    OnAddMashupTokens() { }
+    MashupAdminViewModel.prototype.OnAddMashupTokens = function () { };
     ;
-    AddMashupTokens(data) {
+    MashupAdminViewModel.prototype.AddMashupTokens = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
@@ -209,9 +229,10 @@ class MashupAdminViewModel {
         }
         if (this.OnAddMashupTokens)
             this.OnAddMashupTokens();
-    }
+    };
     ;
-    PageMashupTokens() {
+    MashupAdminViewModel.prototype.PageMashupTokens = function () {
+        var _this = this;
         if (this.MashupTokensRequestActive())
             return;
         this.MashupTokensRequestActive(true);
@@ -226,30 +247,30 @@ class MashupAdminViewModel {
             }),
             dataType: 'json',
             contentType: 'application/json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddMashupTokens(result);
+                    _this.AddMashupTokens(result);
                 }
                 else {
-                    this.HasMoreMashupTokens(false);
+                    _this.HasMoreMashupTokens(false);
                 }
-                this.MashupTokensRequestActive(false);
+                _this.MashupTokensRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.MashupTokensRequestActive(false);
+                _this.MashupTokensRequestActive(false);
             }
         });
-    }
-    OnEditMashup(mashupDto) { }
+    };
+    MashupAdminViewModel.prototype.OnEditMashup = function (mashupDto) { };
     ;
-    EditMashup(mashup) {
+    MashupAdminViewModel.prototype.EditMashup = function (mashup) {
         this.CurrentMashup(mashup);
         this.FormType(MashupFormTypeEnum.Edit);
         this.MashupTokenCallbackUrlValue(mashup.MashupTokenCallbackUrl());
@@ -258,19 +279,19 @@ class MashupAdminViewModel {
         if (this.OnEditMashup) {
             this.OnEditMashup(mashup);
         }
-    }
-    OnDetailMashup(mashupDto) { }
+    };
+    MashupAdminViewModel.prototype.OnDetailMashup = function (mashupDto) { };
     ;
-    DetailMashup(mashup) {
+    MashupAdminViewModel.prototype.DetailMashup = function (mashup) {
         this.CurrentMashup(mashup);
         this.FormType(MashupFormTypeEnum.Detail);
         if (this.OnDetailMashup) {
             this.OnDetailMashup(mashup);
         }
-    }
-    OnMashupToken(mashupDto) { }
+    };
+    MashupAdminViewModel.prototype.OnMashupToken = function (mashupDto) { };
     ;
-    MashupToken(mashup) {
+    MashupAdminViewModel.prototype.MashupToken = function (mashup) {
         this.CurrentMashup(mashup);
         this.HasMoreMashupTokens(true);
         this.MashupTokens([]);
@@ -278,11 +299,11 @@ class MashupAdminViewModel {
         if (this.OnMashupToken) {
             this.OnMashupToken(mashup);
         }
-    }
-    GetCommunityNameFromAdd(sufix) {
+    };
+    MashupAdminViewModel.prototype.GetCommunityNameFromAdd = function (sufix) {
         return this.GetCommunityPrefix(this.PrivacyDropdownItems()[this.PrivacyIndex()]) + sufix;
-    }
-    GetCommunityHtml(value, additionalClass) {
+    };
+    MashupAdminViewModel.prototype.GetCommunityHtml = function (value, additionalClass) {
         var icon = "";
         var firstChar = this.GetCommunityPrefix(value);
         switch (firstChar) {
@@ -304,14 +325,14 @@ class MashupAdminViewModel {
         else {
             return '<i class="fas fa-globe-americas"></i> <span class="keyword-label' + additionalClass + '"> ' + value + '</span>';
         }
-    }
-    GetCommunityPrefix(value) {
+    };
+    MashupAdminViewModel.prototype.GetCommunityPrefix = function (value) {
         if (!value || value.length < 1) {
             return "%";
         }
         return value.charAt(0);
-    }
-    GetOwnMashups() {
+    };
+    MashupAdminViewModel.prototype.GetOwnMashups = function () {
         var self = this;
         if (self.RequestActiveOwnMashups())
             return;
@@ -329,7 +350,7 @@ class MashupAdminViewModel {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), result.Message, null);
                 }
                 else {
-                    ko.utils.arrayForEach(result, (item, index) => {
+                    ko.utils.arrayForEach(result, function (item, index) {
                         self.OwnMashups.push(new MashupDto(item));
                     });
                 }
@@ -339,15 +360,15 @@ class MashupAdminViewModel {
                 dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
             }
         });
-    }
-    RegisterCommunity() {
+    };
+    MashupAdminViewModel.prototype.RegisterCommunity = function () {
         var self = this;
         if (self.RequestActiveRegisterCommunity())
             return;
         self.CurrentMashup(null);
         var tag = this.GetCommunityNameFromAdd(this.RegisterCommunityValue());
         var isUnique = true;
-        ko.utils.arrayForEach(self.OwnMashups(), (item, index) => {
+        ko.utils.arrayForEach(self.OwnMashups(), function (item, index) {
             var com = item.CommunityTagSufix();
             if (com == self.RegisterCommunityValue()) {
                 isUnique = false;
@@ -385,8 +406,8 @@ class MashupAdminViewModel {
         else {
             dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblDuplicateItem", "There is already an entry with the same name!"), null);
         }
-    }
-    ValidateCommunity() {
+    };
+    MashupAdminViewModel.prototype.ValidateCommunity = function () {
         var self = this;
         if (self.RequestActiveValidateCommunity())
             return;
@@ -423,8 +444,8 @@ class MashupAdminViewModel {
                 dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
             }
         });
-    }
-    AddHost() {
+    };
+    MashupAdminViewModel.prototype.AddHost = function () {
         if (this.CurrentMashup() != null) {
             if (this.Hosts().indexOf(this.AddHostValue()) < 0) {
                 var refs = this.Hosts().slice(0);
@@ -436,15 +457,15 @@ class MashupAdminViewModel {
                 dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblDuplicateItem", "There is already an entry with the same name!"), null);
             }
         }
-    }
-    RemoveHost(value) {
+    };
+    MashupAdminViewModel.prototype.RemoveHost = function (value) {
         if (this.CurrentMashup() != null) {
             var refs = this.Hosts().slice(0);
             refs.splice(refs.indexOf(value), 1);
             this.Hosts(refs);
         }
-    }
-    UpdateCommunity() {
+    };
+    MashupAdminViewModel.prototype.UpdateCommunity = function () {
         if (this.CurrentMashup() != null) {
             var self = this;
             if (self.RequestActiveUpdateCommunity())
@@ -476,12 +497,13 @@ class MashupAdminViewModel {
                 }
             });
         }
-    }
-    RegenerateAppKey() {
+    };
+    MashupAdminViewModel.prototype.RegenerateAppKey = function () {
+        var _this = this;
         if (this.CurrentMashup() != null) {
-            dialog.ShowDestructive(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), () => {
+            dialog.ShowDestructive(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
                 dialog.Hide();
-                var self = this;
+                var self = _this;
                 if (self.RequestActiveRegenerateAppKey())
                     return;
                 var tag = self.CurrentMashup().CommunityTag();
@@ -513,8 +535,8 @@ class MashupAdminViewModel {
                 });
             });
         }
-    }
-    AddSubCommunity() {
+    };
+    MashupAdminViewModel.prototype.AddSubCommunity = function () {
         if (this.CurrentMashup() != null) {
             var self = this;
             if (self.RequestActiveAddSubCommunity())
@@ -554,11 +576,12 @@ class MashupAdminViewModel {
                 dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblDuplicateItem", "There is already an entry with the same name!"), null);
             }
         }
-    }
-    DelSubCommunity(tag) {
-        dialog.ShowDestructive(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), () => {
+    };
+    MashupAdminViewModel.prototype.DelSubCommunity = function (tag) {
+        var _this = this;
+        dialog.ShowDestructive(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
             dialog.Hide();
-            var self = this;
+            var self = _this;
             if (self.RequestActiveDelSubCommunity())
                 return;
             self.RequestActiveDelSubCommunity(true);
@@ -590,8 +613,8 @@ class MashupAdminViewModel {
                 }
             });
         });
-    }
-    CreateMashupToken() {
+    };
+    MashupAdminViewModel.prototype.CreateMashupToken = function () {
         var self = this;
         if (self.CreateMashupTokenIsValid() && self.CurrentMashup() != null) {
             if (self.RequestActiveMashupTokenNew())
@@ -622,12 +645,12 @@ class MashupAdminViewModel {
                 },
                 success: function (data) {
                     try {
-                        const reader = new FileReader();
-                        reader.addEventListener("load", function () {
-                            self.CreateMashupTokenSrc(reader.result);
+                        var reader_1 = new FileReader();
+                        reader_1.addEventListener("load", function () {
+                            self.CreateMashupTokenSrc(reader_1.result);
                             self.RequestActiveMashupTokenNew(false);
                         }, false);
-                        reader.readAsDataURL(data);
+                        reader_1.readAsDataURL(data);
                     }
                     catch (error) {
                         dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorContentUnavailable", "The requested content cannot be loaded. <br/> Please try again later."), null);
@@ -643,10 +666,11 @@ class MashupAdminViewModel {
         else {
             self.CreateMashupTokenSrc("");
         }
-    }
-}
-class MashupDto {
-    constructor(data) {
+    };
+    return MashupAdminViewModel;
+}());
+var MashupDto = (function () {
+    function MashupDto(data) {
         this.CommunityTag = ko.observable("");
         this.ValidationKey = ko.observable("");
         this.AppKey = ko.observable("");
@@ -680,35 +704,37 @@ class MashupDto {
             });
         }
         if (data.CallHistory) {
-            for (const prop in data.CallHistory) {
+            for (var prop in data.CallHistory) {
                 var exceededCount = data.ExceededQuotaHistory[prop];
                 self.History.push(new HistoryDto(prop, data.CallHistory[prop], (exceededCount > 0 ? exceededCount : 0)));
             }
         }
         if (data.ExceededQuotaHistory) {
-            for (const prop in data.ExceededQuotaHistory) {
+            for (var prop in data.ExceededQuotaHistory) {
                 if (data.CallHistory[prop] == null) {
                     self.History.push(new HistoryDto(prop, 0, data.ExceededQuotaHistory[prop]));
                 }
             }
         }
     }
-    CommunityTagPrefix() {
+    MashupDto.prototype.CommunityTagPrefix = function () {
         return this.CommunityTag().substring(0, 1);
-    }
-    CommunityTagSufix() {
+    };
+    MashupDto.prototype.CommunityTagSufix = function () {
         return this.CommunityTag().substring(1, this.CommunityTag().length);
-    }
-}
-class HistoryDto {
-    constructor(Ticks, Call, ExQuota) {
+    };
+    return MashupDto;
+}());
+var HistoryDto = (function () {
+    function HistoryDto(Ticks, Call, ExQuota) {
         this.Ticks = Ticks;
         this.Call = Call;
         this.ExQuota = ExQuota;
     }
-}
-class MashupTokenDto {
-    constructor(data) {
+    return HistoryDto;
+}());
+var MashupTokenDto = (function () {
+    function MashupTokenDto(data) {
         this.NoseDto = ko.observable();
         this.Payload = ko.observable("");
         this.ScannedByLoginName = ko.observable("");
@@ -728,5 +754,6 @@ class MashupTokenDto {
         this.CallbackResponseMessage(data.CallbackResponseMessage);
         this.NoseDto(new NoseDto({ "LoginName": this.ScannedByLoginName() }));
     }
-}
+    return MashupTokenDto;
+}());
 //# sourceMappingURL=gpsnose.developer.js.map

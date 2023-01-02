@@ -1,5 +1,20 @@
-class BaseViewModel {
-    constructor() {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var BaseViewModel = (function () {
+    function BaseViewModel() {
         this.AppleLink = ko.observable('https://itunes.apple.com/us/app/gpsnose/id892215768');
         this.GoogleLink = ko.observable('https://goo.gl/4q4TGl');
         this.YoutubeLink = ko.observable('https://www.youtube.com/embed/ZD6O-Hy7NtA');
@@ -14,17 +29,17 @@ class BaseViewModel {
             'osm-hydrant',
         ];
     }
-    GetQrCodeUrl(content) {
+    BaseViewModel.prototype.GetQrCodeUrl = function (content) {
         return gnSettings.BaseUrl + "/Components/QrCode?tag=" + encodeURIComponent(content);
-    }
-    GetLoginUrl(url) {
+    };
+    BaseViewModel.prototype.GetLoginUrl = function (url) {
         if (window.location.href.indexOf('/Account/Login') > -1) {
             return url;
         }
         var encUrl = encodeURIComponent("/" + window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, ""));
         return (url ? url : '/Account/Login') + '?returnUrl=' + encUrl;
-    }
-    GetHtmlFromString(text) {
+    };
+    BaseViewModel.prototype.GetHtmlFromString = function (text) {
         if (!text)
             return '';
         text = text.replace(/(?:\r\n|\r|\n)/g, ' <br> ');
@@ -38,8 +53,8 @@ class BaseViewModel {
             return '<a href="mailto:' + url + '">' + decodeURI(url) + '</a>';
         });
         return text;
-    }
-    GetKeywordDisplayName(keyword) {
+    };
+    BaseViewModel.prototype.GetKeywordDisplayName = function (keyword) {
         if (!keyword)
             return '';
         if (keyword.lastIndexOf("i-", 0) === 0 && keyword.length > 2) {
@@ -49,33 +64,34 @@ class BaseViewModel {
             return "fireplace";
         }
         return keyword;
-    }
-    GetDefaultImageFromKeywords(keywords) {
+    };
+    BaseViewModel.prototype.GetDefaultImageFromKeywords = function (keywords) {
+        var _this = this;
         if (!Array.isArray(keywords) && keywords != undefined) {
             keywords = keywords.split(';');
         }
         if (Array.isArray(keywords)) {
-            let filteredKeywords = keywords.map(keyword => {
-                var keywordDisplayName = this.GetKeywordDisplayName(keyword);
-                if (this.SupportedDefaultKeywords.indexOf(keywordDisplayName) != -1) {
+            var filteredKeywords = keywords.map(function (keyword) {
+                var keywordDisplayName = _this.GetKeywordDisplayName(keyword);
+                if (_this.SupportedDefaultKeywords.indexOf(keywordDisplayName) != -1) {
                     return keywordDisplayName;
                 }
                 var lastindex1 = keywordDisplayName.lastIndexOf('-');
                 if (lastindex1 > 0) {
                     var fallbackKeyword1 = keywordDisplayName.substring(0, lastindex1);
-                    if (this.SupportedDefaultKeywords.indexOf(fallbackKeyword1) != -1) {
+                    if (_this.SupportedDefaultKeywords.indexOf(fallbackKeyword1) != -1) {
                         return fallbackKeyword1;
                     }
                     var lastindex2 = fallbackKeyword1.lastIndexOf('-');
                     if (lastindex2 > 0) {
                         var fallbackKeyword2 = fallbackKeyword1.substring(0, lastindex2);
-                        if (this.SupportedDefaultKeywords.indexOf(fallbackKeyword2) != -1) {
+                        if (_this.SupportedDefaultKeywords.indexOf(fallbackKeyword2) != -1) {
                             return fallbackKeyword2;
                         }
                     }
                 }
                 return null;
-            }).filter(keyword => {
+            }).filter(function (keyword) {
                 return keyword != null;
             });
             if (filteredKeywords.length > 0 && filteredKeywords[0]) {
@@ -83,10 +99,11 @@ class BaseViewModel {
             }
         }
         return "";
-    }
-}
-class BaseComponentsViewModel {
-    constructor(imagePath) {
+    };
+    return BaseViewModel;
+}());
+var BaseComponentsViewModel = (function () {
+    function BaseComponentsViewModel(imagePath) {
         this.AppleLink = ko.observable('https://itunes.apple.com/us/app/gpsnose/id892215768');
         this.GoogleLink = ko.observable('https://goo.gl/4q4TGl');
         this.YoutubeLink = ko.observable('https://www.youtube.com/embed/ZD6O-Hy7NtA');
@@ -102,11 +119,11 @@ class BaseComponentsViewModel {
         ];
         this.ImagePath = ko.observable(imagePath || '/Content/Mashup/Images');
     }
-    GetLoginUrl(url) {
+    BaseComponentsViewModel.prototype.GetLoginUrl = function (url) {
         var encUrl = encodeURIComponent("/" + window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, ""));
         return (url ? url : '/Account/Login') + '?returnUrl=' + encUrl;
-    }
-    GetHtmlFromString(text) {
+    };
+    BaseComponentsViewModel.prototype.GetHtmlFromString = function (text) {
         if (!text)
             return '';
         text = text.replace(/(?:\r\n|\r|\n)/g, ' <br> ');
@@ -120,8 +137,8 @@ class BaseComponentsViewModel {
             return '<a href="mailto:' + url + '">' + decodeURI(url) + '</a>';
         });
         return text;
-    }
-    GetKeywordDisplayName(keyword) {
+    };
+    BaseComponentsViewModel.prototype.GetKeywordDisplayName = function (keyword) {
         if (!keyword)
             return '';
         if (keyword.lastIndexOf("i-", 0) === 0 && keyword.length > 2) {
@@ -131,33 +148,34 @@ class BaseComponentsViewModel {
             return "fireplace";
         }
         return keyword;
-    }
-    GetDefaultImageFromKeywords(keywords) {
+    };
+    BaseComponentsViewModel.prototype.GetDefaultImageFromKeywords = function (keywords) {
+        var _this = this;
         if (!Array.isArray(keywords) && keywords != undefined) {
             keywords = keywords.split(';');
         }
         if (Array.isArray(keywords)) {
-            let filteredKeywords = keywords.map(keyword => {
-                var keywordDisplayName = this.GetKeywordDisplayName(keyword);
-                if (this.SupportedDefaultKeywords.indexOf(keywordDisplayName) != -1) {
+            var filteredKeywords = keywords.map(function (keyword) {
+                var keywordDisplayName = _this.GetKeywordDisplayName(keyword);
+                if (_this.SupportedDefaultKeywords.indexOf(keywordDisplayName) != -1) {
                     return keywordDisplayName;
                 }
                 var lastindex1 = keywordDisplayName.lastIndexOf('-');
                 if (lastindex1 > 0) {
                     var fallbackKeyword1 = keywordDisplayName.substring(0, lastindex1);
-                    if (this.SupportedDefaultKeywords.indexOf(fallbackKeyword1) != -1) {
+                    if (_this.SupportedDefaultKeywords.indexOf(fallbackKeyword1) != -1) {
                         return fallbackKeyword1;
                     }
                     var lastindex2 = fallbackKeyword1.lastIndexOf('-');
                     if (lastindex2 > 0) {
                         var fallbackKeyword2 = fallbackKeyword1.substring(0, lastindex2);
-                        if (this.SupportedDefaultKeywords.indexOf(fallbackKeyword2) != -1) {
+                        if (_this.SupportedDefaultKeywords.indexOf(fallbackKeyword2) != -1) {
                             return fallbackKeyword2;
                         }
                     }
                 }
                 return null;
-            }).filter(keyword => {
+            }).filter(function (keyword) {
                 return keyword != null;
             });
             if (filteredKeywords.length > 0 && filteredKeywords[0]) {
@@ -165,57 +183,58 @@ class BaseComponentsViewModel {
             }
         }
         return "";
-    }
-    GetPackageTitle(keywords) {
-        let appType = this.GetAppKeywordMarkFromKeywords(keywords);
+    };
+    BaseComponentsViewModel.prototype.GetPackageTitle = function (keywords) {
+        var appType = this.GetAppKeywordMarkFromKeywords(keywords);
         if ((appType === null || appType === void 0 ? void 0 : appType.toLowerCase()) == "primaguide$") {
             return GetLangRes('AppType_lblPrimaGuideTitle', 'PrimaGuide');
         }
         return null;
-    }
-    GetPackageMessage(keywords) {
-        let appType = this.GetAppKeywordMarkFromKeywords(keywords);
+    };
+    BaseComponentsViewModel.prototype.GetPackageMessage = function (keywords) {
+        var appType = this.GetAppKeywordMarkFromKeywords(keywords);
         if ((appType === null || appType === void 0 ? void 0 : appType.toLowerCase()) == "primaguide$") {
             return GetLangRes('AppType_lblPrimaGuideMessage', 'Download PrimaGuide, its free!');
         }
         return null;
-    }
-    GetPackageForAndroid(keywords) {
-        let appType = this.GetAppKeywordMarkFromKeywords(keywords);
+    };
+    BaseComponentsViewModel.prototype.GetPackageForAndroid = function (keywords) {
+        var appType = this.GetAppKeywordMarkFromKeywords(keywords);
         if ((appType === null || appType === void 0 ? void 0 : appType.toLowerCase()) == "primaguide$") {
             return "sk.swizzbits.primaguide.app";
         }
         return null;
-    }
-    GetPackageForIos(keywords) {
-        let appType = this.GetAppKeywordMarkFromKeywords(keywords);
+    };
+    BaseComponentsViewModel.prototype.GetPackageForIos = function (keywords) {
+        var appType = this.GetAppKeywordMarkFromKeywords(keywords);
         if ((appType === null || appType === void 0 ? void 0 : appType.toLowerCase()) == "primaguide$") {
             return "6444717857";
         }
         return null;
-    }
-    GetAppKeywordMarkFromKeywords(keywords) {
-        let keyword = keywords === null || keywords === void 0 ? void 0 : keywords.find((keyword) => {
+    };
+    BaseComponentsViewModel.prototype.GetAppKeywordMarkFromKeywords = function (keywords) {
+        var keyword = keywords === null || keywords === void 0 ? void 0 : keywords.find(function (keyword) {
             return keyword.indexOf("$") > 0;
         });
         return keyword;
-    }
-}
+    };
+    return BaseComponentsViewModel;
+}());
 window.MAX_DATE_TIME_TICKS = "3155378975999999999";
 ko.bindingHandlers.modal = {
-    init: (element, valueAccessor) => {
+    init: function (element, valueAccessor) {
         jQuery(element).modal();
         var value = valueAccessor();
         if (typeof (value) === 'function') {
-            jQuery(element).on('hide.bs.modal', () => {
+            jQuery(element).on('hide.bs.modal', function () {
                 value(false);
             });
         }
-        ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
             jQuery(element).modal('hide');
         });
     },
-    update: (element, valueAccessor) => {
+    update: function (element, valueAccessor) {
         var value = valueAccessor();
         if (ko.utils.unwrapObservable(value)) {
             jQuery(element).modal('show');
@@ -226,9 +245,9 @@ ko.bindingHandlers.modal = {
     }
 };
 ko.bindingHandlers.enterkey = {
-    init: (element, valueAccessor, allBindingsAccessor, viewModel) => {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
         var callback = valueAccessor();
-        jQuery(element).on('keypress', (event) => {
+        jQuery(element).on('keypress', function (event) {
             var keyCode = (event.which ? event.which : event.keyCode);
             if (keyCode === 13) {
                 jQuery(element).trigger('blur');
@@ -240,7 +259,7 @@ ko.bindingHandlers.enterkey = {
     }
 };
 ko.bindingHandlers.bsChecked = {
-    init: (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) => {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var value = valueAccessor();
         var newValue = null;
         if (allBindingsAccessor['has']('checkedValue')) {
@@ -249,25 +268,25 @@ ko.bindingHandlers.bsChecked = {
         else if (allBindingsAccessor['has']('value')) {
             newValue = ko.utils.unwrapObservable(allBindingsAccessor.get('value'));
         }
-        var newValueAccessor = () => {
+        var newValueAccessor = function () {
             return {
-                change: () => {
+                change: function () {
                     value(newValue);
                 }
             };
         };
         ko.bindingHandlers.event.init(element, newValueAccessor, allBindingsAccessor, viewModel, bindingContext);
     },
-    update: (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) => {
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         if (jQuery(element).val() == ko.unwrap(valueAccessor())) {
-            setTimeout(() => {
+            setTimeout(function () {
                 jQuery(element).closest('.btn').button('toggle');
             }, 10);
         }
     }
 };
 ko.bindingHandlers.fancyboxAttr = {
-    update: (element, valueAccessor, allBindings, viewModel, bindingContext) => {
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         var linkableItem = valueAccessor();
         var group = allBindings.get('group') || '';
         var external = allBindings.get('external');
@@ -316,7 +335,7 @@ ko.bindingHandlers.dateTimePicker = {
         }
     }
 };
-ko.extenders.numeric = (target, digits) => {
+ko.extenders.numeric = function (target, digits) {
     var result = ko.computed({
         read: target,
         write: function (newValue) {
@@ -334,32 +353,34 @@ ko.extenders.numeric = (target, digits) => {
     result(target());
     return result;
 };
-class CommunityDetailViewModel extends BaseViewModel {
-    constructor(communityDto, user) {
-        super();
-        this.MembersPageUrl = '/Community/Page_Members';
-        this.Members = ko.observableArray();
-        this.MembersPageSize = gnSettings.CommunityMembersPageSize;
-        this.MembersLastJoinTicks = window.MAX_DATE_TIME_TICKS;
-        this.HasMoreMembers = ko.observable(true);
-        this.MembersRequestActive = ko.observable(false);
-        this.NewsCurrentPage = ko.observable(0);
-        this.MembersRequestActive.subscribe((newValue) => {
+var CommunityDetailViewModel = (function (_super) {
+    __extends(CommunityDetailViewModel, _super);
+    function CommunityDetailViewModel(communityDto, user) {
+        var _this = _super.call(this) || this;
+        _this.MembersPageUrl = '/Community/Page_Members';
+        _this.Members = ko.observableArray();
+        _this.MembersPageSize = gnSettings.CommunityMembersPageSize;
+        _this.MembersLastJoinTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMoreMembers = ko.observable(true);
+        _this.MembersRequestActive = ko.observable(false);
+        _this.NewsCurrentPage = ko.observable(0);
+        _this.MembersRequestActive.subscribe(function (newValue) {
             ShowPreviewPageLoad(newValue);
         });
-        this.TagName = communityDto.TagName;
-        this.NoseDto = new NoseDto({ "LoginName": communityDto.CreatorLoginName });
-        this.Entity = new CommunityDto(communityDto, user);
+        _this.TagName = communityDto.TagName;
+        _this.NoseDto = new NoseDto({ "LoginName": communityDto.CreatorLoginName });
+        _this.Entity = new CommunityDto(communityDto, user);
+        return _this;
     }
-    DisplayName() {
+    CommunityDetailViewModel.prototype.DisplayName = function () {
         return this.Entity.DisplayName();
-    }
-    PageNews() {
+    };
+    CommunityDetailViewModel.prototype.PageNews = function () {
         this.NewsCurrentPage(this.NewsCurrentPage() + 1);
-    }
-    OnAddMembers(data) { }
+    };
+    CommunityDetailViewModel.prototype.OnAddMembers = function (data) { };
     ;
-    AddMembers(data) {
+    CommunityDetailViewModel.prototype.AddMembers = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
@@ -377,9 +398,10 @@ class CommunityDetailViewModel extends BaseViewModel {
         }
         if (this.OnAddMembers)
             this.OnAddMembers(data);
-    }
+    };
     ;
-    PageMembers() {
+    CommunityDetailViewModel.prototype.PageMembers = function () {
+        var _this = this;
         if (this.MembersRequestActive() || !this.HasMoreMembers())
             return;
         this.MembersRequestActive(true);
@@ -393,42 +415,47 @@ class CommunityDetailViewModel extends BaseViewModel {
                 pageSize: this.MembersPageSize
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddMembers(result);
+                    _this.AddMembers(result);
                 }
                 else {
-                    this.HasMoreMembers(false);
+                    _this.HasMoreMembers(false);
                 }
-                this.MembersRequestActive(false);
+                _this.MembersRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.MembersRequestActive(false);
+                _this.MembersRequestActive(false);
             }
         });
-    }
-}
-class AppTypeComponent extends BaseComponentsViewModel {
-    constructor(params) {
+    };
+    return CommunityDetailViewModel;
+}(BaseViewModel));
+var AppTypeComponent = (function (_super) {
+    __extends(AppTypeComponent, _super);
+    function AppTypeComponent(params) {
+        var _this = this;
         var _a;
-        super(params && params.imagePath || null);
-        this.Keywords = ko.observableArray((_a = params === null || params === void 0 ? void 0 : params.keywords) !== null && _a !== void 0 ? _a : []);
-        this.PackageTitle = ko.observable(this.GetPackageTitle(params === null || params === void 0 ? void 0 : params.keywords));
-        this.PackageMessage = ko.observable(this.GetPackageMessage(params === null || params === void 0 ? void 0 : params.keywords));
-        this.PackageForIos = ko.observable(this.GetPackageForIos(params === null || params === void 0 ? void 0 : params.keywords));
-        this.PackageForAndroid = ko.observable(this.GetPackageForAndroid(params === null || params === void 0 ? void 0 : params.keywords));
+        _this = _super.call(this, params && params.imagePath || null) || this;
+        _this.Keywords = ko.observableArray((_a = params === null || params === void 0 ? void 0 : params.keywords) !== null && _a !== void 0 ? _a : []);
+        _this.PackageTitle = ko.observable(_this.GetPackageTitle(params === null || params === void 0 ? void 0 : params.keywords));
+        _this.PackageMessage = ko.observable(_this.GetPackageMessage(params === null || params === void 0 ? void 0 : params.keywords));
+        _this.PackageForIos = ko.observable(_this.GetPackageForIos(params === null || params === void 0 ? void 0 : params.keywords));
+        _this.PackageForAndroid = ko.observable(_this.GetPackageForAndroid(params === null || params === void 0 ? void 0 : params.keywords));
+        return _this;
     }
-}
+    return AppTypeComponent;
+}(BaseComponentsViewModel));
 ko.components.register('ma-gpsnose-apptype', {
     viewModel: {
-        createViewModel: (params, componentInfo) => {
+        createViewModel: function (params, componentInfo) {
             return new AppTypeComponent(params);
         }
     },
@@ -453,16 +480,17 @@ ko.components.register('ma-gpsnose-apptype', {
         '</div>' +
         '</li>'
 });
-class CarouselViewModel extends BaseComponentsViewModel {
-    constructor(params) {
-        super(params && params.imagePath || null);
-        this.IsHidden = ko.observable(false);
-        this.HasCarousel = ko.observable(false);
-        this.Slides = ko.observableArray();
-        this.IsHidden(params && params.isHidden);
-        this.HasCarousel(params && params.hasCarousel);
-        this.Slides.push(new CarouselItemDto(GetLangRes("Shared_HomePageCarouselView0_Title", ""), GetLangRes("Shared_HomePageCarouselView0_Text", "")));
-        if (this.HasCarousel()) {
+var CarouselViewModel = (function (_super) {
+    __extends(CarouselViewModel, _super);
+    function CarouselViewModel(params) {
+        var _this = _super.call(this, params && params.imagePath || null) || this;
+        _this.IsHidden = ko.observable(false);
+        _this.HasCarousel = ko.observable(false);
+        _this.Slides = ko.observableArray();
+        _this.IsHidden(params && params.isHidden);
+        _this.HasCarousel(params && params.hasCarousel);
+        _this.Slides.push(new CarouselItemDto(GetLangRes("Shared_HomePageCarouselView0_Title", ""), GetLangRes("Shared_HomePageCarouselView0_Text", "")));
+        if (_this.HasCarousel()) {
             var carouselSlides = [
                 {
                     title: GetLangRes("Shared_HomePageCarouselView1_Title", ""),
@@ -499,122 +527,93 @@ class CarouselViewModel extends BaseComponentsViewModel {
             ];
             for (var k in carouselSlides) {
                 var slide = carouselSlides[k];
-                this.Slides.push(new CarouselItemDto(slide.title, slide.text));
+                _this.Slides.push(new CarouselItemDto(slide.title, slide.text));
             }
         }
+        return _this;
     }
-}
+    return CarouselViewModel;
+}(BaseComponentsViewModel));
 ko.components.register('ma-gpsnose-carousel', {
     viewModel: {
-        createViewModel: (params, componentInfo) => {
+        createViewModel: function (params, componentInfo) {
             return new CarouselViewModel(params);
         }
     },
-    template: `
-<header class="header-carousel" data-bind="visible: ! IsHidden()">
-    <div id="carousel1" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="10000" data-bs-keyboard="true">
-        <div class="carousel-indicators" data-bind="foreach: Slides, visible: Slides().length > 1">
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bind="attr: { 'data-bs-slide-to': $index() }, css: { active: $index() == 0 }"></button>
-        </div>
-        <div class="carousel-inner" data-bind="foreach: Slides">
-            <div class="carousel-item" data-bind="css: { active: $index() == 0 }">
-                <img data-bind="attr: { src: $parent.ImagePath() + '/bg' + $index() + '.png', atr: Text }">
-                <div class="container2">
-                    <div class="carousel-caption d-flex flex-column justify-content-center">
-                        <div class="d-flex">
-                            <div class="me-3">
-                                <img class="intropage"data-bind="attr: { src: $parent.ImagePath() + '/fg' + $index() + '.png', atr: Text }">
-                            </div>
-                            <div class="flx-grow-1 d-flex flex-column justify-content-center">
-                                <h2 data-bind="text: Title"></h2>
-                                <p data-bind="text: Text" class="d-none d-lg-block m-0"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carousel1" data-bs-slide="prev" data-bind="visible: Slides().length > 1">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carousel1" data-bs-slide="next" data-bind="visible: Slides().length > 1">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-</header>`
+    template: "\n<header class=\"header-carousel\" data-bind=\"visible: ! IsHidden()\">\n    <div id=\"carousel1\" class=\"carousel slide carousel-fade\" data-bs-ride=\"carousel\" data-bs-interval=\"10000\" data-bs-keyboard=\"true\">\n        <div class=\"carousel-indicators\" data-bind=\"foreach: Slides, visible: Slides().length > 1\">\n            <button type=\"button\" data-bs-target=\"#carouselExampleCaptions\" data-bind=\"attr: { 'data-bs-slide-to': $index() }, css: { active: $index() == 0 }\"></button>\n        </div>\n        <div class=\"carousel-inner\" data-bind=\"foreach: Slides\">\n            <div class=\"carousel-item\" data-bind=\"css: { active: $index() == 0 }\">\n                <img data-bind=\"attr: { src: $parent.ImagePath() + '/bg' + $index() + '.png', atr: Text }\">\n                <div class=\"container2\">\n                    <div class=\"carousel-caption d-flex flex-column justify-content-center\">\n                        <div class=\"d-flex\">\n                            <div class=\"me-3\">\n                                <img class=\"intropage\"data-bind=\"attr: { src: $parent.ImagePath() + '/fg' + $index() + '.png', atr: Text }\">\n                            </div>\n                            <div class=\"flx-grow-1 d-flex flex-column justify-content-center\">\n                                <h2 data-bind=\"text: Title\"></h2>\n                                <p data-bind=\"text: Text\" class=\"d-none d-lg-block m-0\"></p>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <button class=\"carousel-control-prev\" type=\"button\" data-bs-target=\"#carousel1\" data-bs-slide=\"prev\" data-bind=\"visible: Slides().length > 1\">\n            <span class=\"carousel-control-prev-icon\" aria-hidden=\"true\"></span>\n            <span class=\"visually-hidden\">Previous</span>\n        </button>\n        <button class=\"carousel-control-next\" type=\"button\" data-bs-target=\"#carousel1\" data-bs-slide=\"next\" data-bind=\"visible: Slides().length > 1\">\n            <span class=\"carousel-control-next-icon\" aria-hidden=\"true\"></span>\n            <span class=\"visually-hidden\">Next</span>\n        </button>\n    </div>\n</header>"
 });
-class CommentsViewModel extends BaseComponentsViewModel {
-    constructor(params) {
-        super(params && params.imagePath || null);
-        this.CommentPageUrl = '/Comment/Page_Comment';
-        this.CommentSaveUrl = '/WebApi/SaveComment';
-        this.Comments = ko.observableArray();
-        this.CommentsPageSize = gnSettings.CommentsPageSize;
-        this.CommentsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
-        this.HasMoreComments = ko.observable(true);
-        this.CommentsRequestActive = ko.observable(false);
-        this.LoginName = ko.observable("");
-        this.IsActivated = ko.observable(false);
-        this.IsAddAllowed = ko.observable(false);
-        this.IsReadonly = ko.observable(false);
-        this.IsLoggedIn = ko.observable(false);
-        this.CommentAddText = ko.observable("");
-        this.CommentAddMood = ko.observable("");
-        this.CommentEditText = ko.observable("");
-        this.CommentEditMood = ko.observable("");
-        this.SaveCommentRequestActive = ko.observable(false);
-        this.UniqueKey = params && params.uniqueKey || "";
-        this.HideTitle = params && params.hideTitle || false;
+var CommentsViewModel = (function (_super) {
+    __extends(CommentsViewModel, _super);
+    function CommentsViewModel(params) {
+        var _this = _super.call(this, params && params.imagePath || null) || this;
+        _this.CommentPageUrl = '/Comment/Page_Comment';
+        _this.CommentSaveUrl = '/WebApi/SaveComment';
+        _this.Comments = ko.observableArray();
+        _this.CommentsPageSize = gnSettings.CommentsPageSize;
+        _this.CommentsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMoreComments = ko.observable(true);
+        _this.CommentsRequestActive = ko.observable(false);
+        _this.LoginName = ko.observable("");
+        _this.IsActivated = ko.observable(false);
+        _this.IsAddAllowed = ko.observable(false);
+        _this.IsReadonly = ko.observable(false);
+        _this.IsLoggedIn = ko.observable(false);
+        _this.CommentAddText = ko.observable("");
+        _this.CommentAddMood = ko.observable("");
+        _this.CommentEditText = ko.observable("");
+        _this.CommentEditMood = ko.observable("");
+        _this.SaveCommentRequestActive = ko.observable(false);
+        _this.UniqueKey = params && params.uniqueKey || "";
+        _this.HideTitle = params && params.hideTitle || false;
         if (params && params.commentPageUrl)
-            this.CommentPageUrl = params.commentPageUrl;
+            _this.CommentPageUrl = params.commentPageUrl;
         if (params && params.commentSaveUrl)
-            this.CommentSaveUrl = params.commentSaveUrl;
+            _this.CommentSaveUrl = params.commentSaveUrl;
         if (params && params.loginUrl)
-            this.LoginUrl = params.loginUrl;
+            _this.LoginUrl = params.loginUrl;
         if (params && params.onChangeComments)
-            this.OnChangeComments = params.onChangeComments;
+            _this.OnChangeComments = params.onChangeComments;
         if (params && params.loginName)
-            this.LoginName(params.loginName);
+            _this.LoginName(params.loginName);
         if (params && params.isActivated)
-            this.IsActivated(params.isActivated);
+            _this.IsActivated(params.isActivated);
         if (params && params.entity) {
-            this.Entity = params.entity;
-            this.ItemType = this.Entity.CommentItemType;
-            this.IsAddAllowed(this.Entity.IsCommentsAllowed());
+            _this.Entity = params.entity;
+            _this.ItemType = _this.Entity.CommentItemType;
+            _this.IsAddAllowed(_this.Entity.IsCommentsAllowed());
         }
         if (params && params.isReadonly) {
-            this.IsReadonly(params.isReadonly);
+            _this.IsReadonly(params.isReadonly);
         }
-        this.IsLoggedIn(this.LoginName().length > 0);
-        this.Moods = ko.observableArray([
+        _this.IsLoggedIn(_this.LoginName().length > 0);
+        _this.Moods = ko.observableArray([
             '😊', '😁', '❤', '💤', '😱', '😔', '😭', '😠'
         ]);
-        this.CommentAddMood.subscribe((newValue) => {
+        _this.CommentAddMood.subscribe(function (newValue) {
             if (newValue.length > 0) {
-                if (this.CommentAddText().length > 0) {
-                    this.CommentAddText(this.CommentAddText().trim() + "  " + newValue);
-                    this.CommentAddMood("");
+                if (_this.CommentAddText().length > 0) {
+                    _this.CommentAddText(_this.CommentAddText().trim() + "  " + newValue);
+                    _this.CommentAddMood("");
                 }
                 else {
-                    this.AddComment();
+                    _this.AddComment();
                 }
             }
         });
         if (params && params.comments && params.comments.length > 0) {
-            this.AddComments(params.comments);
+            _this.AddComments(params.comments);
         }
         else if (params && params.comments) {
-            this.HasMoreComments(false);
+            _this.HasMoreComments(false);
         }
         else {
-            this.PageComments();
+            _this.PageComments();
         }
+        return _this;
     }
-    OnChangeComments(container) { }
+    CommentsViewModel.prototype.OnChangeComments = function (container) { };
     ;
-    AddComments(data) {
+    CommentsViewModel.prototype.AddComments = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
@@ -629,9 +628,10 @@ class CommentsViewModel extends BaseComponentsViewModel {
         }
         if (this.OnChangeComments)
             this.OnChangeComments(jQuery('#commentsContainer'));
-    }
+    };
     ;
-    PageComments() {
+    CommentsViewModel.prototype.PageComments = function () {
+        var _this = this;
         if (this.CommentsRequestActive() || !this.HasMoreComments())
             return;
         this.CommentsRequestActive(true);
@@ -646,28 +646,29 @@ class CommentsViewModel extends BaseComponentsViewModel {
                 itemType: this.ItemType
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddComments(result);
+                    _this.AddComments(result);
                 }
                 else {
-                    this.HasMoreComments(false);
+                    _this.HasMoreComments(false);
                 }
-                this.CommentsRequestActive(false);
+                _this.CommentsRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.CommentsRequestActive(false);
+                _this.CommentsRequestActive(false);
             }
         });
-    }
-    AddComment() {
+    };
+    CommentsViewModel.prototype.AddComment = function () {
+        var _this = this;
         if (this.CommentAddText().length == 0 && this.CommentAddMood().length == 0) {
             dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Comment_lblErrorTextRequired", "Text is required!"), null);
         }
@@ -678,78 +679,82 @@ class CommentsViewModel extends BaseComponentsViewModel {
                 "Mood": this.CommentAddMood(),
                 "CreationTicks": GetTicksFromDate(new Date())
             });
-            this.SaveComment(comment, false, () => {
-                this.CommentAddText("");
-                this.CommentAddMood("");
+            this.SaveComment(comment, false, function () {
+                _this.CommentAddText("");
+                _this.CommentAddMood("");
             });
         }
-    }
-    LongComment() {
-        jQuery(document).off('gn.dialog.show').on('gn.dialog.show', () => {
-            setTimeout(() => {
+    };
+    CommentsViewModel.prototype.LongComment = function () {
+        var _this = this;
+        jQuery(document).off('gn.dialog.show').on('gn.dialog.show', function () {
+            setTimeout(function () {
                 jQuery('#CommentLongField').trigger('select');
             }, 500);
         });
-        dialog.Show(GetLangRes("Common_lblCommentAdd", "Add comment"), '<textarea id="CommentLongField" rows="4" cols="50" maxlength="5000" type="text" class="form-control" placeholder="' + GetLangRes("Common_lblCommentAddHint", "Write comment") + '">' + this.CommentAddText() + '</textarea>', () => {
-            let newVal = String(jQuery('#CommentLongField').val());
+        dialog.Show(GetLangRes("Common_lblCommentAdd", "Add comment"), '<textarea id="CommentLongField" rows="4" cols="50" maxlength="5000" type="text" class="form-control" placeholder="' + GetLangRes("Common_lblCommentAddHint", "Write comment") + '">' + this.CommentAddText() + '</textarea>', function () {
+            var newVal = String(jQuery('#CommentLongField').val());
             if (newVal && newVal.length > 0) {
                 var comment = new CommentDto({
-                    "Creator": this.LoginName(),
+                    "Creator": _this.LoginName(),
                     "Text": newVal,
                     "CreationTicks": GetTicksFromDate(new Date())
                 });
-                this.SaveComment(comment, false, () => {
+                _this.SaveComment(comment, false, function () {
                     dialog.Hide();
-                    this.CommentAddText("");
-                    this.CommentAddMood("");
+                    _this.CommentAddText("");
+                    _this.CommentAddMood("");
                     jQuery('#CommentLongField').val("");
-                    var tmp = this.Comments();
-                    this.Comments([]);
-                    this.Comments(tmp);
-                    if (this.OnChangeComments)
-                        this.OnChangeComments(jQuery('#commentsContainer'));
+                    var tmp = _this.Comments();
+                    _this.Comments([]);
+                    _this.Comments(tmp);
+                    if (_this.OnChangeComments)
+                        _this.OnChangeComments(jQuery('#commentsContainer'));
                 });
             }
             else {
                 dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Comment_lblErrorTextRequired", "Text is required!"), null);
             }
         });
-    }
-    EditComment(comment) {
-        jQuery(document).off('gn.dialog.show').on('gn.dialog.show', () => {
-            setTimeout(() => {
+    };
+    CommentsViewModel.prototype.EditComment = function (comment) {
+        var _this = this;
+        jQuery(document).off('gn.dialog.show').on('gn.dialog.show', function () {
+            setTimeout(function () {
                 jQuery('#CommentEditField').trigger('select');
             }, 500);
         });
-        dialog.Show(GetLangRes("Common_lblCommentEdit", "Edit comment"), '<textarea id="CommentEditField" rows="4" cols="50" maxlength="5000" type="text" class="form-control" placeholder="' + GetLangRes("Common_lblCommentEditHint", "Remove comment") + '">' + comment.Text + '</textarea>', () => {
-            let newVal = String(jQuery('#CommentEditField').val());
+        dialog.Show(GetLangRes("Common_lblCommentEdit", "Edit comment"), '<textarea id="CommentEditField" rows="4" cols="50" maxlength="5000" type="text" class="form-control" placeholder="' + GetLangRes("Common_lblCommentEditHint", "Remove comment") + '">' + comment.Text + '</textarea>', function () {
+            var newVal = String(jQuery('#CommentEditField').val());
             if (newVal && newVal.length > 0) {
                 comment.Text = newVal;
-                this.SaveComment(comment, true, () => {
+                _this.SaveComment(comment, true, function () {
                     dialog.Hide();
-                    var tmp = this.Comments();
-                    this.Comments([]);
-                    this.Comments(tmp);
-                    if (this.OnChangeComments)
-                        this.OnChangeComments(jQuery('#commentsContainer'));
+                    var tmp = _this.Comments();
+                    _this.Comments([]);
+                    _this.Comments(tmp);
+                    if (_this.OnChangeComments)
+                        _this.OnChangeComments(jQuery('#commentsContainer'));
                 });
             }
             else {
-                this.DeleteComment(comment);
+                _this.DeleteComment(comment);
             }
         });
-    }
-    DeleteComment(comment) {
-        dialog.ShowDestructive(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), () => {
+    };
+    CommentsViewModel.prototype.DeleteComment = function (comment) {
+        var _this = this;
+        dialog.ShowDestructive(GetLangRes("Common_lblAreYouSureTitle", "Are you sure?"), GetLangRes("Common_lblAreYouSureMessage", "This can not be undone, proceed anyway?"), function () {
             comment.Text = null;
             comment.Mood = null;
-            this.SaveComment(comment, true, () => {
-                this.Comments.remove(comment);
+            _this.SaveComment(comment, true, function () {
+                _this.Comments.remove(comment);
             });
             dialog.Hide();
         });
-    }
-    SaveComment(comment, isUpdate, onSuccess) {
+    };
+    CommentsViewModel.prototype.SaveComment = function (comment, isUpdate, onSuccess) {
+        var _this = this;
         if (this.SaveCommentRequestActive())
             return;
         this.SaveCommentRequestActive(true);
@@ -766,7 +771,7 @@ class CommentsViewModel extends BaseComponentsViewModel {
                 isUpdate: isUpdate
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (result && result.ErrorCode > 0) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), result.Message, null);
                 }
@@ -774,13 +779,13 @@ class CommentsViewModel extends BaseComponentsViewModel {
                     if (result && typeof (result) === "string" && result.match(/^-{0,1}\d+$/)) {
                         comment.CreationTicks = result;
                     }
-                    var match = ko.utils.arrayFirst(this.Comments(), function (item) {
+                    var match = ko.utils.arrayFirst(_this.Comments(), function (item) {
                         return comment.CreationTicks === item.CreationTicks;
                     });
                     if (comment.Text == null && comment.Mood === null && match) {
-                        this.Comments.remove(match);
-                        if (this.OnChangeComments)
-                            this.OnChangeComments(jQuery('#commentsContainer'));
+                        _this.Comments.remove(match);
+                        if (_this.OnChangeComments)
+                            _this.OnChangeComments(jQuery('#commentsContainer'));
                     }
                     else {
                         if (match) {
@@ -788,26 +793,27 @@ class CommentsViewModel extends BaseComponentsViewModel {
                             match.Mood = comment.Mood;
                         }
                         else {
-                            this.Comments.splice(0, 0, comment);
-                            if (this.OnChangeComments)
-                                this.OnChangeComments(jQuery('#commentsContainer'));
+                            _this.Comments.splice(0, 0, comment);
+                            if (_this.OnChangeComments)
+                                _this.OnChangeComments(jQuery('#commentsContainer'));
                         }
                     }
                     if (onSuccess)
                         onSuccess();
                 }
-                this.SaveCommentRequestActive(false);
+                _this.SaveCommentRequestActive(false);
             },
-            error: () => {
+            error: function () {
                 dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Comment_lblErrorCannotSave", "The comment could not be saved!"), null);
-                this.SaveCommentRequestActive(false);
+                _this.SaveCommentRequestActive(false);
             }
         });
-    }
-}
+    };
+    return CommentsViewModel;
+}(BaseComponentsViewModel));
 ko.components.register('ma-gpsnose-comments', {
     viewModel: {
-        createViewModel: (params, componentInfo) => {
+        createViewModel: function (params, componentInfo) {
             return new CommentsViewModel(params);
         }
     },
@@ -909,8 +915,8 @@ ko.components.register('ma-gpsnose-comments', {
         '</div>' +
         '</div>'
 });
-class DialogViewModel {
-    constructor() {
+var DialogViewModel = (function () {
+    function DialogViewModel() {
         this.Title = ko.observable("");
         this.Message = ko.observable("");
         this.IsDestructive = ko.observable(false);
@@ -919,7 +925,7 @@ class DialogViewModel {
         this.HasOkCallback = ko.observable(false);
         this.ShowDialog = ko.observable(false);
     }
-    Show(title, message, okCallback) {
+    DialogViewModel.prototype.Show = function (title, message, okCallback) {
         this.Title(title);
         this.Message(message);
         this.IsDestructive(false);
@@ -928,8 +934,8 @@ class DialogViewModel {
         this.ShowDialog(title.length > 0 || message.length > 0);
         this.OkClicked(false);
         jQuery(document).trigger('gn.dialog.show');
-    }
-    ShowDestructive(title, message, okCallback) {
+    };
+    DialogViewModel.prototype.ShowDestructive = function (title, message, okCallback) {
         this.Title(title);
         this.Message(message);
         this.IsDestructive(true);
@@ -938,26 +944,26 @@ class DialogViewModel {
         this.ShowDialog(title.length > 0 || message.length > 0);
         this.OkClicked(false);
         jQuery(document).trigger('gn.dialog.show');
-    }
-    Hide() {
+    };
+    DialogViewModel.prototype.Hide = function () {
         this.ShowDialog(false);
         jQuery(document).trigger('gn.dialog.hide');
-    }
-    ClickOkButton() {
+    };
+    DialogViewModel.prototype.ClickOkButton = function () {
         this.OkClicked(true);
         if (this.OkCallback)
             this.OkCallback();
         jQuery(document).trigger('gn.dialog.click.ok');
-    }
-    HasTitle() {
+    };
+    DialogViewModel.prototype.HasTitle = function () {
         return this.Title() != null || this.Title().length > 0;
-    }
-    JoinCommunity(comm, a, onSuccessHandler) {
+    };
+    DialogViewModel.prototype.JoinCommunity = function (comm, a, onSuccessHandler) {
         this.OkClicked(false);
         var keyword = new KeywordDto(comm);
         if (keyword.IsCommunity) {
             var msg = GetLangRes("Common_lblJoinCommunityAreYouSure", "Would you like to join the community %community%?").replace("%community%", keyword.GetHtml());
-            dialog.Show(GetLangRes("Common_lblJoinTitle", "Join a community"), msg, () => {
+            dialog.Show(GetLangRes("Common_lblJoinTitle", "Join a community"), msg, function () {
                 jQuery.ajax({
                     type: 'POST',
                     url: '/WebApi/JoinCommunity',
@@ -966,7 +972,7 @@ class DialogViewModel {
                         tag: comm
                     },
                     dataType: 'json',
-                    success: (response) => {
+                    success: function (response) {
                         if (response && response.ErrorCode == 0) {
                             dialog.Hide();
                             if (onSuccessHandler)
@@ -976,19 +982,19 @@ class DialogViewModel {
                             dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_loginRequired", "Please login first."), null);
                         }
                     },
-                    error: () => {
+                    error: function () {
                         dialog.Show(GetLangRes("Common_lblError", "Error"), "", null);
                     }
                 });
             });
         }
-    }
-    LeaveCommunity(comm, a, onSuccessHandler) {
+    };
+    DialogViewModel.prototype.LeaveCommunity = function (comm, a, onSuccessHandler) {
         this.OkClicked(false);
         var keyword = new KeywordDto(comm);
         if (keyword.IsCommunity) {
             var msg = GetLangRes("Common_lblLeaveCommunityAreYouSure", "Would you like to leave the community %community%?").replace("%community%", keyword.GetHtml());
-            dialog.ShowDestructive(GetLangRes("Common_lblLeaveTitle", "Leave community"), msg, () => {
+            dialog.ShowDestructive(GetLangRes("Common_lblLeaveTitle", "Leave community"), msg, function () {
                 jQuery.ajax({
                     type: 'POST',
                     url: '/WebApi/LeaveCommunity',
@@ -997,7 +1003,7 @@ class DialogViewModel {
                         tag: comm
                     },
                     dataType: 'json',
-                    success: (response) => {
+                    success: function (response) {
                         if (response && response.ErrorCode == 0) {
                             dialog.Hide();
                             if (onSuccessHandler)
@@ -1007,14 +1013,15 @@ class DialogViewModel {
                             dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_loginRequired", "Please login first."), null);
                         }
                     },
-                    error: () => {
+                    error: function () {
                         dialog.Show(GetLangRes("Common_lblError", "Error"), "", null);
                     }
                 });
             });
         }
-    }
-}
+    };
+    return DialogViewModel;
+}());
 var dialog = new DialogViewModel();
 ko.components.register('ma-gpsnose-dialog', {
     viewModel: {
@@ -1047,80 +1054,29 @@ ko.components.register('ma-gpsnose-dialog', {
         '</div>' +
         '</div>'
 });
-class FooterViewModel extends BaseComponentsViewModel {
-    constructor(params) {
-        super(params && params.imagePath || null);
-        this.IsHidden = ko.observable(params && params.isHidden);
+var FooterViewModel = (function (_super) {
+    __extends(FooterViewModel, _super);
+    function FooterViewModel(params) {
+        var _this = _super.call(this, params && params.imagePath || null) || this;
+        _this.IsHidden = ko.observable(params && params.isHidden);
         var d = new Date();
-        this.Copyright = '&copy; ' + d.getFullYear() + ' ' + GetLangRes('Common_lblCompanyName', 'SwizzBits s.r.o.');
-        this.HideCopyright = ko.observable(params && params.hideCopyright);
-        this.HideSupportMail = ko.observable(params && params.hideSupportMail);
+        _this.Copyright = '&copy; ' + d.getFullYear() + ' ' + GetLangRes('Common_lblCompanyName', 'SwizzBits s.r.o.');
+        _this.HideCopyright = ko.observable(params && params.hideCopyright);
+        _this.HideSupportMail = ko.observable(params && params.hideSupportMail);
+        return _this;
     }
-}
+    return FooterViewModel;
+}(BaseComponentsViewModel));
 ko.components.register('ma-gpsnose-footer', {
     viewModel: {
-        createViewModel: (params, componentInfo) => {
+        createViewModel: function (params, componentInfo) {
             return new FooterViewModel(params);
         }
     },
-    template: `
-<div class="footer mt-auto shadow-lg" data-bind="ifnot: IsHidden()">
-    <div class="container d-lg-none">
-        <div class="row my-2">
-            <div class="col-6">
-                <div class="text-end gn-badge">
-                    <a href="#" data-external role="button" data-bind="attr: { 'href': AppleLink }">
-                        <img data-bind="attr: { src: ImagePath() + '/badge_app_store.svg' }" alt="App Store">
-                    </a>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="text-start gn-badge">
-                    <a href="#" data-external role="button" data-bind="attr: { 'href': GoogleLink }">
-                        <img data-bind="attr: { src: ImagePath() + '/badge_google_play.svg' }" alt="Google Play">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container d-none d-lg-block">
-        <div class="row">
-            <div class="col-4 gn-preview" data-aos="fade-right">
-                <img src="/Content/images/screenshot_gn1.png" alt="GpsNose Screenshot">
-            </div>
-            <div class="col-8 d-flex flex-column">
-                <div class="text-center mt-3">
-                    <h2 class="mt-4 mb-0" data-bind="text: GetLangRes('Common_lblFooterTitle')"></h2>
-                    <p class="m-0" data-bind="text: GetLangRes('Common_lblFooterMessage')"></p>
-                </div>
-                <div class="row flex-grow-1">
-                    <div class="col-6 d-flex align-items-center">
-                        <div class="text-end w-100 gn-badge" data-aos="fade-right" data-aos-delay="300" data-aos-offset="1">
-                            <a href="#" data-external role="button" data-bind="attr: { 'href': AppleLink }">
-                                <img data-bind="attr: { src: ImagePath() + '/badge_app_store.svg' }" alt="App Store">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex align-items-center">
-                        <div class="text-start w-100 gn-badge" data-aos="fade-left" data-aos-delay="300" data-aos-offset="1">
-                            <a href="#" data-external role="button" data-bind="attr: { 'href': GoogleLink }">
-                                <img data-bind="attr: { src: ImagePath() + '/badge_google_play.svg' }" alt="Google Play">
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div data-bind="if: ! HideCopyright()" class="flex-">
-                    <footer>
-                        <p class="text-center" data-bind="html: Copyright"></p>
-                    </footer>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>`
+    template: "\n<div data-bind=\"ifnot: IsHidden()\">\n    <div class=\"footer mt-auto shadow-lg\">\n        <div class=\"container d-lg-none\">\n            <div class=\"row my-2\">\n                <div class=\"col-6\">\n                    <div class=\"text-end gn-badge\">\n                        <a href=\"#\" data-external role=\"button\" data-bind=\"attr: { 'href': AppleLink }\">\n                            <img data-bind=\"attr: { src: ImagePath() + '/badge_app_store.svg' }\" alt=\"App Store\">\n                        </a>\n                    </div>\n                </div>\n                <div class=\"col-6\">\n                    <div class=\"text-start gn-badge\">\n                        <a href=\"#\" data-external role=\"button\" data-bind=\"attr: { 'href': GoogleLink }\">\n                            <img data-bind=\"attr: { src: ImagePath() + '/badge_google_play.svg' }\" alt=\"Google Play\">\n                        </a>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"container d-none d-lg-block\">\n            <div class=\"row\">\n                <div class=\"col-4 gn-preview\" data-aos=\"fade-right\">\n                    <img src=\"/Content/images/screenshot_gn1.png\" alt=\"GpsNose Screenshot\">\n                </div>\n                <div class=\"col-8 d-flex flex-column\">\n                    <div class=\"text-center mt-3\">\n                        <h2 class=\"mt-4 mb-0\" data-bind=\"text: GetLangRes('Common_lblFooterTitle')\"></h2>\n                        <p class=\"m-0\" data-bind=\"text: GetLangRes('Common_lblFooterMessage')\"></p>\n                    </div>\n                    <div class=\"row flex-grow-1\">\n                        <div class=\"col-6 d-flex align-items-center\">\n                            <div class=\"text-end w-100 gn-badge\" data-aos=\"fade-right\" data-aos-delay=\"300\" data-aos-offset=\"1\">\n                                <a href=\"#\" data-external role=\"button\" data-bind=\"attr: { 'href': AppleLink }\">\n                                    <img data-bind=\"attr: { src: ImagePath() + '/badge_app_store.svg' }\" alt=\"App Store\">\n                                </a>\n                            </div>\n                        </div>\n                        <div class=\"col-6 d-flex align-items-center\">\n                            <div class=\"text-start w-100 gn-badge\" data-aos=\"fade-left\" data-aos-delay=\"300\" data-aos-offset=\"1\">\n                                <a href=\"#\" data-external role=\"button\" data-bind=\"attr: { 'href': GoogleLink }\">\n                                    <img data-bind=\"attr: { src: ImagePath() + '/badge_google_play.svg' }\" alt=\"Google Play\">\n                                </a>\n                            </div>\n                        </div>\n                    </div>\n                    <div data-bind=\"if: ! HideCopyright()\" class=\"flex-\">\n                        <footer>\n                            <p class=\"text-center\" data-bind=\"html: Copyright\"></p>\n                        </footer>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>"
 });
-class KeepAliveViewModel {
-    constructor(params) {
+var KeepAliveViewModel = (function () {
+    function KeepAliveViewModel(params) {
         this.IsLoggedIn = ko.observable(true);
         var interval = 600;
         if (params != null && params.interval >= 0) {
@@ -1128,7 +1084,7 @@ class KeepAliveViewModel {
         }
         this.StartInterval(interval);
     }
-    IsStillLoggedIn(onFinish) {
+    KeepAliveViewModel.prototype.IsStillLoggedIn = function (onFinish) {
         jQuery.ajax({
             type: 'POST',
             url: '/Login/IsStillLoggedIn',
@@ -1136,7 +1092,7 @@ class KeepAliveViewModel {
             data: JSON.stringify({}),
             dataType: 'json',
             contentType: 'application/json',
-            success: (result) => {
+            success: function (result) {
                 if (onFinish != null)
                     onFinish(result);
             },
@@ -1145,19 +1101,20 @@ class KeepAliveViewModel {
                     onFinish(false);
             }
         });
-    }
-    StartInterval(interval) {
+    };
+    KeepAliveViewModel.prototype.StartInterval = function (interval) {
         var self = this;
         setInterval(function () {
-            self.IsStillLoggedIn((isOk) => {
+            self.IsStillLoggedIn(function (isOk) {
                 self.IsLoggedIn(isOk);
             });
         }, (interval * 1000));
-    }
-}
+    };
+    return KeepAliveViewModel;
+}());
 ko.components.register('ma-gpsnose-keepalive', {
     viewModel: {
-        createViewModel: (params, componentInfo) => {
+        createViewModel: function (params, componentInfo) {
             return new KeepAliveViewModel(params);
         }
     },
@@ -1172,8 +1129,9 @@ ko.components.register('ma-gpsnose-keepalive', {
         '</div>' +
         '</div>'
 });
-class KeywordsViewModel {
-    constructor(params) {
+var KeywordsViewModel = (function () {
+    function KeywordsViewModel(params) {
+        var _this = this;
         this.Keywords = ko.observableArray();
         this.SelectedKeywords = ko.observableArray();
         this.NewKeyword = ko.observable('');
@@ -1188,61 +1146,62 @@ class KeywordsViewModel {
             this.IsRequired = ko.observable(true);
         }
         this.NoEntryLabel = ko.observable(params && params.noEntryLabel || null);
-        this.SelectedKeywords.subscribe((changes) => {
-            if (this.OnSelectionChange)
-                this.OnSelectionChange(this.SelectedKeywords());
+        this.SelectedKeywords.subscribe(function (changes) {
+            if (_this.OnSelectionChange)
+                _this.OnSelectionChange(_this.SelectedKeywords());
         });
-        this.NewKeyword.subscribe((newKeyword) => {
-            if (this.OnKeywordFieldChange)
-                this.OnKeywordFieldChange(newKeyword);
+        this.NewKeyword.subscribe(function (newKeyword) {
+            if (_this.OnKeywordFieldChange)
+                _this.OnKeywordFieldChange(newKeyword);
         });
         this.AddKeywords(params && params.keywords || [], false);
         if (params && params.keywordString) {
             this.AddKeywords(params.keywordString.split(';'), false);
         }
-        ko.utils.arrayForEach(params && params.selectedKeywords || [], (selectedKeyword) => {
-            this.SelectedKeywords.push(selectedKeyword);
+        ko.utils.arrayForEach(params && params.selectedKeywords || [], function (selectedKeyword) {
+            _this.SelectedKeywords.push(selectedKeyword);
         });
     }
-    OnSelectionChange(data) { }
+    KeywordsViewModel.prototype.OnSelectionChange = function (data) { };
     ;
-    OnKeywordFieldChange(data) { }
+    KeywordsViewModel.prototype.OnKeywordFieldChange = function (data) { };
     ;
-    AddKeywords(data, allSelected) {
-        ko.utils.arrayForEach(data, (newKeyword) => {
+    KeywordsViewModel.prototype.AddKeywords = function (data, allSelected) {
+        var _this = this;
+        ko.utils.arrayForEach(data, function (newKeyword) {
             var addItem = true;
-            ko.utils.arrayForEach(this.Keywords() || [], (keywordDto) => {
+            ko.utils.arrayForEach(_this.Keywords() || [], function (keywordDto) {
                 if (newKeyword == keywordDto.Name()) {
                     addItem = false;
                 }
             });
             if (addItem && newKeyword.indexOf('$') == -1) {
                 var selected = allSelected;
-                ko.utils.arrayForEach(this.SelectedKeywords(), (selectedKeyword) => {
+                ko.utils.arrayForEach(_this.SelectedKeywords(), function (selectedKeyword) {
                     if (selectedKeyword == newKeyword) {
                         selected = true;
                     }
                 });
                 var newKeywordDto = new KeywordDto(newKeyword.toLowerCase());
-                this.Keywords.push(newKeywordDto);
-                newKeywordDto.IsSelected.subscribe((newValue) => {
-                    this.SelectedKeywords.removeAll();
-                    ko.utils.arrayForEach(this.Keywords() || [], (keywordDto) => {
+                _this.Keywords.push(newKeywordDto);
+                newKeywordDto.IsSelected.subscribe(function (newValue) {
+                    _this.SelectedKeywords.removeAll();
+                    ko.utils.arrayForEach(_this.Keywords() || [], function (keywordDto) {
                         if (keywordDto.IsSelected()) {
-                            this.SelectedKeywords.push(keywordDto.Name());
+                            _this.SelectedKeywords.push(keywordDto.Name());
                         }
                     });
                 });
                 newKeywordDto.IsSelected(selected);
             }
         });
-    }
-    AddKeyword() {
+    };
+    KeywordsViewModel.prototype.AddKeyword = function () {
         if (this.NewKeyword().length > 0) {
             var newKeywordStrings = this.NewKeyword().replace(/[^a-zA-Z0-9À-ÿ\ \.\-_]/gi, '');
             var keywordsArray = [];
             var i = 0;
-            ko.utils.arrayForEach(newKeywordStrings.split(' '), (newKeywordString) => {
+            ko.utils.arrayForEach(newKeywordStrings.split(' '), function (newKeywordString) {
                 if (newKeywordString && newKeywordString.length > 0) {
                     keywordsArray[i] = newKeywordString;
                     i++;
@@ -1256,11 +1215,12 @@ class KeywordsViewModel {
                 dialog.Show('', GetLangRes("Common_lblCharsNotAllowed", "To add a keyword you have to enter a valid character"), null);
             }
         }
-    }
-}
+    };
+    return KeywordsViewModel;
+}());
 ko.components.register('ma-gpsnose-keywords', {
     viewModel: {
-        createViewModel: (params, componentInfo) => {
+        createViewModel: function (params, componentInfo) {
             return new KeywordsViewModel(params);
         }
     },
@@ -1286,8 +1246,9 @@ ko.components.register('ma-gpsnose-keywords', {
         '<div class="clearfix"></div>' +
         '</div>'
 });
-class MoodsControlViewModel {
-    constructor(params) {
+var MoodsControlViewModel = (function () {
+    function MoodsControlViewModel(params) {
+        var _this = this;
         this.SelectedMood = ko.observable('');
         this.MoodIndex = ko.observable(params && params.index || '0');
         this.Moods = ko.observableArray(params && params.moods || [
@@ -1304,18 +1265,19 @@ class MoodsControlViewModel {
             '🏂', '🏄', '🏊', '🎮'
         ]);
         this.OnSelectionChange = params && params.onSelectionChange || null;
-        this.SelectedMood.subscribe((newValue) => {
-            if (this.OnSelectionChange)
-                this.OnSelectionChange(this.SelectedMood());
+        this.SelectedMood.subscribe(function (newValue) {
+            if (_this.OnSelectionChange)
+                _this.OnSelectionChange(_this.SelectedMood());
         });
         this.SelectedMood(params && params.selectedMood || '😊');
     }
-    OnSelectionChange(selectedMood) { }
+    MoodsControlViewModel.prototype.OnSelectionChange = function (selectedMood) { };
     ;
-}
+    return MoodsControlViewModel;
+}());
 ko.components.register('ma-gpsnose-moods-control', {
     viewModel: {
-        createViewModel: (params, componentInfo) => {
+        createViewModel: function (params, componentInfo) {
             return new MoodsControlViewModel(params);
         }
     },
@@ -1330,37 +1292,39 @@ ko.components.register('ma-gpsnose-moods-control', {
         '</div>' +
         '</div>'
 });
-class NavbarViewModel extends BaseViewModel {
-    constructor(params) {
-        super();
-        this.params = params;
-        this.ImagePath = ko.observable(this.params && this.params.imagePath || '/Content/Mashup/Images');
-        this.IsHidden = ko.observable(this.params && this.params.isHidden);
-        this.Profile = this.params && this.params.profile || {};
-        this.NoseDto = new NoseDto({ "LoginName": this.Profile.LoginName });
-        this.Languages = ko.observableArray(this.params && this.params.languages || []);
-        this.Navigation = ko.observableArray([]);
-        this.PokeMoods = ko.observableArray([]);
-        this.User = new UserDto(params && params.user || {});
-        this.Navigation([
+var NavbarViewModel = (function (_super) {
+    __extends(NavbarViewModel, _super);
+    function NavbarViewModel(params) {
+        var _this = _super.call(this) || this;
+        _this.params = params;
+        _this.ImagePath = ko.observable(_this.params && _this.params.imagePath || '/Content/Mashup/Images');
+        _this.IsHidden = ko.observable(_this.params && _this.params.isHidden);
+        _this.Profile = _this.params && _this.params.profile || {};
+        _this.NoseDto = new NoseDto({ "LoginName": _this.Profile.LoginName });
+        _this.Languages = ko.observableArray(_this.params && _this.params.languages || []);
+        _this.Navigation = ko.observableArray([]);
+        _this.PokeMoods = ko.observableArray([]);
+        _this.User = new UserDto(params && params.user || {});
+        _this.Navigation([
             new NavBarDto('/', GetLangRes('Common_menuHome', 'Home'), 'fas fa-home', /^\/$|^\/home\/?$|^\/home\/index\/?/i),
             new NavBarDto('/Home/Overview', GetLangRes('Common_menuOverview', 'Overview'), 'fas fa-magnifying-glass-location', /^\/home\/overview\/?/i),
             new NavBarDto('/Home/ImportedKeywords', GetLangRes('Common_menuImportedKeywords', 'POIs'), 'fas fa-hashtag', /^\/home\/importedkeywords\/?/i),
-            new NavBarDto((this.User.LoginName ? '/PhotoUploader/Index' : '/Home/PhotoUploaderAbout'), GetLangRes('Common_menuPhotoUploader', 'Upload photos'), 'fas fa-camera', /^\/photouploader\/?/i),
+            new NavBarDto((_this.User.LoginName ? '/PhotoUploader/Index' : '/Home/PhotoUploaderAbout'), GetLangRes('Common_menuPhotoUploader', 'Upload photos'), 'fas fa-camera', /^\/photouploader\/?/i),
             new NavBarDto('/Developer', GetLangRes('Common_menuDeveloperIndex', 'For developers'), 'fas fa-laptop-code', /^\/developer\/?/i),
             new NavBarDto('/Home/About', GetLangRes('Common_menuSiteAbout', 'Help'), 'fas fa-question-circle', /^\/home\/about\/?/i),
         ]);
-        this.PokeMoods = ko.observableArray([
+        _this.PokeMoods = ko.observableArray([
             '😊', '😁', '😂', '😆', '😉', '😋', '😍', '😜', '😠',
             '😔', '😥', '😫', '😓', '😖', '😷', '😢', '😭', '😱',
             '❤', '💔', '👼', '👿', '👽', '🙈', '🙉', '🙊', '💤',
             '🌹', '🌼', '☕️', '🍷', '🍸', '🍺', '🍴', '⭐', '🎁'
         ]);
+        return _this;
     }
-    OpenUrl(url) {
+    NavbarViewModel.prototype.OpenUrl = function (url) {
         location.href = url;
-    }
-    SendPoke(mood, user) {
+    };
+    NavbarViewModel.prototype.SendPoke = function (mood, user) {
         if (!user.IsActivated) {
             dialog.Show(GetLangRes("Common_activationRequired", "Validation required"), GetLangRes("Common_lblActivationRequired", "To use this functionality, it is required to validate your account, please validate your account in the GpsNose-App!"), null);
         }
@@ -1374,7 +1338,7 @@ class NavbarViewModel extends BaseViewModel {
                     body: mood
                 },
                 dataType: 'json',
-                success: (result) => {
+                success: function (result) {
                     if (result && result.ErrorCode == 0) {
                         dialog.Show(GetLangRes("Common_lblSuccess", "Success"), GetLangRes("Common_lblMessageSendSuccess", "Message sent successfully!"), null);
                     }
@@ -1382,177 +1346,67 @@ class NavbarViewModel extends BaseViewModel {
                         dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblUnknownError", "An unknown error is occured!"), null);
                     }
                 },
-                error: () => {
+                error: function () {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblUnknownError", "An unknown error is occured!"), null);
                 }
             });
         }
-    }
-}
+    };
+    return NavbarViewModel;
+}(BaseViewModel));
 ko.components.register('ma-gpsnose-navbar', {
     viewModel: {
-        createViewModel: (params, componentInfo) => {
+        createViewModel: function (params, componentInfo) {
             return new NavbarViewModel(params);
         }
     },
-    template: `
-<div id="navbar-sticky">
-    <nav class="navbar navbar-expand-lg navbar navbar-light bg-light" data-bind="visible: ! IsHidden()">
-        <div class="container">
-            <a class="d-inline d-lg-none navbar-brand" href="/" data-bind="text: GetLangRes('Common_menuHome', 'Home')"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#gn-navbar-collapse-1" aria-controls="gn-navbar-collapse-1" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="gn-navbar-collapse-1">
-                <ul class="navbar-nav">
-                    <!-- ko foreach: Navigation -->
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="javascript:void(0);" data-bind="click: function() { $parent.OpenUrl(Url()) }, css: { active: IsActive() }">
-                                <i class="d-lg-none" data-bind="class: Icon(), if: Icon()"></i>
-                                <span data-bind="text: Text()"></span>
-                            </a>
-                        </li>
-                    <!-- /ko -->
-                    <!-- ko if: User.LoginName -->
-                        <li class="nav-item dropdown ms-lg-3 mt-lg-0 mt-3">
-                            <a class="nav-link dropdown-toggle p-1" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img class="rounded-circle mr-1 me-1" width="32" data-bind="attr: { src: User.ImageUrl() + '@200', onerror: 'RemoveFancyboxForImage(this);ImageErrorHandler(this, \\'' + ImagePath() + '/EmptyUser.png\\');' }" />
-                                <span data-bind="text: User.LoginName"></span>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li>
-                                    <a class="dropdown-item" data-bind="attr: { href: '/n/' + User.LoginName }">
-                                        <i class="fas fa-user-circle"></i>
-                                        <span data-bind="text: GetLangRes('Common_btnShowProfile', 'Show Profile')"></span>
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item text-danger" data-bind="attr: { href: '/Account/Logout' }">
-                                        <i class="fas fa-sign-out-alt"></i>
-                                        <span data-bind="text: GetLangRes('Common_menuLogout', 'Logout')"></span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    <!-- /ko -->
-                </ul>
-                <!-- ko if: !User.LoginName -->
-                    <span class="d-inline-block ms-lg-3 mt-3 mt-lg-0">
-                        <a class="btn btn-outline-secondary navbar-btn" data-bind="attr: { href: GetLoginUrl(null) }">
-                            <i class="fas fa-sign-in-alt me-1"></i>
-                            <span data-bind="text: GetLangRes('Common_menuLogin', 'Login')"></span>
-                        </a>
-                    </span>
-                <!-- /ko -->
-                <ul class="languages navbar-nav ms-auto mt-3 mt-lg-0" data-bind="foreach: Languages">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="language" data-bind="attr: { href: 'javascript:' + (GetCurrentLang() == $data ? '' : 'SwitchLanguage(\\''+$data+'\\')') + ';' }, text: $data, css: { active: GetCurrentLang() == $data }"></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="bg-light" data-bind="if: Profile.LoginName">
-        <div class="container">
-            <div class="navbar-userinfo py-2" data-bind="if: Profile.LoginName">
-                <div class="row">
-                    <div class="col-sm-4 col-5">
-                        <div class="d-flex">
-                            <div class="me-2">
-                                <a data-bind="attr: { href: NoseDto.ImageUrl() }" data-fancybox>
-                                    <img class="media-object rounded-circle" data-bind="attr: { src: NoseDto.ImageUrl() + '@200', onerror: 'RemoveFancyboxForImage(this);ImageErrorHandler(this, \\'' + ImagePath() + '/EmptyUser.png\\');' }" />
-                                </a>
-                            </div>
-                            <div class="text-nowrap">
-                                <h5 class="m-0" data-bind="text: Profile.LoginName"></h5>
-                                <div data-bind="text: Profile.FullName"></div>
-                                <div data-bind="text: GetDistanceString(Profile)"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 col-2">
-                        <div class="text-center">
-                            <div class="btn-group-vertical btn-group-sm" role="group" aria-label="share">
-                                <div class="btn btn-outline-secondary py-0" data-src="#share" data-fancybox data-bind="attr: { title: GetLangRes('Common_btnShare', 'Share') }">
-                                    <i class="fas fa-qrcode"></i><span class="d-none d-sm-inline" data-bind="text: ' ' + GetLangRes('Common_btnShare', 'Share')"></span>
-                                </div>
-                                <div class="btn btn-outline-secondary py-0 visually-hidden" data-fancybox data-src="#poke-moods-dialog" data-bind="attr: { title: GetLangRes('Common_btnPoke', 'Knock'), 'data-remove': ! User.LoginName || Profile.LoginName == User.LoginName }, css: { \'visually-hidden\': ! User.LoginName || Profile.LoginName == User.LoginName }">
-                                    <i class="far fa-hand-point-left"></i><span class="d-none d-sm-inline" data-bind="text: ' ' + GetLangRes('Common_btnPoke', 'Knock')"></span>
-                                </div>
-                                <a class="btn btn-outline-secondary py-0 visually-hidden" data-bind="attr: { href: GetLoginUrl(null), title: GetLangRes(\'Common_loginToPoke', 'Login to Knock'), 'data-remove': User.LoginName }, css: { 'visually-hidden': User.LoginName }">
-                                    <i class="far fa-hand-point-left"></i><span class="d-none d-sm-inline" data-bind="text: ' ' + GetLangRes('Common_loginToPoke', 'Login to Knock')"></span>
-                                </a>
-                                <a class="btn btn-outline-secondary py-0 visually-hidden" data-external data-bind="attr: { href: GetGoogleMapsLink(Profile.LastActivityLatitude, Profile.LastActivityLongitude), title: GetLangRes('Common_showOnMap', 'Show on map'), 'data-remove': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }, css: { 'visually-hidden': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }">
-                                    <i class="fas fa-map-marker-alt"></i><span class="d-none d-sm-inline" data-bind="text: ' ' + GetLangRes('Common_showOnMap', 'Show on map')"></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 col-5">
-                        <div class="text-end">
-                            <div class="text-nowrap">
-                                <h5 data-bind="text: GetLangRes('Nose_Profile_lblLastSeen', 'Last seen') + ':'"></h5>
-                                <div data-bind="text: GetDateStringFromTicks(Profile.LastActivityUtcDateTime)"></div>
-                                <div data-bind="ifnot: Profile.LastActivityUtcDateTime">
-                                    <a data-bind="attr: { href: GetLoginUrl(null) }, text: GetLangRes('Common_loginRequired', 'Please login first.')" data-popup></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="poke-moods-dialog">
-    <div id="poke-moods-dialog" data-bind="foreach: PokeMoods" style="display:none;" class="moods-dialog">
-        <div class="btn btn-outline-secondary p-1" data-bind="text: $data, click: function() { jQuery.fancybox.getInstance('close'); $parent.SendPoke($data, gn_data.User || {}); }"></div>
-    </div>
-</div>`
+    template: "\n<div id=\"navbar-sticky\">\n    <nav class=\"navbar navbar-expand-lg navbar navbar-light bg-light\" data-bind=\"visible: ! IsHidden()\">\n        <div class=\"container\">\n            <a class=\"d-inline d-lg-none navbar-brand\" href=\"/\" data-bind=\"text: GetLangRes('Common_menuHome', 'Home')\"></a>\n            <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#gn-navbar-collapse-1\" aria-controls=\"gn-navbar-collapse-1\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n                <span class=\"navbar-toggler-icon\"></span>\n            </button>\n            <div class=\"collapse navbar-collapse\" id=\"gn-navbar-collapse-1\">\n                <ul class=\"navbar-nav\">\n                    <!-- ko foreach: Navigation -->\n                        <li class=\"nav-item\">\n                            <a class=\"nav-link\" aria-current=\"page\" href=\"javascript:void(0);\" data-bind=\"click: function() { $parent.OpenUrl(Url()) }, css: { active: IsActive() }\">\n                                <i class=\"d-lg-none\" data-bind=\"class: Icon(), if: Icon()\"></i>\n                                <span data-bind=\"text: Text()\"></span>\n                            </a>\n                        </li>\n                    <!-- /ko -->\n                    <!-- ko if: User.LoginName -->\n                        <li class=\"nav-item dropdown ms-lg-3 mt-lg-0 mt-3\">\n                            <a class=\"nav-link dropdown-toggle p-1\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">\n                                <img class=\"rounded-circle mr-1 me-1\" width=\"32\" data-bind=\"attr: { src: User.ImageUrl() + '@200', onerror: 'RemoveFancyboxForImage(this);ImageErrorHandler(this, \\'' + ImagePath() + '/EmptyUser.png\\');' }\" />\n                                <span data-bind=\"text: User.LoginName\"></span>\n                            </a>\n                            <ul class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\n                                <li>\n                                    <a class=\"dropdown-item\" data-bind=\"attr: { href: '/n/' + User.LoginName }\">\n                                        <i class=\"fas fa-user-circle\"></i>\n                                        <span data-bind=\"text: GetLangRes('Common_btnShowProfile', 'Show Profile')\"></span>\n                                    </a>\n                                </li>\n                                <li><hr class=\"dropdown-divider\"></li>\n                                <li>\n                                    <a class=\"dropdown-item text-danger\" data-bind=\"attr: { href: '/Account/Logout' }\">\n                                        <i class=\"fas fa-sign-out-alt\"></i>\n                                        <span data-bind=\"text: GetLangRes('Common_menuLogout', 'Logout')\"></span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </li>\n                    <!-- /ko -->\n                </ul>\n                <!-- ko if: !User.LoginName -->\n                    <span class=\"d-inline-block ms-lg-3 mt-3 mt-lg-0\">\n                        <a class=\"btn btn-outline-secondary navbar-btn\" data-bind=\"attr: { href: GetLoginUrl(null) }\">\n                            <i class=\"fas fa-sign-in-alt me-1\"></i>\n                            <span data-bind=\"text: GetLangRes('Common_menuLogin', 'Login')\"></span>\n                        </a>\n                    </span>\n                <!-- /ko -->\n                <ul class=\"languages navbar-nav ms-auto mt-3 mt-lg-0\" data-bind=\"foreach: Languages\">\n                    <li class=\"nav-item\">\n                        <a class=\"nav-link\" aria-current=\"language\" data-bind=\"attr: { href: 'javascript:' + (GetCurrentLang() == $data ? '' : 'SwitchLanguage(\\''+$data+'\\')') + ';' }, text: $data, css: { active: GetCurrentLang() == $data }\"></a>\n                    </li>\n                </ul>\n            </div>\n        </div>\n    </nav>\n    <div class=\"bg-light\" data-bind=\"if: Profile.LoginName\">\n        <div class=\"container\">\n            <div class=\"navbar-userinfo py-2\" data-bind=\"if: Profile.LoginName\">\n                <div class=\"row\">\n                    <div class=\"col-sm-4 col-5\">\n                        <div class=\"d-flex\">\n                            <div class=\"me-2\">\n                                <a data-bind=\"attr: { href: NoseDto.ImageUrl() }\" data-fancybox>\n                                    <img class=\"media-object rounded-circle\" data-bind=\"attr: { src: NoseDto.ImageUrl() + '@200', onerror: 'RemoveFancyboxForImage(this);ImageErrorHandler(this, \\'' + ImagePath() + '/EmptyUser.png\\');' }\" />\n                                </a>\n                            </div>\n                            <div class=\"text-nowrap\">\n                                <h5 class=\"m-0\" data-bind=\"text: Profile.LoginName\"></h5>\n                                <div data-bind=\"text: Profile.FullName\"></div>\n                                <div data-bind=\"text: GetDistanceString(Profile)\"></div>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 col-2\">\n                        <div class=\"text-center\">\n                            <div class=\"btn-group-vertical btn-group-sm\" role=\"group\" aria-label=\"share\">\n                                <div class=\"btn btn-outline-secondary py-0\" data-src=\"#share\" data-fancybox data-bind=\"attr: { title: GetLangRes('Common_btnShare', 'Share') }\">\n                                    <i class=\"fas fa-qrcode\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_btnShare', 'Share')\"></span>\n                                </div>\n                                <div class=\"btn btn-outline-secondary py-0 visually-hidden\" data-fancybox data-src=\"#poke-moods-dialog\" data-bind=\"attr: { title: GetLangRes('Common_btnPoke', 'Knock'), 'data-remove': ! User.LoginName || Profile.LoginName == User.LoginName }, css: { 'visually-hidden': ! User.LoginName || Profile.LoginName == User.LoginName }\">\n                                    <i class=\"far fa-hand-point-left\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_btnPoke', 'Knock')\"></span>\n                                </div>\n                                <a class=\"btn btn-outline-secondary py-0 visually-hidden\" data-bind=\"attr: { href: GetLoginUrl(null), title: GetLangRes('Common_loginToPoke', 'Login to Knock'), 'data-remove': User.LoginName }, css: { 'visually-hidden': User.LoginName }\">\n                                    <i class=\"far fa-hand-point-left\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_loginToPoke', 'Login to Knock')\"></span>\n                                </a>\n                                <a class=\"btn btn-outline-secondary py-0 visually-hidden\" data-external data-bind=\"attr: { href: GetGoogleMapsLink(Profile.LastActivityLatitude, Profile.LastActivityLongitude), title: GetLangRes('Common_showOnMap', 'Show on map'), 'data-remove': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }, css: { 'visually-hidden': !IsGeoValid(Profile.LastActivityLatitude, Profile.LastActivityLongitude) }\">\n                                    <i class=\"fas fa-map-marker-alt\"></i><span class=\"d-none d-sm-inline\" data-bind=\"text: ' ' + GetLangRes('Common_showOnMap', 'Show on map')\"></span>\n                                </a>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 col-5\">\n                        <div class=\"text-end\">\n                            <div class=\"text-nowrap\">\n                                <h5 data-bind=\"text: GetLangRes('Nose_Profile_lblLastSeen', 'Last seen') + ':'\"></h5>\n                                <div data-bind=\"text: GetDateStringFromTicks(Profile.LastActivityUtcDateTime)\"></div>\n                                <div data-bind=\"ifnot: Profile.LastActivityUtcDateTime\">\n                                    <a data-bind=\"attr: { href: GetLoginUrl(null) }, text: GetLangRes('Common_loginRequired', 'Please login first.')\" data-popup></a>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<div class=\"poke-moods-dialog\">\n    <div id=\"poke-moods-dialog\" data-bind=\"foreach: PokeMoods\" style=\"display:none;\" class=\"moods-dialog\">\n        <div class=\"btn btn-outline-secondary p-1\" data-bind=\"text: $data, click: function() { jQuery.fancybox.getInstance('close'); $parent.SendPoke($data, gn_data.User || {}); }\"></div>\n    </div>\n</div>"
 });
-class NewsComponent extends BaseComponentsViewModel {
-    constructor(params) {
-        super(params && params.imagePath || null);
-        this.NewsPageUrl = '/Home/Page_News';
-        this.News = ko.observableArray();
-        this.NewsPageSize = gnSettings.NewsPageSize;
-        this.NewsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
-        this.HasMoreNews = ko.observable(true);
-        this.NewsRequestActive = ko.observable(false);
-        this.CommunityTag = ko.observable('');
-        this.CommunityTag(params && params.communityTag || "");
-        this.NewsRequestActive.subscribe((newValue) => {
+var NewsComponent = (function (_super) {
+    __extends(NewsComponent, _super);
+    function NewsComponent(params) {
+        var _this = _super.call(this, params && params.imagePath || null) || this;
+        _this.NewsPageUrl = '/Home/Page_News';
+        _this.News = ko.observableArray();
+        _this.NewsPageSize = gnSettings.NewsPageSize;
+        _this.NewsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMoreNews = ko.observable(true);
+        _this.NewsRequestActive = ko.observable(false);
+        _this.CommunityTag = ko.observable('');
+        _this.CommunityTag(params && params.communityTag || "");
+        _this.NewsRequestActive.subscribe(function (newValue) {
             ShowPreviewPageLoad(newValue);
         });
         if (params && params.onAddNews) {
-            this.OnAddNews = params.onAddNews;
+            _this.OnAddNews = params.onAddNews;
         }
         if (params && params.newsPageUrl) {
-            this.NewsPageUrl = params.newsPageUrl;
+            _this.NewsPageUrl = params.newsPageUrl;
         }
         if (params && params.page) {
-            params.page.subscribe(() => {
-                if (this.HasMoreNews()) {
-                    this.PageNews();
+            params.page.subscribe(function () {
+                if (_this.HasMoreNews()) {
+                    _this.PageNews();
                 }
             });
         }
         if (params && params.news && params.news.length > 0) {
-            this.AddNews(params.news);
+            _this.AddNews(params.news);
         }
         else if (params && params.news) {
-            this.HasMoreNews(false);
+            _this.HasMoreNews(false);
         }
         else {
-            this.PageNews();
+            _this.PageNews();
         }
+        return _this;
     }
-    OnAddNews() { }
-    AddNews(data) {
+    NewsComponent.prototype.OnAddNews = function () { };
+    NewsComponent.prototype.AddNews = function (data) {
+        var _this = this;
         if (data == null)
             return;
-        let timeout = true;
+        var timeout = true;
         if (this.News.length > 0) {
             timeout = false;
         }
@@ -1570,16 +1424,17 @@ class NewsComponent extends BaseComponentsViewModel {
         }
         if (this.OnAddNews) {
             if (timeout) {
-                setTimeout(() => {
-                    this.OnAddNews();
+                setTimeout(function () {
+                    _this.OnAddNews();
                 }, 100);
             }
             else {
                 this.OnAddNews();
             }
         }
-    }
-    PageNews() {
+    };
+    NewsComponent.prototype.PageNews = function () {
+        var _this = this;
         if (this.NewsRequestActive() || !this.HasMoreNews())
             return;
         this.NewsRequestActive(true);
@@ -1593,464 +1448,83 @@ class NewsComponent extends BaseComponentsViewModel {
                 community: this.CommunityTag()
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddNews(result);
+                    _this.AddNews(result);
                 }
                 else {
-                    this.HasMoreNews(false);
+                    _this.HasMoreNews(false);
                 }
-                this.NewsRequestActive(false);
+                _this.NewsRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.NewsRequestActive(false);
+                _this.NewsRequestActive(false);
             }
         });
-    }
-}
+    };
+    return NewsComponent;
+}(BaseComponentsViewModel));
 ko.components.register('ma-gpsnose-news', {
     viewModel: {
-        createViewModel: (params, componentInfo) => {
+        createViewModel: function (params, componentInfo) {
             return new NewsComponent(params);
         }
     },
-    template: `
-<div id="newsContainer" class="masonry row">
-    <div class="masonry-sizer col-lg-3 col-md-4 col-6"></div>
-    <!-- ko foreach: News -->
-    <div data-bind="template: { name: TemplateName() }"></div>
-    <!-- /ko -->
-</div>
-
-<div class="text-center">
-    <div class="btn btn-outline-secondary btn-lg" data-bind="click: function(){ PageNews() }, visible: HasMoreNews(), attr: { disabled: NewsRequestActive() }" data-aos="zoom-in">
-        <div data-bind="visible: ! NewsRequestActive()">
-            <i class="fas fa-cloud-download-alt"></i>
-            <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
-        </div>
-        <div data-bind="visible: NewsRequestActive()">
-            <i class="fas fa-redo-alt gly-spin"></i>
-            <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Request in progress')"></span>
-        </div>
-    </div>
-</div>
-
-<div class="alert alert-info" data-bind="visible: News().length == 0 && ! NewsRequestActive()">
-    <i class="fas fa-info-circle"></i>
-    <span data-bind="text: ' ' + GetLangRes('Home_Overview_lblNoNews', 'There are currently no such news in your area.')"></span>
-</div>
-
-
-
-<script type="text/html" id="UnknownTemplate">
-    <div class="UnknownNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="card shadow-sm">
-            <div class="card-body p-2">
-                <div class="card-bottom mt-2">
-                    <div class="text-center">
-                        <small data-bind="text: GetLangRes('Home_Overview_lblUnknownNews', 'Unknown news')"></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/html" id="AboutNewsTemplate">
-    <div class="AboutNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="card shadow-sm" data-bind="fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP">
-            <div class="card-body p-2">
-                <div class="d-flex">
-                    <div class="me-2">
-                        <img class="media-object rounded-circle media-height" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')" />
-                    </div>
-                    <div class="flow-grow-1">
-                        <h4 data-bind="text: $data.Title"></h4>
-                        <p data-bind="html: $parent.GetHtmlFromString($data.Description)"></p>
-                    </div>
-                </div>
-                <div class="card-bottom mt-2">
-                    <div class="text-center">
-                        <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/html" id="ProfileImageNewsTemplate">
-    <div class="ProfileImageNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="card shadow-sm" data-bind="fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP">
-            <div class="card-body p-2">
-                <img class="image" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')" />
-                <p data-bind="html: $parent.GetHtmlFromString($data.Description)"></p>
-                <div class="card-bottom mt-2">
-                    <div class="text-center">
-                        <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/html" id="NewGuestUserNewsTemplate">
-    <div class="NewGuestUserNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="card shadow-sm" data-bind="fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP">
-            <div class="card-body p-2">
-                <div class="d-flex">
-                    <div class="me-2">
-                        <img class="media-object rounded media-height" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')" />
-                    </div>
-                    <div class="flow-grow-1">
-                        <h4 data-bind="text: $data.Title"></h4>
-                        <p data-bind="html: $parent.GetHtmlFromString($data.Description)"></p>
-                    </div>
-                </div>
-                <div class="card-bottom mt-2">
-                    <div class="text-center">
-                        <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/html" id="ProfileActivatedTemplate">
-    <div class="ProfileActivated masonry-item col-lg-3 col-md-4 col-sm-6 col-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="card shadow-sm" data-bind="fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP">
-            <div class="card-body p-2">
-                <div class="d-flex">
-                    <div class="me-2">
-                        <img class="media-object rounded media-height" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')" />
-                    </div>
-                    <div class="flex-grow-1">
-                        <h4 data-bind="text: $data.Title"></h4>
-                        <p data-bind="html: $parent.GetHtmlFromString($data.Description)"></p>
-                    </div>
-                </div>
-                <div class="card-bottom mt-2">
-                    <div class="text-center">
-                        <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/html" id="PhotoBlogNewsTemplate">
-    <div class="PhotoBlogNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="card shadow-sm" data-bind="fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP, disabled:$data.IsNowDeleted">
-            <img class="card-img-top" data-bind="attr: { src: $data.ThumbUrl() }" onerror="this.style.display='none'" />
-            <div class="card-body p-2">
-                <div class="d-flex">
-                    <div class="flex-grow-1" data-bind="html: $parent.GetHtmlFromString($data.Impression_Text)"></div>
-                    <div class="text-end" data-bind="text: $data.Impression_Mood"></div>
-                </div>
-                <div class="text-end mt-2">
-                    <span class="align-middle" data-bind="text: NoseDto.LoginName"></span>
-                    <img class="rounded-circle" width="32" data-bind="attr: { src: NoseDto.ImageUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')" />
-                </div>
-                <div class="card-bottom mt-2">
-                    <div class="text-center">
-                        <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/html" id="PoIPublishedNewsTemplate">
-    <div class="PoIPublishedNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="card shadow-sm" data-bind="fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP, disabled:$data.IsNowDeleted">
-            <div class="card-body p-2">
-                <div class="d-flex">
-                    <div class="me-2">
-                        <img class="media-object rounded media-height" data-bind="attr: { src: $data.ThumbUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')" />
-                    </div>
-                    <div class="flex-grow-1">
-                        <h4 data-bind="text: $data.Title"></h4>
-                        <p data-bind="html: $parent.GetHtmlFromString($data.Description)"></p>
-                    </div>
-                </div>
-                <div class="card-bottom mt-2">
-                    <div class="text-center">
-                        <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/html" id="TourNewsTemplate">
-    <div class="TourNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="card shadow-sm" data-bind="fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP, disabled:$data.IsNowDeleted">
-            <div class="card-body p-2">
-                <div class="d-flex">
-                    <div class="me-2">
-                        <img class="media-object rounded media-height" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')" />
-                    </div>
-                    <div class="flow-grow-1">
-                        <h4 data-bind="text: $data.Title"></h4>
-                        <p data-bind="html: $parent.GetHtmlFromString($data.Description)"></p>
-                    </div>
-                </div>
-                <div class="card-bottom mt-2">
-                    <div class="d-flex">
-                        <img class="ma-tour-icon" width="24px" data-bind="attr: { src: '/Content/Mashup/Images/TourType' + $data.Track_TrackType + '.png' }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/TourType99.png')" />
-                        <div class="flex-grow-1">
-                            <div class="text-center">
-                                <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/html" id="EventNewsTemplate">
-    <div class="AboutNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="card shadow-sm" data-bind="fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP">
-            <div class="card-body p-2">
-                <div class="d-flex">
-                    <div class="me-2">
-                        <img class="media-object rounded media-height" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyEvent.png')" />
-                    </div>
-                    <div class="flow-grow-1">
-                        <h4 data-bind="text: $data.Title"></h4>
-                        <p data-bind="html: $parent.GetHtmlFromString($data.Description)"></p>
-                        <p data-bind="text: $data.Event_LocationAddress"></p>
-                    </div>
-                </div>
-                <div class="card-bottom mt-2">
-                    <div class="text-center">
-                        <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/html" id="CommentNewsTemplate">
-    <div class="CommentNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="card shadow-sm" data-bind="attr: {'data-src': MA_GPSNOSE_IS_MASHUP ? $data.DetailUrl() : '#comment-' + $index() }, fancyboxAttr: $data, fancyboxType: null, group: 'news', external: MA_GPSNOSE_IS_MASHUP">
-            <div class="card-body p-2">
-                <div>
-                    <div class="comment-image-container me-2">
-                        <div data-bind="if: Comment_CommentItemType == 'Tour'">
-                            <img class="rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')" />
-                        </div>
-                        <div data-bind="if: Comment_CommentItemType == 'FavoriteLocation'">
-                            <img class="rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')" />
-                        </div>
-                        <div data-bind="if: Comment_CommentItemType == 'PhotoBlog'">
-                            <img class="rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyImage.png')" />
-                        </div>
-                        <div data-bind="if: Comment_CommentItemType == 'Community'">
-                            <img class="rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')" />
-                        </div>
-                        <img class="rounded comment-image-left" data-bind="attr: { src: NoseDto.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')" />
-                    </div>
-                    <p data-bind="html: $parent.GetHtmlFromString(CommentText())"></p>
-                </div>
-                <div class="card-bottom mt-2">
-                    <div class="text-center">
-                        <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="visually-hidden">
-        <div data-bind="attr: { id: 'comment-' + $index() }">
-            <div class="CommentNews gn-detail-inline">
-                <div>
-                    <div class="comment-image-container">
-                        <div data-bind="if: Comment_CommentItemType == 'Tour'">
-                            <img class="rounded comment-image-right" data-fancybox data-type="ajax" data-bind="attr: { src: $data.ThumbUrl(), 'data-src': DetailInlineUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')" />
-                        </div>
-                        <div data-bind="if: Comment_CommentItemType == 'FavoriteLocation'">
-                            <img class="rounded comment-image-right" data-fancybox data-type="ajax" data-bind="attr: { src: $data.ThumbUrl(), 'data-src': DetailInlineUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')" />
-                        </div>
-                        <div data-bind="if: Comment_CommentItemType == 'PhotoBlog'">
-                            <img class="rounded comment-image-right" data-fancybox data-type="ajax" data-bind="attr: { src: $data.ThumbUrl(), 'data-src': DetailInlineUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyImage.png')" />
-                        </div>
-                        <div data-bind="if: Comment_CommentItemType == 'Community'">
-                            <img class="rounded comment-image-right" data-fancybox data-type="ajax" data-bind="attr: { src: $data.ThumbUrl(), 'data-src': DetailInlineUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')" />
-                        </div>
-                        <img class="rounded comment-image-left" data-fancybox data-type="ajax" data-bind="attr: { src: NoseDto.ThumbUrl(), 'data-src': NoseDto.PreviewUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')" />
-                    </div>
-                    <p data-bind="html: $parent.GetHtmlFromString(CommentText())"></p>
-                </div>
-                <div class="text-center mt-2">
-                    <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/html" id="RatingNewsTemplate">
-    <div class="RatingNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="card shadow-sm" data-bind="attr: {'data-src': MA_GPSNOSE_IS_MASHUP ? $data.DetailUrl() : '#rating-' + $index() }, fancyboxAttr: $data, fancyboxType: null, group: 'news', external: MA_GPSNOSE_IS_MASHUP">
-            <div class="card-body p-2">
-                <div>
-                    <div class="comment-image-container">
-                        <div data-bind="if: Rating_RatedItemType == 'Tour'">
-                            <img class="rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')" />
-                        </div>
-                        <div data-bind="if: Rating_RatedItemType == 'FavoriteLocation'">
-                            <img class="rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')" />
-                        </div>
-                        <div data-bind="if: Rating_RatedItemType == 'PhotoBlog'">
-                            <img class="rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyImage.png')" />
-                        </div>
-                        <div data-bind="if: Rating_RatedItemType == 'Community'">
-                            <img class="rounded comment-image-right" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')" />
-                        </div>
-                        <img class="rounded comment-image-left" data-bind="attr: { src: NoseDto.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')" />
-                    </div>
-                    <div class="rating-stars-container">
-                        <!-- ko component: {
-                                name: "ma-gpsnose-rating",
-                                params: {
-                                    percent: $data.Rating_Percent,
-                                    count: -1
-                                }
-                            } -->
-                        <!-- /ko -->
-                    </div>
-                    <p data-bind="html: $parent.GetHtmlFromString($data.Description)"></p>
-                </div>
-                <div class="card-bottom mt-2">
-                    <div class="text-center">
-                        <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="visually-hidden">
-        <div data-bind="attr: { id: 'rating-' + $index() }">
-            <div class="RatingNews gn-detail-inline">
-                <div>
-                    <div class="comment-image-container">
-                        <div data-bind="if: Rating_RatedItemType == 'Tour'">
-                            <img class="rounded comment-image-right" data-fancybox data-type="ajax" data-bind="attr: { src: ThumbUrl(), 'data-src': DetailInlineUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')" />
-                        </div>
-                        <div data-bind="if: Rating_RatedItemType == 'FavoriteLocation'">
-                            <img class="rounded comment-image-right" data-fancybox data-type="ajax" data-bind="attr: { src: ThumbUrl(), 'data-src': DetailInlineUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')" />
-                        </div>
-                        <div data-bind="if: Rating_RatedItemType == 'PhotoBlog'">
-                            <img class="rounded comment-image-right" data-fancybox data-type="ajax" data-bind="attr: { src: ThumbUrl(), 'data-src': DetailInlineUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyImage.png')" />
-                        </div>
-                        <div data-bind="if: Rating_RatedItemType == 'Community'">
-                            <img class="rounded comment-image-right" data-fancybox data-type="ajax" data-bind="attr: { src: ThumbUrl(), 'data-src': DetailInlineUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')" />
-                        </div>
-                        <img class="rounded comment-image-left" data-fancybox data-type="ajax" data-bind="attr: { src: NoseDto.ThumbUrl(), 'data-src': NoseDto.PreviewUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')" />
-                    </div>
-                    <div class="rating-stars-container">
-                        <!-- ko component: {
-                                name: "ma-gpsnose-rating",
-                                params: {
-                                    percent: $data.Rating_Percent,
-                                    count: -1
-                                }
-                            } -->
-                        <!-- /ko -->
-                    </div>
-                    <p data-bind="html: $parent.GetHtmlFromString($data.Description)"></p>
-                </div>
-                <div class="text-center mt-2">
-                    <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/html" id="MashupNewsTemplate">
-    <div class="MashupNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12" data-bind="visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted">
-        <div class="card shadow-sm" data-bind="fancyboxAttr: $data, fancyboxType: 'ajax', group: 'news', external: MA_GPSNOSE_IS_MASHUP, disabled: $data.IsNowDeleted">
-            <div class="card-body p-2">
-                <div class="d-flex">
-                    <div class="me-2">
-                        <img class="media-object rounded media-height" data-bind="attr: { src: ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')" />
-                    </div>
-                    <div class="flow-grow-1">
-                        <h4 data-bind="text: $data.Title"></h4>
-                        <p data-bind="html: $parent.GetHtmlFromString($data.Description)"></p>
-                    </div>
-                </div>
-                <div class="card-bottom mt-2">
-                    <div class="text-center">
-                        <small data-bind="text: GetDateStringFromTicks($data.CreationTicks)"></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-`
+    template: "\n<div id=\"newsContainer\" class=\"masonry row\">\n    <div class=\"masonry-sizer col-lg-3 col-md-4 col-6\"></div>\n    <!-- ko foreach: News -->\n    <div data-bind=\"template: { name: TemplateName() }\"></div>\n    <!-- /ko -->\n</div>\n\n<div class=\"text-center\">\n    <div class=\"btn btn-outline-secondary btn-lg\" data-bind=\"click: function(){ PageNews() }, visible: HasMoreNews(), attr: { disabled: NewsRequestActive() }\" data-aos=\"zoom-in\">\n        <div data-bind=\"visible: ! NewsRequestActive()\">\n            <i class=\"fas fa-cloud-download-alt\"></i>\n            <span data-bind=\"text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')\"></span>\n        </div>\n        <div data-bind=\"visible: NewsRequestActive()\">\n            <i class=\"fas fa-redo-alt gly-spin\"></i>\n            <span data-bind=\"text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Request in progress')\"></span>\n        </div>\n    </div>\n</div>\n\n<div class=\"alert alert-info\" data-bind=\"visible: News().length == 0 && ! NewsRequestActive()\">\n    <i class=\"fas fa-info-circle\"></i>\n    <span data-bind=\"text: ' ' + GetLangRes('Home_Overview_lblNoNews', 'There are currently no such news in your area.')\"></span>\n</div>\n\n\n\n<script type=\"text/html\" id=\"UnknownTemplate\">\n    <div class=\"UnknownNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\">\n            <div class=\"card-body p-2\">\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetLangRes('Home_Overview_lblUnknownNews', 'Unknown news')\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"AboutNewsTemplate\">\n    <div class=\"AboutNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded-circle media-height\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <div class=\"flow-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"ProfileImageNewsTemplate\">\n    <div class=\"ProfileImageNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <img class=\"image\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"NewGuestUserNewsTemplate\">\n    <div class=\"NewGuestUserNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded media-height\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <div class=\"flow-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"ProfileActivatedTemplate\">\n    <div class=\"ProfileActivated masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded media-height\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <div class=\"flex-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"PhotoBlogNewsTemplate\">\n    <div class=\"PhotoBlogNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP, disabled:$data.IsNowDeleted\">\n            <img class=\"card-img-top\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"this.style.display='none'\" />\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"flex-grow-1\" data-bind=\"html: $parent.GetHtmlFromString($data.Impression_Text)\"></div>\n                    <div class=\"text-end\" data-bind=\"text: $data.Impression_Mood\"></div>\n                </div>\n                <div class=\"text-end mt-2\">\n                    <span class=\"align-middle\" data-bind=\"text: NoseDto.LoginName\"></span>\n                    <img class=\"rounded-circle\" width=\"32\" data-bind=\"attr: { src: NoseDto.ImageUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"PoIPublishedNewsTemplate\">\n    <div class=\"PoIPublishedNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP, disabled:$data.IsNowDeleted\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded media-height\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')\" />\n                    </div>\n                    <div class=\"flex-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"TourNewsTemplate\">\n    <div class=\"TourNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP, disabled:$data.IsNowDeleted\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded media-height\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')\" />\n                    </div>\n                    <div class=\"flow-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"d-flex\">\n                        <img class=\"ma-tour-icon\" width=\"24px\" data-bind=\"attr: { src: '/Content/Mashup/Images/TourType' + $data.Track_TrackType + '.png' }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/TourType99.png')\" />\n                        <div class=\"flex-grow-1\">\n                            <div class=\"text-center\">\n                                <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"EventNewsTemplate\">\n    <div class=\"AboutNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'news', external:MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded media-height\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyEvent.png')\" />\n                    </div>\n                    <div class=\"flow-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                        <p data-bind=\"text: $data.Event_LocationAddress\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"CommentNewsTemplate\">\n    <div class=\"CommentNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"attr: {'data-src': MA_GPSNOSE_IS_MASHUP ? $data.DetailUrl() : '#comment-' + $index() }, fancyboxAttr: $data, fancyboxType: null, group: 'news', external: MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <div>\n                    <div class=\"comment-image-container me-2\">\n                        <div data-bind=\"if: Comment_CommentItemType == 'Tour'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')\" />\n                        </div>\n                        <div data-bind=\"if: Comment_CommentItemType == 'FavoriteLocation'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')\" />\n                        </div>\n                        <div data-bind=\"if: Comment_CommentItemType == 'PhotoBlog'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyImage.png')\" />\n                        </div>\n                        <div data-bind=\"if: Comment_CommentItemType == 'Community'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')\" />\n                        </div>\n                        <img class=\"rounded comment-image-left\" data-bind=\"attr: { src: NoseDto.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <p data-bind=\"html: $parent.GetHtmlFromString(CommentText())\"></p>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"visually-hidden\">\n        <div data-bind=\"attr: { id: 'comment-' + $index() }\">\n            <div class=\"CommentNews gn-detail-inline\">\n                <div>\n                    <div class=\"comment-image-container\">\n                        <div data-bind=\"if: Comment_CommentItemType == 'Tour'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-src': DetailInlineUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')\" />\n                        </div>\n                        <div data-bind=\"if: Comment_CommentItemType == 'FavoriteLocation'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-src': DetailInlineUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')\" />\n                        </div>\n                        <div data-bind=\"if: Comment_CommentItemType == 'PhotoBlog'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-src': DetailInlineUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyImage.png')\" />\n                        </div>\n                        <div data-bind=\"if: Comment_CommentItemType == 'Community'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-src': DetailInlineUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')\" />\n                        </div>\n                        <img class=\"rounded comment-image-left\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: NoseDto.ThumbUrl(), 'data-src': NoseDto.PreviewUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <p data-bind=\"html: $parent.GetHtmlFromString(CommentText())\"></p>\n                </div>\n                <div class=\"text-center mt-2\">\n                    <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"RatingNewsTemplate\">\n    <div class=\"RatingNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"attr: {'data-src': MA_GPSNOSE_IS_MASHUP ? $data.DetailUrl() : '#rating-' + $index() }, fancyboxAttr: $data, fancyboxType: null, group: 'news', external: MA_GPSNOSE_IS_MASHUP\">\n            <div class=\"card-body p-2\">\n                <div>\n                    <div class=\"comment-image-container\">\n                        <div data-bind=\"if: Rating_RatedItemType == 'Tour'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')\" />\n                        </div>\n                        <div data-bind=\"if: Rating_RatedItemType == 'FavoriteLocation'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')\" />\n                        </div>\n                        <div data-bind=\"if: Rating_RatedItemType == 'PhotoBlog'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyImage.png')\" />\n                        </div>\n                        <div data-bind=\"if: Rating_RatedItemType == 'Community'\">\n                            <img class=\"rounded comment-image-right\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')\" />\n                        </div>\n                        <img class=\"rounded comment-image-left\" data-bind=\"attr: { src: NoseDto.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <div class=\"rating-stars-container\">\n                        <!-- ko component: {\n                                name: \"ma-gpsnose-rating\",\n                                params: {\n                                    percent: $data.Rating_Percent,\n                                    count: -1\n                                }\n                            } -->\n                        <!-- /ko -->\n                    </div>\n                    <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"visually-hidden\">\n        <div data-bind=\"attr: { id: 'rating-' + $index() }\">\n            <div class=\"RatingNews gn-detail-inline\">\n                <div>\n                    <div class=\"comment-image-container\">\n                        <div data-bind=\"if: Rating_RatedItemType == 'Tour'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: ThumbUrl(), 'data-src': DetailInlineUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyTour.png')\" />\n                        </div>\n                        <div data-bind=\"if: Rating_RatedItemType == 'FavoriteLocation'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: ThumbUrl(), 'data-src': DetailInlineUrl(), 'data-default': $parent.GetDefaultImageFromKeywords($data.Keywords) }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyPoi.png')\" />\n                        </div>\n                        <div data-bind=\"if: Rating_RatedItemType == 'PhotoBlog'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: ThumbUrl(), 'data-src': DetailInlineUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyImage.png')\" />\n                        </div>\n                        <div data-bind=\"if: Rating_RatedItemType == 'Community'\">\n                            <img class=\"rounded comment-image-right\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: ThumbUrl(), 'data-src': DetailInlineUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')\" />\n                        </div>\n                        <img class=\"rounded comment-image-left\" data-fancybox data-type=\"ajax\" data-bind=\"attr: { src: NoseDto.ThumbUrl(), 'data-src': NoseDto.PreviewUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n                    </div>\n                    <div class=\"rating-stars-container\">\n                        <!-- ko component: {\n                                name: \"ma-gpsnose-rating\",\n                                params: {\n                                    percent: $data.Rating_Percent,\n                                    count: -1\n                                }\n                            } -->\n                        <!-- /ko -->\n                    </div>\n                    <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                </div>\n                <div class=\"text-center mt-2\">\n                    <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n\n<script type=\"text/html\" id=\"MashupNewsTemplate\">\n    <div class=\"MashupNews masonry-item col-lg-3 col-md-4 col-sm-6 col-12\" data-bind=\"visible:!$data.IsNowDeleted, if:!$data.IsNowDeleted\">\n        <div class=\"card shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group: 'news', external: MA_GPSNOSE_IS_MASHUP, disabled: $data.IsNowDeleted\">\n            <div class=\"card-body p-2\">\n                <div class=\"d-flex\">\n                    <div class=\"me-2\">\n                        <img class=\"media-object rounded media-height\" data-bind=\"attr: { src: ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyCommunity.png')\" />\n                    </div>\n                    <div class=\"flow-grow-1\">\n                        <h4 data-bind=\"text: $data.Title\"></h4>\n                        <p data-bind=\"html: $parent.GetHtmlFromString($data.Description)\"></p>\n                    </div>\n                </div>\n                <div class=\"card-bottom mt-2\">\n                    <div class=\"text-center\">\n                        <small data-bind=\"text: GetDateStringFromTicks($data.CreationTicks)\"></small>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</script>\n"
 });
-class NosesComponent extends BaseComponentsViewModel {
-    constructor(params) {
-        super(params && params.imagePath || null);
-        this.NosePageUrl = '/Home/Page_Noses';
-        this.Noses = ko.observableArray();
-        this.NosesPageSize = gnSettings.NosesPageSize;
-        this.NosesLastKnownTicks = window.MAX_DATE_TIME_TICKS;
-        this.HasMoreNoses = ko.observable(true);
-        this.NosesRequestActive = ko.observable(false);
-        this.ShowNoses = ko.observable(true);
-        this.CommunityTag = ko.observable('');
-        this.CommunityTag(params && params.communityTag || "");
-        this.NosesRequestActive.subscribe((newValue) => {
+var NosesComponent = (function (_super) {
+    __extends(NosesComponent, _super);
+    function NosesComponent(params) {
+        var _this = _super.call(this, params && params.imagePath || null) || this;
+        _this.NosePageUrl = '/Home/Page_Noses';
+        _this.Noses = ko.observableArray();
+        _this.NosesPageSize = gnSettings.NosesPageSize;
+        _this.NosesLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMoreNoses = ko.observable(true);
+        _this.NosesRequestActive = ko.observable(false);
+        _this.ShowNoses = ko.observable(true);
+        _this.CommunityTag = ko.observable('');
+        _this.CommunityTag(params && params.communityTag || "");
+        _this.NosesRequestActive.subscribe(function (newValue) {
             ShowPreviewPageLoad(newValue);
         });
         if (params && params.onAddNoses) {
-            this.OnAddNoses = params.onAddNoses;
+            _this.OnAddNoses = params.onAddNoses;
         }
         if (params && params.nosePageUrl) {
-            this.NosePageUrl = params.nosePageUrl;
+            _this.NosePageUrl = params.nosePageUrl;
         }
         if (params && params.page) {
-            params.page.subscribe(() => {
-                if (this.HasMoreNoses()) {
-                    this.PageNoses();
+            params.page.subscribe(function () {
+                if (_this.HasMoreNoses()) {
+                    _this.PageNoses();
                 }
             });
         }
         if (params && params.noses && params.noses.length > 0) {
-            this.AddNoses(params.noses);
+            _this.AddNoses(params.noses);
         }
         else if (params && params.noses) {
-            this.HasMoreNoses(false);
+            _this.HasMoreNoses(false);
         }
         else {
-            this.PageNoses();
+            _this.PageNoses();
         }
+        return _this;
     }
-    OnAddNoses() { }
-    AddNoses(data) {
+    NosesComponent.prototype.OnAddNoses = function () { };
+    NosesComponent.prototype.AddNoses = function (data) {
+        var _this = this;
         if (data == null)
             return;
-        let timeout = true;
+        var timeout = true;
         if (this.Noses.length > 0) {
             timeout = false;
         }
@@ -2068,16 +1542,17 @@ class NosesComponent extends BaseComponentsViewModel {
         }
         if (this.OnAddNoses) {
             if (timeout) {
-                setTimeout(() => {
-                    this.OnAddNoses();
+                setTimeout(function () {
+                    _this.OnAddNoses();
                 }, 100);
             }
             else {
                 this.OnAddNoses();
             }
         }
-    }
-    PageNoses() {
+    };
+    NosesComponent.prototype.PageNoses = function () {
+        var _this = this;
         if (!this.ShowNoses() || this.NosesRequestActive() || !this.HasMoreNoses())
             return;
         this.NosesRequestActive(true);
@@ -2091,89 +1566,65 @@ class NosesComponent extends BaseComponentsViewModel {
                 community: this.CommunityTag()
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddNoses(result);
+                    _this.AddNoses(result);
                 }
                 else {
-                    this.HasMoreNoses(false);
+                    _this.HasMoreNoses(false);
                 }
-                this.NosesRequestActive(false);
+                _this.NosesRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.NosesRequestActive(false);
+                _this.NosesRequestActive(false);
             }
         });
-    }
-}
+    };
+    return NosesComponent;
+}(BaseComponentsViewModel));
 ko.components.register('ma-gpsnose-noses', {
     viewModel: {
-        createViewModel: (params, componentInfo) => {
+        createViewModel: function (params, componentInfo) {
             return new NosesComponent(params);
         }
     },
-    template: `
-<div id="publishersContainer" class="row g-3 mb-3" data-bind="foreach: Noses">
-    <div class="col-lg-2 col-md-3 col-sm-4 col-6">
-        <div class="card border-0 shadow-sm" data-bind="fancyboxAttr: $data, fancyboxType: 'ajax', group:'nose', external:MA_GPSNOSE_IS_MASHUP">
-            <img class="card-img-top" data-bind="attr: { src: $data.ThumbUrl() }" onerror="ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')" />
-            <div class="card-body p-0">
-                <div class="loginname text-white bg-primary text-center" data-bind="text: $data.LoginName"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="text-center">
-    <div class="btn btn-outline-secondary btn-lg" data-bind="click: function(){ PageNoses() }, visible: HasMoreNoses(), attr: { disabled: NosesRequestActive() }" data-aos="zoom-in">
-        <div data-bind="visible: ! NosesRequestActive()">
-            <i class="fas fa-cloud-download-alt"></i>
-            <span data-bind="text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')"></span>
-        </div>
-        <div data-bind="visible: NosesRequestActive()">
-            <i class="fas fa-redo-alt gly-spin"></i>
-            <span data-bind="text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Request in progress')"></span>
-        </div>
-    </div>
-</div>
-
-<div class="alert alert-info" data-bind="visible: Noses().length == 0 && ! NosesRequestActive()">
-    <i class="fas fa-info-circle"></i>
-    <span data-bind="text: ' ' + GetLangRes('Home_Overview_lblNoPublishers', 'There are currently no such noses in your area, but you can give the mobile app to your friends to see them here.')"></span>
-</div>`
+    template: "\n<div id=\"publishersContainer\" class=\"row g-3 mb-3\" data-bind=\"foreach: Noses\">\n    <div class=\"col-lg-2 col-md-3 col-sm-4 col-6\">\n        <div class=\"card border-0 shadow-sm\" data-bind=\"fancyboxAttr: $data, fancyboxType: 'ajax', group:'nose', external:MA_GPSNOSE_IS_MASHUP\">\n            <img class=\"card-img-top\" data-bind=\"attr: { src: $data.ThumbUrl() }\" onerror=\"ImageErrorHandler(this, '/Content/Mashup/Images/EmptyUser.png')\" />\n            <div class=\"card-body p-0\">\n                <div class=\"loginname text-white bg-primary text-center\" data-bind=\"text: $data.LoginName\"></div>\n            </div>\n        </div>\n    </div>\n</div>\n\n<div class=\"text-center\">\n    <div class=\"btn btn-outline-secondary btn-lg\" data-bind=\"click: function(){ PageNoses() }, visible: HasMoreNoses(), attr: { disabled: NosesRequestActive() }\" data-aos=\"zoom-in\">\n        <div data-bind=\"visible: ! NosesRequestActive()\">\n            <i class=\"fas fa-cloud-download-alt\"></i>\n            <span data-bind=\"text: ' ' + GetLangRes('Common_lblLoadMore', 'more..')\"></span>\n        </div>\n        <div data-bind=\"visible: NosesRequestActive()\">\n            <i class=\"fas fa-redo-alt gly-spin\"></i>\n            <span data-bind=\"text: ' ' + GetLangRes('Common_lblRequestInProgress', 'Request in progress')\"></span>\n        </div>\n    </div>\n</div>\n\n<div class=\"alert alert-info\" data-bind=\"visible: Noses().length == 0 && ! NosesRequestActive()\">\n    <i class=\"fas fa-info-circle\"></i>\n    <span data-bind=\"text: ' ' + GetLangRes('Home_Overview_lblNoPublishers', 'There are currently no such noses in your area, but you can give the mobile app to your friends to see them here.')\"></span>\n</div>"
 });
-class RatingViewModel extends BaseComponentsViewModel {
-    constructor(params) {
-        super(params && params.imagePath || null);
+var RatingViewModel = (function (_super) {
+    __extends(RatingViewModel, _super);
+    function RatingViewModel(params) {
+        var _this = _super.call(this, params && params.imagePath || null) || this;
         var percentVal = 0;
         if (params && !isNaN(params.percent)) {
             percentVal = parseInt(params.percent);
         }
-        this.Percent = ko.observable(percentVal);
+        _this.Percent = ko.observable(percentVal);
         var countVal = 0;
         if (params && !isNaN(params.count)) {
             countVal = parseInt(params.count);
         }
-        this.Count = ko.observable(countVal);
+        _this.Count = ko.observable(countVal);
+        return _this;
     }
-    Title() {
+    RatingViewModel.prototype.Title = function () {
         return this.Percent() + '%' + (this.Count() > 0 ? ' (' + this.Count() + ')' : '');
-    }
+    };
     ;
-    ImageByPercent(upper) {
+    RatingViewModel.prototype.ImageByPercent = function (upper) {
         return this.ImagePath() + (this.Percent() > upper ? '/StarOn' : '/StarOff') + '.png';
-    }
-}
+    };
+    return RatingViewModel;
+}(BaseComponentsViewModel));
 ko.components.register('ma-gpsnose-rating', {
     viewModel: {
-        createViewModel: (params, componentInfo) => {
+        createViewModel: function (params, componentInfo) {
             return new RatingViewModel(params);
         }
     },
@@ -2232,19 +1683,21 @@ var NewsType;
     NewsType[NewsType["Event"] = 10] = "Event";
     NewsType[NewsType["Mashup"] = 11] = "Mashup";
 })(NewsType || (NewsType = {}));
-class EulaViewModel extends BaseViewModel {
-    constructor() {
-        super();
-        this.EulaPath = '/eula/';
-        this.IndexCurrId = 0;
-        this.UlActive = false;
-        this.OlActive = false;
-        this.EulaCurrentVersion = ko.observable(1);
-        this.EulaLanguage = ko.observable('en');
-        this.Content = ko.observable('');
-        this.Index = ko.observableArray([]);
+var EulaViewModel = (function (_super) {
+    __extends(EulaViewModel, _super);
+    function EulaViewModel() {
+        var _this = _super.call(this) || this;
+        _this.EulaPath = '/eula/';
+        _this.IndexCurrId = 0;
+        _this.UlActive = false;
+        _this.OlActive = false;
+        _this.EulaCurrentVersion = ko.observable(1);
+        _this.EulaLanguage = ko.observable('en');
+        _this.Content = ko.observable('');
+        _this.Index = ko.observableArray([]);
+        return _this;
     }
-    GetHtml(line) {
+    EulaViewModel.prototype.GetHtml = function (line) {
         var _a;
         var ret = '';
         if (line.substring(0, 1) != '-' && this.UlActive) {
@@ -2286,40 +1739,41 @@ class EulaViewModel extends BaseViewModel {
             ret += '<p>' + jQuery('<div />').text(line).html() + '</p>';
         }
         return this.linkify(ret);
-    }
-    linkify(text) {
+    };
+    EulaViewModel.prototype.linkify = function (text) {
         var mailRegex = /(\b[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)/ig;
         var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]|www\.gpsnose\.com)/ig;
         var text = text.replace(urlRegex, function (url) {
             if (url == 'www.gpsnose.com') {
-                return `<strong>${url}</strong>`;
+                return "<strong>".concat(url, "</strong>");
             }
-            return `<a href="${url}">${url}</a>`;
+            return "<a href=\"".concat(url, "\">").concat(url, "</a>");
         });
         return text.replace(mailRegex, function (mail) {
-            return `<a href="${mail}">${mail}</a>`;
+            return "<a href=\"".concat(mail, "\">").concat(mail, "</a>");
         });
-    }
-    GetHeader(num, text, addToIndex) {
+    };
+    EulaViewModel.prototype.GetHeader = function (num, text, addToIndex) {
         var str = jQuery('<div />').text(text).html();
         this.IndexCurrId++;
         if (addToIndex) {
             this.Index.push('<a href="#anc_' + this.IndexCurrId + '" class="index index-' + num + '">' + str + '</a>');
         }
         return '<h' + (num + 1) + ' id="anc_' + this.IndexCurrId + '">' + str + '</h' + (num + 1) + '>';
-    }
-    LoadFile(onComplete) {
-        let self = this;
-        this.UpdateCurrentVersion(() => {
-            this.CheckLanguage(() => {
+    };
+    EulaViewModel.prototype.LoadFile = function (onComplete) {
+        var _this = this;
+        var self = this;
+        this.UpdateCurrentVersion(function () {
+            _this.CheckLanguage(function () {
                 jQuery.ajax({
                     type: 'GET',
-                    url: this.EulaPath + this.EulaCurrentVersion() + '_' + this.EulaLanguage() + '.txt',
+                    url: _this.EulaPath + _this.EulaCurrentVersion() + '_' + _this.EulaLanguage() + '.txt',
                     dataType: 'text',
-                    success: (result) => {
+                    success: function (result) {
                         var lines = result.split("\n");
                         var content = '';
-                        lines.forEach(line => {
+                        lines.forEach(function (line) {
                             if (line.trim().length > 0) {
                                 content += self.GetHtml(line.trim());
                             }
@@ -2327,16 +1781,16 @@ class EulaViewModel extends BaseViewModel {
                         self.Content(content);
                         onComplete();
                     },
-                    error: () => {
+                    error: function () {
                         dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblUnknownError", "An unknown error is occured!"), null);
                     }
                 });
             });
         });
-    }
-    CheckLanguage(onComplete) {
+    };
+    EulaViewModel.prototype.CheckLanguage = function (onComplete) {
         var newLanguage = GetCurrentLang();
-        let self = this;
+        var self = this;
         jQuery.ajax({
             type: 'HEAD',
             url: this.EulaPath + this.EulaCurrentVersion() + '_' + newLanguage + '.txt',
@@ -2348,10 +1802,10 @@ class EulaViewModel extends BaseViewModel {
                 onComplete();
             }
         });
-    }
-    UpdateCurrentVersion(onComplete) {
-        let nextVersion = this.EulaCurrentVersion() + 1;
-        let self = this;
+    };
+    EulaViewModel.prototype.UpdateCurrentVersion = function (onComplete) {
+        var nextVersion = this.EulaCurrentVersion() + 1;
+        var self = this;
         jQuery.ajax({
             type: 'HEAD',
             url: this.EulaPath + nextVersion + '_en.txt',
@@ -2363,94 +1817,100 @@ class EulaViewModel extends BaseViewModel {
                 onComplete();
             }
         });
+    };
+    return EulaViewModel;
+}(BaseViewModel));
+var EventDetailViewModel = (function (_super) {
+    __extends(EventDetailViewModel, _super);
+    function EventDetailViewModel(eventDto) {
+        var _this = _super.call(this) || this;
+        _this.Dates = ko.observableArray();
+        _this.UniqueKey = eventDto.UniqueKey || "";
+        _this.LoginName = GetLoginNameFromUniqueKey(_this.UniqueKey);
+        _this.CreationTicks = GetTicksFromUniqueKey(_this.UniqueKey);
+        _this.Entity = new EventDto({ "UniqueKey": _this.UniqueKey });
+        _this.NoseDto = new NoseDto({ "LoginName": _this.LoginName });
+        _this.IsOnlineEvent = (eventDto.EventOptions & 16) == 16;
+        return _this;
     }
-}
-class EventDetailViewModel extends BaseViewModel {
-    constructor(eventDto) {
-        super();
-        this.Dates = ko.observableArray();
-        this.UniqueKey = eventDto.UniqueKey || "";
-        this.LoginName = GetLoginNameFromUniqueKey(this.UniqueKey);
-        this.CreationTicks = GetTicksFromUniqueKey(this.UniqueKey);
-        this.Entity = new EventDto({ "UniqueKey": this.UniqueKey });
-        this.NoseDto = new NoseDto({ "LoginName": this.LoginName });
-        this.IsOnlineEvent = (eventDto.EventOptions & 16) == 16;
-    }
-    OnAddDates(data) { }
+    EventDetailViewModel.prototype.OnAddDates = function (data) { };
     ;
-    AddDates(data) {
+    EventDetailViewModel.prototype.AddDates = function (data) {
         if (data == null)
             return;
-        for (const prop in data)
+        for (var prop in data)
             this.Dates.push(new EventDateDto(prop, data[prop]));
         if (this.OnAddDates)
             this.OnAddDates(this.Dates());
-    }
+    };
     ;
-}
-class GipViewModel extends BaseViewModel {
-    constructor() {
-        super();
-        this.CacheGip = new Array();
-        this.Rectangle = ko.observable(null);
-        this.Gip = ko.observable(null);
-        this.IsGipAutoUpdate = ko.observable(false);
-        this.SearchQuery = ko.observable(null);
-        this.Latitude = ko.observable(0.0).extend({ numeric: 5 });
-        this.Longitude = ko.observable(0.0).extend({ numeric: 5 });
-        this.Zoom = ko.observable(12);
-        this.ZoomPreview = ko.observable(12);
-        this.PreventZoomInOnRefresh = ko.observable(false);
-        this.RequestActive = ko.observable(false);
-        this.ShareUrl = ko.computed(() => {
-            return "https://www.gpsnose.com/gip/" + this.Gip();
+    return EventDetailViewModel;
+}(BaseViewModel));
+var GipViewModel = (function (_super) {
+    __extends(GipViewModel, _super);
+    function GipViewModel() {
+        var _this = _super.call(this) || this;
+        _this.CacheGip = new Array();
+        _this.Rectangle = ko.observable(null);
+        _this.Gip = ko.observable(null);
+        _this.IsGipAutoUpdate = ko.observable(false);
+        _this.SearchQuery = ko.observable(null);
+        _this.Latitude = ko.observable(0.0).extend({ numeric: 5 });
+        _this.Longitude = ko.observable(0.0).extend({ numeric: 5 });
+        _this.Zoom = ko.observable(12);
+        _this.ZoomPreview = ko.observable(12);
+        _this.PreventZoomInOnRefresh = ko.observable(false);
+        _this.RequestActive = ko.observable(false);
+        _this.ShareUrl = ko.computed(function () {
+            return "https://www.gpsnose.com/gip/" + _this.Gip();
         });
-        this.Warning = ko.observable(null);
-        this.HasWarning = ko.computed(() => {
-            return this.Warning() != null;
+        _this.Warning = ko.observable(null);
+        _this.HasWarning = ko.computed(function () {
+            return _this.Warning() != null;
         });
-        this.Gip.subscribe((newValue) => {
-            let allowedString = newValue.replace(/[^0-9A-HYJKWMNXPR-VZ.]+/ig, '');
+        _this.Gip.subscribe(function (newValue) {
+            var allowedString = newValue.replace(/[^0-9A-HYJKWMNXPR-VZ.]+/ig, '');
             if (allowedString != newValue) {
-                this.Gip(allowedString);
+                _this.Gip(allowedString);
             }
-            else if (this.IsGipAutoUpdate() || (this.Latitude() == 0 && this.Longitude() == 0)) {
-                this.GetMapRectFromGip();
+            else if (_this.IsGipAutoUpdate() || (_this.Latitude() == 0 && _this.Longitude() == 0)) {
+                _this.GetMapRectFromGip();
             }
         });
-        this.Zoom.subscribe((newValue) => {
+        _this.Zoom.subscribe(function (newValue) {
             if (newValue < 2) {
-                this.Zoom(2);
+                _this.Zoom(2);
             }
             else if (newValue > 28) {
-                this.Zoom(28);
+                _this.Zoom(28);
             }
             else {
-                this.PreventZoomInOnRefresh(false);
+                _this.PreventZoomInOnRefresh(false);
             }
-            this.ZoomPreview(newValue);
-            this.GetGipFromLatLng();
+            _this.ZoomPreview(newValue);
+            _this.GetGipFromLatLng();
         });
-        this.Rectangle.subscribe((rect) => {
-            this.Latitude(rect.Center.Latitude);
-            this.Longitude(rect.Center.Longitude);
-            this.Zoom(rect.Zoom);
-            if (this.OnRefresh) {
-                this.OnRefresh(this.PreventZoomInOnRefresh());
+        _this.Rectangle.subscribe(function (rect) {
+            _this.Latitude(rect.Center.Latitude);
+            _this.Longitude(rect.Center.Longitude);
+            _this.Zoom(rect.Zoom);
+            if (_this.OnRefresh) {
+                _this.OnRefresh(_this.PreventZoomInOnRefresh());
             }
         });
-        this.IsGipAutoUpdate.subscribe((newValue) => {
+        _this.IsGipAutoUpdate.subscribe(function (newValue) {
             if (newValue) {
-                this.GetMapRectFromGip();
+                _this.GetMapRectFromGip();
             }
         });
+        return _this;
     }
-    OnSearch(query) { }
+    GipViewModel.prototype.OnSearch = function (query) { };
     ;
-    OnRefresh(preventZoomIn) { }
+    GipViewModel.prototype.OnRefresh = function (preventZoomIn) { };
     ;
-    GetGpxBox() {
-        let rect = this.Rectangle();
+    GipViewModel.prototype.GetGpxBox = function () {
+        var rect = this.Rectangle();
         return rect == null || !rect.Vertex0 ? null : [{
                 "type": "Feature",
                 "properties": {
@@ -2467,15 +1927,16 @@ class GipViewModel extends BaseViewModel {
                     ]
                 }
             }];
-    }
+    };
     ;
-    GetMapRectFromGip() {
+    GipViewModel.prototype.GetMapRectFromGip = function () {
+        var _this = this;
         var gipTrimmed = this.Gip() ? this.Gip().replace(/\.$/, "") : null;
         if (!gipTrimmed || gipTrimmed.length < 1) {
             this.UseUserLocation();
         }
         else {
-            let bub = this.CacheGip.filter((elem) => {
+            var bub = this.CacheGip.filter(function (elem) {
                 return elem[0] == gipTrimmed;
             });
             if (bub[0]) {
@@ -2493,21 +1954,22 @@ class GipViewModel extends BaseViewModel {
                     gip: gipTrimmed
                 },
                 dataType: 'json',
-                success: (result) => {
+                success: function (result) {
                     if (result && result.Center) {
-                        this.CacheGip.push([gipTrimmed, result]);
-                        this.Rectangle(result);
+                        _this.CacheGip.push([gipTrimmed, result]);
+                        _this.Rectangle(result);
                     }
-                    this.RequestActive(false);
+                    _this.RequestActive(false);
                 },
-                error: (jqxhr) => {
-                    this.RequestActive(false);
-                    this.UseUserLocation();
+                error: function (jqxhr) {
+                    _this.RequestActive(false);
+                    _this.UseUserLocation();
                 }
             });
         }
-    }
-    GetGipFromLatLng() {
+    };
+    GipViewModel.prototype.GetGipFromLatLng = function () {
+        var _this = this;
         if (this.RequestActive())
             return;
         this.RequestActive(true);
@@ -2521,88 +1983,93 @@ class GipViewModel extends BaseViewModel {
                 zoom: this.Zoom()
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (result && result.Rect) {
-                    this.Rectangle(result.Rect);
-                    this.Gip(result.Gip);
+                    _this.Rectangle(result.Rect);
+                    _this.Gip(result.Gip);
                 }
-                this.RequestActive(false);
+                _this.RequestActive(false);
             },
-            error: (jqxhr) => {
-                this.RequestActive(false);
-                this.UseUserLocation();
+            error: function (jqxhr) {
+                _this.RequestActive(false);
+                _this.UseUserLocation();
             }
         });
-    }
-    UseUserLocation() {
+    };
+    GipViewModel.prototype.UseUserLocation = function () {
         if (this.UserLocationCallback) {
             this.UserLocationCallback();
         }
-    }
-    Search() {
+    };
+    GipViewModel.prototype.Search = function () {
         if (this.OnSearch) {
             this.OnSearch(this.SearchQuery());
         }
-    }
-}
-class ImportedKeywordsViewModel extends BaseViewModel {
-    constructor() {
-        super();
-        this.ImportedKeywordsUrl = '/Home/GetAllImportedKeywords';
-        this.BaseDataUrl = 'https://gpsnose.blob.core.windows.net';
-        this.CurrentKeyword = ko.observable(null);
-        this.KeywordScopes = ko.observableArray([]);
-        this.ImportedKeywords = ko.observableArray([]);
-        this.ImportedKeywordsRequestActive = ko.observable(false);
-        this.CurrentKeyword.subscribe((newValue) => {
-            this.SelectKeyword(newValue.Keyword);
+    };
+    return GipViewModel;
+}(BaseViewModel));
+var ImportedKeywordsViewModel = (function (_super) {
+    __extends(ImportedKeywordsViewModel, _super);
+    function ImportedKeywordsViewModel() {
+        var _this = _super.call(this) || this;
+        _this.ImportedKeywordsUrl = '/Home/GetAllImportedKeywords';
+        _this.BaseDataUrl = 'https://gpsnose.blob.core.windows.net';
+        _this.CurrentKeyword = ko.observable(null);
+        _this.KeywordScopes = ko.observableArray([]);
+        _this.ImportedKeywords = ko.observableArray([]);
+        _this.ImportedKeywordsRequestActive = ko.observable(false);
+        _this.CurrentKeyword.subscribe(function (newValue) {
+            _this.SelectKeyword(newValue.Keyword);
         });
-        this.ImportedKeywords.subscribe((newValues) => {
-            let scopes = ko.utils.arrayMap(this.ImportedKeywords(), (item) => {
+        _this.ImportedKeywords.subscribe(function (newValues) {
+            var scopes = ko.utils.arrayMap(_this.ImportedKeywords(), function (item) {
                 return item.Scope;
             });
-            this.KeywordScopes(ko.utils.arrayGetDistinctValues(scopes).sort());
-            let keyword = this.findGetParameter('keyword');
+            _this.KeywordScopes(ko.utils.arrayGetDistinctValues(scopes).sort());
+            var keyword = _this.findGetParameter('keyword');
             if (keyword && keyword.length > 0) {
-                let selKeywords = ko.utils.arrayFilter(this.ImportedKeywords(), (item) => {
+                var selKeywords = ko.utils.arrayFilter(_this.ImportedKeywords(), function (item) {
                     return item.Keyword == keyword;
                 });
                 if (selKeywords[0]) {
-                    this.CurrentKeyword(selKeywords[0]);
+                    _this.CurrentKeyword(selKeywords[0]);
                 }
                 else {
-                    this.CurrentKeyword(newValues[0]);
+                    _this.CurrentKeyword(newValues[0]);
                 }
             }
             else {
-                this.CurrentKeyword(newValues[0]);
+                _this.CurrentKeyword(newValues[0]);
             }
         });
+        return _this;
     }
-    OnSelectKeyword(vm, ikey, json) { }
-    SelectKeyword(keyword) {
-        let ikey = ko.utils.arrayFirst(this.ImportedKeywords(), (item) => {
+    ImportedKeywordsViewModel.prototype.OnSelectKeyword = function (vm, ikey, json) { };
+    ImportedKeywordsViewModel.prototype.SelectKeyword = function (keyword) {
+        var _this = this;
+        var ikey = ko.utils.arrayFirst(this.ImportedKeywords(), function (item) {
             return item.Keyword == keyword;
         });
         jQuery.ajax({
             url: this.BaseDataUrl + "/impkeysgsjon/" + encodeURI(keyword),
             dataType: 'json',
-            success: (data) => {
-                if (this.OnSelectKeyword)
-                    this.OnSelectKeyword(this, ikey, data);
+            success: function (data) {
+                if (_this.OnSelectKeyword)
+                    _this.OnSelectKeyword(_this, ikey, data);
             },
-            error: (jqXHR, textStatus, errorThrown) => {
-                if (this.OnSelectKeyword)
-                    this.OnSelectKeyword(this, ikey, []);
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (_this.OnSelectKeyword)
+                    _this.OnSelectKeyword(_this, ikey, []);
             }
         });
-    }
-    ImportedKeywordsWithScope(scope) {
-        return ko.utils.arrayFilter(this.ImportedKeywords(), (item) => {
+    };
+    ImportedKeywordsViewModel.prototype.ImportedKeywordsWithScope = function (scope) {
+        return ko.utils.arrayFilter(this.ImportedKeywords(), function (item) {
             return item.Scope == scope;
         });
-    }
-    LoadImportedKeywords() {
+    };
+    ImportedKeywordsViewModel.prototype.LoadImportedKeywords = function () {
+        var _this = this;
         if (this.ImportedKeywordsRequestActive()) {
             return;
         }
@@ -2612,22 +2079,22 @@ class ImportedKeywordsViewModel extends BaseViewModel {
             url: this.ImportedKeywordsUrl,
             cache: false,
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (result) {
-                    this.ImportedKeywords(result);
+                    _this.ImportedKeywords(result);
                 }
                 else {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblUnknownError", "An unknown error is occured!"), null);
                 }
-                this.ImportedKeywordsRequestActive(false);
+                _this.ImportedKeywordsRequestActive(false);
             },
-            error: () => {
-                this.ImportedKeywordsRequestActive(false);
+            error: function () {
+                _this.ImportedKeywordsRequestActive(false);
                 dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblUnknownError", "An unknown error is occured!"), null);
             }
         });
-    }
-    findGetParameter(parameterName) {
+    };
+    ImportedKeywordsViewModel.prototype.findGetParameter = function (parameterName) {
         var result = null, tmp = [];
         location.search.substr(1).split("&").forEach(function (item) {
             tmp = item.split("=");
@@ -2635,48 +2102,51 @@ class ImportedKeywordsViewModel extends BaseViewModel {
                 result = decodeURIComponent(tmp[1]);
         });
         return result;
-    }
-}
-class IndexViewModel extends BaseViewModel {
-    constructor() {
-        super();
-        this.CommunityTag = ko.observable('');
-        this.MashupPageUrl = '/Home/Page_Mashups';
-        this.CommunityDetailUrl = '/Community/GetDetail';
-        this.MashupsPageSize = gnSettings.MashupsPageSize;
-        this.ShowMashups = ko.observable(true);
-        this.PublicMashups = ko.observableArray();
-        this.PublicMashupsLastKnownTagName = '%';
-        this.HasMorePublicMashups = ko.observable(true);
-        this.PublicMashupsRequestActive = ko.observable(false);
-        this.ClosedMashups = ko.observableArray();
-        this.ClosedMashupsLastKnownTagName = '@';
-        this.HasMoreClosedMashups = ko.observable(true);
-        this.ClosedMashupsRequestActive = ko.observable(false);
-        this.NosePageUrl = '/Home/Page_Noses';
-        this.Noses = ko.observableArray();
-        this.NosesPageSize = gnSettings.NosesPageSize;
-        this.NosesLastKnownTicks = window.MAX_DATE_TIME_TICKS;
-        this.HasMoreNoses = ko.observable(true);
-        this.NosesRequestActive = ko.observable(false);
-        this.ShowNoses = ko.observable(true);
-        this.NosesCurrentPage = ko.observable(0);
-        this.NewsPageUrl = '/Home/Page_News';
-        this.News = ko.observableArray();
-        this.NewsPageSize = gnSettings.NewsPageSize;
-        this.NewsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
-        this.HasMoreNews = ko.observable(true);
-        this.NewsRequestActive = ko.observable(false);
-        this.ShowNews = ko.observable(true);
-        this.NewsCurrentPage = ko.observable(0);
-        this.CommunityEntity = new CommunityDto({}, new NoseDto({}));
-        this.CommunityTag.subscribe((newValue) => {
-            this.CommunityEntity = new CommunityDto({ 'TagName': newValue }, new NoseDto({}));
+    };
+    return ImportedKeywordsViewModel;
+}(BaseViewModel));
+var IndexViewModel = (function (_super) {
+    __extends(IndexViewModel, _super);
+    function IndexViewModel() {
+        var _this = _super.call(this) || this;
+        _this.CommunityTag = ko.observable('');
+        _this.MashupPageUrl = '/Home/Page_Mashups';
+        _this.CommunityDetailUrl = '/Community/GetDetail';
+        _this.MashupsPageSize = gnSettings.MashupsPageSize;
+        _this.ShowMashups = ko.observable(true);
+        _this.PublicMashups = ko.observableArray();
+        _this.PublicMashupsLastKnownTagName = '%';
+        _this.HasMorePublicMashups = ko.observable(true);
+        _this.PublicMashupsRequestActive = ko.observable(false);
+        _this.ClosedMashups = ko.observableArray();
+        _this.ClosedMashupsLastKnownTagName = '@';
+        _this.HasMoreClosedMashups = ko.observable(true);
+        _this.ClosedMashupsRequestActive = ko.observable(false);
+        _this.NosePageUrl = '/Home/Page_Noses';
+        _this.Noses = ko.observableArray();
+        _this.NosesPageSize = gnSettings.NosesPageSize;
+        _this.NosesLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMoreNoses = ko.observable(true);
+        _this.NosesRequestActive = ko.observable(false);
+        _this.ShowNoses = ko.observable(true);
+        _this.NosesCurrentPage = ko.observable(0);
+        _this.NewsPageUrl = '/Home/Page_News';
+        _this.News = ko.observableArray();
+        _this.NewsPageSize = gnSettings.NewsPageSize;
+        _this.NewsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMoreNews = ko.observable(true);
+        _this.NewsRequestActive = ko.observable(false);
+        _this.ShowNews = ko.observable(true);
+        _this.NewsCurrentPage = ko.observable(0);
+        _this.CommunityEntity = new CommunityDto({}, new NoseDto({}));
+        _this.CommunityTag.subscribe(function (newValue) {
+            _this.CommunityEntity = new CommunityDto({ 'TagName': newValue }, new NoseDto({}));
         });
+        return _this;
     }
-    OnAddPublicMashups() { }
+    IndexViewModel.prototype.OnAddPublicMashups = function () { };
     ;
-    AddPublicMashups(data) {
+    IndexViewModel.prototype.AddPublicMashups = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
@@ -2691,9 +2161,10 @@ class IndexViewModel extends BaseViewModel {
         }
         if (this.OnAddPublicMashups)
             this.OnAddPublicMashups();
-    }
+    };
     ;
-    PagePublicMashups() {
+    IndexViewModel.prototype.PagePublicMashups = function () {
+        var _this = this;
         if (!this.ShowMashups() || this.PublicMashupsRequestActive() || !this.HasMorePublicMashups())
             return;
         this.PublicMashupsRequestActive(true);
@@ -2706,29 +2177,29 @@ class IndexViewModel extends BaseViewModel {
                 pageSize: this.MashupsPageSize
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddPublicMashups(result);
+                    _this.AddPublicMashups(result);
                 }
                 else {
-                    this.HasMorePublicMashups(false);
+                    _this.HasMorePublicMashups(false);
                 }
-                this.PublicMashupsRequestActive(false);
+                _this.PublicMashupsRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.PublicMashupsRequestActive(false);
+                _this.PublicMashupsRequestActive(false);
             }
         });
-    }
-    OnAddClosedMashups() { }
-    AddClosedMashups(data) {
+    };
+    IndexViewModel.prototype.OnAddClosedMashups = function () { };
+    IndexViewModel.prototype.AddClosedMashups = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
@@ -2743,8 +2214,9 @@ class IndexViewModel extends BaseViewModel {
         }
         if (this.OnAddClosedMashups)
             this.OnAddClosedMashups();
-    }
-    PageClosedMashups() {
+    };
+    IndexViewModel.prototype.PageClosedMashups = function () {
+        var _this = this;
         if (!this.ShowMashups() || this.ClosedMashupsRequestActive() || !this.HasMoreClosedMashups())
             return;
         this.ClosedMashupsRequestActive(true);
@@ -2757,29 +2229,29 @@ class IndexViewModel extends BaseViewModel {
                 pageSize: this.MashupsPageSize
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddClosedMashups(result);
+                    _this.AddClosedMashups(result);
                 }
                 else {
-                    this.HasMoreClosedMashups(false);
+                    _this.HasMoreClosedMashups(false);
                 }
-                this.ClosedMashupsRequestActive(false);
+                _this.ClosedMashupsRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.ClosedMashupsRequestActive(false);
+                _this.ClosedMashupsRequestActive(false);
             }
         });
-    }
-    OnAddNoses() { }
-    AddNoses(data) {
+    };
+    IndexViewModel.prototype.OnAddNoses = function () { };
+    IndexViewModel.prototype.AddNoses = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
@@ -2794,8 +2266,9 @@ class IndexViewModel extends BaseViewModel {
         }
         if (this.OnAddNoses)
             this.OnAddNoses();
-    }
-    PageNoses() {
+    };
+    IndexViewModel.prototype.PageNoses = function () {
+        var _this = this;
         if (!this.ShowNoses() || this.NosesRequestActive() || !this.HasMoreNoses())
             return;
         this.NosesRequestActive(true);
@@ -2810,29 +2283,29 @@ class IndexViewModel extends BaseViewModel {
                 community: this.CommunityTag()
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddNoses(result);
+                    _this.AddNoses(result);
                 }
                 else {
-                    this.HasMoreNoses(false);
+                    _this.HasMoreNoses(false);
                 }
-                this.NosesRequestActive(false);
+                _this.NosesRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.NosesRequestActive(false);
+                _this.NosesRequestActive(false);
             }
         });
-    }
-    OnAddNews() { }
-    AddNews(data) {
+    };
+    IndexViewModel.prototype.OnAddNews = function () { };
+    IndexViewModel.prototype.AddNews = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
@@ -2847,8 +2320,9 @@ class IndexViewModel extends BaseViewModel {
         }
         if (this.OnAddNews)
             this.OnAddNews();
-    }
-    PageNews() {
+    };
+    IndexViewModel.prototype.PageNews = function () {
+        var _this = this;
         if (!this.ShowNews() || this.NewsRequestActive() || !this.HasMoreNews())
             return;
         this.NewsRequestActive(true);
@@ -2863,30 +2337,31 @@ class IndexViewModel extends BaseViewModel {
                 community: this.CommunityTag()
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddNews(result);
+                    _this.AddNews(result);
                 }
                 else {
-                    this.HasMoreNews(false);
+                    _this.HasMoreNews(false);
                 }
-                this.NewsRequestActive(false);
+                _this.NewsRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.NewsRequestActive(false);
+                _this.NewsRequestActive(false);
             }
         });
-    }
-}
-class BaseNavigableItem {
-    constructor(data) {
+    };
+    return IndexViewModel;
+}(BaseViewModel));
+var BaseNavigableItem = (function () {
+    function BaseNavigableItem(data) {
         if (data)
             jQuery.extend(this, data);
         if (!this.LoginName && data.Creator) {
@@ -2900,19 +2375,22 @@ class BaseNavigableItem {
             this.UniqueKey = GetUniqueKey(this.LoginName, this.CreationTicks);
         }
     }
-}
-class CarouselItemDto {
-    constructor(title, text) {
+    return BaseNavigableItem;
+}());
+var CarouselItemDto = (function () {
+    function CarouselItemDto(title, text) {
         this.Title = ko.observable("");
         this.Text = ko.observable("");
         this.Title(title);
         this.Text(text);
     }
-}
-class CommentDto {
-    constructor(data) {
-        this.HasText = () => {
-            return this.Text && this.Text.length > 0;
+    return CarouselItemDto;
+}());
+var CommentDto = (function () {
+    function CommentDto(data) {
+        var _this = this;
+        this.HasText = function () {
+            return _this.Text && _this.Text.length > 0;
         };
         if (data)
             jQuery.extend(this, data);
@@ -2920,9 +2398,11 @@ class CommentDto {
             this.Creator = data.CreatedByUserName;
         this.NoseDto = new NoseDto({ "LoginName": this.Creator });
     }
-}
-class CommunityDto {
-    constructor(data, user) {
+    return CommentDto;
+}());
+var CommunityDto = (function () {
+    function CommunityDto(data, user) {
+        var _this = this;
         this.TagName = ko.observable("");
         this.Description = ko.observable("");
         this.CreatorLoginName = ko.observable("");
@@ -2936,59 +2416,59 @@ class CommunityDto {
         this.LoginName = ko.observable("");
         this.NoseDto = ko.observable();
         this.ThumbSize = "@200";
-        this.ImageUrl = () => {
-            return gnSettings.BaseDataUrl + "/commimg/" + encodeURIComponent(this.TagName());
+        this.ImageUrl = function () {
+            return gnSettings.BaseDataUrl + "/commimg/" + encodeURIComponent(_this.TagName());
         };
-        this.ThumbUrl = () => {
-            return this.ImageUrl() + this.ThumbSize;
+        this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
         };
-        this.PreviewUrl = () => {
-            return "/community/preview?profileTag=" + encodeURIComponent(this.TagName());
+        this.PreviewUrl = function () {
+            return "/community/preview?profileTag=" + encodeURIComponent(_this.TagName());
         };
-        this.DetailUrl = () => {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/community/index?profileTag=" + encodeURIComponent(this.TagName()) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '&lid=' + gnSettings.LoginId : '');
+        this.DetailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/community/index?profileTag=" + encodeURIComponent(_this.TagName()) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '&lid=' + gnSettings.LoginId : '');
         };
-        this.ShareUrl = () => {
-            return gnSettings.BaseUrl + "/community/index?profileTag=" + encodeURIComponent(this.TagName());
+        this.ShareUrl = function () {
+            return gnSettings.BaseUrl + "/community/index?profileTag=" + encodeURIComponent(_this.TagName());
         };
-        this.JoinUrl = () => {
-            return gnSettings.BaseUrl + "/tag/" + encodeURIComponent(this.TagName());
+        this.JoinUrl = function () {
+            return gnSettings.BaseUrl + "/tag/" + encodeURIComponent(_this.TagName());
         };
-        this.IsLoginNameAdmin = () => {
-            return this.LoginName() == this.CreatorLoginName() || jQuery.inArray(this.LoginName(), this.Admins()) != -1;
+        this.IsLoginNameAdmin = function () {
+            return _this.LoginName() == _this.CreatorLoginName() || jQuery.inArray(_this.LoginName(), _this.Admins()) != -1;
         };
-        this.WebMashupUrl = () => {
-            if (this.TagName().indexOf(".") != -1) {
-                var parts = this.TagName().substring(1).split("@");
+        this.WebMashupUrl = function () {
+            if (_this.TagName().indexOf(".") != -1) {
+                var parts = _this.TagName().substring(1).split("@");
                 if (parts.length > 0) {
                     return "http://" + parts[0];
                 }
             }
             return null;
         };
-        this.IsAclListMembers = () => {
-            return (this.Acls() & CommunityAcl.ListMembers) == CommunityAcl.ListMembers;
+        this.IsAclListMembers = function () {
+            return (_this.Acls() & CommunityAcl.ListMembers) == CommunityAcl.ListMembers;
         };
-        this.IsMembersListAllowed = () => {
-            return this.IsAclListMembers() || this.IsLoginNameAdmin();
+        this.IsMembersListAllowed = function () {
+            return _this.IsAclListMembers() || _this.IsLoginNameAdmin();
         };
-        this.IsAclMembersInviteMembers = () => {
-            return (this.Acls() & CommunityAcl.MembersInviteMembers) == CommunityAcl.MembersInviteMembers;
+        this.IsAclMembersInviteMembers = function () {
+            return (_this.Acls() & CommunityAcl.MembersInviteMembers) == CommunityAcl.MembersInviteMembers;
         };
-        this.IsInviteMembersAllowed = () => {
-            return (this.IsAclMembersInviteMembers() && (this.IsInCommunity() || this.NoseDto().IsInCommunity(this.TagName()))) || this.IsLoginNameAdmin();
+        this.IsInviteMembersAllowed = function () {
+            return (_this.IsAclMembersInviteMembers() && (_this.IsInCommunity() || _this.NoseDto().IsInCommunity(_this.TagName()))) || _this.IsLoginNameAdmin();
         };
-        this.IsAclCommentsFromMembers = () => {
-            return (this.Acls() & CommunityAcl.CommentsFromMembers) == CommunityAcl.CommentsFromMembers;
+        this.IsAclCommentsFromMembers = function () {
+            return (_this.Acls() & CommunityAcl.CommentsFromMembers) == CommunityAcl.CommentsFromMembers;
         };
         this.CommentItemType = CommentItemType.Community;
-        this.IsCommentsAllowed = () => (this.IsAclCommentsFromMembers() && (this.IsInCommunity() || this.NoseDto().IsInCommunity(this.TagName()) || !this.LoginName())) || this.IsLoginNameAdmin();
-        this.IsUserAdmin = (loginName) => this.CreatorLoginName() == loginName || jQuery.inArray(loginName, this.Admins()) != -1;
+        this.IsCommentsAllowed = function () { return (_this.IsAclCommentsFromMembers() && (_this.IsInCommunity() || _this.NoseDto().IsInCommunity(_this.TagName()) || !_this.LoginName())) || _this.IsLoginNameAdmin(); };
+        this.IsUserAdmin = function (loginName) { return _this.CreatorLoginName() == loginName || jQuery.inArray(loginName, _this.Admins()) != -1; };
         this.Update(data);
         this.LoginName(user.LoginName);
         this.NoseDto(new NoseDto(user));
     }
-    Update(data) {
+    CommunityDto.prototype.Update = function (data) {
         if (data.TagName)
             this.TagName(data.TagName);
         if (data.Description)
@@ -3009,21 +2489,23 @@ class CommunityDto {
             this.LoginName(data.LoginName);
         if (data.HasRequested)
             this.HasRequested(data.HasRequested);
-    }
-    DisplayName() {
+    };
+    CommunityDto.prototype.DisplayName = function () {
         var comm = new KeywordDto(this.TagName());
         return comm.GetHtml();
-    }
-}
-class CommunityMemberDto {
-    constructor(data) {
+    };
+    return CommunityDto;
+}());
+var CommunityMemberDto = (function () {
+    function CommunityMemberDto(data) {
         if (data)
             jQuery.extend(this, data);
         this.NoseDto = new NoseDto({ "LoginName": this.LoginName });
     }
-}
-class Coordinate {
-    constructor(data) {
+    return CommunityMemberDto;
+}());
+var Coordinate = (function () {
+    function Coordinate(data) {
         this.PercentageX = 0;
         this.PercentageY = 0;
         this.Distance = 0;
@@ -3032,70 +2514,92 @@ class Coordinate {
             jQuery.extend(this, data);
         this.Location = L.latLng(this.lat, this.lon, this.alt);
     }
-}
-class EventDateDto {
-    constructor(Ticks, Count) {
+    return Coordinate;
+}());
+var EventDateDto = (function () {
+    function EventDateDto(Ticks, Count) {
         this.Ticks = Ticks;
         this.Count = Count;
     }
-}
-class EventDto extends BaseNavigableItem {
-    constructor(data) {
-        super(data);
-        this.ThumbSize = "@200";
-        this.ImageUrl = () => {
-            return gnSettings.BaseDataUrl + "/eventsimg/" + encodeURIComponent(this.UniqueKey);
+    return EventDateDto;
+}());
+var EventDto = (function (_super) {
+    __extends(EventDto, _super);
+    function EventDto(data) {
+        var _this = _super.call(this, data) || this;
+        _this.ThumbSize = "@200";
+        _this.ImageUrl = function () {
+            return gnSettings.BaseDataUrl + "/eventsimg/" + encodeURIComponent(_this.UniqueKey);
         };
-        this.ThumbUrl = () => {
-            return this.ImageUrl() + this.ThumbSize;
+        _this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
         };
-        this.PreviewUrl = () => {
-            return "/event/preview/" + encodeURIComponent(this.UniqueKey);
+        _this.PreviewUrl = function () {
+            return "/event/preview/" + encodeURIComponent(_this.UniqueKey);
         };
-        this.DetailUrl = () => {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/event/detail/" + encodeURIComponent(this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+        _this.DetailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/event/detail/" + encodeURIComponent(_this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
         };
-        this.ShareUrl = () => {
-            return gnSettings.BaseUrl + "/event/detail/" + encodeURIComponent(this.UniqueKey);
+        _this.ShareUrl = function () {
+            return gnSettings.BaseUrl + "/event/detail/" + encodeURIComponent(_this.UniqueKey);
         };
+        return _this;
     }
-}
-class GeoDataGeometry {
-}
-class GeoDataItem {
-}
-class GeoDataProperties {
-}
-class GnGip {
-}
-class GnMapPoint {
-    constructor(Latitude, Longitude) {
+    return EventDto;
+}(BaseNavigableItem));
+var GeoDataGeometry = (function () {
+    function GeoDataGeometry() {
+    }
+    return GeoDataGeometry;
+}());
+var GeoDataItem = (function () {
+    function GeoDataItem() {
+    }
+    return GeoDataItem;
+}());
+var GeoDataProperties = (function () {
+    function GeoDataProperties() {
+    }
+    return GeoDataProperties;
+}());
+var GnGip = (function () {
+    function GnGip() {
+    }
+    return GnGip;
+}());
+var GnMapPoint = (function () {
+    function GnMapPoint(Latitude, Longitude) {
         this.Latitude = Latitude;
         this.Longitude = Longitude;
     }
-}
-class GnMapRectangle {
-}
-class ImportedKeywordDto {
-    constructor() {
+    return GnMapPoint;
+}());
+var GnMapRectangle = (function () {
+    function GnMapRectangle() {
+    }
+    return GnMapRectangle;
+}());
+var ImportedKeywordDto = (function () {
+    function ImportedKeywordDto() {
         this.Keyword = "";
         this.LastUpdatedTicks = "";
         this.DataSourceInfo = "";
         this.Scope = "";
         this.Count = 0;
     }
-}
-class KeywordDto {
-    constructor(name) {
+    return ImportedKeywordDto;
+}());
+var KeywordDto = (function () {
+    function KeywordDto(name) {
         this.Name = ko.observable("");
         this.IsSelected = ko.observable(false);
         this.Name(name);
         this.Community = new CommunityDto({ "TagName": name }, new NoseDto({}));
     }
-    IsCommunity() {
+    KeywordDto.prototype.IsCommunity = function () {
         return this.GetIcon() != "";
-    }
-    GetHtml() {
+    };
+    KeywordDto.prototype.GetHtml = function () {
         var value = this.Name();
         var icon = this.GetIcon();
         if (icon != '' && value && value.length > 2) {
@@ -3105,8 +2609,8 @@ class KeywordDto {
         else {
             return value;
         }
-    }
-    GetIcon() {
+    };
+    KeywordDto.prototype.GetIcon = function () {
         var value = this.Name();
         if (!value || value.length < 1) {
             return "";
@@ -3125,13 +2629,14 @@ class KeywordDto {
                 break;
         }
         return icon;
-    }
-    Toggle() {
+    };
+    KeywordDto.prototype.Toggle = function () {
         this.IsSelected(!this.IsSelected());
-    }
-}
-class NavBarDto {
-    constructor(url, text, icon, regActive) {
+    };
+    return KeywordDto;
+}());
+var NavBarDto = (function () {
+    function NavBarDto(url, text, icon, regActive) {
         this.Url = ko.observable('');
         this.Text = ko.observable('');
         this.Icon = ko.observable('');
@@ -3143,17 +2648,18 @@ class NavBarDto {
             this.IsActive(true);
         }
     }
-}
-class NearbyItem {
-    constructor(TagName, newItem) {
+    return NavBarDto;
+}());
+var NearbyItem = (function () {
+    function NearbyItem(TagName, newItem) {
         this.Items = ko.observableArray();
         this.TagName = TagName;
         this.NewItem = newItem;
     }
-    NewItem(data) { return null; }
+    NearbyItem.prototype.NewItem = function (data) { return null; };
     ;
-    OnAddItems() { }
-    AddItems(data) {
+    NearbyItem.prototype.OnAddItems = function () { };
+    NearbyItem.prototype.AddItems = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
@@ -3164,13 +2670,15 @@ class NearbyItem {
         if (this.OnAddItems) {
             this.OnAddItems();
         }
-    }
-}
-class NewsDto {
-    constructor(data) {
+    };
+    return NearbyItem;
+}());
+var NewsDto = (function () {
+    function NewsDto(data) {
+        var _this = this;
         this.PoiPublished_Name = 34;
-        this.TemplateName = () => {
-            switch (this.NewsType) {
+        this.TemplateName = function () {
+            switch (_this.NewsType) {
                 case NewsType.ProfileAbout:
                     return "AboutNewsTemplate";
                 case NewsType.ProfileImage:
@@ -3197,43 +2705,43 @@ class NewsDto {
                     return "UnknownTemplate";
             }
         };
-        this.ThumbUrl = () => {
-            return this.ImageUrl() + this.Entity.ThumbSize;
+        this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.Entity.ThumbSize;
         };
-        this.DetailInlineUrl = () => {
-            return this.PreviewUrl();
+        this.DetailInlineUrl = function () {
+            return _this.PreviewUrl();
         };
-        this.PhotoBlogText = () => {
-            if (this.IsNowDeleted)
+        this.PhotoBlogText = function () {
+            if (_this.IsNowDeleted)
                 return GetLangRes("NewsPart_Load_lblBlogWasDeleted", "Impression was deleted");
             else
-                return this.Title;
+                return _this.Title;
         };
-        this.CommentText = () => {
-            if (this.IsNowDeleted) {
+        this.CommentText = function () {
+            if (_this.IsNowDeleted) {
                 return GetLangRes("NewsPart_Load_lblCommentWasDeleted", "Comment was deleted");
             }
             else {
-                if (this.Description != null && this.Description != "") {
-                    return this.Description;
+                if (_this.Description != null && _this.Description != "") {
+                    return _this.Description;
                 }
-                var text = this.Comment_Text != null ? this.Comment_Text : "";
-                var mood = this.Comment_Mood != null ? " " + this.Comment_Mood : "";
+                var text = _this.Comment_Text != null ? _this.Comment_Text : "";
+                var mood = _this.Comment_Mood != null ? " " + _this.Comment_Mood : "";
                 return text + mood;
             }
         };
         this.ThumbSize = "@600";
-        this.ImageUrl = () => {
-            return this.Entity.ImageUrl();
+        this.ImageUrl = function () {
+            return _this.Entity.ImageUrl();
         };
-        this.PreviewUrl = () => {
-            return this.Entity.PreviewUrl();
+        this.PreviewUrl = function () {
+            return _this.Entity.PreviewUrl();
         };
-        this.DetailUrl = () => {
-            return this.Entity.DetailUrl();
+        this.DetailUrl = function () {
+            return _this.Entity.DetailUrl();
         };
-        this.ShareUrl = () => {
-            return this.Entity.ShareUrl();
+        this.ShareUrl = function () {
+            return _this.Entity.ShareUrl();
         };
         if (data)
             jQuery.extend(this, data);
@@ -3304,99 +2812,109 @@ class NewsDto {
                 break;
         }
     }
-}
-class NoseDto extends BaseNavigableItem {
-    constructor(data) {
-        super(data);
-        this.IsInCommunity = (community) => {
-            return this.Communities && jQuery.inArray(community, this.Communities) != -1;
+    return NewsDto;
+}());
+var NoseDto = (function (_super) {
+    __extends(NoseDto, _super);
+    function NoseDto(data) {
+        var _this = _super.call(this, data) || this;
+        _this.IsInCommunity = function (community) {
+            return _this.Communities && jQuery.inArray(community, _this.Communities) != -1;
         };
-        this.ThumbSize = "@200";
-        this.ImageUrl = () => {
-            return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(this.LoginName);
+        _this.ThumbSize = "@200";
+        _this.ImageUrl = function () {
+            return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(_this.LoginName);
         };
-        this.ThumbUrl = () => {
-            return this.ImageUrl() + this.ThumbSize;
+        _this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
         };
-        this.PreviewUrl = () => {
-            return "/nose/preview/" + encodeURIComponent(this.LoginName);
+        _this.PreviewUrl = function () {
+            return "/nose/preview/" + encodeURIComponent(_this.LoginName);
         };
-        this.DetailUrl = () => {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/n/" + encodeURIComponent(this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+        _this.DetailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/n/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
         };
-        this.ShareUrl = () => {
-            return gnSettings.BaseUrl + "/n/" + encodeURIComponent(this.LoginName);
+        _this.ShareUrl = function () {
+            return gnSettings.BaseUrl + "/n/" + encodeURIComponent(_this.LoginName);
         };
+        return _this;
     }
-}
-class PhotoBlogDto extends BaseNavigableItem {
-    constructor(data) {
-        super(data);
-        this.GroupName = ko.observable("");
-        this.GroupCount = ko.observable(1);
-        this.GroupType = ko.observable(GroupTypeEnum.None);
-        this.IsGrouped = ko.observable(false);
-        this.IsLastIncompleteGroup = ko.observable(false);
-        this.DateString = ko.computed(() => {
-            let date = GetDateFromTicks(this.CreationTicks);
-            if (this.GroupType() == GroupTypeEnum.ByDay) {
+    return NoseDto;
+}(BaseNavigableItem));
+var PhotoBlogDto = (function (_super) {
+    __extends(PhotoBlogDto, _super);
+    function PhotoBlogDto(data) {
+        var _this = _super.call(this, data) || this;
+        _this.GroupName = ko.observable("");
+        _this.GroupCount = ko.observable(1);
+        _this.GroupType = ko.observable(GroupTypeEnum.None);
+        _this.IsGrouped = ko.observable(false);
+        _this.IsLastIncompleteGroup = ko.observable(false);
+        _this.DateString = ko.computed(function () {
+            var date = GetDateFromTicks(_this.CreationTicks);
+            if (_this.GroupType() == GroupTypeEnum.ByDay) {
                 return moment(date).format('LL');
             }
-            else if (this.GroupType() == GroupTypeEnum.ByWeek) {
+            else if (_this.GroupType() == GroupTypeEnum.ByWeek) {
                 return GetLangRes("Common_lblCalendarWeekFormat", "CW %cw%").replace("%cw%", moment(date).format('w')) + " " + moment(date).format('YYYY');
             }
-            else if (this.GroupType() == GroupTypeEnum.ByMonth) {
+            else if (_this.GroupType() == GroupTypeEnum.ByMonth) {
                 return moment(date).format('MMMM YYYY');
             }
             return moment(date).format('LLL');
         });
-        this.ThumbSize = "@600";
-        this.ImageUrl = () => {
-            return gnSettings.BaseDataUrl + "/pbimg/" + encodeURIComponent(this.UniqueKey);
+        _this.ThumbSize = "@600";
+        _this.ImageUrl = function () {
+            return gnSettings.BaseDataUrl + "/pbimg/" + encodeURIComponent(_this.UniqueKey);
         };
-        this.ThumbUrl = () => {
-            return this.ImageUrl() + this.ThumbSize;
+        _this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
         };
-        this.PreviewUrl = () => {
-            return "/impression/preview/" + encodeURIComponent(this.UniqueKey);
+        _this.PreviewUrl = function () {
+            return "/impression/preview/" + encodeURIComponent(_this.UniqueKey);
         };
-        this.DetailUrl = () => {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/impression/detail/" + encodeURIComponent(this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+        _this.DetailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/impression/detail/" + encodeURIComponent(_this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
         };
-        this.ShareUrl = () => {
-            return gnSettings.BaseUrl + "/impression/detail/" + encodeURIComponent(this.UniqueKey);
+        _this.ShareUrl = function () {
+            return gnSettings.BaseUrl + "/impression/detail/" + encodeURIComponent(_this.UniqueKey);
         };
-        this.CommentItemType = CommentItemType.PhotoBlog;
-        this.IsCommentsAllowed = () => true;
-        this.IsUserAdmin = (loginName) => this.LoginName == loginName;
+        _this.CommentItemType = CommentItemType.PhotoBlog;
+        _this.IsCommentsAllowed = function () { return true; };
+        _this.IsUserAdmin = function (loginName) { return _this.LoginName == loginName; };
+        return _this;
     }
-}
-class PoiDto extends BaseNavigableItem {
-    constructor(data) {
-        super(data);
-        this.ThumbSize = "@200";
-        this.ImageUrl = () => {
-            return gnSettings.BaseDataUrl + "/locimg/" + encodeURIComponent(this.UniqueKey);
+    return PhotoBlogDto;
+}(BaseNavigableItem));
+var PoiDto = (function (_super) {
+    __extends(PoiDto, _super);
+    function PoiDto(data) {
+        var _this = _super.call(this, data) || this;
+        _this.ThumbSize = "@200";
+        _this.ImageUrl = function () {
+            return gnSettings.BaseDataUrl + "/locimg/" + encodeURIComponent(_this.UniqueKey);
         };
-        this.ThumbUrl = () => {
-            return this.ImageUrl() + this.ThumbSize;
+        _this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
         };
-        this.PreviewUrl = () => {
-            return "/poi/preview/" + encodeURIComponent(this.UniqueKey);
+        _this.PreviewUrl = function () {
+            return "/poi/preview/" + encodeURIComponent(_this.UniqueKey);
         };
-        this.DetailUrl = () => {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/poi/detail/" + encodeURIComponent(this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+        _this.DetailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/poi/detail/" + encodeURIComponent(_this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
         };
-        this.ShareUrl = () => {
-            return gnSettings.BaseUrl + "/poi/detail/" + encodeURIComponent(this.UniqueKey);
+        _this.ShareUrl = function () {
+            return gnSettings.BaseUrl + "/poi/detail/" + encodeURIComponent(_this.UniqueKey);
         };
-        this.CommentItemType = CommentItemType.FavoriteLocation;
-        this.IsCommentsAllowed = () => true;
-        this.IsUserAdmin = (loginName) => this.LoginName == loginName;
+        _this.CommentItemType = CommentItemType.FavoriteLocation;
+        _this.IsCommentsAllowed = function () { return true; };
+        _this.IsUserAdmin = function (loginName) { return _this.LoginName == loginName; };
+        return _this;
     }
-}
-class SecurityToken {
-    constructor() {
+    return PoiDto;
+}(BaseNavigableItem));
+var SecurityToken = (function () {
+    function SecurityToken() {
         this.Token = ko.observable(null);
         this.CreatorUserName = ko.observable(null);
         this.CreatedTicks = ko.observable(null);
@@ -3404,117 +2922,128 @@ class SecurityToken {
         this.IsValid = ko.observable(false);
         this.IsPending = ko.observable(false);
     }
-}
-class TourDto extends BaseNavigableItem {
-    constructor(data) {
-        super(data);
-        this.ThumbSize = "";
-        this.ImageUrl = () => {
-            return gnSettings.BaseDataUrl + "/toursimg/" + encodeURIComponent(this.UniqueKey);
+    return SecurityToken;
+}());
+var TourDto = (function (_super) {
+    __extends(TourDto, _super);
+    function TourDto(data) {
+        var _this = _super.call(this, data) || this;
+        _this.ThumbSize = "";
+        _this.ImageUrl = function () {
+            return gnSettings.BaseDataUrl + "/toursimg/" + encodeURIComponent(_this.UniqueKey);
         };
-        this.ThumbUrl = () => {
-            return this.ImageUrl() + this.ThumbSize;
+        _this.ThumbUrl = function () {
+            return _this.ImageUrl() + _this.ThumbSize;
         };
-        this.PreviewUrl = () => {
-            return "/track/preview/" + encodeURIComponent(this.UniqueKey);
+        _this.PreviewUrl = function () {
+            return "/track/preview/" + encodeURIComponent(_this.UniqueKey);
         };
-        this.DetailUrl = () => {
-            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/track/detail/" + encodeURIComponent(this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
+        _this.DetailUrl = function () {
+            return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/track/detail/" + encodeURIComponent(_this.UniqueKey) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');
         };
-        this.ShareUrl = () => {
-            return gnSettings.BaseUrl + "/track/detail/" + encodeURIComponent(this.UniqueKey);
+        _this.ShareUrl = function () {
+            return gnSettings.BaseUrl + "/track/detail/" + encodeURIComponent(_this.UniqueKey);
         };
-        this.CommentItemType = CommentItemType.Tour;
-        this.IsCommentsAllowed = () => true;
-        this.IsUserAdmin = (loginName) => this.LoginName == loginName;
-        if (!this.StartLatitude && this.Latitude)
-            this.StartLatitude = this.Latitude;
-        if (!this.StartLongitude && this.Longitude)
-            this.StartLongitude = this.Longitude;
-        if (!this.StartLatitude && data.Track_StartLatitude)
-            this.StartLatitude = data.Track_StartLatitude;
-        if (!this.StartLongitude && data.Track_StartLongitude)
-            this.StartLongitude = data.Track_StartLongitude;
+        _this.CommentItemType = CommentItemType.Tour;
+        _this.IsCommentsAllowed = function () { return true; };
+        _this.IsUserAdmin = function (loginName) { return _this.LoginName == loginName; };
+        if (!_this.StartLatitude && _this.Latitude)
+            _this.StartLatitude = _this.Latitude;
+        if (!_this.StartLongitude && _this.Longitude)
+            _this.StartLongitude = _this.Longitude;
+        if (!_this.StartLatitude && data.Track_StartLatitude)
+            _this.StartLatitude = data.Track_StartLatitude;
+        if (!_this.StartLongitude && data.Track_StartLongitude)
+            _this.StartLongitude = data.Track_StartLongitude;
+        return _this;
     }
-}
-class UserDto {
-    constructor(data) {
-        this.ImageUrl = () => {
-            return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(this.LoginName);
+    return TourDto;
+}(BaseNavigableItem));
+var UserDto = (function () {
+    function UserDto(data) {
+        var _this = this;
+        this.ImageUrl = function () {
+            return gnSettings.BaseDataUrl + "/profimg/" + encodeURIComponent(_this.LoginName);
         };
         this.LoginName = data.LoginName;
         this.IsActivated = data.IsActivated;
     }
-}
-class NearbyViewModel extends BaseViewModel {
-    constructor(communityDto, user) {
-        super();
-        this.Entity = new CommunityDto(communityDto, user);
-        this.TagName = this.Entity.TagName();
-        this.NoseDto = new NoseDto({ "LoginName": this.Entity.CreatorLoginName() });
-        this.PageableNoses = new NearbyItem(this.Entity.TagName(), (data) => {
+    return UserDto;
+}());
+var NearbyViewModel = (function (_super) {
+    __extends(NearbyViewModel, _super);
+    function NearbyViewModel(communityDto, user) {
+        var _this = _super.call(this) || this;
+        _this.Entity = new CommunityDto(communityDto, user);
+        _this.TagName = _this.Entity.TagName();
+        _this.NoseDto = new NoseDto({ "LoginName": _this.Entity.CreatorLoginName() });
+        _this.PageableNoses = new NearbyItem(_this.Entity.TagName(), function (data) {
             var nose = new NoseDto(data);
-            nose.IsAdmin = nose.LoginName == this.Entity.CreatorLoginName() || (this.Entity.Admins() && jQuery.inArray(nose.LoginName, this.Entity.Admins()) != -1);
+            nose.IsAdmin = nose.LoginName == _this.Entity.CreatorLoginName() || (_this.Entity.Admins() && jQuery.inArray(nose.LoginName, _this.Entity.Admins()) != -1);
             return nose;
         });
-        this.PageablePois = new NearbyItem(this.Entity.TagName(), (data) => {
+        _this.PageablePois = new NearbyItem(_this.Entity.TagName(), function (data) {
             return new PoiDto(data);
         });
-        this.PageableImpressions = new NearbyItem(this.Entity.TagName(), (data) => {
+        _this.PageableImpressions = new NearbyItem(_this.Entity.TagName(), function (data) {
             return new PhotoBlogDto(data);
         });
-        this.PageableTracks = new NearbyItem(this.Entity.TagName(), (data) => {
+        _this.PageableTracks = new NearbyItem(_this.Entity.TagName(), function (data) {
             return new TourDto(data);
         });
-        this.PageableEvents = new NearbyItem(this.Entity.TagName(), (data) => {
+        _this.PageableEvents = new NearbyItem(_this.Entity.TagName(), function (data) {
             return new EventDto(data);
         });
+        return _this;
     }
-    DisplayName() {
+    NearbyViewModel.prototype.DisplayName = function () {
         var comm = new KeywordDto(this.TagName);
         return comm.GetHtml();
-    }
-}
-class OverviewViewModel extends BaseViewModel {
-    constructor() {
-        super();
-        this.CommunityTag = ko.observable('');
-        this.MashupPageUrl = '/Home/Page_Mashups';
-        this.CommunityDetailUrl = '/Community/GetDetail';
-        this.MashupsPageSize = gnSettings.MashupsPageSize;
-        this.ShowMashups = ko.observable(true);
-        this.PublicMashups = ko.observableArray();
-        this.PublicMashupsLastKnownTagName = '%';
-        this.HasMorePublicMashups = ko.observable(true);
-        this.PublicMashupsRequestActive = ko.observable(false);
-        this.ClosedMashups = ko.observableArray();
-        this.ClosedMashupsLastKnownTagName = '@';
-        this.HasMoreClosedMashups = ko.observable(true);
-        this.ClosedMashupsRequestActive = ko.observable(false);
-        this.NosePageUrl = '/Home/Page_Noses';
-        this.Noses = ko.observableArray();
-        this.NosesPageSize = gnSettings.NosesPageSize;
-        this.NosesLastKnownTicks = window.MAX_DATE_TIME_TICKS;
-        this.HasMoreNoses = ko.observable(true);
-        this.NosesRequestActive = ko.observable(false);
-        this.ShowNoses = ko.observable(true);
-        this.NosesCurrentPage = ko.observable(0);
-        this.NewsPageUrl = '/Home/Page_News';
-        this.News = ko.observableArray();
-        this.NewsPageSize = gnSettings.NewsPageSize;
-        this.NewsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
-        this.HasMoreNews = ko.observable(true);
-        this.NewsRequestActive = ko.observable(false);
-        this.ShowNews = ko.observable(true);
-        this.NewsCurrentPage = ko.observable(0);
-        this.CommunityEntity = new CommunityDto({}, new NoseDto({}));
-        this.CommunityTag.subscribe((newValue) => {
-            this.CommunityEntity = new CommunityDto({ 'TagName': newValue }, new NoseDto({}));
+    };
+    return NearbyViewModel;
+}(BaseViewModel));
+var OverviewViewModel = (function (_super) {
+    __extends(OverviewViewModel, _super);
+    function OverviewViewModel() {
+        var _this = _super.call(this) || this;
+        _this.CommunityTag = ko.observable('');
+        _this.MashupPageUrl = '/Home/Page_Mashups';
+        _this.CommunityDetailUrl = '/Community/GetDetail';
+        _this.MashupsPageSize = gnSettings.MashupsPageSize;
+        _this.ShowMashups = ko.observable(true);
+        _this.PublicMashups = ko.observableArray();
+        _this.PublicMashupsLastKnownTagName = '%';
+        _this.HasMorePublicMashups = ko.observable(true);
+        _this.PublicMashupsRequestActive = ko.observable(false);
+        _this.ClosedMashups = ko.observableArray();
+        _this.ClosedMashupsLastKnownTagName = '@';
+        _this.HasMoreClosedMashups = ko.observable(true);
+        _this.ClosedMashupsRequestActive = ko.observable(false);
+        _this.NosePageUrl = '/Home/Page_Noses';
+        _this.Noses = ko.observableArray();
+        _this.NosesPageSize = gnSettings.NosesPageSize;
+        _this.NosesLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMoreNoses = ko.observable(true);
+        _this.NosesRequestActive = ko.observable(false);
+        _this.ShowNoses = ko.observable(true);
+        _this.NosesCurrentPage = ko.observable(0);
+        _this.NewsPageUrl = '/Home/Page_News';
+        _this.News = ko.observableArray();
+        _this.NewsPageSize = gnSettings.NewsPageSize;
+        _this.NewsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMoreNews = ko.observable(true);
+        _this.NewsRequestActive = ko.observable(false);
+        _this.ShowNews = ko.observable(true);
+        _this.NewsCurrentPage = ko.observable(0);
+        _this.CommunityEntity = new CommunityDto({}, new NoseDto({}));
+        _this.CommunityTag.subscribe(function (newValue) {
+            _this.CommunityEntity = new CommunityDto({ 'TagName': newValue }, new NoseDto({}));
         });
+        return _this;
     }
-    OnAddPublicMashups() { }
+    OverviewViewModel.prototype.OnAddPublicMashups = function () { };
     ;
-    AddPublicMashups(data) {
+    OverviewViewModel.prototype.AddPublicMashups = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
@@ -3529,9 +3058,10 @@ class OverviewViewModel extends BaseViewModel {
         }
         if (this.OnAddPublicMashups)
             this.OnAddPublicMashups();
-    }
+    };
     ;
-    PagePublicMashups() {
+    OverviewViewModel.prototype.PagePublicMashups = function () {
+        var _this = this;
         if (!this.ShowMashups() || this.PublicMashupsRequestActive() || !this.HasMorePublicMashups())
             return;
         this.PublicMashupsRequestActive(true);
@@ -3544,29 +3074,29 @@ class OverviewViewModel extends BaseViewModel {
                 pageSize: this.MashupsPageSize
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddPublicMashups(result);
+                    _this.AddPublicMashups(result);
                 }
                 else {
-                    this.HasMorePublicMashups(false);
+                    _this.HasMorePublicMashups(false);
                 }
-                this.PublicMashupsRequestActive(false);
+                _this.PublicMashupsRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.PublicMashupsRequestActive(false);
+                _this.PublicMashupsRequestActive(false);
             }
         });
-    }
-    OnAddClosedMashups() { }
-    AddClosedMashups(data) {
+    };
+    OverviewViewModel.prototype.OnAddClosedMashups = function () { };
+    OverviewViewModel.prototype.AddClosedMashups = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
@@ -3581,8 +3111,9 @@ class OverviewViewModel extends BaseViewModel {
         }
         if (this.OnAddClosedMashups)
             this.OnAddClosedMashups();
-    }
-    PageClosedMashups() {
+    };
+    OverviewViewModel.prototype.PageClosedMashups = function () {
+        var _this = this;
         if (!this.ShowMashups() || this.ClosedMashupsRequestActive() || !this.HasMoreClosedMashups())
             return;
         this.ClosedMashupsRequestActive(true);
@@ -3595,29 +3126,29 @@ class OverviewViewModel extends BaseViewModel {
                 pageSize: this.MashupsPageSize
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddClosedMashups(result);
+                    _this.AddClosedMashups(result);
                 }
                 else {
-                    this.HasMoreClosedMashups(false);
+                    _this.HasMoreClosedMashups(false);
                 }
-                this.ClosedMashupsRequestActive(false);
+                _this.ClosedMashupsRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.ClosedMashupsRequestActive(false);
+                _this.ClosedMashupsRequestActive(false);
             }
         });
-    }
-    OnAddNoses() { }
-    AddNoses(data) {
+    };
+    OverviewViewModel.prototype.OnAddNoses = function () { };
+    OverviewViewModel.prototype.AddNoses = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
@@ -3632,8 +3163,9 @@ class OverviewViewModel extends BaseViewModel {
         }
         if (this.OnAddNoses)
             this.OnAddNoses();
-    }
-    PageNoses() {
+    };
+    OverviewViewModel.prototype.PageNoses = function () {
+        var _this = this;
         if (!this.ShowNoses() || this.NosesRequestActive() || !this.HasMoreNoses())
             return;
         this.NosesRequestActive(true);
@@ -3648,29 +3180,29 @@ class OverviewViewModel extends BaseViewModel {
                 community: this.CommunityTag()
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddNoses(result);
+                    _this.AddNoses(result);
                 }
                 else {
-                    this.HasMoreNoses(false);
+                    _this.HasMoreNoses(false);
                 }
-                this.NosesRequestActive(false);
+                _this.NosesRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.NosesRequestActive(false);
+                _this.NosesRequestActive(false);
             }
         });
-    }
-    OnAddNews() { }
-    AddNews(data) {
+    };
+    OverviewViewModel.prototype.OnAddNews = function () { };
+    OverviewViewModel.prototype.AddNews = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
@@ -3685,8 +3217,9 @@ class OverviewViewModel extends BaseViewModel {
         }
         if (this.OnAddNews)
             this.OnAddNews();
-    }
-    PageNews() {
+    };
+    OverviewViewModel.prototype.PageNews = function () {
+        var _this = this;
         if (!this.ShowNews() || this.NewsRequestActive() || !this.HasMoreNews())
             return;
         this.NewsRequestActive(true);
@@ -3701,108 +3234,117 @@ class OverviewViewModel extends BaseViewModel {
                 community: this.CommunityTag()
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddNews(result);
+                    _this.AddNews(result);
                 }
                 else {
-                    this.HasMoreNews(false);
+                    _this.HasMoreNews(false);
                 }
-                this.NewsRequestActive(false);
+                _this.NewsRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.NewsRequestActive(false);
+                _this.NewsRequestActive(false);
             }
         });
+    };
+    return OverviewViewModel;
+}(BaseViewModel));
+var PhotoBlogDetailViewModel = (function (_super) {
+    __extends(PhotoBlogDetailViewModel, _super);
+    function PhotoBlogDetailViewModel(uniqueKey) {
+        var _this = _super.call(this) || this;
+        _this.Tour = null;
+        _this.UniqueKey = uniqueKey || "";
+        _this.LoginName = GetLoginNameFromUniqueKey(_this.UniqueKey);
+        _this.CreationTicks = GetTicksFromUniqueKey(_this.UniqueKey);
+        _this.Entity = new PhotoBlogDto({ "UniqueKey": _this.UniqueKey });
+        _this.NoseDto = new NoseDto({ "LoginName": _this.LoginName });
+        return _this;
     }
-}
-class PhotoBlogDetailViewModel extends BaseViewModel {
-    constructor(uniqueKey) {
-        super();
-        this.Tour = null;
-        this.UniqueKey = uniqueKey || "";
-        this.LoginName = GetLoginNameFromUniqueKey(this.UniqueKey);
-        this.CreationTicks = GetTicksFromUniqueKey(this.UniqueKey);
-        this.Entity = new PhotoBlogDto({ "UniqueKey": this.UniqueKey });
-        this.NoseDto = new NoseDto({ "LoginName": this.LoginName });
-    }
-    SetTourById(uniqueKey) {
+    PhotoBlogDetailViewModel.prototype.SetTourById = function (uniqueKey) {
         this.Tour = new TourDto({ "UniqueKey": uniqueKey });
+    };
+    return PhotoBlogDetailViewModel;
+}(BaseViewModel));
+var PoiDetailViewModel = (function (_super) {
+    __extends(PoiDetailViewModel, _super);
+    function PoiDetailViewModel(uniqueKey) {
+        var _this = _super.call(this) || this;
+        _this.Tour = null;
+        _this.UniqueKey = uniqueKey || "";
+        _this.LoginName = GetLoginNameFromUniqueKey(_this.UniqueKey);
+        _this.CreationTicks = GetTicksFromUniqueKey(_this.UniqueKey);
+        _this.Entity = new PoiDto({ "UniqueKey": _this.UniqueKey });
+        _this.NoseDto = new NoseDto({ "LoginName": _this.LoginName });
+        return _this;
     }
-}
-class PoiDetailViewModel extends BaseViewModel {
-    constructor(uniqueKey) {
-        super();
-        this.Tour = null;
-        this.UniqueKey = uniqueKey || "";
-        this.LoginName = GetLoginNameFromUniqueKey(this.UniqueKey);
-        this.CreationTicks = GetTicksFromUniqueKey(this.UniqueKey);
-        this.Entity = new PoiDto({ "UniqueKey": this.UniqueKey });
-        this.NoseDto = new NoseDto({ "LoginName": this.LoginName });
-    }
-    SetTourById(uniqueKey) {
+    PoiDetailViewModel.prototype.SetTourById = function (uniqueKey) {
         this.Tour = new TourDto({ "UniqueKey": uniqueKey });
-    }
-}
-class SecurityTokenValidatorViewModel extends BaseViewModel {
-    constructor() {
-        super();
-        this.ValidateUrl = '/WebApi/IsSecurityTokenValid';
-        this.ValidationRequestActive = ko.observable(false);
-        this.CurrentSecurityToken = ko.observable(null);
-        this.SecurityTokens = ko.observableArray([]);
-        this.MessageError = ko.observable(null);
-        this.MessageSuccess = ko.observable(null);
-        this.HasMessage = ko.computed(() => {
-            return this.MessageError() != null || this.MessageSuccess() != null;
+    };
+    return PoiDetailViewModel;
+}(BaseViewModel));
+var SecurityTokenValidatorViewModel = (function (_super) {
+    __extends(SecurityTokenValidatorViewModel, _super);
+    function SecurityTokenValidatorViewModel() {
+        var _this = _super.call(this) || this;
+        _this.ValidateUrl = '/WebApi/IsSecurityTokenValid';
+        _this.ValidationRequestActive = ko.observable(false);
+        _this.CurrentSecurityToken = ko.observable(null);
+        _this.SecurityTokens = ko.observableArray([]);
+        _this.MessageError = ko.observable(null);
+        _this.MessageSuccess = ko.observable(null);
+        _this.HasMessage = ko.computed(function () {
+            return _this.MessageError() != null || _this.MessageSuccess() != null;
         });
-        this.IsCameraOn = ko.observable(false);
-        this.IsCameraPending = ko.observable(false);
-        this.IsScanFinished = ko.observable(false);
-        this.IsCameraOn.subscribe((newValue) => {
+        _this.IsCameraOn = ko.observable(false);
+        _this.IsCameraPending = ko.observable(false);
+        _this.IsScanFinished = ko.observable(false);
+        _this.IsCameraOn.subscribe(function (newValue) {
             if (newValue) {
-                if (this.OnCameraOn) {
-                    this.OnCameraOn(this.Decoder);
+                if (_this.OnCameraOn) {
+                    _this.OnCameraOn(_this.Decoder);
                 }
-                this.CurrentSecurityToken(null);
-                this.MessageError(null);
-                this.MessageSuccess(null);
-                this.IsScanFinished(false);
+                _this.CurrentSecurityToken(null);
+                _this.MessageError(null);
+                _this.MessageSuccess(null);
+                _this.IsScanFinished(false);
             }
             else {
-                if (this.OnCameraOff) {
-                    this.OnCameraOff(this.Decoder);
+                if (_this.OnCameraOff) {
+                    _this.OnCameraOff(_this.Decoder);
                 }
             }
-            this.ValidationRequestActive(false);
-            this.IsCameraPending(newValue);
+            _this.ValidationRequestActive(false);
+            _this.IsCameraPending(newValue);
         });
-        this.CurrentSecurityToken.subscribe((newValue) => {
+        _this.CurrentSecurityToken.subscribe(function (newValue) {
             if (newValue != null) {
-                this.SecurityTokens.push(newValue);
+                _this.SecurityTokens.push(newValue);
             }
         });
+        return _this;
     }
-    OnCameraOn(decoder) { }
+    SecurityTokenValidatorViewModel.prototype.OnCameraOn = function (decoder) { };
     ;
-    OnCameraOff(decoder) { }
+    SecurityTokenValidatorViewModel.prototype.OnCameraOff = function (decoder) { };
     ;
-    OnValidateComplete(tokenIsValide, creatorUserName) { }
+    SecurityTokenValidatorViewModel.prototype.OnValidateComplete = function (tokenIsValide, creatorUserName) { };
     ;
-    ToggleCamera() {
+    SecurityTokenValidatorViewModel.prototype.ToggleCamera = function () {
         this.IsCameraOn(!this.IsCameraOn());
-    }
-    CameraIsNowReady() {
+    };
+    SecurityTokenValidatorViewModel.prototype.CameraIsNowReady = function () {
         this.IsCameraPending(false);
-    }
-    ValidateResultCode(resultCode) {
+    };
+    SecurityTokenValidatorViewModel.prototype.ValidateResultCode = function (resultCode) {
         if (this.ValidationRequestActive())
             return;
         this.ValidationRequestActive(true);
@@ -3848,29 +3390,30 @@ class SecurityTokenValidatorViewModel extends BaseViewModel {
                 });
             }
         }
-    }
-    setDefaultDecoder(canvas, decoratorWorkerPath) {
+    };
+    SecurityTokenValidatorViewModel.prototype.setDefaultDecoder = function (canvas, decoratorWorkerPath) {
+        var _this = this;
         this.Decoder = canvas.WebCodeCamJQuery({
             zoom: 1,
             beep: null,
-            resultFunction: (result) => {
-                this.ValidateResultCode(result.code);
+            resultFunction: function (result) {
+                _this.ValidateResultCode(result.code);
             },
-            cameraSuccess: (stream) => {
-                this.CameraIsNowReady();
+            cameraSuccess: function (stream) {
+                _this.CameraIsNowReady();
             },
-            canPlayFunction: () => { },
-            getDevicesError: (error) => {
-                this.IsCameraOn(false);
-                this.MessageError(error.message);
+            canPlayFunction: function () { },
+            getDevicesError: function (error) {
+                _this.IsCameraOn(false);
+                _this.MessageError(error.message);
             },
-            getUserMediaError: (error) => {
-                this.IsCameraOn(false);
-                this.MessageError(error.message);
+            getUserMediaError: function (error) {
+                _this.IsCameraOn(false);
+                _this.MessageError(error.message);
             },
-            cameraError: (error) => {
-                this.IsCameraOn(false);
-                this.MessageError(error.message);
+            cameraError: function (error) {
+                _this.IsCameraOn(false);
+                _this.MessageError(error.message);
             },
             constraints: {
                 video: {
@@ -3884,61 +3427,63 @@ class SecurityTokenValidatorViewModel extends BaseViewModel {
             flipHorizontal: true,
             decoderWorker: decoratorWorkerPath
         }).data().plugin_WebCodeCamJQuery;
-        this.OnCameraOn = (decoder) => {
+        this.OnCameraOn = function (decoder) {
             decoder.play();
         };
-        this.OnCameraOff = (decoder) => {
+        this.OnCameraOff = function (decoder) {
             decoder.stop();
         };
-    }
-}
-class TourDetailViewModel extends BaseViewModel {
-    constructor(tourDto) {
-        super();
-        this.ALTITUDE_UNKNOWN = 0x8000;
-        this.ALTITUDE_FROM_MISSING_QUADRANT = 0x8001;
-        this.ALTITUDE_SEA_LEVEL = 0.001;
-        this.CurrentTourIndex = ko.observable(-1);
-        this.TourItems = ko.observableArray([]);
-        this.Coordinates = ko.observableArray([]);
-        this.NiceTourCoordinates = ko.observableArray([]);
-        this.ElevationMax = ko.observable(0);
-        this.ElevationMaxString = ko.computed(() => {
-            return this.ElevationMax() != 0 ? Math.round(this.ElevationMax()) + "m" : "";
+    };
+    return SecurityTokenValidatorViewModel;
+}(BaseViewModel));
+var TourDetailViewModel = (function (_super) {
+    __extends(TourDetailViewModel, _super);
+    function TourDetailViewModel(tourDto) {
+        var _this = _super.call(this) || this;
+        _this.ALTITUDE_UNKNOWN = 0x8000;
+        _this.ALTITUDE_FROM_MISSING_QUADRANT = 0x8001;
+        _this.ALTITUDE_SEA_LEVEL = 0.001;
+        _this.CurrentTourIndex = ko.observable(-1);
+        _this.TourItems = ko.observableArray([]);
+        _this.Coordinates = ko.observableArray([]);
+        _this.NiceTourCoordinates = ko.observableArray([]);
+        _this.ElevationMax = ko.observable(0);
+        _this.ElevationMaxString = ko.computed(function () {
+            return _this.ElevationMax() != 0 ? Math.round(_this.ElevationMax()) + "m" : "";
         });
-        this.ElevationMin = ko.observable(0);
-        this.ElevationMinString = ko.computed(() => {
-            return this.ElevationMin() != 0 ? Math.round(this.ElevationMin()) + "m" : "";
+        _this.ElevationMin = ko.observable(0);
+        _this.ElevationMinString = ko.computed(function () {
+            return _this.ElevationMin() != 0 ? Math.round(_this.ElevationMin()) + "m" : "";
         });
-        this.MetaElapsedTime = ko.observable(0);
-        this.MetaDistanceTravelled = ko.observable(0);
-        this.MetaAverageSpeed = ko.observable(0);
-        this.MetaElevationUp = ko.observable(0);
-        this.MetaElevationDown = ko.observable(0);
-        this.MetaEffectiveDistance = ko.observable(0);
-        this.CoordinateRequestActive = ko.observable(false);
-        this.cWidth = 3000;
-        this.cHeight = 1000;
-        this.cMargin = 5;
-        this.ElevationCanvasIdentifier = ko.observable(null);
-        this.ElevationMousemoveIndex = ko.observable(-1);
-        this.ElevationClickedIndex = ko.observable(-1);
-        this.UniqueKey = tourDto.UniqueKey || "";
-        this.LoginName = GetLoginNameFromUniqueKey(this.UniqueKey);
-        this.CreationTicks = GetTicksFromUniqueKey(this.UniqueKey);
-        this.Entity = tourDto;
-        this.NoseDto = new NoseDto({ "LoginName": this.LoginName });
-        this.ElevationMousemoveIndex.subscribe((newValue) => {
-            this.DrawElevation();
+        _this.MetaElapsedTime = ko.observable(0);
+        _this.MetaDistanceTravelled = ko.observable(0);
+        _this.MetaAverageSpeed = ko.observable(0);
+        _this.MetaElevationUp = ko.observable(0);
+        _this.MetaElevationDown = ko.observable(0);
+        _this.MetaEffectiveDistance = ko.observable(0);
+        _this.CoordinateRequestActive = ko.observable(false);
+        _this.cWidth = 3000;
+        _this.cHeight = 1000;
+        _this.cMargin = 5;
+        _this.ElevationCanvasIdentifier = ko.observable(null);
+        _this.ElevationMousemoveIndex = ko.observable(-1);
+        _this.ElevationClickedIndex = ko.observable(-1);
+        _this.UniqueKey = tourDto.UniqueKey || "";
+        _this.LoginName = GetLoginNameFromUniqueKey(_this.UniqueKey);
+        _this.CreationTicks = GetTicksFromUniqueKey(_this.UniqueKey);
+        _this.Entity = tourDto;
+        _this.NoseDto = new NoseDto({ "LoginName": _this.LoginName });
+        _this.ElevationMousemoveIndex.subscribe(function (newValue) {
+            _this.DrawElevation();
         });
-        this.ElevationClickedIndex.subscribe((newValue) => {
-            this.DrawElevation();
+        _this.ElevationClickedIndex.subscribe(function (newValue) {
+            _this.DrawElevation();
         });
-        if (this.Entity && this.Entity.GeoData) {
-            let data = this.Entity.GeoData;
-            let items = new Array();
+        if (_this.Entity && _this.Entity.GeoData) {
+            var data = _this.Entity.GeoData;
+            var items = new Array();
             for (var i in data) {
-                let item = data[i];
+                var item = data[i];
                 if (item.properties) {
                     if (item.geometry) {
                         var newItem = {
@@ -3958,7 +3503,7 @@ class TourDetailViewModel extends BaseViewModel {
                     }
                 }
             }
-            ko.utils.arrayPushAll(this.TourItems(), items.sort((a, b) => {
+            ko.utils.arrayPushAll(_this.TourItems(), items.sort(function (a, b) {
                 if (a.CreationTicks < b.CreationTicks) {
                     return -1;
                 }
@@ -3968,17 +3513,19 @@ class TourDetailViewModel extends BaseViewModel {
                 return 0;
             }));
         }
+        return _this;
     }
-    UpdateMetaInformations() {
+    TourDetailViewModel.prototype.UpdateMetaInformations = function () {
         this.MetaElapsedTime(this.GetElapsedTime());
         this.MetaDistanceTravelled(this.GetDistanceTravelled());
         this.MetaAverageSpeed(this.GetAverageSpeed());
         this.MetaElevationUp(this.GetElevationUp());
         this.MetaElevationDown(this.GetElevationDown());
         this.MetaEffectiveDistance(this.GetEffectiveDistance());
-    }
-    OnLoadCoordinates() { }
-    LoadCoordinates() {
+    };
+    TourDetailViewModel.prototype.OnLoadCoordinates = function () { };
+    TourDetailViewModel.prototype.LoadCoordinates = function () {
+        var _this = this;
         if (this.CoordinateRequestActive())
             return;
         this.CoordinateRequestActive(true);
@@ -3990,28 +3537,30 @@ class TourDetailViewModel extends BaseViewModel {
                 id: this.UniqueKey
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (result) {
-                    for (var r of result) {
-                        let c = new Coordinate(r);
+                    for (var _i = 0, result_1 = result; _i < result_1.length; _i++) {
+                        var r = result_1[_i];
+                        var c = new Coordinate(r);
                         if (c.type == CoordinateTypeEnum.Touch)
-                            this.Coordinates.push(c);
+                            _this.Coordinates.push(c);
                     }
                 }
-                this.DrawElevation();
-                this.OnLoadCoordinates();
-                this.UpdateMetaInformations();
-                this.CoordinateRequestActive(false);
+                _this.DrawElevation();
+                _this.OnLoadCoordinates();
+                _this.UpdateMetaInformations();
+                _this.CoordinateRequestActive(false);
             },
-            error: () => {
+            error: function () {
                 dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorLoadCoordinates", "Coordinates cannot be loaded!"), null);
-                this.CoordinateRequestActive(false);
+                _this.CoordinateRequestActive(false);
             }
         });
-    }
+    };
     ;
-    DrawElevation() {
-        let identifier = this.ElevationCanvasIdentifier() || '';
+    TourDetailViewModel.prototype.DrawElevation = function () {
+        var _this = this;
+        var identifier = this.ElevationCanvasIdentifier() || '';
         var canvas = $(identifier)[0];
         if (canvas.getContext) {
             canvas.width = this.cWidth + (2 * this.cMargin);
@@ -4023,19 +3572,20 @@ class TourDetailViewModel extends BaseViewModel {
             ctx.lineWidth = 10;
             ctx.strokeStyle = '#dddddd';
             ctx.stroke();
-            let totalDistanceTravelled = this.GetDistanceTravelled();
-            let coordinates = this.AnyCoordinatesWithAlt(this.NiceTourCoordinates()) ? this.NiceTourCoordinates() : this.Coordinates();
-            let startTicks = coordinates[0].ticks;
-            let minAlt = this.ALTITUDE_UNKNOWN;
-            let maxAlt = 0;
-            for (let coordinate of coordinates) {
+            var totalDistanceTravelled = this.GetDistanceTravelled();
+            var coordinates_2 = this.AnyCoordinatesWithAlt(this.NiceTourCoordinates()) ? this.NiceTourCoordinates() : this.Coordinates();
+            var startTicks = coordinates_2[0].ticks;
+            var minAlt = this.ALTITUDE_UNKNOWN;
+            var maxAlt = 0;
+            for (var _i = 0, coordinates_1 = coordinates_2; _i < coordinates_1.length; _i++) {
+                var coordinate = coordinates_1[_i];
                 if (minAlt > coordinate.alt && coordinate.alt != 0)
                     minAlt = coordinate.alt;
                 if (maxAlt < coordinate.alt && coordinate.alt != this.ALTITUDE_UNKNOWN && coordinate.alt != this.ALTITUDE_FROM_MISSING_QUADRANT)
                     maxAlt = coordinate.alt;
             }
-            let hLineGap;
-            let diffAlt = (maxAlt - minAlt);
+            var hLineGap = void 0;
+            var diffAlt = (maxAlt - minAlt);
             if (diffAlt < 50) {
                 minAlt -= 20;
                 maxAlt += 20;
@@ -4053,9 +3603,9 @@ class TourDetailViewModel extends BaseViewModel {
             }
             this.ElevationMin(minAlt);
             this.ElevationMax(maxAlt);
-            for (let i = Math.floor(minAlt / hLineGap) + 1; i < Math.floor(maxAlt / hLineGap); i++) {
-                let oneMeter = this.cHeight / Math.abs(maxAlt - minAlt);
-                let vertical = this.cHeight - ((i * hLineGap - minAlt) * oneMeter);
+            for (var i = Math.floor(minAlt / hLineGap) + 1; i < Math.floor(maxAlt / hLineGap); i++) {
+                var oneMeter = this.cHeight / Math.abs(maxAlt - minAlt);
+                var vertical = this.cHeight - ((i * hLineGap - minAlt) * oneMeter);
                 ctx.beginPath();
                 ctx.moveTo(this.cMargin, vertical + this.cMargin);
                 ctx.lineTo(this.cWidth + this.cMargin, vertical + this.cMargin);
@@ -4064,17 +3614,17 @@ class TourDetailViewModel extends BaseViewModel {
                 ctx.stroke();
             }
             ctx.beginPath();
-            let lastCoordinateModel = null;
-            let distanceTravelled = 0;
-            let clickedX = -1;
-            let clickedY = -1;
-            let clickedAlt = -1;
-            let moveX = -1;
-            let moveY = -1;
-            let moveAlt = -1;
-            for (let i = 0; i < coordinates.length; i++) {
-                let coordinate = coordinates[i];
-                let lineX = this.cMargin;
+            var lastCoordinateModel = null;
+            var distanceTravelled = 0;
+            var clickedX = -1;
+            var clickedY = -1;
+            var clickedAlt = -1;
+            var moveX = -1;
+            var moveY = -1;
+            var moveAlt = -1;
+            for (var i = 0; i < coordinates_2.length; i++) {
+                var coordinate = coordinates_2[i];
+                var lineX = this.cMargin;
                 if (lastCoordinateModel != null) {
                     if (coordinate.alt == 0 || coordinate.alt == this.ALTITUDE_UNKNOWN)
                         coordinate.alt = lastCoordinateModel.alt;
@@ -4082,7 +3632,7 @@ class TourDetailViewModel extends BaseViewModel {
                     lineX += (this.cWidth / totalDistanceTravelled) * distanceTravelled;
                     coordinate.AgeString = GetAgeString(startTicks, coordinate.ticks, true, true);
                 }
-                let lineY = this.cHeight - ((this.cHeight / (maxAlt - minAlt)) * (coordinate.alt - minAlt)) + this.cMargin;
+                var lineY = this.cHeight - ((this.cHeight / (maxAlt - minAlt)) * (coordinate.alt - minAlt)) + this.cMargin;
                 if (lastCoordinateModel != null)
                     ctx.lineTo(lineX, lineY);
                 else
@@ -4111,19 +3661,19 @@ class TourDetailViewModel extends BaseViewModel {
                 this.DrawVerticalLine(ctx, clickedX, clickedY, '#ff0000', '#ffff00');
             }
             $(identifier).off();
-            $(identifier).on('mouseout', (e) => {
-                this.OnElevationMouseOut();
-                this.ElevationMousemoveIndex(-1);
+            $(identifier).on('mouseout', function (e) {
+                _this.OnElevationMouseOut();
+                _this.ElevationMousemoveIndex(-1);
             });
-            $(identifier).on('mousemove', (e) => {
-                this.HandleElevationEvent(coordinates, e);
+            $(identifier).on('mousemove', function (e) {
+                _this.HandleElevationEvent(coordinates_2, e);
             });
-            $(identifier).on('click', (e) => {
-                this.HandleElevationEvent(coordinates, e);
+            $(identifier).on('click', function (e) {
+                _this.HandleElevationEvent(coordinates_2, e);
             });
         }
-    }
-    DrawVerticalLine(ctx, x, y, lineColor, fillColor) {
+    };
+    TourDetailViewModel.prototype.DrawVerticalLine = function (ctx, x, y, lineColor, fillColor) {
         ctx.beginPath();
         ctx.moveTo(x, this.cMargin);
         ctx.lineTo(x, this.cHeight + this.cMargin);
@@ -4139,20 +3689,20 @@ class TourDetailViewModel extends BaseViewModel {
             ctx.fillStyle = fillColor;
             ctx.fill();
         }
-    }
-    OnElevationMouseMove(coordinate) { }
-    OnElevationMouseOut() { }
-    OnElevationClick(coordinate) { }
-    HandleElevationEvent(coordinates, e) {
+    };
+    TourDetailViewModel.prototype.OnElevationMouseMove = function (coordinate) { };
+    TourDetailViewModel.prototype.OnElevationMouseOut = function () { };
+    TourDetailViewModel.prototype.OnElevationClick = function (coordinate) { };
+    TourDetailViewModel.prototype.HandleElevationEvent = function (coordinates, e) {
         e.preventDefault();
         e.stopPropagation();
-        let eventType = e.type;
+        var eventType = e.type;
         try {
-            let clickedIndex = -1;
-            let percentageX = (e.clientX - $(e.target).offset().left) / $(e.target).width();
-            let minDiff = 10000;
-            for (let i = 0; i < coordinates.length; i++) {
-                let coordinate = coordinates[i];
+            var clickedIndex = -1;
+            var percentageX = (e.clientX - $(e.target).offset().left) / $(e.target).width();
+            var minDiff = 10000;
+            for (var i = 0; i < coordinates.length; i++) {
+                var coordinate = coordinates[i];
                 var m = Math.abs(percentageX - coordinate.PercentageX);
                 if (m < minDiff) {
                     minDiff = m;
@@ -4160,7 +3710,7 @@ class TourDetailViewModel extends BaseViewModel {
                 }
             }
             if (clickedIndex >= 0) {
-                let currentCoordinate = coordinates[clickedIndex];
+                var currentCoordinate = coordinates[clickedIndex];
                 if (eventType == "click") {
                     this.ElevationClickedIndex(clickedIndex);
                     this.OnElevationClick(currentCoordinate);
@@ -4175,46 +3725,48 @@ class TourDetailViewModel extends BaseViewModel {
             if (console)
                 console.log(e);
         }
-    }
-    AnyCoordinatesWithAlt(coordinates) {
-        for (let coordinate of coordinates) {
+    };
+    TourDetailViewModel.prototype.AnyCoordinatesWithAlt = function (coordinates) {
+        for (var _i = 0, coordinates_3 = coordinates; _i < coordinates_3.length; _i++) {
+            var coordinate = coordinates_3[_i];
             if (coordinate.alt != this.ALTITUDE_UNKNOWN && coordinate.alt != this.ALTITUDE_FROM_MISSING_QUADRANT)
                 return true;
         }
         return false;
-    }
-    GetElapsedTime() {
-        let coordinates = this.Coordinates();
+    };
+    TourDetailViewModel.prototype.GetElapsedTime = function () {
+        var coordinates = this.Coordinates();
         if (coordinates.length > 0) {
-            let firstCoordinateModel = coordinates[0];
-            let lastCoordinateModel = coordinates[coordinates.length - 1];
+            var firstCoordinateModel = coordinates[0];
+            var lastCoordinateModel = coordinates[coordinates.length - 1];
             if (firstCoordinateModel != null && lastCoordinateModel != null) {
-                let msElapsed = GetDateFromTicks(lastCoordinateModel.ticks).getTime() - GetDateFromTicks(firstCoordinateModel.ticks).getTime();
+                var msElapsed = GetDateFromTicks(lastCoordinateModel.ticks).getTime() - GetDateFromTicks(firstCoordinateModel.ticks).getTime();
                 return Math.floor(Math.abs(msElapsed / 1000));
             }
         }
         return 0;
-    }
-    GetDistanceTravelled() {
-        let distanceTravelled = 0.0;
-        let coordinates = this.NiceTourCoordinates().length > 0 ? this.NiceTourCoordinates() : this.Coordinates();
-        let lastCoordinateModel = null;
-        for (let coordinate of coordinates) {
+    };
+    TourDetailViewModel.prototype.GetDistanceTravelled = function () {
+        var distanceTravelled = 0.0;
+        var coordinates = this.NiceTourCoordinates().length > 0 ? this.NiceTourCoordinates() : this.Coordinates();
+        var lastCoordinateModel = null;
+        for (var _i = 0, coordinates_4 = coordinates; _i < coordinates_4.length; _i++) {
+            var coordinate = coordinates_4[_i];
             if (lastCoordinateModel != null) {
                 distanceTravelled += Math.abs(coordinate.Location.distanceTo(lastCoordinateModel.Location));
             }
             lastCoordinateModel = coordinate;
         }
         return distanceTravelled;
-    }
-    GetElevationUp() {
+    };
+    TourDetailViewModel.prototype.GetElevationUp = function () {
         return this.GetElevation(+1, 0);
-    }
-    GetElevationDown() {
+    };
+    TourDetailViewModel.prototype.GetElevationDown = function () {
         return this.GetElevation(-1, 0);
-    }
-    GetElevation(direction, minSlopePercentage) {
-        let elevation = 0;
+    };
+    TourDetailViewModel.prototype.GetElevation = function (direction, minSlopePercentage) {
+        var elevation = 0;
         if (this.NiceTourCoordinates().length > 0) {
             elevation = this.GetElevationFromCoordinates(this.NiceTourCoordinates(), direction, minSlopePercentage);
         }
@@ -4222,13 +3774,14 @@ class TourDetailViewModel extends BaseViewModel {
             elevation = this.GetElevationFromCoordinates(this.Coordinates(), direction, minSlopePercentage);
         }
         return elevation;
-    }
-    GetElevationFromCoordinates(coordinateModels, direction, minSlopePercentage) {
-        let hasAltitude = false;
-        let elevation = 0;
+    };
+    TourDetailViewModel.prototype.GetElevationFromCoordinates = function (coordinateModels, direction, minSlopePercentage) {
+        var hasAltitude = false;
+        var elevation = 0;
         if (coordinateModels != null) {
-            let lastCoordinateModel = null;
-            for (let coordinateModel of coordinateModels) {
+            var lastCoordinateModel = null;
+            for (var _i = 0, coordinateModels_1 = coordinateModels; _i < coordinateModels_1.length; _i++) {
+                var coordinateModel = coordinateModels_1[_i];
                 if (Math.abs(coordinateModel.alt) > this.ALTITUDE_SEA_LEVEL && coordinateModel.alt != this.ALTITUDE_UNKNOWN) {
                     hasAltitude = true;
                 }
@@ -4237,12 +3790,12 @@ class TourDetailViewModel extends BaseViewModel {
                 }
                 else if (Math.abs(lastCoordinateModel.alt) > this.ALTITUDE_SEA_LEVEL && Math.abs(coordinateModel.alt) > this.ALTITUDE_SEA_LEVEL &&
                     lastCoordinateModel.alt != this.ALTITUDE_UNKNOWN && coordinateModel.alt != this.ALTITUDE_UNKNOWN) {
-                    let useBySlope = false;
-                    let elevationDiff = coordinateModel.alt - lastCoordinateModel.alt;
+                    var useBySlope = false;
+                    var elevationDiff = coordinateModel.alt - lastCoordinateModel.alt;
                     if (minSlopePercentage > 0) {
-                        let distance = Math.abs(lastCoordinateModel.Location.distanceTo(coordinateModel.Location));
+                        var distance = Math.abs(lastCoordinateModel.Location.distanceTo(coordinateModel.Location));
                         if (distance > 0) {
-                            let slope = (Math.abs(elevationDiff) / distance) * 100;
+                            var slope = (Math.abs(elevationDiff) / distance) * 100;
                             if (slope >= minSlopePercentage) {
                                 useBySlope = true;
                             }
@@ -4259,144 +3812,147 @@ class TourDetailViewModel extends BaseViewModel {
             }
         }
         return hasAltitude ? elevation : -1;
-    }
-    GetEffectiveDistance() {
-        let distance = this.GetDistanceTravelled();
-        let upUnit = Math.floor(Math.max(this.GetElevation(+1, 0), 0.0) / 100.0);
+    };
+    TourDetailViewModel.prototype.GetEffectiveDistance = function () {
+        var distance = this.GetDistanceTravelled();
+        var upUnit = Math.floor(Math.max(this.GetElevation(+1, 0), 0.0) / 100.0);
         if (upUnit >= 1) {
             distance += upUnit * 1000;
         }
-        let downUnit = Math.floor(Math.max(this.GetElevation(-1, 20), 0.0) / 150.0);
+        var downUnit = Math.floor(Math.max(this.GetElevation(-1, 20), 0.0) / 150.0);
         if (downUnit >= 1) {
             distance += downUnit * 1000;
         }
         return distance;
-    }
-    GetAverageSpeed() {
-        let speed = 0.0;
-        let elapsedTime = this.GetElapsedTime();
-        let distanceTravelled = this.GetDistanceTravelled();
+    };
+    TourDetailViewModel.prototype.GetAverageSpeed = function () {
+        var speed = 0.0;
+        var elapsedTime = this.GetElapsedTime();
+        var distanceTravelled = this.GetDistanceTravelled();
         if (elapsedTime > 0 && distanceTravelled > 0) {
             speed = (distanceTravelled / elapsedTime) * 3.6;
         }
         return speed;
-    }
-}
-class UserDetailViewModel extends BaseViewModel {
-    constructor(loginName) {
-        super();
-        this.loginName = loginName;
-        this.PhotoBlogs = ko.observableArray([]);
-        this.PhotoBlogsPageSize = gnSettings.PhotoBlogsPageSize;
-        this.PhotoBlogsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
-        this.HasMorePhotoBlogs = ko.observable(true);
-        this.PhotoBlogsRequestActive = ko.observable(false);
-        this.PhotoBlogsGroupValueTemp = ko.observable(0);
-        this.PhotoBlogsGroupValue = ko.observable(0).extend({ 'notify': 'always' });
-        this.PhotoBlogsGroupCount = 0;
-        this.RequestUntilPhotoBlogsGroup = 0;
-        this.LoadNextGroupClicked = false;
-        this.LoadNextGroupRequestCount = 0;
-        this.PhotoBlogsGroupType = ko.observable(GroupTypeEnum.None);
-        this.PhotoBlogsGroupTypeString = ko.computed(() => {
-            if (this.PhotoBlogsGroupType() == GroupTypeEnum.ByDay) {
+    };
+    return TourDetailViewModel;
+}(BaseViewModel));
+var UserDetailViewModel = (function (_super) {
+    __extends(UserDetailViewModel, _super);
+    function UserDetailViewModel(loginName) {
+        var _this = _super.call(this) || this;
+        _this.loginName = loginName;
+        _this.PhotoBlogs = ko.observableArray([]);
+        _this.PhotoBlogsPageSize = gnSettings.PhotoBlogsPageSize;
+        _this.PhotoBlogsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMorePhotoBlogs = ko.observable(true);
+        _this.PhotoBlogsRequestActive = ko.observable(false);
+        _this.PhotoBlogsGroupValueTemp = ko.observable(0);
+        _this.PhotoBlogsGroupValue = ko.observable(0).extend({ 'notify': 'always' });
+        _this.PhotoBlogsGroupCount = 0;
+        _this.RequestUntilPhotoBlogsGroup = 0;
+        _this.LoadNextGroupClicked = false;
+        _this.LoadNextGroupRequestCount = 0;
+        _this.PhotoBlogsGroupType = ko.observable(GroupTypeEnum.None);
+        _this.PhotoBlogsGroupTypeString = ko.computed(function () {
+            if (_this.PhotoBlogsGroupType() == GroupTypeEnum.ByDay) {
                 return GetLangRes("Common_lblGroupTypeByDay", "Group by day");
             }
-            else if (this.PhotoBlogsGroupType() == GroupTypeEnum.ByWeek) {
+            else if (_this.PhotoBlogsGroupType() == GroupTypeEnum.ByWeek) {
                 return GetLangRes("Common_lblGroupTypeByWeek", "Group by week");
             }
-            else if (this.PhotoBlogsGroupType() == GroupTypeEnum.ByMonth) {
+            else if (_this.PhotoBlogsGroupType() == GroupTypeEnum.ByMonth) {
                 return GetLangRes("Common_lblGroupTypeByMonth", "Group by month");
             }
-            else if (this.PhotoBlogsGroupType() == GroupTypeEnum.Custom) {
+            else if (_this.PhotoBlogsGroupType() == GroupTypeEnum.Custom) {
                 return GetLangRes("Common_lblGroupTypeCustom", "Smart group");
             }
             return GetLangRes("Common_lblGroupTypeNone", "No grouping");
         });
-        this.PhotoBlogsGroupValueLabel = ko.computed(() => {
-            if (this.PhotoBlogsGroupValueTemp() >= 60) {
-                return (this.PhotoBlogsGroupValueTemp() / 60) + "h";
+        _this.PhotoBlogsGroupValueLabel = ko.computed(function () {
+            if (_this.PhotoBlogsGroupValueTemp() >= 60) {
+                return (_this.PhotoBlogsGroupValueTemp() / 60) + "h";
             }
-            else if (this.PhotoBlogsGroupValueTemp() >= 1) {
-                return this.PhotoBlogsGroupValueTemp() + "min";
+            else if (_this.PhotoBlogsGroupValueTemp() >= 1) {
+                return _this.PhotoBlogsGroupValueTemp() + "min";
             }
             else {
                 return GetLangRes("Common_lblNoGrouping", "No Grouping");
             }
         });
-        this.PhotoBlogsScrollAutoLoad = ko.computed(() => {
-            let photoBlogsGroupType = this.PhotoBlogsGroupType();
-            let photoBlogsGroupValue = this.PhotoBlogsGroupValue();
+        _this.PhotoBlogsScrollAutoLoad = ko.computed(function () {
+            var photoBlogsGroupType = _this.PhotoBlogsGroupType();
+            var photoBlogsGroupValue = _this.PhotoBlogsGroupValue();
             return photoBlogsGroupType == GroupTypeEnum.None || (photoBlogsGroupType == GroupTypeEnum.Custom && photoBlogsGroupValue < 1);
         });
-        this.PhotoBlogsStartTicksValue = ko.observable(window.MAX_DATE_TIME_TICKS);
-        this.PhotoBlogsStartDate = ko.observable("");
-        this.ShareUrl = ko.pureComputed(() => {
-            let params = new Array();
-            if (this.PhotoBlogsGroupValue() > 0)
-                params.push("bg=" + this.PhotoBlogsGroupValue());
-            if (this.PhotoBlogsStartTicksValue() != window.MAX_DATE_TIME_TICKS)
-                params.push("bs=" + this.PhotoBlogsStartTicksValue());
-            if (this.PhotoBlogsGroupType() != GroupTypeEnum.None)
-                params.push("bgt=" + this.PhotoBlogsGroupType());
-            return this.NoseDto ? this.NoseDto.ShareUrl() + (params.length > 0 ? "?" + params.join('&') : "") : "";
-        }, this);
-        this.Pois = ko.observableArray();
-        this.PoisPageSize = gnSettings.PoisPageSize;
-        this.PoisLastKnownTicks = window.MAX_DATE_TIME_TICKS;
-        this.HasMorePois = ko.observable(true);
-        this.PoisRequestActive = ko.observable(false);
-        this.Tours = ko.observableArray();
-        this.ToursPageSize = gnSettings.ToursPageSize;
-        this.ToursLastKnownTicks = window.MAX_DATE_TIME_TICKS;
-        this.HasMoreTours = ko.observable(true);
-        this.ToursRequestActive = ko.observable(false);
-        this.Events = ko.observableArray();
-        this.EventsPageSize = gnSettings.EventsPageSize;
-        this.EventsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
-        this.HasMoreEvents = ko.observable(true);
-        this.EventsRequestActive = ko.observable(false);
-        this.PhotoBlogsRequestActive.subscribe((newValue) => {
+        _this.PhotoBlogsStartTicksValue = ko.observable(window.MAX_DATE_TIME_TICKS);
+        _this.PhotoBlogsStartDate = ko.observable("");
+        _this.ShareUrl = ko.pureComputed(function () {
+            var params = new Array();
+            if (_this.PhotoBlogsGroupValue() > 0)
+                params.push("bg=" + _this.PhotoBlogsGroupValue());
+            if (_this.PhotoBlogsStartTicksValue() != window.MAX_DATE_TIME_TICKS)
+                params.push("bs=" + _this.PhotoBlogsStartTicksValue());
+            if (_this.PhotoBlogsGroupType() != GroupTypeEnum.None)
+                params.push("bgt=" + _this.PhotoBlogsGroupType());
+            return _this.NoseDto ? _this.NoseDto.ShareUrl() + (params.length > 0 ? "?" + params.join('&') : "") : "";
+        }, _this);
+        _this.Pois = ko.observableArray();
+        _this.PoisPageSize = gnSettings.PoisPageSize;
+        _this.PoisLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMorePois = ko.observable(true);
+        _this.PoisRequestActive = ko.observable(false);
+        _this.Tours = ko.observableArray();
+        _this.ToursPageSize = gnSettings.ToursPageSize;
+        _this.ToursLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMoreTours = ko.observable(true);
+        _this.ToursRequestActive = ko.observable(false);
+        _this.Events = ko.observableArray();
+        _this.EventsPageSize = gnSettings.EventsPageSize;
+        _this.EventsLastKnownTicks = window.MAX_DATE_TIME_TICKS;
+        _this.HasMoreEvents = ko.observable(true);
+        _this.EventsRequestActive = ko.observable(false);
+        _this.PhotoBlogsRequestActive.subscribe(function (newValue) {
             ShowPreviewPageLoad(newValue);
         });
-        this.PoisRequestActive.subscribe((newValue) => {
+        _this.PoisRequestActive.subscribe(function (newValue) {
             ShowPreviewPageLoad(newValue);
         });
-        this.ToursRequestActive.subscribe((newValue) => {
+        _this.ToursRequestActive.subscribe(function (newValue) {
             ShowPreviewPageLoad(newValue);
         });
-        this.NoseDto = new NoseDto({ "LoginName": this.loginName });
-        this.PhotoBlogsGroupType.subscribe((newValue) => {
+        _this.NoseDto = new NoseDto({ "LoginName": _this.loginName });
+        _this.PhotoBlogsGroupType.subscribe(function (newValue) {
             if (newValue != GroupTypeEnum.Custom) {
-                this.PhotoBlogsStartDate("");
-                this.PhotoBlogsGroupValue(0);
+                _this.PhotoBlogsStartDate("");
+                _this.PhotoBlogsGroupValue(0);
             }
             else {
-                this.UpdatePhotoBlogGroup();
+                _this.UpdatePhotoBlogGroup();
             }
         });
-        this.PhotoBlogsGroupValue.subscribe((newValue) => {
-            this.PhotoBlogsGroupValueTemp(newValue);
-            this.UpdatePhotoBlogGroup();
+        _this.PhotoBlogsGroupValue.subscribe(function (newValue) {
+            _this.PhotoBlogsGroupValueTemp(newValue);
+            _this.UpdatePhotoBlogGroup();
         });
-        this.PhotoBlogsStartTicksValue.subscribe((newValue) => {
-            this.PhotoBlogsLastKnownTicks = newValue;
-            this.PhotoBlogs.removeAll();
-            this.HasMorePhotoBlogs(true);
-            this.PageBlogs();
+        _this.PhotoBlogsStartTicksValue.subscribe(function (newValue) {
+            _this.PhotoBlogsLastKnownTicks = newValue;
+            _this.PhotoBlogs.removeAll();
+            _this.HasMorePhotoBlogs(true);
+            _this.PageBlogs();
         });
-        this.PhotoBlogsStartDate.subscribe((newDate) => {
+        _this.PhotoBlogsStartDate.subscribe(function (newDate) {
             if (!newDate) {
-                this.PhotoBlogsStartTicksValue(window.MAX_DATE_TIME_TICKS);
+                _this.PhotoBlogsStartTicksValue(window.MAX_DATE_TIME_TICKS);
             }
             else {
                 var copiedDate = moment(newDate).tz("UTC").add(1, "d").startOf('day').toDate();
                 var ticks = GetTicksFromDate(copiedDate);
-                this.PhotoBlogsStartTicksValue(ticks);
+                _this.PhotoBlogsStartTicksValue(ticks);
             }
         });
+        return _this;
     }
-    LengthBasedContent(value) {
+    UserDetailViewModel.prototype.LengthBasedContent = function (value) {
         if (value) {
             if (value.length > 200) {
                 return '<p>' + this.GetHtmlFromString(value) + '</p>';
@@ -4412,8 +3968,8 @@ class UserDetailViewModel extends BaseViewModel {
             }
         }
         return "";
-    }
-    UpdatePhotoBlogsGroupValue(newValue, setValue) {
+    };
+    UserDetailViewModel.prototype.UpdatePhotoBlogsGroupValue = function (newValue, setValue) {
         var value = 0;
         if (newValue < 15) {
             value = newValue;
@@ -4430,8 +3986,8 @@ class UserDetailViewModel extends BaseViewModel {
         else {
             this.PhotoBlogsGroupValueTemp(value);
         }
-    }
-    GetPhotoBlogsGroupSliderVal(val) {
+    };
+    UserDetailViewModel.prototype.GetPhotoBlogsGroupSliderVal = function (val) {
         if (val <= 15) {
             return val;
         }
@@ -4441,27 +3997,28 @@ class UserDetailViewModel extends BaseViewModel {
         else {
             return ((val - 60) / 60) + 18;
         }
-    }
-    OnUpdatePhotoBlogGroup() { }
-    UpdatePhotoBlogGroup() {
-        let minGroupCount = 0;
-        let groupCount = 0;
-        let topBlog;
-        let lastTicks;
-        let newValue = this.PhotoBlogsGroupValue();
-        let sliderTicks = new BigNumber(newValue).multiply(600000000);
-        ko.utils.arrayForEach(this.PhotoBlogs(), (photoBlog, index) => {
-            photoBlog.GroupType(this.PhotoBlogsGroupType());
+    };
+    UserDetailViewModel.prototype.OnUpdatePhotoBlogGroup = function () { };
+    UserDetailViewModel.prototype.UpdatePhotoBlogGroup = function () {
+        var _this = this;
+        var minGroupCount = 0;
+        var groupCount = 0;
+        var topBlog;
+        var lastTicks;
+        var newValue = this.PhotoBlogsGroupValue();
+        var sliderTicks = new BigNumber(newValue).multiply(600000000);
+        ko.utils.arrayForEach(this.PhotoBlogs(), function (photoBlog, index) {
+            photoBlog.GroupType(_this.PhotoBlogsGroupType());
             photoBlog.IsLastIncompleteGroup(false);
-            let bTicks = new BigNumber(photoBlog.CreationTicks);
-            let bStart = new BigNumber(this.PhotoBlogsStartTicksValue());
-            if (this.PhotoBlogsScrollAutoLoad() && this.PhotoBlogsGroupValue() < 1 && this.PhotoBlogsStartTicksValue() == window.MAX_DATE_TIME_TICKS) {
+            var bTicks = new BigNumber(photoBlog.CreationTicks);
+            var bStart = new BigNumber(_this.PhotoBlogsStartTicksValue());
+            if (_this.PhotoBlogsScrollAutoLoad() && _this.PhotoBlogsGroupValue() < 1 && _this.PhotoBlogsStartTicksValue() == window.MAX_DATE_TIME_TICKS) {
                 groupCount++;
                 photoBlog.IsGrouped(false);
                 photoBlog.GroupCount(1);
                 photoBlog.GroupName("");
             }
-            else if (this.PhotoBlogsGroupType() == GroupTypeEnum.Custom) {
+            else if (_this.PhotoBlogsGroupType() == GroupTypeEnum.Custom) {
                 minGroupCount = 5;
                 if (newValue > 0) {
                     if (topBlog === undefined) {
@@ -4494,10 +4051,10 @@ class UserDetailViewModel extends BaseViewModel {
                 }
             }
             else {
-                if (this.PhotoBlogsGroupType() == GroupTypeEnum.ByWeek) {
+                if (_this.PhotoBlogsGroupType() == GroupTypeEnum.ByWeek) {
                     minGroupCount = 4;
                 }
-                else if (this.PhotoBlogsGroupType() == GroupTypeEnum.ByMonth) {
+                else if (_this.PhotoBlogsGroupType() == GroupTypeEnum.ByMonth) {
                     minGroupCount = 3;
                 }
                 else {
@@ -4511,15 +4068,15 @@ class UserDetailViewModel extends BaseViewModel {
                     topBlog.GroupName(photoBlog.CreationTicks);
                 }
                 else {
-                    let topBlogDate = GetDateFromTicks(topBlog.CreationTicks);
-                    let blogDate = GetDateFromTicks(photoBlog.CreationTicks);
-                    if ((this.PhotoBlogsGroupType() == GroupTypeEnum.ByDay &&
+                    var topBlogDate = GetDateFromTicks(topBlog.CreationTicks);
+                    var blogDate = GetDateFromTicks(photoBlog.CreationTicks);
+                    if ((_this.PhotoBlogsGroupType() == GroupTypeEnum.ByDay &&
                         topBlogDate.getFullYear() == blogDate.getFullYear() &&
                         topBlogDate.getMonth() == blogDate.getMonth() &&
                         topBlogDate.getDate() == blogDate.getDate()) ||
-                        (this.PhotoBlogsGroupType() == GroupTypeEnum.ByWeek &&
+                        (_this.PhotoBlogsGroupType() == GroupTypeEnum.ByWeek &&
                             moment(topBlogDate).week() == moment(blogDate).week()) ||
-                        (this.PhotoBlogsGroupType() == GroupTypeEnum.ByMonth &&
+                        (_this.PhotoBlogsGroupType() == GroupTypeEnum.ByMonth &&
                             topBlogDate.getFullYear() == blogDate.getFullYear() &&
                             topBlogDate.getMonth() == blogDate.getMonth())) {
                         photoBlog.IsGrouped(true);
@@ -4535,7 +4092,7 @@ class UserDetailViewModel extends BaseViewModel {
                 }
             }
             if (topBlog) {
-                if (index === (this.PhotoBlogs().length - 1) && this.HasMorePhotoBlogs() && !this.PhotoBlogsScrollAutoLoad()) {
+                if (index === (_this.PhotoBlogs().length - 1) && _this.HasMorePhotoBlogs() && !_this.PhotoBlogsScrollAutoLoad()) {
                     topBlog.IsLastIncompleteGroup(true);
                 }
                 else {
@@ -4549,15 +4106,17 @@ class UserDetailViewModel extends BaseViewModel {
         }
         if (this.OnUpdatePhotoBlogGroup)
             this.OnUpdatePhotoBlogGroup();
-    }
-    OnAddPhotoBlogs(data) { }
-    AddPhotoBlogs(data) {
+    };
+    UserDetailViewModel.prototype.OnAddPhotoBlogs = function (data) { };
+    UserDetailViewModel.prototype.AddPhotoBlogs = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
             this.PhotoBlogsLastKnownTicks = data[data.length - 1].CreationTicks;
-            for (let item of data)
+            for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
+                var item = data_1[_i];
                 this.PhotoBlogs.push(new PhotoBlogDto(item));
+            }
             if (data.length % this.PhotoBlogsPageSize != 0)
                 this.HasMorePhotoBlogs(false);
         }
@@ -4567,8 +4126,9 @@ class UserDetailViewModel extends BaseViewModel {
         this.UpdatePhotoBlogGroup();
         if (this.OnAddPhotoBlogs)
             this.OnAddPhotoBlogs(data);
-    }
-    PageBlogs() {
+    };
+    UserDetailViewModel.prototype.PageBlogs = function () {
+        var _this = this;
         if (this.LoadNextGroupClicked) {
             if (this.LoadNextGroupRequestCount > 10) {
                 this.LoadNextGroupClicked = false;
@@ -4587,44 +4147,46 @@ class UserDetailViewModel extends BaseViewModel {
             data: {
                 loginName: this.loginName,
                 lastKnownBlogTicks: this.PhotoBlogsLastKnownTicks,
-                pageSize: this.PhotoBlogsPageSize,
+                pageSize: this.PhotoBlogsPageSize
             },
             dataType: 'json',
-            success: (result) => {
-                this.PhotoBlogsRequestActive(false);
+            success: function (result) {
+                _this.PhotoBlogsRequestActive(false);
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddPhotoBlogs(result);
+                    _this.AddPhotoBlogs(result);
                 }
                 else {
-                    this.HasMorePhotoBlogs(false);
+                    _this.HasMorePhotoBlogs(false);
                 }
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.PhotoBlogsRequestActive(false);
+                _this.PhotoBlogsRequestActive(false);
             }
         });
-    }
-    LoadNextGroup() {
+    };
+    UserDetailViewModel.prototype.LoadNextGroup = function () {
         this.LoadNextGroupClicked = true;
         this.LoadNextGroupRequestCount = 0;
         this.RequestUntilPhotoBlogsGroup = this.PhotoBlogsGroupCount + 1;
         this.UpdatePhotoBlogGroup();
-    }
-    OnAddPois(data) { }
-    AddPois(data) {
+    };
+    UserDetailViewModel.prototype.OnAddPois = function (data) { };
+    UserDetailViewModel.prototype.AddPois = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
             this.PoisLastKnownTicks = data[data.length - 1].CreationTicks;
-            for (let item of data)
+            for (var _i = 0, data_2 = data; _i < data_2.length; _i++) {
+                var item = data_2[_i];
                 this.Pois.push(new PoiDto(item));
+            }
             if (data.length % this.PoisPageSize != 0)
                 this.HasMorePois(false);
         }
@@ -4633,8 +4195,9 @@ class UserDetailViewModel extends BaseViewModel {
         }
         if (this.OnAddPois)
             this.OnAddPois(data);
-    }
-    PagePois() {
+    };
+    UserDetailViewModel.prototype.PagePois = function () {
+        var _this = this;
         if (this.PoisRequestActive() || !this.HasMorePois())
             return;
         this.PoisRequestActive(true);
@@ -4648,35 +4211,37 @@ class UserDetailViewModel extends BaseViewModel {
                 pageSize: this.PoisPageSize
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddPois(result);
+                    _this.AddPois(result);
                 }
                 else {
-                    this.HasMorePois(false);
+                    _this.HasMorePois(false);
                 }
-                this.PoisRequestActive(false);
+                _this.PoisRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.PoisRequestActive(false);
+                _this.PoisRequestActive(false);
             }
         });
-    }
-    OnAddTours(data) { }
-    AddTours(data) {
+    };
+    UserDetailViewModel.prototype.OnAddTours = function (data) { };
+    UserDetailViewModel.prototype.AddTours = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
             this.ToursLastKnownTicks = data[data.length - 1].CreationTicks;
-            for (let item of data)
+            for (var _i = 0, data_3 = data; _i < data_3.length; _i++) {
+                var item = data_3[_i];
                 this.Tours.push(new TourDto(item));
+            }
             if (data.length % this.ToursPageSize != 0)
                 this.HasMoreTours(false);
         }
@@ -4685,8 +4250,9 @@ class UserDetailViewModel extends BaseViewModel {
         }
         if (this.OnAddTours)
             this.OnAddTours(data);
-    }
-    PageTours() {
+    };
+    UserDetailViewModel.prototype.PageTours = function () {
+        var _this = this;
         if (this.ToursRequestActive() || !this.HasMoreTours())
             return;
         this.ToursRequestActive(true);
@@ -4697,38 +4263,40 @@ class UserDetailViewModel extends BaseViewModel {
             data: {
                 loginName: this.loginName,
                 lastKnownTourTicks: this.ToursLastKnownTicks,
-                pageSize: this.ToursPageSize,
+                pageSize: this.ToursPageSize
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddTours(result);
+                    _this.AddTours(result);
                 }
                 else {
-                    this.HasMoreTours(false);
+                    _this.HasMoreTours(false);
                 }
-                this.ToursRequestActive(false);
+                _this.ToursRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.ToursRequestActive(false);
+                _this.ToursRequestActive(false);
             }
         });
-    }
-    OnAddEvents(data) { }
-    AddEvents(data) {
+    };
+    UserDetailViewModel.prototype.OnAddEvents = function (data) { };
+    UserDetailViewModel.prototype.AddEvents = function (data) {
         if (data == null)
             return;
         if (data.length > 0) {
             this.EventsLastKnownTicks = data[data.length - 1].CreationTicks;
-            for (let item of data)
+            for (var _i = 0, data_4 = data; _i < data_4.length; _i++) {
+                var item = data_4[_i];
                 this.Events.push(new EventDto(item));
+            }
             if (data.length % this.EventsPageSize != 0)
                 this.HasMoreEvents(false);
         }
@@ -4737,8 +4305,9 @@ class UserDetailViewModel extends BaseViewModel {
         }
         if (this.OnAddEvents)
             this.OnAddEvents(data);
-    }
-    PageEvents() {
+    };
+    UserDetailViewModel.prototype.PageEvents = function () {
+        var _this = this;
         if (this.EventsRequestActive() || !this.HasMoreEvents())
             return;
         this.EventsRequestActive(true);
@@ -4749,29 +4318,30 @@ class UserDetailViewModel extends BaseViewModel {
             data: {
                 loginName: this.loginName,
                 lastKnownEventTicks: this.EventsLastKnownTicks,
-                pageSize: this.EventsPageSize,
+                pageSize: this.EventsPageSize
             },
             dataType: 'json',
-            success: (result) => {
+            success: function (result) {
                 if (typeof result != 'object') {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                     console === null || console === void 0 ? void 0 : console.warn(result);
                 }
                 else if (result && result.length > 0) {
-                    this.AddEvents(result);
+                    _this.AddEvents(result);
                 }
                 else {
-                    this.HasMoreEvents(false);
+                    _this.HasMoreEvents(false);
                 }
-                this.EventsRequestActive(false);
+                _this.EventsRequestActive(false);
             },
-            error: (jqxhr) => {
+            error: function (jqxhr) {
                 if (jqxhr.status != 429) {
                     dialog.Show(GetLangRes("Common_lblError", "Error"), GetLangRes("Common_lblErrorCannotPage", "Page cannot be loaded!"), null);
                 }
-                this.EventsRequestActive(false);
+                _this.EventsRequestActive(false);
             }
         });
-    }
-}
+    };
+    return UserDetailViewModel;
+}(BaseViewModel));
 //# sourceMappingURL=gpsnose.knockout.js.map

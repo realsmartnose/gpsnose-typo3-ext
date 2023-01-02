@@ -13,13 +13,13 @@
 
 <f:section name="buttons">
     <f:link.action action="list" class="btn btn-default">
-        <core:icon identifier="fa-chevron-left" /> <f:translate key="Common_btnBackToList" />
+        <core:icon identifier="chevron-left-svg" /> <f:translate key="Common_btnBackToList" />
     </f:link.action>
     <f:link.action action="tokenrefresh" arguments="{mashup : mashup}" class="btn btn-default">
-        <core:icon identifier="fa-cloud" /> <f:translate key="Common_btnSync" />
+        <core:icon identifier="cloud-svg" /> <f:translate key="Common_btnSync" />
     </f:link.action>
     <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-default">
-        <core:icon identifier="fa-refresh" />
+        <core:icon identifier="sync-svg" />
     </f:link.action>
 </f:section>
 
@@ -35,7 +35,7 @@
         <tr>
             <th class="col-md-1 col-sm-1 col-xs-2">
                 <f:link.action action="tokennew" arguments="{mashup : mashup}" class="btn btn-primary btn-xs">
-                    <core:icon identifier="fa-plus" /> <f:translate key="Common_btnAdd" />
+                    <core:icon identifier="plus-svg" /> <f:translate key="Common_btnAdd" />
                 </f:link.action>
             </th>
             <th class="col-md-6 col-sm-5 col-xs-6">
@@ -49,10 +49,10 @@
             <tr>
                 <td>
                     <div class="btn-group btn-group-xs">
-                        <f:link.action action="tokenedit" arguments="{token : token, mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="fa-edit" /></f:link.action>
-                        <f:link.action action="tokenshow" arguments="{token : token, mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="fa-folder-open" /></f:link.action>
+                        <f:link.action action="tokenedit" arguments="{token : token, mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="edit-svg" /></f:link.action>
+                        <f:link.action action="tokenshow" arguments="{token : token, mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="folder-svg" /></f:link.action>
                         <f:if condition="{token.tokenScans -> f:count()} < 1">
-                            <f:link.action action="tokendelete" arguments="{token : token, mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="fa-trash" /></f:link.action>
+                            <f:link.action action="tokendelete" arguments="{token : token, mashup : mashup}" class="btn btn-icon btn-default"><core:icon identifier="trash-svg" /></f:link.action>
                         </f:if>
                     </div>
                 </td>
@@ -63,7 +63,7 @@
                 <td class="visible-lg visible-md"><nose:ticks.datetime ticks="{token.validUntilTicks}" /></td>
                 <td>
                     <span class="badge">
-                        <core:icon identifier="fa-tag" />
+                        <core:icon identifier="tag-svg" />
                         <span><f:count subject="{token.tokenScans}" /></span>
                     </span>
                 </td>

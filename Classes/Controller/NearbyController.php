@@ -39,11 +39,11 @@ class NearbyController extends BaseController
      */
     public function nosesAction()
     {
-        $this->contentObj = $this->configurationManager->getContentObject();
-        $communityTag = $this->contentObj->data['tx_gpsnose_community_tag'];
+        $contentObj = $this->configurationManager->getContentObject();
+        $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
 
         $this->view->assign('communityTag', $communityTag);
-        $this->view->assign('record', $this->contentObj->data['uid']);
+        $this->view->assign('record', $contentObj->data['uid']);
 
         $noses = [];
         if ($this->isUserLoggedIn()) {
@@ -68,11 +68,11 @@ class NearbyController extends BaseController
      */
     public function impressionsAction()
     {
-        $this->contentObj = $this->configurationManager->getContentObject();
-        $communityTag = $this->contentObj->data['tx_gpsnose_community_tag'];
+        $contentObj = $this->configurationManager->getContentObject();
+        $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
 
         $this->view->assign('communityTag', $communityTag);
-        $this->view->assign('record', $this->contentObj->data['uid']);
+        $this->view->assign('record', $contentObj->data['uid']);
 
         $impressions = [];
         if ($this->isUserLoggedIn()) {
@@ -97,11 +97,11 @@ class NearbyController extends BaseController
      */
     public function poisAction()
     {
-        $this->contentObj = $this->configurationManager->getContentObject();
-        $communityTag = $this->contentObj->data['tx_gpsnose_community_tag'];
+        $contentObj = $this->configurationManager->getContentObject();
+        $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
 
         $this->view->assign('communityTag', $communityTag);
-        $this->view->assign('record', $this->contentObj->data['uid']);
+        $this->view->assign('record', $contentObj->data['uid']);
 
         $pois = [];
         if ($this->isUserLoggedIn()) {
@@ -126,12 +126,12 @@ class NearbyController extends BaseController
      */
     public function tracksAction()
     {
-        $this->contentObj = $this->configurationManager->getContentObject();
-        $communityTag = $this->contentObj->data['tx_gpsnose_community_tag'];
+        $contentObj = $this->configurationManager->getContentObject();
+        $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
 
         $this->view->assign('communityTag', $communityTag);
-        $this->view->assign('record', $this->contentObj->data['uid']);
-        $trackType = $this->contentObj->data['tx_gpsnose_community_track_type'] ?? GnTrackType::Unspecified;
+        $this->view->assign('record', $contentObj->data['uid']);
+        $trackType = $contentObj->data['tx_gpsnose_community_track_type'] ?? GnTrackType::Unspecified;
 
         $tracks = [];
         if ($this->isUserLoggedIn()) {
@@ -156,11 +156,11 @@ class NearbyController extends BaseController
      */
     public function eventsAction()
     {
-        $this->contentObj = $this->configurationManager->getContentObject();
-        $communityTag = $this->contentObj->data['tx_gpsnose_community_tag'];
+        $contentObj = $this->configurationManager->getContentObject();
+        $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
 
         $this->view->assign('communityTag', $communityTag);
-        $this->view->assign('record', $this->contentObj->data['uid']);
+        $this->view->assign('record', $contentObj->data['uid']);
 
         $events = [];
         if ($this->isUserLoggedIn()) {

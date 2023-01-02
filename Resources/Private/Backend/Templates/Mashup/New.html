@@ -13,10 +13,10 @@
 
 <f:section name="buttons">
     <f:link.action action="list" class="btn btn-default">
-        <core:icon identifier="fa-chevron-left" /> <f:translate key="Common_btnBackToList" />
+        <core:icon identifier="chevron-left-svg" /> <f:translate key="Common_btnBackToList" />
     </f:link.action>
     <f:link.action action="new" class="btn btn-default">
-        <core:icon identifier="fa-refresh" />
+        <core:icon identifier="sync-svg" />
     </f:link.action>
 </f:section>
 
@@ -36,7 +36,7 @@
                         <div class="panel-heading"><f:translate key="MashupAdmin_lblUnvalidatedMashup" /></div>
                         <div class="list-group">
                             <f:for each="{unvalidatedMashups}" as="unvalidatedMashup">
-                                <f:link.action action="delete" arguments="{mashup : unvalidatedMashup, redirect : 'new'}" class="list-group-item"><core:icon identifier="fa-trash" /> <nose:community.label tag="{unvalidatedMashup.communityTag}" /></f:link.action>
+                                <f:link.action action="delete" arguments="{mashup : unvalidatedMashup, redirect : 'new'}" class="list-group-item"><core:icon identifier="trash-svg" /> <nose:community.label tag="{unvalidatedMashup.communityTag}" /></f:link.action>
                             </f:for>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                                 <input type="text" id="communityTagField" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblRegisterCommunityPlaceholder')}" />
                                 <span class="input-group-btn">
                                     <button class="btn btn-primary" type="submit" disabled="disabled" id="addButton">
-                                        <core:icon identifier="fa-plus" />
+                                        <core:icon identifier="plus-svg" />
                                         <span class="hidden-xs"> <f:translate key="Common_btnAdd" /></span>
                                     </button>
                                 </span>
