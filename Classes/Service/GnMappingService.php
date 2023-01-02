@@ -2,7 +2,6 @@
 namespace SmartNoses\Gpsnose\Service;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use GpsNose\SDK\Framework\Logging\GnLogger;
 use GpsNose\SDK\Mashup\Api\Modules\GnMappingApi;
@@ -33,8 +32,7 @@ class GnMappingService extends GnBaseService
                 $community = $visibility . $community;
             }
 
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
 
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
@@ -68,8 +66,7 @@ class GnMappingService extends GnBaseService
                 $community = $visibility . $community;
             }
 
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
 
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);

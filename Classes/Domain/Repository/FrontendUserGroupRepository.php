@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace SmartNoses\Gpsnose\Domain\Repository;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup;
 
 /**
@@ -28,15 +26,14 @@ class FrontendUserGroupRepository
     /**
      * @var \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository
      */
-    protected $repository = NULL;
+    protected $frontendUserGroupRepository = NULL;
 
     /**
-     * Constructor
+     * @param \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository $frontendUserGroupRepository
      */
-    public function __construct()
+    public function injectRepository(\TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository $frontendUserGroupRepository)
     {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->repository = $objectManager->get(\TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository::class);
+        $this->frontendUserGroupRepository = $frontendUserGroupRepository;
     }
 
     /**
@@ -49,7 +46,7 @@ class FrontendUserGroupRepository
      */
     public function findByUid($uid)
     {
-        $query = $this->repository->createQuery();
+        $query = $this->frontendUserGroupRepository->createQuery();
         $object = $query->matching($query->equals('uid', $uid))
             ->execute()
             ->getFirst();
@@ -67,7 +64,7 @@ class FrontendUserGroupRepository
      */
     public function findByTitle($title)
     {
-        $query = $this->repository->createQuery();
+        $query = $this->frontendUserGroupRepository->createQuery();
         $object = $query->matching($query->equals('title', $title))
             ->execute()
             ->getFirst();
@@ -87,7 +84,7 @@ class FrontendUserGroupRepository
             $userGroup = new FrontendUserGroup();
             $userGroup->setTitle($title);
             $userGroup->setDescription("Created by GpsNose");
-            $this->repository->add($userGroup);
+            $this->frontendUserGroupRepository->add($userGroup);
         }
     }
 
@@ -103,7 +100,7 @@ class FrontendUserGroupRepository
     {
         $userGroup = $this->findByTitle($title);
         if ($userGroup) {
-            $this->repository->remove($userGroup);
+            $this->frontendUserGroupRepository->remove($userGroup);
         }
     }
 }

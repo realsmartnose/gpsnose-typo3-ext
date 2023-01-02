@@ -3,7 +3,6 @@
 namespace SmartNoses\Gpsnose\UserFuncs;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 use GpsNose\SDK\Framework\Logging\GnLogger;
@@ -32,9 +31,8 @@ class GnLogin
             try {
                 GnUtility::applyExtConf();
 
-                $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
                 /** @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository $mashupRepository */
-                $mashupRepository = $objectManager->get(MashupRepository::class);
+                $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
                 // Here we dont have the StoragePage (in case of gnlid-login-process)
                 $querySettings = $mashupRepository->createQuery()->getQuerySettings();
                 $querySettings->setRespectStoragePage(FALSE);

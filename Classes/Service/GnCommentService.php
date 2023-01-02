@@ -5,7 +5,6 @@ use GpsNose\SDK\Mashup\Framework\GnSettings;
 use GpsNose\SDK\Web\Login\GnAuthentication;
 use GpsNose\SDK\Mashup\Model\GnCommentItemType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use GpsNose\SDK\Framework\Logging\GnLogger;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 
@@ -41,8 +40,7 @@ class GnCommentService extends GnBaseService
                 $community = $visibility . $community;
             }
 
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
 
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
@@ -93,8 +91,7 @@ class GnCommentService extends GnBaseService
                 $lastKnownTicks = GnSettings::FAR_FUTURE_TICKS;
             }
 
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
 
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);

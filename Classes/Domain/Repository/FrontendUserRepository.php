@@ -17,7 +17,7 @@ namespace SmartNoses\Gpsnose\Domain\Repository;
 /**
  * The repository for feusers
  */
-class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository
+class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
     /**
      * Finds the user matching the given GpsNose-Loginname

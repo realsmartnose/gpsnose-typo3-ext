@@ -12,7 +12,6 @@ use SmartNoses\Gpsnose\Domain\Model\TokenScan;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use SmartNoses\Gpsnose\Domain\Repository\TokenRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 
@@ -26,16 +25,14 @@ class GetTokenScans extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             GnLogConfig::AddListener(new GnLogListener());
             GnCache::$DisableCache = TRUE;
 
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-
             /** @var MashupRepository */
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
 
             /** @var TokenRepository */
-            $tokenRepository = $objectManager->get(TokenRepository::class);
+            $tokenRepository = GeneralUtility::makeInstance(TokenRepository::class);
 
             /** @var PersistenceManager */
-            $persistenceManager = $objectManager->get(PersistenceManager::class);
+            $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
 
             if ($mashupRepository && $persistenceManager) {
                 // Here we dont have the StoragePage

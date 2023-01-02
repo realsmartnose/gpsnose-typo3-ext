@@ -14,7 +14,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use GpsNose\SDK\Framework\Logging\GnLogger;
 use GpsNose\SDK\Mashup\Api\GnApi;
 use GpsNose\SDK\Web\Login\GnAuthentication;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use SmartNoses\Gpsnose\Domain\Repository\TokenRepository;
 
@@ -54,6 +53,14 @@ class ApiController extends BaseController
     protected $mashupRepository = NULL;
 
     /**
+     * @param MashupRepository $mashupRepository
+     */
+    public function injectMashupRepository(MashupRepository $mashupRepository)
+    {
+        $this->mashupRepository = $mashupRepository;
+    }
+
+    /**
      * tokenRepository
      *
      * @var \SmartNoses\Gpsnose\Domain\Repository\TokenRepository
@@ -61,15 +68,13 @@ class ApiController extends BaseController
     protected $tokenRepository = NULL;
 
     /**
-     * ApiController __construct
+     * @param TokenRepository $tokenRepository
      */
-    public function __construct()
+    public function injectTokenRepository(TokenRepository $tokenRepository)
     {
-        parent::__construct();
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->mashupRepository = $objectManager->get(MashupRepository::class);
-        $this->tokenRepository = $objectManager->get(TokenRepository::class);
+        $this->tokenRepository = $tokenRepository;
     }
+
 
     /**
      * pageMembers

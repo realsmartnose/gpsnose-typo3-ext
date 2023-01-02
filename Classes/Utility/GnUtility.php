@@ -225,6 +225,7 @@ class GnUtility
      */
     public static function getGnSetting()
     {
+        /** @var ConfigurationManager */
         $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
         $settings = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         return $settings['plugin.']['tx_gpsnose.']['settings.'] ?? [];
@@ -237,8 +238,8 @@ class GnUtility
      */
     public static function getGnPersistenceStoragePid()
     {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $configurationManager = $objectManager->get(ConfigurationManager::class);
+        /** @var ConfigurationManager */
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
         $settings = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         try {
             return intval($settings['plugin.']['tx_gpsnose.']['persistence.']['storagePid']);
@@ -256,9 +257,8 @@ class GnUtility
     {
         $mashupName = self::getGnSetting()['mashup.']['activeMashup'];
         if (strlen($mashupName) < 1) {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             /** @var MashupRepository $mashupRepository */
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
             $query = $mashupRepository->createQuery();
             $query->getQuerySettings()->setRespectStoragePage(FALSE);
             $query->getQuerySettings()->setRespectSysLanguage(FALSE);

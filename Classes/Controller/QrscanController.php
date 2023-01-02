@@ -3,8 +3,6 @@ namespace SmartNoses\Gpsnose\Controller;
 
 use SmartNoses\Gpsnose\Utility\GnUtility;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * *
@@ -32,15 +30,13 @@ class QrscanController extends BaseController
     protected $mashupRepository = NULL;
 
     /**
-     * QrscanController __construct
+     * @param MashupRepository $mashupRepository
      */
-    public function __construct()
+    public function injectMashupRepository(MashupRepository $mashupRepository)
     {
-        parent::__construct();
-
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->mashupRepository = $objectManager->get(MashupRepository::class);
+        $this->mashupRepository = $mashupRepository;
     }
+
 
     /**
      * action index

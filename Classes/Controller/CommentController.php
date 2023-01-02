@@ -4,8 +4,6 @@ namespace SmartNoses\Gpsnose\Controller;
 use SmartNoses\Gpsnose\Service\GnCommentService;
 use GpsNose\SDK\Mashup\Model\GnCommentItemType;
 use SmartNoses\Gpsnose\Utility\GnUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 
 /**
@@ -34,14 +32,13 @@ class CommentController extends BaseController
     protected $mashupRepository = NULL;
 
     /**
-     * CommentController __construct
+     * @param MashupRepository $mashupRepository
      */
-    public function __construct()
+    public function injectMashupRepository(MashupRepository $mashupRepository)
     {
-        parent::__construct();
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->mashupRepository = $objectManager->get(MashupRepository::class);
+        $this->mashupRepository = $mashupRepository;
     }
+
 
     /**
      * action index

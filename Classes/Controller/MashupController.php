@@ -21,13 +21,14 @@ use GpsNose\SDK\Mashup\Framework\GnSettings;
 use GpsNose\SDK\Mashup\Model\GnMashupTokenOptions;
 use GpsNose\SDK\Mashup\Api\GnApi;
 use GpsNose\SDK\Web\Login\GnAuthenticationData;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Model\TokenScan;
 use GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 use GpsNose\SDK\Framework\Logging\GnLogger;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Service\CacheService;
 
 /**
  * *
@@ -50,30 +51,62 @@ class MashupController extends BaseController
     /**
      * persistenceManager
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
+     * @var PersistenceManager
      */
     protected $persistenceManager = NULL;
 
     /**
+     * @param PersistenceManager $persistenceManager
+     */
+    public function injectPersistenceManager(PersistenceManager $persistenceManager)
+    {
+        $this->persistenceManager = $persistenceManager;
+    }
+
+    /**
      * mashupRepository
      *
-     * @var \SmartNoses\Gpsnose\Domain\Repository\MashupRepository
+     * @var MashupRepository
      */
     protected $mashupRepository = NULL;
 
     /**
+     * @param MashupRepository $mashupRepository
+     */
+    public function injectMashupRepository(MashupRepository $mashupRepository)
+    {
+        $this->mashupRepository = $mashupRepository;
+    }
+
+    /**
      * tokenRepository
      *
-     * @var \SmartNoses\Gpsnose\Domain\Repository\TokenRepository
+     * @var TokenRepository
      */
     protected $tokenRepository = NULL;
 
     /**
+     * @param TokenRepository $tokenRepository
+     */
+    public function injectTokenRepository(TokenRepository $tokenRepository)
+    {
+        $this->tokenRepository = $tokenRepository;
+    }
+
+    /**
      * frontendUserGroupRepository
      * 
-     * @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserGroupRepository
+     * @var FrontendUserGroupRepository
      */
     protected $frontendUserGroupRepository = NULL;
+
+    /**
+     * @param FrontendUserGroupRepository $frontendUserGroupRepository
+     */
+    public function injectFrontendUserGroupRepository(FrontendUserGroupRepository $frontendUserGroupRepository)
+    {
+        $this->frontendUserGroupRepository = $frontendUserGroupRepository;
+    }
 
     /**
      * @var \GpsNose\SDK\Mashup\Api\GnApi
@@ -110,12 +143,6 @@ class MashupController extends BaseController
     public function __construct()
     {
         parent::__construct();
-
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->mashupRepository = $objectManager->get(MashupRepository::class);
-        $this->tokenRepository = $objectManager->get(TokenRepository::class);
-        $this->frontendUserGroupRepository = $objectManager->get(FrontendUserGroupRepository::class);
-        $this->persistenceManager = $objectManager->get(PersistenceManager::class);
 
         $this->_gnApi = new GnApi();
 
@@ -500,7 +527,9 @@ class MashupController extends BaseController
                 $this->addFlashMessage('The object was created.', '', FlashMessage::OK, TRUE);
 
                 // Clear the cache
-                $this->cacheService->clearPageCache();
+                /** @var CacheService */
+                $cacheService = GeneralUtility::makeInstance(CacheService::class);
+                $cacheService->clearPageCache();
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
                 GnLogger::LogException($e);
@@ -873,8 +902,12 @@ class MashupController extends BaseController
      */
     public function flexFormsCommunitiesListItems($conf, TcaSelectItems $tcaSelectItems)
     {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $repository = $objectManager->get(MashupRepository::class);
+        if ($this->mashupRepository) {
+            $repository = $this->mashupRepository;
+        } else {
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            $repository = $objectManager->get(MashupRepository::class);
+        }
 
         $query = $repository->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(FALSE);

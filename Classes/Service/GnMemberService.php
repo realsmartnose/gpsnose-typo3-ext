@@ -3,7 +3,6 @@ namespace SmartNoses\Gpsnose\Service;
 
 use GpsNose\SDK\Mashup\Framework\GnSettings;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use GpsNose\SDK\Framework\Logging\GnLogger;
 
@@ -38,8 +37,7 @@ class GnMemberService extends GnBaseService
                 $lastKnownTicks = GnSettings::FAR_FUTURE_TICKS;
             }
 
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
 
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);

@@ -3,10 +3,8 @@ namespace SmartNoses\Gpsnose\Service;
 
 use GpsNose\SDK\Framework\Logging\GnLogger;
 use GpsNose\SDK\Web\Login\GnAuthentication;
-use GpsNose\SDK\Mashup\Framework\GnSettings;
 use GpsNose\SDK\Mashup\Model\CreatedEntities\GnTrackType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 
 class GnNearbyService extends GnBaseService
@@ -34,8 +32,7 @@ class GnNearbyService extends GnBaseService
                 $community = $visibility . $community;
             }
 
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
 
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
@@ -74,8 +71,7 @@ class GnNearbyService extends GnBaseService
                 $community = $visibility . $community;
             }
 
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
 
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
@@ -114,8 +110,7 @@ class GnNearbyService extends GnBaseService
                 $community = $visibility . $community;
             }
 
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
 
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
@@ -155,8 +150,7 @@ class GnNearbyService extends GnBaseService
                 $community = $visibility . $community;
             }
 
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
 
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
@@ -195,8 +189,7 @@ class GnNearbyService extends GnBaseService
                 $community = $visibility . $community;
             }
 
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $mashupRepository = $objectManager->get(MashupRepository::class);
+            $mashupRepository = GeneralUtility::makeInstance(MashupRepository::class);
 
             if ($mashupRepository) {
                 $mashup = $mashupRepository->findByCommunityTag($community);
