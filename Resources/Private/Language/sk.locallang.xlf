@@ -473,7 +473,7 @@
 			</trans-unit>
 			<trans-unit id="Common_lblUnknownNews" xml:space="preserve">
 				<source><![CDATA[Unknown news]]></source>
-				<target><![CDATA[Unknown news]]></target>
+				<target><![CDATA[Neznáme správy]]></target>
 			</trans-unit>
 			<trans-unit id="Common_loginRequired" xml:space="preserve">
 				<source><![CDATA[Please login first.]]></source>

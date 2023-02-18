@@ -85,13 +85,12 @@ class GnUtility
 
         $verified = FALSE;
         if ($mashup && !GnUtil::IsNullOrEmpty($loginId)) {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-
             $api = new GnApi();
             $gnLogin = $api->GetLoginApiForEndUser($mashup->getAppKey(), $loginId, NULL)->GetVerified();
             if ($gnLogin && $gnLogin->LoginName) {
-                $gnSettings = self::getGnSetting();
+                $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
+                $gnSettings = self::getGnSetting();
                 $isNewUser = FALSE;
 
                 /** @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository $frontendUserRepository */
