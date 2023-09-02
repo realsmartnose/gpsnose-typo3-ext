@@ -5,7 +5,7 @@
     xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<f:layout name="Default" />
+<f:layout name="Module" />
 
 
 <f:section name="title"><f:translate key="MashupAdmin_lblMashupTokenTitle" /></f:section>
@@ -13,10 +13,10 @@
 
 <f:section name="buttons">
     <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-default">
-        <core:icon identifier="chevron-left-svg" /> <f:translate key="Common_btnBackToList" />
+        <core:icon identifier="chevron-left-svg" /><span class="ms-1"><f:translate key="Common_btnBackToList" /></span>
     </f:link.action>
     <f:link.action action="tokenedit" arguments="{token : token, mashup : mashup}" class="btn btn-default">
-        <core:icon identifier="edit-svg" /> <f:translate key="Common_btnEdit" />
+        <core:icon identifier="edit-svg" /><span class="ms-1"><f:translate key="Common_btnEdit" /></span>
     </f:link.action>
     <f:link.action action="tokenshow" arguments="{token : token, mashup : mashup}" class="btn btn-default">
         <core:icon identifier="sync-svg" />

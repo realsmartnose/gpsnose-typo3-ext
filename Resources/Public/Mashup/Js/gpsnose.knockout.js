@@ -15,8 +15,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var BaseViewModel = (function () {
     function BaseViewModel() {
-        this.AppleLink = ko.observable('https://itunes.apple.com/us/app/gpsnose/id892215768');
-        this.GoogleLink = ko.observable('https://goo.gl/4q4TGl');
+        this.AppleLink = ko.observable('https://apps.apple.com/app/gpsnose/id892215768');
+        this.GoogleLink = ko.observable('https://play.google.com/store/apps/details?id=com.gpsnose.app');
         this.YoutubeLink = ko.observable('https://www.youtube.com/embed/ZD6O-Hy7NtA');
         this.SupportedDefaultKeywords = [
             'fireplace',
@@ -104,8 +104,8 @@ var BaseViewModel = (function () {
 }());
 var BaseComponentsViewModel = (function () {
     function BaseComponentsViewModel(imagePath) {
-        this.AppleLink = ko.observable('https://itunes.apple.com/us/app/gpsnose/id892215768');
-        this.GoogleLink = ko.observable('https://goo.gl/4q4TGl');
+        this.AppleLink = ko.observable('https://apps.apple.com/app/gpsnose/id892215768');
+        this.GoogleLink = ko.observable('https://play.google.com/store/apps/details?id=com.gpsnose.app');
         this.YoutubeLink = ko.observable('https://www.youtube.com/embed/ZD6O-Hy7NtA');
         this.SupportedDefaultKeywords = [
             'fireplace',
@@ -465,7 +465,7 @@ ko.components.register('ma-gpsnose-apptype', {
         '<div class="row">' +
         '<div class="col-6">' +
         '<div class="text-right text-end">' +
-        '<a data-bind="attr: { href: `https://itunes.apple.com/us/app/id` + PackageForIos() }" data-external role="button">' +
+        '<a data-bind="attr: { href: `https://apps.apple.com/app/id` + PackageForIos() }" data-external role="button">' +
         '<img height="40" alt="App Store" data-bind="attr: { src: ImagePath() + \'/badge_app_store.png\' }">' +
         '</a>' +
         '</div>' +

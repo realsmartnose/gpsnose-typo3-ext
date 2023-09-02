@@ -1,30 +1,32 @@
-define(['jquery'], function($) {
-    var KeepAlive = {
-       interval: 10*60*1000
+define([], function () {
+  const KeepAlive = {
+    interval: 1 * 60 * 1000,
+  };
+
+  KeepAlive.Request = function () {
+    const element = document.getElementById('keep-alive-message');
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        const result = JSON.parse(this.responseText);
+        if (result.IsOk) {
+          if (element) {
+            element.style.display = 'none';
+          }
+          window.setTimeout(KeepAlive.Request, KeepAlive.interval);
+        } else {
+          if (element) {
+            element.style.display = 'block';
+          }
+        }
+      }
     };
+    xhttp.open('POST', TYPO3.settings.ajaxUrls['gpsnose::keepAlive'], true);
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhttp.send();
+  };
 
-    KeepAlive.Request = function() {
-        $.ajax({
-            type: 'POST',
-            url: TYPO3.settings.ajaxUrls['gpsnose::keepAlive'],
-            dataType: 'json',
-            success: function(result) {
-                if (result.IsOk) {
-                    $('#keep-alive-message').hide();
-                    window.setTimeout(KeepAlive.Request, KeepAlive.interval);
-                } else {
-                    $('#keep-alive-message').show();
-                }
-            },
-            error: function () {
-                window.setTimeout(KeepAlive.Request, KeepAlive.interval);
-            }
-        });
-    }
+  window.setTimeout(KeepAlive.Request, KeepAlive.interval);
 
-    $(function() {
-    	window.setTimeout(KeepAlive.Request, KeepAlive.interval);
-    });
-
-    return KeepAlive;
+  return KeepAlive;
 });

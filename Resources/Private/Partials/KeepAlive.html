@@ -6,20 +6,20 @@
 
 <div class="typo3-messages" id="keep-alive-message" style="display: none;">
     <div class="alert alert-danger">
-        <div class="media">
+        <div class="media d-flex">
             <div class="media-left">
                 <span class="fa-stack fa-lg">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-times fa-stack-1x"></i>
                 </span>
             </div>
-            <div class="media-body">
+            <div class="media-body flex-grow-1">
                 <p class="alert-message"><f:translate key="Common_lblLoggedOut" /></p>
             </div>
             <div class="media-right">
                 <f:link.action action="login" class="btn btn-danger">
                     <core:icon identifier="user-svg" />
-                    <span> <f:translate key="Common_btnLogin" /></span>
+                    <span class="ms-1"><f:translate key="Common_btnLogin" /></span>
                 </f:link.action>
             </div>
         </div>

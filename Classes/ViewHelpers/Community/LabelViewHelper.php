@@ -71,6 +71,7 @@ class LabelViewHelper extends AbstractViewHelper
             $icon = $iconFactory->getIcon($iconName, $size);
             $iconHtml = $icon->render();
         }
-        return $iconHtml . substr($tag, 1);
+
+        return $iconHtml . '<span class="ms-1">' . substr($tag, 1) . '</span>';
     }
 }

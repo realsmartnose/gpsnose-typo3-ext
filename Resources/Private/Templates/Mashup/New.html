@@ -5,7 +5,7 @@
     xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<f:layout name="Default" />
+<f:layout name="Module" />
 
 
 <f:section name="title"><f:translate key="MashupAdmin_lblAddTitle" /></f:section>
@@ -13,7 +13,7 @@
 
 <f:section name="buttons">
     <f:link.action action="list" class="btn btn-default">
-        <core:icon identifier="chevron-left-svg" /> <f:translate key="Common_btnBackToList" />
+        <core:icon identifier="chevron-left-svg" /><span class="ms-1"><f:translate key="Common_btnBackToList" /></span>
     </f:link.action>
     <f:link.action action="new" class="btn btn-default">
         <core:icon identifier="sync-svg" />
@@ -34,9 +34,9 @@
                 <f:then>
                     <div class="panel panel-danger">
                         <div class="panel-heading"><f:translate key="MashupAdmin_lblUnvalidatedMashup" /></div>
-                        <div class="list-group">
+                        <div class="list-group list-group-flush">
                             <f:for each="{unvalidatedMashups}" as="unvalidatedMashup">
-                                <f:link.action action="delete" arguments="{mashup : unvalidatedMashup, redirect : 'new'}" class="list-group-item"><core:icon identifier="trash-svg" /> <nose:community.label tag="{unvalidatedMashup.communityTag}" /></f:link.action>
+                                <f:link.action action="delete" arguments="{mashup : unvalidatedMashup, redirect : 'new'}" class="list-group-item"><core:icon identifier="trash-svg" /><span class="ms-1"><nose:community.label tag="{unvalidatedMashup.communityTag}" /></span></f:link.action>
                             </f:for>
                         </div>
                     </div>
@@ -51,13 +51,12 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="keyword-label" id="description"></span>
-                                        <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <f:for each="{visibilities}" as="description" key="visibility">
-                                            <li><a href="javascript:changeVisibility('{visibility}', '{description}');"><span class="keyword-label"><nose:community.label tag="{visibility}{description}" /></span></a></li>
+                                            <li><a href="javascript:changeVisibility('{visibility}', '{description}');" class="dropdown-item"><span class="keyword-label"><nose:community.label tag="{visibility}{description}" /></span></a></li>
                                         </f:for>
                                     </ul>
                                 </div>
@@ -65,7 +64,7 @@
                                 <span class="input-group-btn">
                                     <button class="btn btn-primary" type="submit" disabled="disabled" id="addButton">
                                         <core:icon identifier="plus-svg" />
-                                        <span class="hidden-xs"> <f:translate key="Common_btnAdd" /></span>
+                                        <span class="hidden-xs ms-1"><f:translate key="Common_btnAdd" /></span>
                                     </button>
                                 </span>
                             </div>
@@ -79,7 +78,7 @@
     </div>
 
 <script>
-var GpsnoseMashupAddMaxChars = {addMaxChars};
+var GpsnoseMashupAddMaxChars = parseInt('{addMaxChars}');
 var GpsnoseMashupVisibility = '';
 var GpsnoseMashupReadyBlock = function() {
     <f:for each="{visibilities}" as="description" key="visibility" iteration="i"><f:if condition="{i.cycle} == 1">changeVisibility('{visibility}', '{description}');</f:if></f:for>
@@ -87,8 +86,8 @@ var GpsnoseMashupReadyBlock = function() {
 
 function changeVisibility(newVisibility, description) {
     GpsnoseMashupVisibility = newVisibility;
-    $('#description').text(description);
-    $('#communityTag').val(GpsnoseMashupVisibility + $('#communityTagField').val());
+    document.getElementById('description').innerHTML = description;
+    document.getElementById('communityTag').value = GpsnoseMashupVisibility + document.getElementById('communityTagField').value;
 }
 </script>
 <f:be.pageRenderer includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/MashupNew' }" />

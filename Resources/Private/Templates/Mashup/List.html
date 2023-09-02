@@ -5,7 +5,7 @@
     xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<f:layout name="Default" />
+<f:layout name="Module" />
 
 
 <f:section name="title"><f:translate key="MashupAdmin_lblTitle" /></f:section>
@@ -13,10 +13,10 @@
 
 <f:section name="buttons">
     <f:link.action action="logout" class="btn btn-danger">
-        <core:icon identifier="sign-out-svg" /> <f:translate key="Common_btnLogout" />
+        <core:icon identifier="sign-out-svg" /><span class="ms-1"><f:translate key="Common_btnLogout" /></span>
     </f:link.action>
     <f:link.action action="refresh" class="btn btn-default">
-        <core:icon identifier="cloud-svg" /> <f:translate key="Common_btnSync" />
+        <core:icon identifier="cloud-svg" /><span class="ms-1"><f:translate key="Common_btnSync" /></span>
     </f:link.action>
     <f:link.action action="list" class="btn btn-default">
         <core:icon identifier="sync-svg" />
@@ -35,7 +35,7 @@
         <tr>
             <th class="col-md-2 col-sm-1 col-xs-3">
                 <f:link.action action="new" class="btn btn-primary btn-xs">
-                    <core:icon identifier="plus-svg" /> <f:translate key="Common_btnAdd" />
+                    <core:icon identifier="plus-svg" /><span class="ms-1"><f:translate key="Common_btnAdd" /></span>
                 </f:link.action>
             </th>
             <th class="col-md-4 col-sm-5 col-xs-7">
@@ -66,11 +66,11 @@
                 <td>
                     <span class="badge" title="{nose:string.replace(value: '{f:translate(key:\'MashupAdmin_lblListTitleSubCommunitiesCount\')}', search:'%count%', replace:'{mashup.subCommunities -> f:count()}')}">
                         <core:icon identifier="link-svg" />
-                        <span><f:count subject="{mashup.subCommunities}" /></span>
+                        <span class="ms-1"><f:count subject="{mashup.subCommunities}" /></span>
                     </span>
                     <span class="badge" title="{nose:string.replace(value: '{f:translate(key:\'MashupAdmin_lblListTitleHostsCount\')}', search:'%count%', replace:'{mashup.hosts -> f:count()}')}">
                         <core:icon identifier="share-svg" />
-                        <span><f:count subject="{mashup.hosts}" /></span>
+                        <span class="ms-1"><f:count subject="{mashup.hosts}" /></span>
                     </span>
                 </td>
             </tr>

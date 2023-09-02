@@ -5,7 +5,7 @@
     xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<f:layout name="Default" />
+<f:layout name="Module" />
 
 
 <f:section name="title"><f:translate key="MashupAdmin_lblMashupTokenListTitle" /></f:section>
@@ -13,10 +13,10 @@
 
 <f:section name="buttons">
     <f:link.action action="list" class="btn btn-default">
-        <core:icon identifier="chevron-left-svg" /> <f:translate key="Common_btnBackToList" />
+        <core:icon identifier="chevron-left-svg" /><span class="ms-1"><f:translate key="Common_btnBackToList" /></span>
     </f:link.action>
     <f:link.action action="tokenrefresh" arguments="{mashup : mashup}" class="btn btn-default">
-        <core:icon identifier="cloud-svg" /> <f:translate key="Common_btnSync" />
+        <core:icon identifier="cloud-svg" /><span class="ms-1"><f:translate key="Common_btnSync" /></span>
     </f:link.action>
     <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-default">
         <core:icon identifier="sync-svg" />
@@ -35,7 +35,7 @@
         <tr>
             <th class="col-md-1 col-sm-1 col-xs-2">
                 <f:link.action action="tokennew" arguments="{mashup : mashup}" class="btn btn-primary btn-xs">
-                    <core:icon identifier="plus-svg" /> <f:translate key="Common_btnAdd" />
+                    <core:icon identifier="plus-svg" /><span class="ms-1"><f:translate key="Common_btnAdd" /></span>
                 </f:link.action>
             </th>
             <th class="col-md-6 col-sm-5 col-xs-6">
@@ -64,7 +64,7 @@
                 <td>
                     <span class="badge">
                         <core:icon identifier="tag-svg" />
-                        <span><f:count subject="{token.tokenScans}" /></span>
+                        <span class="ms-1"><f:count subject="{token.tokenScans}" /></span>
                     </span>
                 </td>
             </tr>

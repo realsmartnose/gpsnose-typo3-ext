@@ -6,3 +6,6 @@ services:
 
   SmartNoses\Gpsnose\Domain\Repository\:
     resource: '../Classes/Domain/Repository/*'
+
+  SmartNoses\Gpsnose\Controller\:
+    resource: '../Classes/Controller/*'

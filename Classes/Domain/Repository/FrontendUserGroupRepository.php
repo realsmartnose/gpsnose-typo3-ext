@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace SmartNoses\Gpsnose\Domain\Repository;
 
-use TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup;
+use SmartNoses\Gpsnose\Domain\Model\FrontendUserGroup;
 
 /**
  * *
@@ -21,32 +21,19 @@ use TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup;
 /**
  * The repository for feugroups
  */
-class FrontendUserGroupRepository
+class FrontendUserGroupRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
-    /**
-     * @var \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository
-     */
-    protected $frontendUserGroupRepository = NULL;
-
-    /**
-     * @param \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository $frontendUserGroupRepository
-     */
-    public function injectRepository(\TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository $frontendUserGroupRepository)
-    {
-        $this->frontendUserGroupRepository = $frontendUserGroupRepository;
-    }
-
     /**
      * Finds the user matching the given UID
      *
      * @param int $uid
      *            UID of the FrontendUserGroup
      *
-     * @return \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup
+     * @return FrontendUserGroup
      */
     public function findByUid($uid)
     {
-        $query = $this->frontendUserGroupRepository->createQuery();
+        $query = $this->createQuery();
         $object = $query->matching($query->equals('uid', $uid))
             ->execute()
             ->getFirst();
@@ -60,11 +47,11 @@ class FrontendUserGroupRepository
      * @param string $title
      *            Title of the FrontendUserGroup
      *
-     * @return \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup
+     * @return FrontendUserGroup
      */
     public function findByTitle($title)
     {
-        $query = $this->frontendUserGroupRepository->createQuery();
+        $query = $this->createQuery();
         $object = $query->matching($query->equals('title', $title))
             ->execute()
             ->getFirst();
@@ -84,7 +71,7 @@ class FrontendUserGroupRepository
             $userGroup = new FrontendUserGroup();
             $userGroup->setTitle($title);
             $userGroup->setDescription("Created by GpsNose");
-            $this->frontendUserGroupRepository->add($userGroup);
+            $this->add($userGroup);
         }
     }
 
@@ -100,7 +87,7 @@ class FrontendUserGroupRepository
     {
         $userGroup = $this->findByTitle($title);
         if ($userGroup) {
-            $this->frontendUserGroupRepository->remove($userGroup);
+            $this->remove($userGroup);
         }
     }
 }

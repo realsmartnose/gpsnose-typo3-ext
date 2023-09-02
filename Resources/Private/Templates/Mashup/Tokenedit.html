@@ -5,17 +5,20 @@
     xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<f:layout name="Default" />
+<f:layout name="Module" />
 
 
-<f:section name="title"><f:translate key="MashupAdmin_lblMashupTokenNewTitle" /></f:section>
+<f:section name="title"><f:translate key="MashupAdmin_lblMashupTokenEditTitle" /></f:section>
 
 
 <f:section name="buttons">
     <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-default">
-        <core:icon identifier="chevron-left-svg" /> <f:translate key="Common_btnBackToList" />
+        <core:icon identifier="chevron-left-svg" /><span class="ms-1"><f:translate key="Common_btnBackToList" /></span>
     </f:link.action>
-    <f:link.action action="tokennew" arguments="{token : token, mashup : mashup}" class="btn btn-default">
+    <f:link.action action="tokenshow" arguments="{token : token, mashup : mashup}" class="btn btn-default">
+        <core:icon identifier="folder-svg" /><span class="ms-1"><f:translate key="Common_btnOpen" /></span>
+    </f:link.action>
+    <f:link.action action="tokenedit" arguments="{token : token, mashup : mashup}" class="btn btn-default">
         <core:icon identifier="sync-svg" />
     </f:link.action>
 </f:section>
@@ -32,12 +35,7 @@
         <div class="col-md-8">
             <f:render partial="FormErrors" arguments="{object : Token}" />
 
-            <f:form action="tokencreate" name="newToken" object="{newToken}">
-
-                <f:form.textfield property="mashup" value="{mashup}" type="hidden" />
-                <f:form.textfield property="validUntilTicks" value="" type="hidden" />
-                <f:form.textfield property="options" value="" type="hidden" />
-                <f:form.textfield property="validUntilTicks" value="" type="hidden" />
+            <f:form action="tokenupdate" name="token" object="{token}">
 
                 <div class="panel panel-primary">
                     <div class="panel-heading"><nose:community.label tag="{mashup.communityTag}" /></div>
@@ -46,8 +44,7 @@
                         <div class="form-group row">
                             <label class="col-lg-3 control-label"><f:translate key="MashupAdmin_lblMashupTokenPayloadLabel" /></label>
                             <div class="col-lg-9">
-                                <f:form.textfield property="payload" class="form-control" id="payload" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenPayloadPlaceholder')}" />
-                                <span class="help-block"><nose:string.replace value="{f:translate(key: 'MashupAdmin_lblMashupTokenPayloadHint')}" search="%max_characters%" replace="{TokenPayloadMaxChars}" /></span>
+                                <pre>{token.payload}</pre>
                             </div>
                         </div>
 
@@ -121,8 +118,8 @@
                         <div class="form-group row">
                             <div class="col-lg-3 col-lg-offset-3">
                                 <button class="btn btn-primary" type="submit" id="addButton">
-                                    <core:icon identifier="plus-svg" />
-                                    <span><f:translate key="MashupAdmin_btnCreateMashupToken" /></span>
+                                    <core:icon identifier="check-svg" />
+                                    <span class="ms-1"><f:translate key="Common_btnUpdate" /></span>
                                 </button>
                             </div>
                         </div>
@@ -134,12 +131,11 @@
     </div>
 
 <script>
-var GpsnoseMashupTokenPayloadMaxChars = {TokenPayloadMaxChars};
-var GpsnoseMashupTokenLabelMaxChars = {TokenLabelMaxChars};
+    var GpsnoseMashupTokenLabelMaxChars = parseInt('{TokenLabelMaxChars}');
 </script>
 <f:be.pageRenderer
     includeCssFiles="{ 0: '{f:uri.resource(path: \'Libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.min.css\')}' }"
-    includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/MashupTokennew', 1: '{f:uri.resource(path: \'Libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js\')}' }" />
+    includeRequireJsModules="{ 0:'TYPO3/CMS/Gpsnose/MashupTokenedit', 1: '{f:uri.resource(path: \'Libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js\')}' }" />
 
 </f:section>
 

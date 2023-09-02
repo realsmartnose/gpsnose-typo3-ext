@@ -1,8 +1,6 @@
 <?php
 namespace SmartNoses\Gpsnose\Domain\Model;
 
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-
 /**
  * *
  *
@@ -19,27 +17,18 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 /**
  * An extended frontend user with more attributes
  */
-class FrontendUser extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class FrontendUserGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
-    /**
-     * @var string
-     */
-    protected $username = null;
 
     /**
      * @var string
      */
-    protected $email = null;
+    protected $title = null;
 
     /**
      * @var string
      */
-    protected $password = null;
-
-    /**
-     * @var ObjectStorage<FrontendUserGroup>
-     */
-    protected $usergroup;
+    protected $description = null;
 
     /**
      * @var string
@@ -83,96 +72,37 @@ class FrontendUser extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 
     /**
-     * Get the value of username
+     * Get the value of title
      */
-    public function getUsername()
+    public function getTitle()
     {
-        return $this->username;
+        return $this->title;
     }
 
     /**
-     * Set the value of username
+     * Set the value of title
      */
-    public function setUsername($username): self
+    public function setTitle($title): self
     {
-        $this->username = $username;
+        $this->title = $title;
         return $this;
     }
 
     /**
-     * Get the value of email
+     * Get the value of description
      */
-    public function getEmail()
+    public function getDescription()
     {
-        return $this->email;
+        return $this->description;
     }
 
     /**
-     * Set the value of email
+     * Set the value of description
      */
-    public function setEmail($email): self
+    public function setDescription($description): self
     {
-        $this->email = $email;
+        $this->description = $description;
         return $this;
-    }
-
-    /**
-     * Get the value of password
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * Set the value of password
-     */
-    public function setPassword($password): self
-    {
-        $this->password = $password;
-        return $this;
-    }
-
-    /**
-     * Sets the usergroups. Keep in mind that the property is called "usergroup"
-     * although it can hold several usergroups.
-     *
-     * @param ObjectStorage<FrontendUserGroup> $usergroup
-     */
-    public function setUsergroup(ObjectStorage $usergroup)
-    {
-        $this->usergroup = $usergroup;
-    }
-
-    /**
-     * Adds a usergroup to the frontend user
-     *
-     * @param FrontendUserGroup $usergroup
-     */
-    public function addUsergroup(FrontendUserGroup $usergroup)
-    {
-        $this->usergroup->attach($usergroup);
-    }
-
-    /**
-     * Removes a usergroup from the frontend user
-     *
-     * @param FrontendUserGroup $usergroup
-     */
-    public function removeUsergroup(FrontendUserGroup $usergroup)
-    {
-        $this->usergroup->detach($usergroup);
-    }
-
-    /**
-     * Returns the usergroups. Keep in mind that the property is called "usergroup"
-     * although it can hold several usergroups.
-     *
-     * @return ObjectStorage<FrontendUserGroup> An object storage containing the usergroup
-     */
-    public function getUsergroup()
-    {
-        return $this->usergroup;
     }
 
     /**

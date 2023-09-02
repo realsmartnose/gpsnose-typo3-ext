@@ -5,7 +5,7 @@
     xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<f:layout name="Default" />
+<f:layout name="Module" />
 
 
 <f:section name="title"><f:translate key="MashupAdmin_lblLoginTitle" /></f:section>
@@ -19,20 +19,20 @@
     <f:flashMessages />
     <div class="typo3-messages" id="polling-stopped-message" style="display: none;">
         <div class="alert alert-danger">
-            <div class="media">
+            <div class="media d-flex">
                 <div class="media-left">
                     <span class="fa-stack fa-lg">
                         <i class="fa fa-circle fa-stack-2x"></i>
                         <i class="fa fa-times fa-stack-1x"></i>
                     </span>
                 </div>
-                <div class="media-body">
+                <div class="media-body flex-grow-1">
                     <p class="alert-message"><f:translate key="Common_lblLoginPollingStopped" /></p>
                 </div>
                 <div class="media-right">
                     <f:link.action action="login" class="btn btn-danger">
                         <core:icon identifier="user-svg" />
-                        <span> <f:translate key="Common_btnRestart" /></span>
+                        <span class="ms-1"><f:translate key="Common_btnRestart" /></span>
                     </f:link.action>
                 </div>
             </div>

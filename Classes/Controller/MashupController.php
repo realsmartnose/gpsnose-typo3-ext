@@ -1,4 +1,5 @@
 <?php
+
 namespace SmartNoses\Gpsnose\Controller;
 
 use GpsNose\SDK\Mashup\Framework\GnUtil;
@@ -26,7 +27,10 @@ use GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 use GpsNose\SDK\Framework\Logging\GnLogger;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Service\CacheService;
 
@@ -54,7 +58,6 @@ class MashupController extends BaseController
      * @var PersistenceManager
      */
     protected $persistenceManager = NULL;
-
     /**
      * @param PersistenceManager $persistenceManager
      */
@@ -69,7 +72,6 @@ class MashupController extends BaseController
      * @var MashupRepository
      */
     protected $mashupRepository = NULL;
-
     /**
      * @param MashupRepository $mashupRepository
      */
@@ -84,7 +86,6 @@ class MashupController extends BaseController
      * @var TokenRepository
      */
     protected $tokenRepository = NULL;
-
     /**
      * @param TokenRepository $tokenRepository
      */
@@ -99,13 +100,40 @@ class MashupController extends BaseController
      * @var FrontendUserGroupRepository
      */
     protected $frontendUserGroupRepository = NULL;
-
     /**
      * @param FrontendUserGroupRepository $frontendUserGroupRepository
      */
     public function injectFrontendUserGroupRepository(FrontendUserGroupRepository $frontendUserGroupRepository)
     {
         $this->frontendUserGroupRepository = $frontendUserGroupRepository;
+    }
+
+    /**
+     * moduleTemplateFactory
+     * 
+     * @var ModuleTemplateFactory
+     */
+    protected ModuleTemplateFactory $moduleTemplateFactory;
+    /**
+     * @param ModuleTemplateFactory $moduleTemplateFactory
+     */
+    public function injectModuleTemplateFactory(ModuleTemplateFactory $moduleTemplateFactory)
+    {
+        $this->moduleTemplateFactory = $moduleTemplateFactory;
+    }
+
+    /**
+     * pageRenderer
+     * 
+     * @var PageRenderer
+     */
+    protected PageRenderer $pageRenderer;
+    /**
+     * @param PageRenderer $pageRenderer
+     */
+    public function injectPageRenderer(PageRenderer $pageRenderer)
+    {
+        $this->pageRenderer = $pageRenderer;
     }
 
     /**
@@ -161,7 +189,7 @@ class MashupController extends BaseController
             if (GnUtil::IsNullOrEmpty($this->gpsnoseConf['backendLockedUser']) || $this->gpsnoseConf['backendLockedUser'] == $this->_currentUser->LoginName) {
                 $this->_gnLoginApi = $this->_gnApi->GetLoginApiForAdmin($this->_currentUser->LoginId, "");
             } else {
-                $this->addFlashMessage("The module is locked to the user '{$this->gpsnoseConf['backendLockedUser']}'", '', FlashMessage::WARNING, TRUE);
+                $this->addFlashMessage("The module is locked to the user '{$this->gpsnoseConf['backendLockedUser']}'", '', ContextualFeedbackSeverity::WARNING, TRUE);
                 GnAuthentication::Logout();
                 $this->_gnLoginApi = NULL;
                 $this->redirect('login');
@@ -294,9 +322,9 @@ class MashupController extends BaseController
                 }
             }
 
-            $this->addFlashMessage('Mashup communities successfully refreshed', '', FlashMessage::OK, TRUE);
+            $this->addFlashMessage('Mashup communities successfully refreshed', '', ContextualFeedbackSeverity::OK, TRUE);
         } catch (\Exception $e) {
-            $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+            $this->addFlashMessage($e->getMessage(), 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
             GnLogger::LogException($e);
         }
     }
@@ -306,7 +334,7 @@ class MashupController extends BaseController
      *
      * @return void
      */
-    public function startAction()
+    public function startAction(): ResponseInterface
     {
         $arguments = [];
         if ($this->_currentUser != NULL) {
@@ -325,7 +353,7 @@ class MashupController extends BaseController
                 GnAuthentication::Logout();
             }
         }
-        $this->redirect('login', NULL, NULL, $arguments);
+        return $this->redirect('login', NULL, NULL, $arguments);
     }
 
     /**
@@ -333,7 +361,7 @@ class MashupController extends BaseController
      *
      * @return void
      */
-    public function loginAction()
+    public function loginAction(): ResponseInterface
     {
         if ($this->_currentUser != NULL) {
             // Assure loggedin
@@ -343,16 +371,21 @@ class MashupController extends BaseController
                 // refresh mashup
                 $this->RefreshMashups();
             }
-            $this->redirect('list');
+            return $this->redirect('list');
         } else {
+            $view = $this->moduleTemplateFactory->create($this->request);
+            $this->preparePageRenderer();
+
             if (!GnUtil::IsNullOrEmpty($this->gpsnoseConf['backendLockedUser'])) {
-                $this->addFlashMessage("The module is locked to the user '{$this->gpsnoseConf['backendLockedUser']}'", '', FlashMessage::WARNING, TRUE);
+                $this->addFlashMessage("The module is locked to the user '{$this->gpsnoseConf['backendLockedUser']}'", '', ContextualFeedbackSeverity::WARNING, TRUE);
             }
-            $this->addFlashMessage('To login, scan this QR code using your mobile GpsNose app please', 'Info', FlashMessage::INFO);
+            $this->addFlashMessage('To login, scan this QR code using your mobile GpsNose app please', 'Info', ContextualFeedbackSeverity::INFO);
             $loginId = GnUtil::NewGuid();
-            $this->view->assign('qr_code_image', base64_encode($this->_gnApi->GetLoginApiForAdmin($loginId, "")
+            $view->assign('qr_code_image', base64_encode($this->_gnApi->GetLoginApiForAdmin($loginId, "")
                 ->GenerateQrCode()));
-            $this->view->assign('login_id', $loginId);
+            $view->assign('login_id', $loginId);
+
+            return $view->renderResponse();
         }
     }
 
@@ -419,11 +452,16 @@ class MashupController extends BaseController
      *
      * @return void
      */
-    public function logoutAction()
+    public function logoutAction(): ResponseInterface
     {
         GnAuthentication::Logout();
 
-        $this->addFlashMessage('Successfully logged out', 'Success', FlashMessage::OK);
+        $view = $this->moduleTemplateFactory->create($this->request);
+        $this->preparePageRenderer();
+
+        $this->addFlashMessage('Successfully logged out', 'Success', ContextualFeedbackSeverity::OK);
+
+        return $view->renderResponse();
     }
 
     /**
@@ -431,11 +469,10 @@ class MashupController extends BaseController
      *
      * @return void
      */
-    public function reloginAction()
+    public function reloginAction(): ResponseInterface
     {
         GnAuthentication::Logout();
-
-        $this->redirect('login');
+        return $this->redirect('login');
     }
 
     /**
@@ -443,7 +480,7 @@ class MashupController extends BaseController
      *
      * @return void
      */
-    public function refreshAction()
+    public function refreshAction(): ResponseInterface
     {
         $this->AssureLoggedIn();
 
@@ -453,10 +490,15 @@ class MashupController extends BaseController
             $this->RefreshMashups($this->_gnLoginApi);
 
             // Redirect to list
-            $this->redirect('list');
+            return $this->redirect('list');
         } else {
             GnAuthentication::Logout();
-            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR);
+            $view = $this->moduleTemplateFactory->create($this->request);
+            $this->preparePageRenderer();
+
+            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', ContextualFeedbackSeverity::ERROR);
+
+            return $view->renderResponse();
         }
     }
 
@@ -465,12 +507,25 @@ class MashupController extends BaseController
      *
      * @return void
      */
-    public function listAction()
+    public function listAction(): ResponseInterface
     {
         $this->AssureLoggedIn();
 
+        $view = $this->moduleTemplateFactory->create($this->request);
+        $this->preparePageRenderer();
+
         $mashups = $this->mashupRepository->findAll();
-        $this->view->assign('mashups', $mashups);
+        $view->assign('mashups', $mashups);
+
+        return $view->renderResponse();
+    }
+
+    /**
+     * Add the CSS and JS of the dashboard module to the page renderer
+     */
+    protected function preparePageRenderer(): void
+    {
+        $this->pageRenderer->addCssFile('EXT:gpsnose/Resources/Public/Css/backend-style.css');
     }
 
     /**
@@ -479,11 +534,16 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @return void
      */
-    public function showAction(Mashup $mashup)
+    public function showAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
-        $this->view->assign('mashup', $mashup);
+        $view = $this->moduleTemplateFactory->create($this->request);
+        $this->preparePageRenderer();
+
+        $view->assign('mashup', $mashup);
+
+        return $view->renderResponse();
     }
 
     /**
@@ -491,16 +551,21 @@ class MashupController extends BaseController
      *
      * @return void
      */
-    public function newAction()
+    public function newAction(): ResponseInterface
     {
         $this->AssureLoggedIn();
 
-        $this->view->assign('addMaxChars', 100);
+        $view = $this->moduleTemplateFactory->create($this->request);
+        $this->preparePageRenderer();
+
+        $view->assign('addMaxChars', 100);
 
         $unvalidated = $this->mashupRepository->findNotValidated();
-        $this->view->assign('unvalidatedMashups', $unvalidated);
+        $view->assign('unvalidatedMashups', $unvalidated);
 
-        $this->view->assign('visibilities', $this->_visibilities);
+        $view->assign('visibilities', $this->_visibilities);
+
+        return $view->renderResponse();
     }
 
     /**
@@ -509,7 +574,7 @@ class MashupController extends BaseController
      * @param Mashup $newMashup
      * @return void
      */
-    public function createAction(Mashup $newMashup)
+    public function createAction(Mashup $newMashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
@@ -524,22 +589,25 @@ class MashupController extends BaseController
                 $newMashup->setValidationTicks(GnUtil::TicksFromDate(new \DateTime()));
                 $this->mashupRepository->add($newMashup);
 
-                $this->addFlashMessage('The object was created.', '', FlashMessage::OK, TRUE);
+                $this->addFlashMessage('The object was created.', '', ContextualFeedbackSeverity::OK, TRUE);
 
                 // Clear the cache
                 /** @var CacheService */
                 $cacheService = GeneralUtility::makeInstance(CacheService::class);
                 $cacheService->clearPageCache();
             } catch (\Exception $e) {
-                $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                $this->addFlashMessage($e->getMessage(), 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
                 GnLogger::LogException($e);
             }
 
             // Redirect to list
-            $this->redirect('list');
+            return $this->redirect('list');
         } else {
             GnAuthentication::Logout();
-            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR);
+            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', ContextualFeedbackSeverity::ERROR);
+            $view = $this->moduleTemplateFactory->create($this->request);
+            $this->preparePageRenderer();
+            return $view->renderResponse();
         }
     }
 
@@ -549,7 +617,7 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @return void
      */
-    public function validateAction(Mashup $mashup)
+    public function validateAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
@@ -563,17 +631,20 @@ class MashupController extends BaseController
                 $mashup->setAppKey($appKey);
                 $this->mashupRepository->add($mashup);
 
-                $this->addFlashMessage('Mashup successfully validated', '', FlashMessage::OK, TRUE);
+                $this->addFlashMessage('Mashup successfully validated', '', ContextualFeedbackSeverity::OK, TRUE);
             } catch (\Exception $e) {
-                $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                $this->addFlashMessage($e->getMessage(), 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
                 GnLogger::LogException($e);
             }
 
             // Redirect to list
-            $this->redirect('list');
+            return $this->redirect('list');
         } else {
             GnAuthentication::Logout();
-            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
+            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
+            $view = $this->moduleTemplateFactory->create($this->request);
+            $this->preparePageRenderer();
+            return $view->renderResponse();
         }
     }
 
@@ -584,15 +655,18 @@ class MashupController extends BaseController
      * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("mashup")
      * @return void
      */
-    public function editAction(Mashup $mashup)
+    public function editAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
-        $this->view->assign('addSubCommunityMaxChars', 20);
-        $this->view->assign('addHostMaxChars', 100);
-        $this->view->assign('mashupTokenCallbackUrlMaxChars', 1000);
-        $this->view->assign('mashup', $mashup);
-        $this->view->assign('visibilities', $this->_visibilities);
+        $view = $this->moduleTemplateFactory->create($this->request);
+        $this->preparePageRenderer();
+
+        $view->assign('addSubCommunityMaxChars', 20);
+        $view->assign('addHostMaxChars', 100);
+        $view->assign('mashupTokenCallbackUrlMaxChars', 1000);
+        $view->assign('mashup', $mashup);
+        $view->assign('visibilities', $this->_visibilities);
 
         $settings = GnUtility::getGnSetting();
         if ($settings['mashup.']['callbackPid'] > 0) {
@@ -605,8 +679,10 @@ class MashupController extends BaseController
                     'type' => $settings['mashup.']['callbackTypeNum']
                 ])
                 ->buildFrontendUri();
-            $this->view->assign('mashupCallbackUrl', $uri);
+            $view->assign('mashupCallbackUrl', $uri);
         }
+
+        return $view->renderResponse();
     }
 
     /**
@@ -614,7 +690,7 @@ class MashupController extends BaseController
      *
      * @param Mashup $mashup
      */
-    public function addSubCommunityAction(Mashup $mashup)
+    public function addSubCommunityAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
@@ -643,20 +719,20 @@ class MashupController extends BaseController
                     // Add the FrontendUserGroup
                     $this->frontendUserGroupRepository->addIfNotExistByTitle($subCommunity->getName());
 
-                    $this->addFlashMessage('Successfully created new Subcommunity', 'Success', FlashMessage::OK, TRUE);
+                    $this->addFlashMessage('Successfully created new Subcommunity', 'Success', ContextualFeedbackSeverity::OK, TRUE);
                 } catch (\Exception $e) {
-                    $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                    $this->addFlashMessage($e->getMessage(), 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
                     GnLogger::LogException($e);
                 }
             } else {
                 GnAuthentication::Logout();
-                $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
+                $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
             }
         } else {
-            $this->addFlashMessage('The SubCommunity already exists', 'Error', FlashMessage::ERROR, TRUE);
+            $this->addFlashMessage('The SubCommunity already exists', 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
         }
 
-        $this->redirect('edit', NULL, NULL, [
+        return $this->redirect('edit', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -667,7 +743,7 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @param SubCommunity $subCommunity
      */
-    public function removeSubCommunityAction(Mashup $mashup, SubCommunity $subCommunity)
+    public function removeSubCommunityAction(Mashup $mashup, SubCommunity $subCommunity): ResponseInterface
     {
         $this->AssureLoggedIn();
 
@@ -683,17 +759,17 @@ class MashupController extends BaseController
                 // Remove the FrontendUserGroup
                 $this->frontendUserGroupRepository->removeByTitle($subCommunity->getName());
 
-                $this->addFlashMessage('SubCommunity successfully removed', '', FlashMessage::OK, TRUE);
+                $this->addFlashMessage('SubCommunity successfully removed', '', ContextualFeedbackSeverity::OK, TRUE);
             } catch (\Exception $e) {
-                $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                $this->addFlashMessage($e->getMessage(), 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
                 GnLogger::LogException($e);
             }
         } else {
             GnAuthentication::Logout();
-            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
+            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
         }
 
-        $this->redirect('edit', NULL, NULL, [
+        return $this->redirect('edit', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -703,7 +779,7 @@ class MashupController extends BaseController
      *
      * @param Mashup $mashup
      */
-    public function addHostAction(Mashup $mashup)
+    public function addHostAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
@@ -735,20 +811,20 @@ class MashupController extends BaseController
                     $mashup->addHost($host);
                     $this->mashupRepository->update($mashup);
 
-                    $this->addFlashMessage('Successfully added new Host', 'Success', FlashMessage::OK, TRUE);
+                    $this->addFlashMessage('Successfully added new Host', 'Success', ContextualFeedbackSeverity::OK, TRUE);
                 } catch (\Exception $e) {
-                    $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                    $this->addFlashMessage($e->getMessage(), 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
                     GnLogger::LogException($e);
                 }
             } else {
                 GnAuthentication::Logout();
-                $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
+                $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
             }
         } else {
-            $this->addFlashMessage('The Host already exists', 'Error', FlashMessage::ERROR, TRUE);
+            $this->addFlashMessage('The Host already exists', 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
         }
 
-        $this->redirect('edit', NULL, NULL, [
+        return $this->redirect('edit', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -759,7 +835,7 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @param Host $host
      */
-    public function removeHostAction(Mashup $mashup, Host $host)
+    public function removeHostAction(Mashup $mashup, Host $host): ResponseInterface
     {
         $this->AssureLoggedIn();
 
@@ -781,17 +857,17 @@ class MashupController extends BaseController
                 $mashup->removeHost($host);
                 $this->mashupRepository->update($mashup);
 
-                $this->addFlashMessage('Host successfully removed', '', FlashMessage::OK, TRUE);
+                $this->addFlashMessage('Host successfully removed', '', ContextualFeedbackSeverity::OK, TRUE);
             } catch (\Exception $e) {
-                $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                $this->addFlashMessage($e->getMessage(), 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
                 GnLogger::LogException($e);
             }
         } else {
             GnAuthentication::Logout();
-            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
+            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
         }
 
-        $this->redirect('edit', NULL, NULL, [
+        return $this->redirect('edit', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -802,7 +878,7 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @return void
      */
-    public function regenerateAppKeyAction(Mashup $mashup)
+    public function regenerateAppKeyAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
@@ -814,18 +890,18 @@ class MashupController extends BaseController
                 if (!GnUtil::IsNullOrEmpty($appKey)) {
                     $mashup->setAppKey($appKey);
                     $this->mashupRepository->update($mashup);
-                    $this->addFlashMessage('Mashup successfully updated', '', FlashMessage::OK, TRUE);
+                    $this->addFlashMessage('Mashup successfully updated', '', ContextualFeedbackSeverity::OK, TRUE);
                 }
             } catch (\Exception $e) {
-                $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                $this->addFlashMessage($e->getMessage(), 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
                 GnLogger::LogException($e);
             }
         } else {
             GnAuthentication::Logout();
-            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
+            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
         }
 
-        $this->redirect('edit', NULL, NULL, [
+        return $this->redirect('edit', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -836,7 +912,7 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @return void
      */
-    public function updateCallbackUrlAction(Mashup $mashup)
+    public function updateCallbackUrlAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
@@ -855,17 +931,17 @@ class MashupController extends BaseController
 
                 $this->mashupRepository->update($mashup);
 
-                $this->addFlashMessage('Mashup successfully updated', '', FlashMessage::OK, TRUE);
+                $this->addFlashMessage('Mashup successfully updated', '', ContextualFeedbackSeverity::OK, TRUE);
             } catch (\Exception $e) {
-                $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                $this->addFlashMessage($e->getMessage(), 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
                 GnLogger::LogException($e);
             }
         } else {
             GnAuthentication::Logout();
-            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
+            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
         }
 
-        $this->redirect('edit', NULL, NULL, [
+        return $this->redirect('edit', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -876,21 +952,21 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @return void
      */
-    public function deleteAction(Mashup $mashup)
+    public function deleteAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
         $this->mashupRepository->remove($mashup);
-        $this->addFlashMessage('Mashup successfully deleted', '', FlashMessage::OK, TRUE);
+        $this->addFlashMessage('Mashup successfully deleted', '', ContextualFeedbackSeverity::OK, TRUE);
 
         if ($this->request->hasArgument('redirect')) {
             if ($this->request->getArgument('redirect') == 'new') {
-                $this->redirect('new');
+                return $this->redirect('new');
             } else {
-                $this->redirect('list');
+                return $this->redirect('list');
             }
         } else {
-            $this->redirect('list');
+            return $this->redirect('list');
         }
     }
 
@@ -905,8 +981,7 @@ class MashupController extends BaseController
         if ($this->mashupRepository) {
             $repository = $this->mashupRepository;
         } else {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $repository = $objectManager->get(MashupRepository::class);
+            $repository = GeneralUtility::makeInstance(MashupRepository::class);
         }
 
         $query = $repository->createQuery();
@@ -939,11 +1014,16 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @return void
      */
-    public function tokenlistAction(Mashup $mashup)
+    public function tokenlistAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
-        $this->view->assign('mashup', $mashup);
+        $view = $this->moduleTemplateFactory->create($this->request);
+        $this->preparePageRenderer();
+
+        $view->assign('mashup', $mashup);
+
+        return $view->renderResponse();
     }
 
     /**
@@ -953,9 +1033,12 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @return void
      */
-    public function tokenshowAction(Token $token, Mashup $mashup)
+    public function tokenshowAction(Token $token, Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
+
+        $view = $this->moduleTemplateFactory->create($this->request);
+        $this->preparePageRenderer();
 
         $token->setCheckboxByOption();
 
@@ -965,21 +1048,23 @@ class MashupController extends BaseController
             try {
                 $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
                 $qr_code_image = $mashupTokensApi->GenerateQrTokenForMashup($token->getPayload(), intval($token->getValidUntilTicks()), floatval($token->getValuePerUnit()), $token->getLabel(), $token->getOptions());
-                $this->view->assign('qr_code_image', base64_encode($qr_code_image));
+                $view->assign('qr_code_image', base64_encode($qr_code_image));
 
                 $qr_code_text = $mashupTokensApi->GenerateQrTokenForMashupAsTextLink($token->getPayload(), intval($token->getValidUntilTicks()), floatval($token->getValuePerUnit()), $token->getLabel(), $token->getOptions());
-                $this->view->assign('qr_code_text', $qr_code_text);
+                $view->assign('qr_code_text', $qr_code_text);
             } catch (\Exception $e) {
-                $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+                $this->addFlashMessage($e->getMessage(), 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
                 GnLogger::LogException($e);
             }
         } else {
             GnAuthentication::Logout();
-            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', FlashMessage::ERROR, TRUE);
+            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
         }
 
-        $this->view->assign('token', $token);
-        $this->view->assign('mashup', $mashup);
+        $view->assign('token', $token);
+        $view->assign('mashup', $mashup);
+
+        return $view->renderResponse();
     }
 
     /**
@@ -988,7 +1073,7 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @return void
      */
-    public function tokenrefreshAction(Mashup $mashup)
+    public function tokenrefreshAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
@@ -1060,17 +1145,17 @@ class MashupController extends BaseController
             }
 
             if (count($addedScans) > 0) {
-                $this->addFlashMessage("Added {count($addedScans)} items", '', FlashMessage::OK, TRUE);
+                $this->addFlashMessage("Added {count($addedScans)} items", '', ContextualFeedbackSeverity::OK, TRUE);
             } else {
-                $this->addFlashMessage('There where no new scans available for this Mashup', '', FlashMessage::OK, TRUE);
+                $this->addFlashMessage('There where no new scans available for this Mashup', '', ContextualFeedbackSeverity::OK, TRUE);
             }
         } catch (\Exception $e) {
-            $this->addFlashMessage($e->getMessage(), 'Error', FlashMessage::ERROR, TRUE);
+            $this->addFlashMessage($e->getMessage(), 'Error', ContextualFeedbackSeverity::ERROR, TRUE);
             GnLogger::LogException($e);
             throw $e;
         }
 
-        $this->redirect('tokenlist', NULL, NULL, [
+        return $this->redirect('tokenlist', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
@@ -1081,12 +1166,17 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @return void
      */
-    public function tokennewAction(Mashup $mashup)
+    public function tokennewAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
-        $this->setSettingsForToken();
-        $this->view->assign('mashup', $mashup);
+        $view = $this->moduleTemplateFactory->create($this->request);
+        $this->preparePageRenderer();
+        $this->setSettingsForToken($view);
+
+        $view->assign('mashup', $mashup);
+
+        return $view->renderResponse();
     }
 
     /**
@@ -1095,7 +1185,7 @@ class MashupController extends BaseController
      * @param Token $newToken
      * @return void
      */
-    public function tokencreateAction(Token $newToken)
+    public function tokencreateAction(Token $newToken): ResponseInterface
     {
         $this->AssureLoggedIn();
 
@@ -1105,21 +1195,20 @@ class MashupController extends BaseController
 
         $existingToken = $mashup->findTokenByPayload($newToken->getPayload());
         if ($existingToken != NULL) {
-            $this->addFlashMessage('Token allready exist', 'Warning', FlashMessage::WARNING, TRUE);
-            $this->redirect('tokenshow', NULL, NULL, [
+            $this->addFlashMessage('Token allready exist', 'Warning', ContextualFeedbackSeverity::WARNING, TRUE);
+            return $this->redirect('tokenshow', NULL, NULL, [
                 'mashup' => $mashup,
                 'token' => $existingToken
             ]);
-            return;
         } else {
             $mashup->addToken($newToken);
             $this->mashupRepository->update($mashup);
             $this->persistenceManager->persistAll();
 
-            $this->addFlashMessage('The object was created successfully', '', FlashMessage::OK, TRUE);
+            $this->addFlashMessage('The object was created successfully', '', ContextualFeedbackSeverity::OK, TRUE);
         }
 
-        $this->redirect('tokenshow', NULL, NULL, [
+        return $this->redirect('tokenshow', NULL, NULL, [
             'mashup' => $mashup,
             'token' => $newToken
         ]);
@@ -1132,21 +1221,26 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @return void
      */
-    public function tokeneditAction(Token $token, Mashup $mashup)
+    public function tokeneditAction(Token $token, Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
         $token->setCheckboxByOption();
+
+        $view = $this->moduleTemplateFactory->create($this->request);
+        $this->preparePageRenderer();
 
         if (!GnUtil::IsNullOrEmpty($token->getValidUntilTicks()) && $token->getValidUntilTicks() != '0') {
             $validUntilDate = GnUtil::DateFromTicks($token->getValidUntilTicks());
             $token->setValidUntilDateString($validUntilDate->format("Y-m-d"));
         }
 
-        $this->setSettingsForToken();
+        $this->setSettingsForToken($view);
 
-        $this->view->assign('mashup', $mashup);
-        $this->view->assign('token', $token);
+        $view->assign('mashup', $mashup);
+        $view->assign('token', $token);
+
+        return $view->renderResponse();
     }
 
     /**
@@ -1155,7 +1249,7 @@ class MashupController extends BaseController
      * @param Token $token
      * @return void
      */
-    public function tokenupdateAction(Token $token)
+    public function tokenupdateAction(Token $token): ResponseInterface
     {
         $this->AssureLoggedIn();
 
@@ -1166,9 +1260,9 @@ class MashupController extends BaseController
         $this->mashupRepository->update($mashup);
         $this->persistenceManager->persistAll();
 
-        $this->addFlashMessage('The object was updated successfully', '', FlashMessage::OK, TRUE);
+        $this->addFlashMessage('The object was updated successfully', '', ContextualFeedbackSeverity::OK, TRUE);
 
-        $this->redirect('tokenshow', NULL, NULL, [
+        return $this->redirect('tokenshow', NULL, NULL, [
             'mashup' => $mashup,
             'token' => $token
         ]);
@@ -1181,31 +1275,32 @@ class MashupController extends BaseController
      * @param Mashup $mashup
      * @return void
      */
-    public function tokendeleteAction(Token $token, Mashup $mashup)
+    public function tokendeleteAction(Token $token, Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
 
         if (count($token->getTokenScans()) > 0) {
-            $this->addFlashMessage('Delete not possible, this token was scanned already', 'Warning', FlashMessage::WARNING, TRUE);
+            $this->addFlashMessage('Delete not possible, this token was scanned already', 'Warning', ContextualFeedbackSeverity::WARNING, TRUE);
         } else {
             $mashup->removeToken($token);
             $this->mashupRepository->update($mashup);
 
-            $this->addFlashMessage('The object was deleted successfully', '', FlashMessage::OK, TRUE);
+            $this->addFlashMessage('The object was deleted successfully', '', ContextualFeedbackSeverity::OK, TRUE);
         }
 
-        $this->redirect('tokenlist', NULL, NULL, [
+        return $this->redirect('tokenlist', NULL, NULL, [
             'mashup' => $mashup
         ]);
     }
 
     /**
      * Set the settings for Token to the view
+     * @param ModuleTemplate $view
      */
-    private function setSettingsForToken()
+    private function setSettingsForToken(ModuleTemplate $view)
     {
-        $this->view->assign('TokenPayloadMaxChars', 50);
-        $this->view->assign('TokenLabelMaxChars', 100);
-        $this->view->assign('TokenCallbackResponseMaxChars', 100);
+        $view->assign('TokenPayloadMaxChars', 50);
+        $view->assign('TokenLabelMaxChars', 100);
+        $view->assign('TokenCallbackResponseMaxChars', 100);
     }
 }

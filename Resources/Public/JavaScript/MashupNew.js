@@ -1,25 +1,40 @@
-define(['jquery', 'maframework'], function($) {
-    $('#communityTagField').on('input', function() {
-        var newValue = $(this).val();
-        var isValid = IsValidDomain(newValue, GpsnoseMashupAddMaxChars);
-        $('#addButton').attr('disabled', ! isValid);
-        $('#communityTag').val(GpsnoseMashupVisibility + newValue);
-        if (isValid || newValue === '') {
-            $(this).closest('.form-group').removeClass('has-error');
+define(['TYPO3/CMS/Gpsnose/MaFramework'], function () {
+  const communityTagField = document.getElementById('communityTagField');
+  if (communityTagField) {
+    communityTagField.oninput = function () {
+      const newValue = this.value;
+      const isValid = IsValidDomain(newValue, GpsnoseMashupAddMaxChars);
+      const addButton = document.getElementById('addButton');
+      if (addButton) {
+        if (isValid) {
+          addButton.removeAttribute('disabled');
         } else {
-            $(this).closest('.form-group').addClass('has-error');
+          addButton.setAttribute('disabled', 'disabled');
         }
-    });
+      }
+      const communityTag = document.getElementById('communityTag');
+      communityTag.value = GpsnoseMashupVisibility + newValue;
+      if (isValid || newValue === '') {
+        communityTagField.classList.remove('is-invalid');
+      } else {
+        communityTagField.classList.add('is-invalid');
+      }
+    };
+  }
 
-    $('form').on('submit', function() {
-        $return = true;
-        $.each($(this).find('button'), function() {
-            if ($(this).attr('disabled')) {
-                $return = false;
-            }
-        });
-        return $return;
-    });
+  const forms = document.getElementsByTagName('form');
+  if (forms) {
+    forms[0].onsubmit = function () {
+      const ret = true;
+      const button = forms[0].getElementsByTagName('button');
+      if (!button || button[0].getAttribute('disabled')) {
+        ret = false;
+      }
+      return ret;
+    };
+  }
 
-    $(GpsnoseMashupReadyBlock);
+  if (GpsnoseMashupReadyBlock) {
+    GpsnoseMashupReadyBlock();
+  }
 });

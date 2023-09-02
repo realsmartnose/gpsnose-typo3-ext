@@ -2,7 +2,6 @@
 defined('TYPO3') || die('Access denied.');
 
 use SmartNoses\Gpsnose\Utility\GnUtility;
-use TYPO3\CMS\Core\Http\ApplicationType;
 
 call_user_func(
     function ($extKey) {
@@ -67,15 +66,7 @@ call_user_func(
             'EXT:' . $extKey . '/Resources/Public/Icons/user_plugin_qrscan.svg'
         );
 
-        $addModule = false;
-        if (GnUtility::isVersion11()) {
-            if (TYPO3_MODE === 'BE' && !(TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_CLI)) {
-                $addModule = true;
-            }
-        } else if (isset($GLOBALS['TYPO3_REQUEST']) && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
-            $addModule = true;
-        }
-        if ($addModule) {
+        if (!GnUtility::isVersion12() && TYPO3_MODE === 'BE' && !(TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_CLI)) {
             \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
                 'Gpsnose',
                 'tools',
@@ -91,8 +82,6 @@ call_user_func(
                 ]
             );
         }
-
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($extKey, 'Configuration/TypoScript', 'GpsNose');
     },
-    $_EXTKEY ?? 'gpsnose'
+    'gpsnose'
 );

@@ -11,4 +11,7 @@ return [
     \SmartNoses\Gpsnose\Domain\Model\FrontendUser::class => [
         'tableName' => 'fe_users',
     ],
+    \SmartNoses\Gpsnose\Domain\Model\FrontendUserGroup::class => [
+        'tableName' => 'fe_groups',
+    ],
 ];

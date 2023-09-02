@@ -5,18 +5,15 @@
     xmlns:nose="http://typo3.org/ns/SmartNoses/Gpsnose/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<f:layout name="Default" />
+<f:layout name="Module" />
 
 
-<f:section name="title"><f:translate key="MashupAdmin_lblDetailTitle" /></f:section>
+<f:section name="title"><f:translate key="Common_lblError" /></f:section>
 
 
 <f:section name="buttons">
     <f:link.action action="list" class="btn btn-default">
-        <core:icon identifier="chevron-left-svg" /> <f:translate key="Common_btnBackToList" />
-    </f:link.action>
-    <f:link.action action="show" arguments="{mashup : mashup}" class="btn btn-default">
-        <core:icon identifier="sync-svg" />
+        <core:icon identifier="chevron-left-svg" /><span class="ms-1"><f:translate key="Common_btnBackToList" /></span>
     </f:link.action>
 </f:section>
 
@@ -28,8 +25,6 @@
 
 
 <f:section name="content">
-    <f:render partial="Mashup/Properties" arguments="{mashup : mashup}" />
-    <!-- TODO: Add chart -->
 </f:section>
 
 </html>

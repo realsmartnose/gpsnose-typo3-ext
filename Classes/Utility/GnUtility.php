@@ -12,7 +12,6 @@ use SmartNoses\Gpsnose\Domain\Model\Mashup;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use GpsNose\SDK\Framework\GnCache;
 use GpsNose\SDK\Framework\Logging\GnLogConfig;
@@ -88,13 +87,11 @@ class GnUtility
             $api = new GnApi();
             $gnLogin = $api->GetLoginApiForEndUser($mashup->getAppKey(), $loginId, NULL)->GetVerified();
             if ($gnLogin && $gnLogin->LoginName) {
-                $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-
                 $gnSettings = self::getGnSetting();
                 $isNewUser = FALSE;
 
                 /** @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository $frontendUserRepository */
-                $frontendUserRepository = $objectManager->get(FrontendUserRepository::class);
+                $frontendUserRepository = GeneralUtility::makeInstance(FrontendUserRepository::class);
                 // Here we dont have the StoragePage (in case of gnlid-login-process)
                 $querySettings = $frontendUserRepository->createQuery()->getQuerySettings();
                 $querySettings->setRespectStoragePage(FALSE);
@@ -129,7 +126,7 @@ class GnUtility
                 }
 
                 /** @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserGroupRepository $userGroupRepository */
-                $userGroupRepository = $objectManager->get(FrontendUserGroupRepository::class);
+                $userGroupRepository = GeneralUtility::makeInstance(FrontendUserGroupRepository::class);
                 // Add UserGroup
                 if ($gnSettings['login.']['groupId'] > 0) {
                     $userGroup = $userGroupRepository->findByUid($gnSettings['login.']['groupId']);
