@@ -6,6 +6,11 @@
 Change log
 ==========
 
+Version 3.0.0
+-------------
+- UPD: Add TYPO3 V12 support
+- UPD: Drop TYPO3 V10 support
+
 Version 2.2.4
 -------------
 - UPD: Update template
