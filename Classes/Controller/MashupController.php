@@ -371,19 +371,25 @@ class MashupController extends BaseController
             }
             return $this->redirect('list');
         } else {
-            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-            $this->preparePageRenderer();
-
             if (!GnUtil::IsNullOrEmpty($this->gpsnoseConf['backendLockedUser'])) {
                 $this->addFlashMessage("The module is locked to the user '{$this->gpsnoseConf['backendLockedUser']}'", '', self::getEnumWarning(), TRUE);
             }
             $this->addFlashMessage('To login, scan this QR code using your mobile GpsNose app please', 'Info', self::getEnumInfo());
             $loginId = GnUtil::NewGuid();
-            $moduleTemplate->assign('qr_code_image', base64_encode($this->_gnApi->GetLoginApiForAdmin($loginId, "")
-                ->GenerateQrCode()));
-            $moduleTemplate->assign('login_id', $loginId);
+            $viewData = [];
+            $viewData['qr_code_image'] = base64_encode($this->_gnApi->GetLoginApiForAdmin($loginId, "")->GenerateQrCode());
+            $viewData['login_id'] = $loginId;
 
-            return $moduleTemplate->renderResponse();
+            $this->preparePageRenderer();
+
+            if (GnUtility::isVersion12Plus()) {
+                $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+                $moduleTemplate->assignMultiple($viewData);
+                return $moduleTemplate->renderResponse();
+            } else {
+                $this->view->assignMultiple($viewData);
+                return $this->htmlResponse();
+            }
         }
     }
 
@@ -509,13 +515,20 @@ class MashupController extends BaseController
     {
         $this->AssureLoggedIn();
 
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->preparePageRenderer();
 
         $mashups = $this->mashupRepository->findAll();
-        $moduleTemplate->assign('mashups', $mashups);
+        $viewData = [];
+        $viewData['mashups'] = $mashups;
 
-        return $moduleTemplate->renderResponse();
+        if (GnUtility::isVersion12Plus()) {
+            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+            $moduleTemplate->assignMultiple($viewData);
+            return $moduleTemplate->renderResponse();
+        } else {
+            $this->view->assignMultiple($viewData);
+            return $this->htmlResponse();
+        }
     }
 
     /**
@@ -536,12 +549,19 @@ class MashupController extends BaseController
     {
         $this->AssureLoggedIn();
 
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->preparePageRenderer();
 
-        $moduleTemplate->assign('mashup', $mashup);
+        $viewData = [];
+        $viewData['mashup'] = $mashup;
 
-        return $moduleTemplate->renderResponse();
+        if (GnUtility::isVersion12Plus()) {
+            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+            $moduleTemplate->assignMultiple($viewData);
+            return $moduleTemplate->renderResponse();
+        } else {
+            $this->view->assignMultiple($viewData);
+            return $this->htmlResponse();
+        }
     }
 
     /**
@@ -553,17 +573,21 @@ class MashupController extends BaseController
     {
         $this->AssureLoggedIn();
 
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->preparePageRenderer();
 
-        $moduleTemplate->assign('addMaxChars', 100);
+        $viewData = [];
+        $viewData['addMaxChars'] = 100;
+        $viewData['unvalidatedMashups'] = $this->mashupRepository->findNotValidated();
+        $viewData['visibilities'] = $this->_visibilities;
 
-        $unvalidated = $this->mashupRepository->findNotValidated();
-        $moduleTemplate->assign('unvalidatedMashups', $unvalidated);
-
-        $moduleTemplate->assign('visibilities', $this->_visibilities);
-
-        return $moduleTemplate->renderResponse();
+        if (GnUtility::isVersion12Plus()) {
+            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+            $moduleTemplate->assignMultiple($viewData);
+            return $moduleTemplate->renderResponse();
+        } else {
+            $this->view->assignMultiple($viewData);
+            return $this->htmlResponse();
+        }
     }
 
     /**
@@ -603,9 +627,14 @@ class MashupController extends BaseController
         } else {
             GnAuthentication::Logout();
             $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', self::getEnumError());
-            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
             $this->preparePageRenderer();
-            return $moduleTemplate->renderResponse();
+
+            if (GnUtility::isVersion12Plus()) {
+                $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+                return $moduleTemplate->renderResponse();
+            } else {
+                return $this->htmlResponse();
+            }
         }
     }
 
@@ -640,9 +669,14 @@ class MashupController extends BaseController
         } else {
             GnAuthentication::Logout();
             $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', self::getEnumError(), TRUE);
-            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
             $this->preparePageRenderer();
-            return $moduleTemplate->renderResponse();
+
+            if (GnUtility::isVersion12Plus()) {
+                $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+                return $moduleTemplate->renderResponse();
+            } else {
+                return $this->htmlResponse();
+            }
         }
     }
 
@@ -657,14 +691,14 @@ class MashupController extends BaseController
     {
         $this->AssureLoggedIn();
 
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->preparePageRenderer();
 
-        $moduleTemplate->assign('addSubCommunityMaxChars', 20);
-        $moduleTemplate->assign('addHostMaxChars', 100);
-        $moduleTemplate->assign('mashupTokenCallbackUrlMaxChars', 1000);
-        $moduleTemplate->assign('mashup', $mashup);
-        $moduleTemplate->assign('visibilities', $this->_visibilities);
+        $viewData = [];
+        $viewData['addSubCommunityMaxChars'] =  20;
+        $viewData['addHostMaxChars'] =  100;
+        $viewData['mashupTokenCallbackUrlMaxChars'] =  1000;
+        $viewData['mashup'] =  $mashup;
+        $viewData['visibilities'] =  $this->_visibilities;
 
         $settings = GnUtility::getGnSetting();
         if ($settings['mashup.']['callbackPid'] > 0) {
@@ -677,10 +711,17 @@ class MashupController extends BaseController
                     'type' => $settings['mashup.']['callbackTypeNum']
                 ])
                 ->buildFrontendUri();
-                $moduleTemplate->assign('mashupCallbackUrl', $uri);
+            $viewData['mashupCallbackUrl'] =  $uri;
         }
 
-        return $moduleTemplate->renderResponse();
+        if (GnUtility::isVersion12Plus()) {
+            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+            $moduleTemplate->assignMultiple($viewData);
+            return $moduleTemplate->renderResponse();
+        } else {
+            $this->view->assignMultiple($viewData);
+            return $this->htmlResponse();
+        }
     }
 
     /**
@@ -1016,12 +1057,19 @@ class MashupController extends BaseController
     {
         $this->AssureLoggedIn();
 
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->preparePageRenderer();
 
-        $moduleTemplate->assign('mashup', $mashup);
+        $viewData = [];
+        $viewData['mashup'] = $mashup;
 
-        return $moduleTemplate->renderResponse();
+        if (GnUtility::isVersion12Plus()) {
+            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+            $moduleTemplate->assignMultiple($viewData);
+            return $moduleTemplate->renderResponse();
+        } else {
+            $this->view->assignMultiple($viewData);
+            return $this->htmlResponse();
+        }
     }
 
     /**
@@ -1035,10 +1083,11 @@ class MashupController extends BaseController
     {
         $this->AssureLoggedIn();
 
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->preparePageRenderer();
 
         $token->setCheckboxByOption();
+
+        $viewData = [];
 
         $gnLoginApi = $this->_gnApi->GetLoginApiForEndUser($mashup->getAppKey(), $this->_currentUser->LoginId, NULL);
         $gnLogin = $gnLoginApi->GetVerified();
@@ -1046,10 +1095,10 @@ class MashupController extends BaseController
             try {
                 $mashupTokensApi = $gnLoginApi->GetMashupTokensApi();
                 $qr_code_image = $mashupTokensApi->GenerateQrTokenForMashup($token->getPayload(), intval($token->getValidUntilTicks()), floatval($token->getValuePerUnit()), $token->getLabel(), $token->getOptions());
-                $moduleTemplate->assign('qr_code_image', base64_encode($qr_code_image));
+                $viewData['qr_code_image'] = base64_encode($qr_code_image);
 
                 $qr_code_text = $mashupTokensApi->GenerateQrTokenForMashupAsTextLink($token->getPayload(), intval($token->getValidUntilTicks()), floatval($token->getValuePerUnit()), $token->getLabel(), $token->getOptions());
-                $moduleTemplate->assign('qr_code_text', $qr_code_text);
+                $viewData['qr_code_text'] = $qr_code_text;
             } catch (\Exception $e) {
                 $this->addFlashMessage($e->getMessage(), 'Error', self::getEnumError(), TRUE);
                 GnLogger::LogException($e);
@@ -1059,10 +1108,17 @@ class MashupController extends BaseController
             $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', self::getEnumError(), TRUE);
         }
 
-        $moduleTemplate->assign('token', $token);
-        $moduleTemplate->assign('mashup', $mashup);
+        $viewData['token'] = $token;
+        $viewData['mashup'] = $mashup;
 
-        return $moduleTemplate->renderResponse();
+        if (GnUtility::isVersion12Plus()) {
+            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+            $moduleTemplate->assignMultiple($viewData);
+            return $moduleTemplate->renderResponse();
+        } else {
+            $this->view->assignMultiple($viewData);
+            return $this->htmlResponse();
+        }
     }
 
     /**
@@ -1168,13 +1224,21 @@ class MashupController extends BaseController
     {
         $this->AssureLoggedIn();
 
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->preparePageRenderer();
-        $this->setSettingsForToken($moduleTemplate);
 
-        $moduleTemplate->assign('mashup', $mashup);
+        $viewData = [];
+        $viewData['mashup'] = $mashup;
 
-        return $moduleTemplate->renderResponse();
+        if (GnUtility::isVersion12Plus()) {
+            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+            $moduleTemplate->assignMultiple($viewData);
+            $this->setSettingsForToken($moduleTemplate);
+            return $moduleTemplate->renderResponse();
+        } else {
+            $this->view->assignMultiple($viewData);
+            $this->setSettingsForToken($this->view);
+            return $this->htmlResponse();
+        }
     }
 
     /**
@@ -1225,7 +1289,6 @@ class MashupController extends BaseController
 
         $token->setCheckboxByOption();
 
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->preparePageRenderer();
 
         if (!GnUtil::IsNullOrEmpty($token->getValidUntilTicks()) && $token->getValidUntilTicks() != '0') {
@@ -1233,12 +1296,20 @@ class MashupController extends BaseController
             $token->setValidUntilDateString($validUntilDate->format("Y-m-d"));
         }
 
-        $this->setSettingsForToken($moduleTemplate);
+        $viewData = [];
+        $viewData['mashup'] = $mashup;
+        $viewData['token'] = $token;
 
-        $moduleTemplate->assign('mashup', $mashup);
-        $moduleTemplate->assign('token', $token);
-
-        return $moduleTemplate->renderResponse();
+        if (GnUtility::isVersion12Plus()) {
+            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+            $moduleTemplate->assignMultiple($viewData);
+            $this->setSettingsForToken($moduleTemplate);
+            return $moduleTemplate->renderResponse();
+        } else {
+            $this->view->assignMultiple($viewData);
+            $this->setSettingsForToken($this->view);
+            return $this->htmlResponse();
+        }
     }
 
     /**
@@ -1293,12 +1364,12 @@ class MashupController extends BaseController
 
     /**
      * Set the settings for Token to the view
-     * @param ModuleTemplate $view
+     * @param mixed $view
      */
-    private function setSettingsForToken(ModuleTemplate $moduleTemplate)
+    private function setSettingsForToken($view)
     {
-        $moduleTemplate->assign('TokenPayloadMaxChars', 50);
-        $moduleTemplate->assign('TokenLabelMaxChars', 100);
-        $moduleTemplate->assign('TokenCallbackResponseMaxChars', 100);
+        $view->assign('TokenPayloadMaxChars', 50);
+        $view->assign('TokenLabelMaxChars', 100);
+        $view->assign('TokenCallbackResponseMaxChars', 100);
     }
 }
