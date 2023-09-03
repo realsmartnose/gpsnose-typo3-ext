@@ -2,6 +2,7 @@
 namespace SmartNoses\Gpsnose\Controller;
 
 use GpsNose\SDK\Mashup\Model\CreatedEntities\GnTrackType;
+use Psr\Http\Message\ResponseInterface;
 use SmartNoses\Gpsnose\Service\GnNearbyService;
 use SmartNoses\Gpsnose\Utility\GnData;
 use SmartNoses\Gpsnose\Utility\GnUtility;
@@ -37,7 +38,7 @@ class NearbyController extends BaseController
      *
      * @return void
      */
-    public function nosesAction()
+    public function nosesAction(): ResponseInterface
     {
         $contentObj = $this->configurationManager->getContentObject();
         $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
@@ -59,6 +60,8 @@ class NearbyController extends BaseController
         $this->SetCommunity($communityTag);
 
         $this->initFrontend();
+
+        return $this->htmlResponse();
     }
 
     /**
@@ -66,7 +69,7 @@ class NearbyController extends BaseController
      *
      * @return void
      */
-    public function impressionsAction()
+    public function impressionsAction(): ResponseInterface
     {
         $contentObj = $this->configurationManager->getContentObject();
         $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
@@ -88,6 +91,8 @@ class NearbyController extends BaseController
         $this->SetCommunity($communityTag);
 
         $this->initFrontend();
+
+        return $this->htmlResponse();
     }
 
     /**
@@ -95,7 +100,7 @@ class NearbyController extends BaseController
      *
      * @return void
      */
-    public function poisAction()
+    public function poisAction(): ResponseInterface
     {
         $contentObj = $this->configurationManager->getContentObject();
         $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
@@ -117,6 +122,8 @@ class NearbyController extends BaseController
         $this->SetCommunity($communityTag);
 
         $this->initFrontend();
+
+        return $this->htmlResponse();
     }
 
     /**
@@ -124,7 +131,7 @@ class NearbyController extends BaseController
      *
      * @return void
      */
-    public function tracksAction()
+    public function tracksAction(): ResponseInterface
     {
         $contentObj = $this->configurationManager->getContentObject();
         $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
@@ -147,6 +154,8 @@ class NearbyController extends BaseController
         $this->SetCommunity($communityTag);
 
         $this->initFrontend();
+
+        return $this->htmlResponse();
     }
 
     /**
@@ -154,7 +163,7 @@ class NearbyController extends BaseController
      *
      * @return void
      */
-    public function eventsAction()
+    public function eventsAction(): ResponseInterface
     {
         $contentObj = $this->configurationManager->getContentObject();
         $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
@@ -176,5 +185,7 @@ class NearbyController extends BaseController
         $this->SetCommunity($communityTag);
 
         $this->initFrontend();
+
+        return $this->htmlResponse();
     }
 }

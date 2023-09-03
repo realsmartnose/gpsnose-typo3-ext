@@ -4,6 +4,7 @@ namespace SmartNoses\Gpsnose\Controller;
 use GpsNose\SDK\Mashup\Api\GnApi;
 use GpsNose\SDK\Web\Login\GnAuthentication;
 use GpsNose\SDK\Mashup\Framework\GnUtil;
+use Psr\Http\Message\ResponseInterface;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 use SmartNoses\Gpsnose\Domain\Repository\FrontendUserRepository;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
@@ -91,7 +92,7 @@ class LoginController extends BaseController
      *
      * @return void
      */
-    public function qrcodeAction()
+    public function qrcodeAction(): ResponseInterface
     {
         $contentObj = $this->configurationManager->getContentObject();
         $redirectPid = $contentObj->data['tx_gpsnose_mashup_login_redirect'];
@@ -148,5 +149,7 @@ class LoginController extends BaseController
                 $this->view->assign('return_url', $uri);
             }
         }
+
+        return $this->htmlResponse();
     }
 }

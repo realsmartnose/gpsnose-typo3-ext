@@ -1,6 +1,7 @@
 <?php
 namespace SmartNoses\Gpsnose\Controller;
 
+use Psr\Http\Message\ResponseInterface;
 use SmartNoses\Gpsnose\Utility\GnData;
 use SmartNoses\Gpsnose\Service\GnNewsService;
 use SmartNoses\Gpsnose\Utility\GnUtility;
@@ -36,7 +37,7 @@ class NewsController extends BaseController
      *
      * @return void
      */
-    public function indexAction()
+    public function indexAction(): ResponseInterface
     {
         $contentObj = $this->configurationManager->getContentObject();
         $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
@@ -56,5 +57,7 @@ class NewsController extends BaseController
         $this->SetCommunity($communityTag);
 
         $this->initFrontend();
+
+        return $this->htmlResponse();
     }
 }

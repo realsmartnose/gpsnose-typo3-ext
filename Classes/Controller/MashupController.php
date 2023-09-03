@@ -26,7 +26,6 @@ use GpsNose\SDK\Mashup\Api\Modules\GnLoginApiAdmin;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 use GpsNose\SDK\Framework\Logging\GnLogger;
-use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -387,6 +386,7 @@ class MashupController extends BaseController
                 $moduleTemplate->assignMultiple($viewData);
                 return $moduleTemplate->renderResponse();
             } else {
+                $viewData['layoutSufix'] = "Old";
                 $this->view->assignMultiple($viewData);
                 return $this->htmlResponse();
             }
@@ -526,6 +526,7 @@ class MashupController extends BaseController
             $moduleTemplate->assignMultiple($viewData);
             return $moduleTemplate->renderResponse();
         } else {
+            $viewData['layoutSufix'] = "Old";
             $this->view->assignMultiple($viewData);
             return $this->htmlResponse();
         }
@@ -559,6 +560,7 @@ class MashupController extends BaseController
             $moduleTemplate->assignMultiple($viewData);
             return $moduleTemplate->renderResponse();
         } else {
+            $viewData['layoutSufix'] = "Old";
             $this->view->assignMultiple($viewData);
             return $this->htmlResponse();
         }
@@ -585,6 +587,7 @@ class MashupController extends BaseController
             $moduleTemplate->assignMultiple($viewData);
             return $moduleTemplate->renderResponse();
         } else {
+            $viewData['layoutSufix'] = "Old";
             $this->view->assignMultiple($viewData);
             return $this->htmlResponse();
         }
@@ -633,6 +636,7 @@ class MashupController extends BaseController
                 $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
                 return $moduleTemplate->renderResponse();
             } else {
+                $this->view->assign('layoutSufix', "Old");
                 return $this->htmlResponse();
             }
         }
@@ -675,6 +679,7 @@ class MashupController extends BaseController
                 $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
                 return $moduleTemplate->renderResponse();
             } else {
+                $this->view->assign('layoutSufix', "Old");
                 return $this->htmlResponse();
             }
         }
@@ -719,6 +724,7 @@ class MashupController extends BaseController
             $moduleTemplate->assignMultiple($viewData);
             return $moduleTemplate->renderResponse();
         } else {
+            $viewData['layoutSufix'] = "Old";
             $this->view->assignMultiple($viewData);
             return $this->htmlResponse();
         }
@@ -1067,6 +1073,7 @@ class MashupController extends BaseController
             $moduleTemplate->assignMultiple($viewData);
             return $moduleTemplate->renderResponse();
         } else {
+            $viewData['layoutSufix'] = "Old";
             $this->view->assignMultiple($viewData);
             return $this->htmlResponse();
         }
@@ -1116,6 +1123,7 @@ class MashupController extends BaseController
             $moduleTemplate->assignMultiple($viewData);
             return $moduleTemplate->renderResponse();
         } else {
+            $viewData['layoutSufix'] = "Old";
             $this->view->assignMultiple($viewData);
             return $this->htmlResponse();
         }
@@ -1235,6 +1243,7 @@ class MashupController extends BaseController
             $this->setSettingsForToken($moduleTemplate);
             return $moduleTemplate->renderResponse();
         } else {
+            $viewData['layoutSufix'] = "Old";
             $this->view->assignMultiple($viewData);
             $this->setSettingsForToken($this->view);
             return $this->htmlResponse();
@@ -1306,6 +1315,7 @@ class MashupController extends BaseController
             $this->setSettingsForToken($moduleTemplate);
             return $moduleTemplate->renderResponse();
         } else {
+            $viewData['layoutSufix'] = "Old";
             $this->view->assignMultiple($viewData);
             $this->setSettingsForToken($this->view);
             return $this->htmlResponse();

@@ -1,6 +1,7 @@
 <?php
 namespace SmartNoses\Gpsnose\Controller;
 
+use Psr\Http\Message\ResponseInterface;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 
@@ -43,7 +44,7 @@ class QrscanController extends BaseController
      *
      * @return void
      */
-    public function indexAction()
+    public function indexAction(): ResponseInterface
     {
         $contentObj = $this->configurationManager->getContentObject();
         $this->view->assign('record', $contentObj->data['uid']);
@@ -64,5 +65,7 @@ class QrscanController extends BaseController
         }
 
         $this->initFrontend();
+
+        return $this->htmlResponse();
     }
 }

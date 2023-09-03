@@ -3,6 +3,7 @@ namespace SmartNoses\Gpsnose\Controller;
 
 use SmartNoses\Gpsnose\Service\GnCommentService;
 use GpsNose\SDK\Mashup\Model\GnCommentItemType;
+use Psr\Http\Message\ResponseInterface;
 use SmartNoses\Gpsnose\Utility\GnUtility;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 
@@ -45,7 +46,7 @@ class CommentController extends BaseController
      *
      * @return void
      */
-    public function communityAction()
+    public function communityAction(): ResponseInterface
     {
         $contentObj = $this->configurationManager->getContentObject();
         $communityTag = $contentObj->data['tx_gpsnose_community_tag'];
@@ -62,5 +63,7 @@ class CommentController extends BaseController
         $this->SetCommunity($communityTag);
 
         $this->initFrontend();
+
+        return $this->htmlResponse();
     }
 }
