@@ -74,17 +74,3 @@ persistence.storagePid                  int         Sysfolder where all created 
 
 [tsref:plugin.tx_gpsnose]
 
-
-
-======================================  ==========  =============================================================  ================================================
-Property:                               Data type:  Description:                                                   Default:
-======================================  ==========  =============================================================  ================================================
-templateRootPath                        string      Defines the path where the templates are located.              EXT:gpsnose/Resources/Private/Backend/Templates/
---------------------------------------  ----------  -------------------------------------------------------------  ------------------------------------------------
-partialRootPath                         string      Defines the path where the partials are located                EXT:gpsnose/Resources/Private/Backend/Partials/
---------------------------------------  ----------  -------------------------------------------------------------  ------------------------------------------------
-layoutRootPath                          string      Defines the path where the layouts are located                 EXT:gpsnose/Resources/Private/Backend/Partials/
-======================================  ==========  =============================================================  ================================================
-
-[tsref:module.tx_gpsnose_gnadmin]
-

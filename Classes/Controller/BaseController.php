@@ -281,4 +281,48 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $this->redirectToUri($url);
     }
+
+    /**
+     * Returns the Warning-Enum for FlashMessages
+     */
+    protected static function getEnumInfo()
+    {
+        if (GnUtility::isVersion12Plus()) {
+            return \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO;
+        }
+        return \TYPO3\CMS\Core\Messaging\FlashMessage::INFO;
+    }
+
+    /**
+     * Returns the Warning-Enum for FlashMessages
+     */
+    protected static function getEnumOk()
+    {
+        if (GnUtility::isVersion12Plus()) {
+            return \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK;
+        }
+        return \TYPO3\CMS\Core\Messaging\FlashMessage::OK;
+    }
+
+    /**
+     * Returns the Warning-Enum for FlashMessages
+     */
+    protected static function getEnumWarning()
+    {
+        if (GnUtility::isVersion12Plus()) {
+            return \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING;
+        }
+        return \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING;
+    }
+
+    /**
+     * Returns the Warning-Enum for FlashMessages
+     */
+    protected static function getEnumError()
+    {
+        if (GnUtility::isVersion12Plus()) {
+            return \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR;
+        }
+        return \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR;
+    }
 }

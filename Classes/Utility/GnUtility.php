@@ -356,4 +356,15 @@ class GnUtility
         $typo3versionAsInt = VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getCurrentTypo3Version());
         return $typo3versionAsInt > 12000000 && $typo3versionAsInt < 13000000;
     }
+
+    /**
+     * Check for TYPO3 Version 12+
+     *
+     * @return bool True if TYPO3 is version 12+
+     */
+    public static function isVersion12Plus(): bool
+    {
+        $typo3versionAsInt = VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getCurrentTypo3Version());
+        return $typo3versionAsInt >= 12000000;
+    }
 }

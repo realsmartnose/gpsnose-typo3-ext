@@ -95,17 +95,3 @@ plugin.tx_gpsnose {
     storagePid =
   }
 }
-
-
-module.tx_gpsnose_gnadmin {
-  view {
-    # cat=module.tx_gpsnose_gnadmin/file/010; type=string; label=Path to template root (BE)
-    templateRootPath = EXT:gpsnose/Resources/Private/Backend/Templates/
-
-    # cat=module.tx_gpsnose_gnadmin/file/020; type=string; label=Path to template partials (BE)
-    partialRootPath = EXT:gpsnose/Resources/Private/Backend/Partials/
-
-    # cat=module.tx_gpsnose_gnadmin/file/030; type=string; label=Path to template layouts (BE)
-    layoutRootPath = EXT:gpsnose/Resources/Private/Backend/Layouts/
-  }
-}

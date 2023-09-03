@@ -88,30 +88,10 @@ plugin.tx_gpsnose {
 }
 
 
-# Extend fe_users
-config.tx_extbase {
-  persistence.classes {
-    SmartNoses\Gpsnose\Domain\Model\FrontendUser {
-      mapping {
-        tableName = fe_users
-      }
-    }
-  }
-}
-
-
 # Module configuration
 module.tx_gpsnose_tools_gpsnosegnadmin {
   persistence {
     storagePid = {$plugin.tx_gpsnose.persistence.storagePid}
-  }
-  view {
-    templateRootPaths.0 = EXT:gpsnose/Resources/Private/Backend/Templates/
-    templateRootPaths.1 = {$module.tx_gpsnose_gnadmin.view.templateRootPath}
-    partialRootPaths.0 = EXT:gpsnose/Resources/Private/Backend/Partials/
-    partialRootPaths.1 = {$module.tx_gpsnose_gnadmin.view.partialRootPath}
-    layoutRootPaths.0 = EXT:gpsnose/Resources/Private/Backend/Layouts/
-    layoutRootPaths.1 = {$module.tx_gpsnose_gnadmin.view.layoutRootPath}
   }
 }
 
