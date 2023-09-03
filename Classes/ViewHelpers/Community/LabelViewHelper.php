@@ -35,20 +35,22 @@ class LabelViewHelper extends AbstractViewHelper
         $iconType = $this->arguments['icon-type'];
 
         $iconName = '';
+        $overlay = null;
         $bootstrapIconClass = '';
         switch (substr($tag, 0, 1)) {
             case GnSettings::PUBLIC_COMMUNITY_PREFIX:
-                $iconName = 'globe-svg';
+                $iconName = 'actions-globe-alt';
                 $bootstrapIconClass = 'glyphicon glyphicon-globe';
                 break;
 
             case GnSettings::CLOSED_COMMUNITY_PREFIX:
-                $iconName = 'lock-svg';
+                $iconName = 'actions-lock';
                 $bootstrapIconClass = 'glyphicon glyphicon-lock';
                 break;
 
             case GnSettings::PRIVATE_COMMUNITY_PREFIX:
-                $iconName = 'eye-slash-svg';
+                $iconName = 'actions-eye';
+                $overlay = "overlay-hidden";
                 $bootstrapIconClass = 'glyphicon glyphicon-eye-close';
                 break;
         }
@@ -68,7 +70,7 @@ class LabelViewHelper extends AbstractViewHelper
             $iconHtml = '<span class="' . $bootstrapIconClass . '"></span>';
         } else if ($iconType === 'fa') {
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
-            $icon = $iconFactory->getIcon($iconName, $size);
+            $icon = $iconFactory->getIcon($iconName, $size, $overlay);
             $iconHtml = $icon->render();
         }
 

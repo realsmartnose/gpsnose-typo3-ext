@@ -15,10 +15,10 @@
 
 <f:section name="buttons">
     <f:link.action action="list" class="btn btn-default">
-        <core:icon identifier="chevron-left-svg" /><span class="ms-1"><f:translate key="Common_btnBackToList" /></span>
+        <core:icon identifier="actions-chevron-left" /><span class="ms-1"><f:translate key="Common_btnBackToList" /></span>
     </f:link.action>
     <f:link.action action="new" class="btn btn-default">
-        <core:icon identifier="sync-svg" />
+        <core:icon identifier="actions-refresh" />
     </f:link.action>
 </f:section>
 
@@ -38,7 +38,7 @@
                         <div class="panel-heading"><f:translate key="MashupAdmin_lblUnvalidatedMashup" /></div>
                         <div class="list-group list-group-flush">
                             <f:for each="{unvalidatedMashups}" as="unvalidatedMashup">
-                                <f:link.action action="delete" arguments="{mashup : unvalidatedMashup, redirect : 'new'}" class="list-group-item"><core:icon identifier="trash-svg" /><span class="ms-1"><nose:community.label tag="{unvalidatedMashup.communityTag}" /></span></f:link.action>
+                                <f:link.action action="delete" arguments="{mashup : unvalidatedMashup, redirect : 'new'}" class="list-group-item"><core:icon identifier="actions-delete" /><span class="ms-1"><nose:community.label tag="{unvalidatedMashup.communityTag}" /></span></f:link.action>
                             </f:for>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                                 <input type="text" id="communityTagField" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblRegisterCommunityPlaceholder')}" />
                                 <span class="input-group-btn">
                                     <button class="btn btn-primary" type="submit" disabled="disabled" id="addButton">
-                                        <core:icon identifier="plus-svg" />
+                                        <core:icon identifier="actions-file-add" />
                                         <span class="hidden-xs ms-1"><f:translate key="Common_btnAdd" /></span>
                                     </button>
                                 </span>

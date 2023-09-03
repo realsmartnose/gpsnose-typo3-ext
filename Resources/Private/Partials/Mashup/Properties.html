@@ -43,7 +43,7 @@
                     <f:if condition="{mashup.appKey} != '' && {edit} == '1'">
                     <br />
                         <f:link.action action="regenerateAppKey" arguments="{mashup : mashup}" class="btn btn-xs btn-danger">
-                            <core:icon identifier="refresh-svg" />
+                            <core:icon identifier="actions-refresh" />
                             <span class="ms-1"><f:translate key="MashupAdmin_btnRegenerateAppKey" /></span>
                         </f:link.action>
                     </f:if>
@@ -64,13 +64,13 @@
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button" id="generateCallbackUrl" data-callback-url="{mashupCallbackUrl}">
                                                 <span class="hidden-xs me-1"><f:translate key="MashupAdmin_btnMashupCallbackUrlGenerate" /></span>
-                                                <core:icon identifier="chevron-right-svg" />
+                                                <core:icon identifier="actions-chevron-right" />
                                             </button>
                                         </span>
                                         <f:form.textfield id="mashupTokenCallbackUrl" property="mashupTokenCallbackUrl" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenCallbackUrlPlaceholder')}" />
                                         <span class="input-group-btn">
                                             <button class="btn btn-primary" type="submit" id="changeCallbackUrlButton">
-                                                <core:icon identifier="check-svg" />
+                                                <core:icon identifier="actions-check" />
                                                 <span class="hidden-xs ms-1"><f:translate key="Common_btnUpdate" /></span>
                                             </button>
                                         </span>

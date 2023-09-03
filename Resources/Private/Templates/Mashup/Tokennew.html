@@ -15,10 +15,10 @@
 
 <f:section name="buttons">
     <f:link.action action="tokenlist" arguments="{mashup : mashup}" class="btn btn-default">
-        <core:icon identifier="chevron-left-svg" /><span class="ms-1"><f:translate key="Common_btnBackToList" /></span>
+        <core:icon identifier="actions-chevron-left" /><span class="ms-1"><f:translate key="Common_btnBackToList" /></span>
     </f:link.action>
     <f:link.action action="tokennew" arguments="{token : token, mashup : mashup}" class="btn btn-default">
-        <core:icon identifier="sync-svg" />
+        <core:icon identifier="actions-refresh" />
     </f:link.action>
 </f:section>
 
@@ -74,7 +74,7 @@
                                 <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-week-start="true" data-date-today-highlight="true" data-date-toggle-active="true" data-date-start-date="0d" data-date-clear-btn="true" data-date-orientation="bottom" data-date-language="en">
                                     <f:form.textfield property="validUntilDateString" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblMashupTokenValidUntilDatePlaceholder')}" />
                                     <div class="input-group-addon">
-                                        <core:icon identifier="calendar-svg" />
+                                        <core:icon identifier="actions-calendar" />
                                     </div>
                                 </div>
                                 <span class="help-block"><f:translate key="MashupAdmin_lblMashupTokenValidUntilDateHint" /></span>
@@ -123,7 +123,7 @@
                         <div class="form-group row">
                             <div class="col-lg-3 col-lg-offset-3">
                                 <button class="btn btn-primary" type="submit" id="addButton">
-                                    <core:icon identifier="plus-svg" />
+                                    <core:icon identifier="actions-file-add" />
                                     <span class="ms-1"><f:translate key="MashupAdmin_btnCreateMashupToken" /></span>
                                 </button>
                             </div>

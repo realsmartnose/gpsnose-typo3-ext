@@ -15,10 +15,10 @@
 
 <f:section name="buttons">
     <f:link.action action="list" class="btn btn-default">
-        <core:icon identifier="chevron-left-svg" /><span class="ms-1"><f:translate key="Common_btnBackToList" /></span>
+        <core:icon identifier="actions-chevron-left" /><span class="ms-1"><f:translate key="Common_btnBackToList" /></span>
     </f:link.action>
     <f:link.action action="edit" arguments="{mashup : mashup}" class="btn btn-default">
-        <core:icon identifier="sync-svg" />
+        <core:icon identifier="actions-refresh" />
     </f:link.action>
 </f:section>
 
@@ -46,7 +46,7 @@
                 <f:if condition="{mashup.subCommunities -> f:count()} >= {mashup.maxSubSites}">
                     <f:then>
                         <div class="alert alert-info">
-                            <core:icon identifier="info-circle-svg" />
+                            <core:icon identifier="actions-info-circle" />
                             <span class="ms-1"><f:translate key="Common_lblMaxCountReached" /></span>
                         </div>
                     </f:then>
@@ -77,7 +77,7 @@
                                         <f:form.textfield property="tempSubCommunity" id="subCommunityField" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblAddSubCommunityPlaceholder')}" />
                                         <span class="input-group-btn">
                                             <button type="submit" id="addSubCommunityButton" class="btn btn-primary" disabled="disabled">
-                                                <core:icon identifier="plus-svg" />
+                                                <core:icon identifier="actions-file-add" />
                                                 <span class="hidden-xs ms-1">
                                                     <f:translate key="Common_btnAdd" />
                                                 </span>
@@ -94,7 +94,7 @@
                     <f:for each="{mashup.subCommunities}" as="subCommunity">
                         <li class="list-group-item">
                             <f:link.action action="removeSubCommunity" arguments="{mashup : mashup, subCommunity : subCommunity}" class="btn btn-danger btn-xs">
-                                <core:icon identifier="trash-svg" />
+                                <core:icon identifier="actions-delete" />
                                 <span class="ms-1"><f:translate key="Common_btnRemove" /></span>
                             </f:link.action>
                             <span><nose:community.label tag="{subCommunity.name}" /></span>
@@ -114,7 +114,7 @@
                 <f:if condition="{mashup.hosts -> f:count()} >= {mashup.maxHosts}">
                     <f:then>
                         <div class="alert alert-info">
-                            <core:icon identifier="info-circle-svg" />
+                            <core:icon identifier="actions-info-circle" />
                             <span class="ms-1"><f:translate key="Common_lblMaxCountReached" /></span>
                         </div>
                     </f:then>
@@ -129,7 +129,7 @@
                                         <f:form.textfield property="tempHost" id="hostField" class="form-control" placeholder="{f:translate(key: 'MashupAdmin_lblAddHostPlaceholder')}" />
                                         <span class="input-group-btn">
                                             <button type="submit" id="addHostButton" class="btn btn-primary" disabled="disabled">
-                                                <core:icon identifier="plus-svg" />
+                                                <core:icon identifier="actions-file-add" />
                                                 <span class="hidden-xs ms-1">
                                                     <f:translate key="Common_btnAdd" />
                                                 </span>
@@ -146,7 +146,7 @@
                     <f:for each="{mashup.hosts}" as="host">
                         <li class="list-group-item">
                             <f:link.action action="removeHost" arguments="{mashup : mashup, host : host}" class="btn btn-danger btn-xs">
-                                <core:icon identifier="trash-svg" />
+                                <core:icon identifier="actions-delete" />
                                 <span class="ms-1"><f:translate key="Common_btnRemove" /></span>
                             </f:link.action>
                             <span>{host.domain}</span>

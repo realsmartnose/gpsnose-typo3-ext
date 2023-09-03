@@ -2,8 +2,7 @@
 return [
     'tools_GpsnoseGnadmin' => [
         'parent' => 'tools',
-        'position' => ['bottom'],
-        'access' => 'user,group',
+        'access' => 'admin',
         'iconIdentifier' => 'gpsnose-gnadmin-module',
         'path' => '/module/web/GpsnoseGnadmin',
         'labels' => 'LLL:EXT:gpsnose/Resources/Private/Language/locallang_gnadmin.xlf',

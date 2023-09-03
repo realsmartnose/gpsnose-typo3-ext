@@ -459,13 +459,18 @@ class MashupController extends BaseController
     public function logoutAction(): ResponseInterface
     {
         GnAuthentication::Logout();
-
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->preparePageRenderer();
-
         $this->addFlashMessage('Successfully logged out', 'Success', self::getEnumOk());
 
-        return $moduleTemplate->renderResponse();
+        if (GnUtility::isVersion12Plus()) {
+            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+            return $moduleTemplate->renderResponse();
+        } else {
+            $viewData = [];
+            $viewData['layoutSufix'] = "Old";
+            $this->view->assignMultiple($viewData);
+            return $this->htmlResponse();
+        }
     }
 
     /**
@@ -497,12 +502,18 @@ class MashupController extends BaseController
             return $this->redirect('list');
         } else {
             GnAuthentication::Logout();
-            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', self::getEnumError());
             $this->preparePageRenderer();
 
-            $this->addFlashMessage('You are not loggedin at GpsNose...', 'Error', self::getEnumError());
-
-            return $moduleTemplate->renderResponse();
+            if (GnUtility::isVersion12Plus()) {
+                $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+                return $moduleTemplate->renderResponse();
+            } else {
+                $viewData = [];
+                $viewData['layoutSufix'] = "Old";
+                $this->view->assignMultiple($viewData);
+                return $this->htmlResponse();
+            }
         }
     }
 
@@ -514,7 +525,6 @@ class MashupController extends BaseController
     public function listAction(): ResponseInterface
     {
         $this->AssureLoggedIn();
-
         $this->preparePageRenderer();
 
         $mashups = $this->mashupRepository->findAll();
@@ -549,7 +559,6 @@ class MashupController extends BaseController
     public function showAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
-
         $this->preparePageRenderer();
 
         $viewData = [];
@@ -574,7 +583,6 @@ class MashupController extends BaseController
     public function newAction(): ResponseInterface
     {
         $this->AssureLoggedIn();
-
         $this->preparePageRenderer();
 
         $viewData = [];
@@ -695,7 +703,6 @@ class MashupController extends BaseController
     public function editAction(Mashup $mashup): ResponseInterface
     {
         $this->AssureLoggedIn();
-
         $this->preparePageRenderer();
 
         $viewData = [];
