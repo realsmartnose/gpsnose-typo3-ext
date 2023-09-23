@@ -81,6 +81,18 @@ class FrontendUser extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $gpsnoseEmail = NULL;
 
+    public function __construct()
+    {
+        $this->usergroup = new ObjectStorage();
+    }
+
+    /**
+     * Called again with initialize object, as fetching an entity from the DB does not use the constructor
+     */
+    public function initializeObject(): void
+    {
+        $this->usergroup = $this->usergroup ?? new ObjectStorage();
+    }
 
     /**
      * Get the value of username

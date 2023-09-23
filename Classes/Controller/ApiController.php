@@ -35,15 +35,6 @@ use SmartNoses\Gpsnose\Domain\Repository\TokenRepository;
  */
 class ApiController extends BaseController
 {
-    /**
-     * @var \TYPO3\CMS\Extbase\Mvc\View\JsonView
-     */
-    protected $view;
-
-    /**
-     * @var string
-     */
-    protected $defaultViewObjectName = \TYPO3\CMS\Extbase\Mvc\View\JsonView::class;
 
     /**
      * mashupRepository
@@ -95,13 +86,13 @@ class ApiController extends BaseController
 
         $communityTag = $_POST['profileTag'];
 
+        $members = [];
         if (!GnUtil::IsNullOrEmpty($communityTag)) {
             $memberService = new GnMemberService(GnUtility::getLanguage());
-            $this->view->assign('members', $memberService->GetMembersPage($communityTag, $lastKnownTicks, $pageSize));
-            $this->view->setVariablesToRender(array(
-                'members'
-            ));
+            $members = $memberService->GetMembersPage($communityTag, $lastKnownTicks, $pageSize);
         }
+
+        return $this->jsonResponse(json_encode($members));
     }
 
     /**
@@ -123,13 +114,13 @@ class ApiController extends BaseController
 
         $communityTag = $_POST['community'];
 
+        $news = [];
         if (!GnUtil::IsNullOrEmpty($communityTag)) {
             $newsService = new GnNewsService(GnUtility::getLanguage());
-            $this->view->assign('news', $newsService->GetNewsPage($communityTag, $lastKnownTicks, $pageSize));
-            $this->view->setVariablesToRender(array(
-                'news'
-            ));
+            $news = $newsService->GetNewsPage($communityTag, $lastKnownTicks, $pageSize);
         }
+
+        return $this->jsonResponse(json_encode($news));
     }
 
     /**
@@ -153,13 +144,13 @@ class ApiController extends BaseController
 
         $itemType = $_POST['itemType'];
 
+        $comments = [];
         if (!GnUtil::IsNullOrEmpty($communityTag)) {
             $commentService = new GnCommentService(GnUtility::getLanguage());
-            $this->view->assign('comments', $commentService->GetCommentsPage($itemType, $communityTag, $lastKnownTicks, $pageSize));
-            $this->view->setVariablesToRender(array(
-                'comments'
-            ));
+            $comments = $commentService->GetCommentsPage($itemType, $communityTag, $lastKnownTicks, $pageSize);
         }
+
+        return $this->jsonResponse(json_encode($comments));
     }
 
     /**
@@ -176,13 +167,13 @@ class ApiController extends BaseController
         $creationTicks = $_POST['creationTicks'];
         $isUpdate = filter_var($_POST['isUpdate'], FILTER_VALIDATE_BOOLEAN);
 
+        $result = null;
         if (!GnUtil::IsNullOrEmpty($uniqueKey)) {
             $commentService = new GnCommentService(GnUtility::getLanguage());
-            $this->view->assign('result', $commentService->SaveComment($creationTicks, $text, $itemType, $uniqueKey, $isUpdate));
-            $this->view->setVariablesToRender(array(
-                'result'
-            ));
+            $result = $commentService->SaveComment($creationTicks, $text, $itemType, $uniqueKey, $isUpdate);
         }
+
+        return $this->jsonResponse(json_encode($result));
     }
 
     /**
@@ -200,12 +191,10 @@ class ApiController extends BaseController
 
             $verified = GnUtility::login($mashup, $loginId);
         }
-        $this->view->assign('verified', (object)[
+
+        return $this->jsonResponse(json_encode([
             'IsOk' => $verified
-        ]);
-        $this->view->setVariablesToRender(array(
-            'verified'
-        ));
+        ]));
     }
 
     /**
@@ -227,12 +216,9 @@ class ApiController extends BaseController
             $validated = $gnLoginApi->IsSecurityTokenValid($token) === TRUE ? TRUE : FALSE;
         }
 
-        $this->view->assign('validated', (object)[
+        return $this->jsonResponse(json_encode([
             'IsOk' => $validated
-        ]);
-        $this->view->setVariablesToRender(array(
-            'validated'
-        ));
+        ]));
     }
 
     /**

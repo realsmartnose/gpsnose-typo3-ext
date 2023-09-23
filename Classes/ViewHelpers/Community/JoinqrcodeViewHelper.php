@@ -49,7 +49,6 @@ class JoinqrcodeViewHelper extends AbstractViewHelper
             }
         } catch (\Exception $e) {
             GnLogger::Error($e->getMessage());
-            return NULL;
         }
         return NULL;
     }

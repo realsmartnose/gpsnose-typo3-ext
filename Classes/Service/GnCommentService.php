@@ -64,7 +64,6 @@ class GnCommentService extends GnBaseService
             }
         } catch (\Exception $e) {
             GnLogger::Error($e->getMessage());
-            return new GnError(1, $e->getMessage());
         }
         return NULL;
     }

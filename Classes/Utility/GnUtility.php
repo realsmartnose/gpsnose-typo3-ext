@@ -18,8 +18,11 @@ use GpsNose\SDK\Framework\Logging\GnLogConfig;
 use SmartNoses\Gpsnose\Domain\Repository\MashupRepository;
 use GpsNose\SDK\Framework\GnCryptor;
 use GpsNose\SDK\Framework\Logging\GnLogger;
+use Psr\Http\Message\ResponseInterface;
+use SmartNoses\Gpsnose\Authentication\GpsNoseBasedAuthenticationService;
+use TYPO3\CMS\Core\Authentication\LoginType;
+use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
 use TYPO3\CMS\Core\Http\ApplicationType;
-use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 class GnUtility
@@ -82,7 +85,7 @@ class GnUtility
     {
         $GLOBALS['TYPO3_CONF_VARS']['FE']['checkFeUserPid'] = false;
 
-        $verified = FALSE;
+        $verified = false;
         if ($mashup && !GnUtil::IsNullOrEmpty($loginId)) {
             $api = new GnApi();
             $gnLogin = $api->GetLoginApiForEndUser($mashup->getAppKey(), $loginId, NULL)->GetVerified();
@@ -121,9 +124,11 @@ class GnUtility
                 if (! GnUtil::IsNullOrEmpty($gnLogin->Email) && $gnSettings['login.']['syncEmail']) {
                     $frontendUser->setEmail($gnLogin->Email ?: '');
                 }
-                if (GnUtil::IsNullOrEmpty($frontendUser->getPassword())) {
-                    $frontendUser->setPassword(GnUtil::NewGuid());
-                }
+
+                $password = GnUtil::NewGuid();
+                $hashInstance = GeneralUtility::makeInstance(PasswordHashFactory::class)->getDefaultHashInstance('FE');
+                $hashedPassword = $hashInstance->getHashedPassword($password);
+                $frontendUser->setPassword($hashedPassword);
 
                 /** @var \SmartNoses\Gpsnose\Domain\Repository\FrontendUserGroupRepository $userGroupRepository */
                 $userGroupRepository = GeneralUtility::makeInstance(FrontendUserGroupRepository::class);
@@ -154,7 +159,7 @@ class GnUtility
                 }
                 GeneralUtility::makeInstance(PersistenceManager::class)->persistAll();
 
-                $verified = self::loginUser($frontendUser->getUsername(), $frontendUser->getPassword());
+                $verified = self::loginUser($frontendUser->getUsername(), $password);
 
                 $gnAuthData = new GnAuthenticationData();
                 $gnAuthData->LoginId = $loginId;
@@ -187,12 +192,13 @@ class GnUtility
      */
     private static function loginUser($username, $password)
     {
-        $_POST['logintype'] = 'login';
+        $_POST['logintype'] = LoginType::LOGIN;
         $_POST['user'] = $username;
         $_POST['pass'] = $password;
-        /** @var FrontendUserAuthentication */
-        $authService = GeneralUtility::makeInstance(FrontendUserAuthentication::class);
-        $authService->start(($GLOBALS['TYPO3_REQUEST'] ?? null));
+        /** @var GpsNoseBasedAuthenticationService */
+        $authService = GeneralUtility::makeInstance(GpsNoseBasedAuthenticationService::class);
+        $request = $GLOBALS['TYPO3_REQUEST'] ?: null;
+        $authService->start($request);
 
         $hasUser = false;
         if (isset($authService->user)) {

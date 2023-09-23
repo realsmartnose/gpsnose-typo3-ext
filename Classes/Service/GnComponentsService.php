@@ -26,7 +26,6 @@ class GnComponentsService extends GnBaseService
             return $gnLoginApi->GetComponentsApi()->GetQrCode($tag);
         } catch (\Exception $e) {
             GnLogger::Error($e->getMessage());
-            return new GnError(1, $e->getMessage());
         }
         return NULL;
     }

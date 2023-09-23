@@ -6,6 +6,10 @@
 Change log
 ==========
 
+Version 3.0.1
+-------------
+- FIX: Ajax response
+
 Version 3.0.0
 -------------
 - UPD: Add TYPO3 V12 support

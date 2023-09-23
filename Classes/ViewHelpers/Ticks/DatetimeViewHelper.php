@@ -39,7 +39,6 @@ class DatetimeViewHelper extends AbstractViewHelper
             return date($format, $date->getTimestamp());
         } catch (\Exception $e) {
             GnLogger::Error($e->getMessage());
-            return NULL;
         }
         return NULL;
     }

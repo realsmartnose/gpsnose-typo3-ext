@@ -1,9 +1,7 @@
 <?php
 defined('TYPO3') || die('Access denied.');
 
-use Psr\Http\Message\ServerRequestInterface;
 use SmartNoses\Gpsnose\Utility\GnUtility;
-use TYPO3\CMS\Core\Http\ApplicationType;
 
 call_user_func(
     function ($extKey) {
@@ -234,15 +232,16 @@ call_user_func(
             \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)->registerImplementation(\TYPO3\CMS\Extbase\Domain\Model\FrontendUser::class, \SmartNoses\Gpsnose\Domain\Model\FrontendUser::class);
         }
 
+        $GLOBALS['TYPO3_CONF_VARS']['SVCONF']['auth']['setup']['FE_alwaysFetchUser'] = true;
         // Add GpsNoseBasedAuthenticationService
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
-            'gnLogin',
+            $extKey,
             'auth',
             \SmartNoses\Gpsnose\Authentication\GpsNoseBasedAuthenticationService::class,
             [
                 'title' => 'Authentication Service for fe_users',
                 'description' => 'Authentication Service for fe_users',
-                'subtype' => 'authUserFE',
+                'subtype' => 'getUserFE,authUserFE',
                 'available' => true,
                 'priority' => 90,
                 'quality' => 90,

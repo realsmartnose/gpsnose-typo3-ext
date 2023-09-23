@@ -30,29 +30,31 @@ class CmsLayoutHook
         }
 
         $iconName = NULL;
-        switch ($params[2]['list_type']) {
-            case 'gpsnose_members':
-                $iconName = 'gpsnose-plugin-members';
-                break;
-            case 'gpsnose_news':
-                $iconName = 'gpsnose-plugin-news';
-                break;
-            case 'gpsnose_commentscommunity':
-                $iconName = 'gpsnose-plugin-comments-community';
-                break;
-            case 'gpsnose_loginqrcode':
-                $iconName = 'gpsnose-plugin-loginqrcode';
-                break;
-            case 'gpsnose_nearbynoses':
-            case 'gpsnose_nearbyimpressions':
-            case 'gpsnose_nearbypois':
-            case 'gpsnose_nearbytracks':
-            case 'gpsnose_nearbyevents':
-                $iconName = 'gpsnose-plugin-nearby';
-                break;
-            case 'gpsnose_qrscanindex':
-                $iconName = 'gpsnose-plugin-qrscan';
-                break;
+        if (isset($params[2])) {
+            switch ($params[2]['list_type']) {
+                case 'gpsnose_members':
+                    $iconName = 'gpsnose-plugin-members';
+                    break;
+                case 'gpsnose_news':
+                    $iconName = 'gpsnose-plugin-news';
+                    break;
+                case 'gpsnose_commentscommunity':
+                    $iconName = 'gpsnose-plugin-comments-community';
+                    break;
+                case 'gpsnose_loginqrcode':
+                    $iconName = 'gpsnose-plugin-loginqrcode';
+                    break;
+                case 'gpsnose_nearbynoses':
+                case 'gpsnose_nearbyimpressions':
+                case 'gpsnose_nearbypois':
+                case 'gpsnose_nearbytracks':
+                case 'gpsnose_nearbyevents':
+                    $iconName = 'gpsnose-plugin-nearby';
+                    break;
+                case 'gpsnose_qrscanindex':
+                    $iconName = 'gpsnose-plugin-qrscan';
+                    break;
+            }
         }
 
         if ($iconName !== NULL) {
