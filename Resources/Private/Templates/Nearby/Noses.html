@@ -11,14 +11,6 @@
 
 <script>
 $(document).ready(function() {
-	AddLangRes('Common_btnJoinCommunity', '<f:translate key="Common_btnJoinCommunity" />');
-    AddLangRes('Common_btnLogin', '<f:translate key="Common_btnLogin" />');
-    AddLangRes('Common_lblError', '<f:translate key="Common_lblError" />');
-    AddLangRes('Common_lblLoadMore', '<f:translate key="Common_lblLoadMore" />');
-    AddLangRes('Common_lblRequestInProgress', '<f:translate key="Common_lblRequestInProgress" />');
-    AddLangRes('Common_lblScanToJoin', '<f:translate key="Common_lblScanToJoin" />');
-    AddLangRes('Common_loginRequired', '<f:translate key="Common_loginRequired" />');
-    AddLangRes('Nearby_lblNoNoses', '<f:translate key="Nearby_lblNoNoses" />');
     gn_data.Settings.LoginUrl = $('<textarea />').html("{f:uri.page(pageUid:'{settings.login.loginPid}')}").text();
 });
 </script>

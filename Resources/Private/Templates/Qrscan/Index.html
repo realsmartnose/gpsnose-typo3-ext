@@ -15,11 +15,6 @@
 <script type="text/javascript">
 var tDecoderWorkerPath = "{qrCodeWorker}";
 $(document).ready(function() {
-    AddLangRes('SecurityTokenValidator_heading', '<f:translate key="SecurityTokenValidator_heading" />');
-    AddLangRes('SecurityTokenValidator_hint', '<f:translate key="SecurityTokenValidator_hint" />');
-    AddLangRes('SecurityTokenValidator_invalideQrCode', '<f:translate key="SecurityTokenValidator_invalideQrCode" />');
-    AddLangRes('SecurityTokenValidator_validationFail', '<f:translate key="SecurityTokenValidator_validationFail" />');
-    AddLangRes('SecurityTokenValidator_validationSuccess', '<f:translate key="SecurityTokenValidator_validationSuccess" />');
     gn_data.Settings.ValidateUrl = $('<textarea />').html("{f:uri.action(action: 'validateSecurityToken', controller: 'Api', pageType: '{settings.ajax.validateSecurityToken}', arguments: {mashup : mashup})}").text();
     gn_data.Settings.DecoderWorkerPath = tDecoderWorkerPath;
 });

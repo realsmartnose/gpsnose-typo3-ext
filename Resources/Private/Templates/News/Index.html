@@ -11,13 +11,6 @@
 
 <script>
 $(document).ready(function() {
-    AddLangRes('Common_btnJoinCommunity', '<f:translate key="Common_btnJoinCommunity" />');
-    AddLangRes('Common_lblLoadMore', '<f:translate key="Common_lblLoadMore" />');
-    AddLangRes('Common_lblRequestInProgress', '<f:translate key="Common_lblRequestInProgress" />');
-    AddLangRes('Common_lblScanToJoin', '<f:translate key="Common_lblScanToJoin" />');
-    AddLangRes('Home_Overview_lblNoNews', '<f:translate key="Home_Overview_lblNoNews" />');
-    AddLangRes('NewsPart_Load_lblBlogWasDeleted', '<f:translate key="NewsPart_Load_lblBlogWasDeleted" />');
-    AddLangRes('NewsPart_Load_lblCommentWasDeleted', '<f:translate key="NewsPart_Load_lblCommentWasDeleted" />');
     gn_data.Settings.NewsPageUrl = $('<textarea />').html("{f:uri.action(action:'pageNews', controller:'Api', pluginName:'Pagenews', pageType:'{settings.ajax.pageNews}', arguments:'{ communityTag : communityTag }')}").text();
 });
 </script>

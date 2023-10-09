@@ -11,11 +11,6 @@
 
 <script>
 $(document).ready(function() {
-    AddLangRes('Common_btnJoinCommunity', '<f:translate key="Common_btnJoinCommunity" />');
-    AddLangRes('Common_lblLoadMore', '<f:translate key="Common_lblLoadMore" />');
-    AddLangRes('Common_lblRequestInProgress', '<f:translate key="Common_lblRequestInProgress" />');
-    AddLangRes('Common_lblScanToJoin', '<f:translate key="Common_lblScanToJoin" />');
-    AddLangRes('Community_lblMembersNoEntryMessage', '<f:translate key="Community_lblMembersNoEntryMessage" />');
     gn_data.Settings.MembersPageUrl = $('<textarea />').html("{f:uri.action(action:'pageMembers', controller:'Api', pluginName:'Pagemembers', pageType:'{settings.ajax.pageMembers}', arguments:'{ communityTag : communityTag }')}").text();
 });
 </script>

@@ -11,29 +11,6 @@
 
 <script>
 $(document).ready(function() {
-    AddLangRes('Comment_lblErrorTextRequired', '<f:translate key="Comment_lblErrorTextRequired" />');
-    AddLangRes('Comment_lblErrorCannotSave', '<f:translate key="Comment_lblErrorCannotSave" />');
-    AddLangRes('Common_btnClose', '<f:translate key="Common_btnClose" />');
-    AddLangRes('Common_btnDelete', '<f:translate key="Common_btnDelete" />');
-    AddLangRes('Common_btnEdit', '<f:translate key="Common_btnEdit" />');
-    AddLangRes('Common_btnJoinCommunity', '<f:translate key="Common_btnJoinCommunity" />');
-    AddLangRes('Common_btnLogin', '<f:translate key="Common_btnLogin" />');
-    AddLangRes('Common_btnOk', '<f:translate key="Common_btnOk" />');
-    AddLangRes('Common_btnSend', '<f:translate key="Common_btnSend" />');
-    AddLangRes('Common_btnShowProfile', '<f:translate key="Common_btnShowProfile" />');
-    AddLangRes('Common_lblCommentAdd', '<f:translate key="Common_lblCommentAdd" />');
-    AddLangRes('Common_lblCommentAddHint', '<f:translate key="Common_lblCommentAddHint" />');
-    AddLangRes('Common_lblCommentEdit', '<f:translate key="Common_lblCommentEdit" />');
-    AddLangRes('Common_lblCommentEditHint', '<f:translate key="Common_lblCommentEditHint" />');
-    AddLangRes('Common_lblComments', '<f:translate key="Common_lblComments" />');
-    AddLangRes('Common_lblError', '<f:translate key="Common_lblError" />');
-    AddLangRes('Common_lblLoadMore', '<f:translate key="Common_lblLoadMore" />');
-    AddLangRes('Common_lblNoCommentsAvailable', '<f:translate key="Common_lblNoCommentsAvailable" />');
-    AddLangRes('Common_lblRequestInProgress', '<f:translate key="Common_lblRequestInProgress" />');
-    AddLangRes('Common_lblScanToJoin', '<f:translate key="Common_lblScanToJoin" />');
-    AddLangRes('Community_loginRequired', '<f:translate key="Community_loginRequired" />');
-    AddLangRes('Common_lblAreYouSureTitle', '<f:translate key="Common_lblAreYouSureTitle" />');
-    AddLangRes('Common_lblAreYouSureMessage', '<f:translate key="Common_lblAreYouSureMessage" />');
     gn_data.Settings.CommentPageUrl = $('<textarea />').html("{f:uri.action(action:'pageComments', controller:'Api', pluginName:'Pagecomments', pageType:'{settings.ajax.pageComments}', arguments:'{ communityTag : communityTag }')}").text();
     gn_data.Settings.CommentSaveUrl = $('<textarea />').html("{f:uri.action(action:'commentSave', controller:'Api', pluginName:'Commentsave', pageType:'{settings.ajax.commentSave}', arguments:'{ communityTag : communityTag }')}").text();
     gn_data.Settings.LoginUrl = $('<textarea />').html("{f:uri.page(pageUid:'{settings.login.loginPid}')}").text();
