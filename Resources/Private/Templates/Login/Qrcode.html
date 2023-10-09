@@ -14,12 +14,6 @@ var tLoginVerifyUrl = $('<textarea />').html("{f:uri.action(action: 'loginVerifi
 var tReturnUrl = '{return_url}';
 var tQrCodeImage = '{qr_code_image}';
 $(document).ready(function() {
-    AddLangRes('Account_Login_lblTitle', '<f:translate key="Account_Login_lblTitle" />');
-    AddLangRes('Account_Login_lblLoginText', '<f:translate key="Account_Login_lblLoginText" />');
-    AddLangRes('Common_lblUnknownError', '<f:translate key="Common_lblUnknownError" />');
-    AddLangRes('Common_lblCompanyName', '<f:translate key="Common_lblCompanyName" />');
-    AddLangRes('Common_lblLoginPollingStopped', '<f:translate key="Common_lblLoginPollingStopped" />');
-    AddLangRes('Common_btnRestart', '<f:translate key="Common_btnRestart" />');
     gn_data.Settings.LoginVerifyUrl = tLoginVerifyUrl;
     gn_data.Settings.ReturnUrl = tReturnUrl;
     gn_data.Settings.QrCodeImage = tQrCodeImage;
@@ -35,7 +29,7 @@ $(document).ready(function() {
     <f:then></f:then>
     <f:else>
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.2.0">
+<div class="ma-gpsnose" data-gn-version="1.2.4">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-login" data-bind="visible:true" style="display:none;">
 
@@ -106,13 +100,16 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 var MA_GPSNOSE_IS_MASHUP = true;
-$(function() {
-    if (! gn_data.User) gn_data.User = {};
-    ko.applyBindings(new BaseViewModel(), $('#ma-gpsnose-{record}').get(0));
-    window.setTimeout(function() {
-        MaWaitForLogin(gn_data.Settings.LoginVerifyUrl, gn_data.Settings.ReturnUrl, new Date().getTime() + 60000, function() { $('#polling-stopped-message').show(); });
-    }, 3500);
-});
+(function($) {
+    $(function() {
+        if (! gn_data.User) gn_data.User = {};
+        ko.applyBindings(new BaseViewModel(), $('#ma-gpsnose-{record}').get(0));
+        window.setTimeout(function() {
+            MaWaitForLogin(gn_data.Settings.LoginVerifyUrl, gn_data.Settings.ReturnUrl, new Date().getTime() + 60000, function() { $('#polling-stopped-message').show(); });
+        }, 3500);
+    });
+})(jQuery);
+
 </script>
 <!-- MAIN_END -->
     </f:else>

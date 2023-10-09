@@ -21,6 +21,7 @@ plugin.tx_gpsnose {
       knockout = {$plugin.tx_gpsnose.javascript.knockout}
       knockoutVm = {$plugin.tx_gpsnose.javascript.knockoutVm}
       maframework = {$plugin.tx_gpsnose.javascript.maframework}
+      gnLanguageFolder = {$plugin.tx_gpsnose.javascript.gnLanguageFolder}
       qrCodeLib = {$plugin.tx_gpsnose.javascript.qrCodeLib}
       qrCodeScanner = {$plugin.tx_gpsnose.javascript.qrCodeScanner}
       qrCodeWorker = {$plugin.tx_gpsnose.javascript.qrCodeWorker}

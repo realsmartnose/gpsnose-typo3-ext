@@ -130,10 +130,11 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         // Add bignumber
         $this->addJsToFooter($this->settings['javascript']['bignumber']);
 
+        // Locale
+        $lang = GnUtility::getLanguage();
+
         // Add moment
         if ($this->addJsToFooter($this->settings['javascript']['moment'])) {
-            // Locale
-            $lang = GnUtility::getLanguage();
             if ($lang != 'en') {
                 $this->addJsToFooter($this->settings['javascript']['momentLocalePath'] . $lang . '.js');
             }
@@ -150,6 +151,9 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         // Add maframework
         $this->addJsToFooter($this->settings['javascript']['maframework']);
+
+        // Add language file
+        $this->addJsToHeader($this->settings['javascript']['gnLanguageFolder'] . $lang . '.js', $this->settings['javascript']['gnLanguageFolder'] . 'en.js');
 
         // Add knockout
         $this->addJsToFooter($this->settings['javascript']['knockout']);
@@ -178,9 +182,13 @@ class BaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param string $fileName
      * @return boolean
      */
-    protected function addJsToHeader($path)
+    protected function addJsToHeader($path, $fallback = null)
     {
-        if ($file = $this->getFileNameOrPath($path)) {
+        $file = $this->getFileNameOrPath($path);
+        if ($file && ! file_exists($file) && $fallback) {
+            $file = $this->getFileNameOrPath($fallback);
+        }
+        if ($file && file_exists($file)) {
             $url = $file . "?" . $this->getFileModifiedDate($file);
             $this->frontendController->additionalHeaderData[md5($path)] = '<script src="' . $url . '"></script>';
             return TRUE;

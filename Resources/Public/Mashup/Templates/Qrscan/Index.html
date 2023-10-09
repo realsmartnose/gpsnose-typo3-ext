@@ -16,7 +16,7 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.2.0">
+<div class="ma-gpsnose" data-gn-version="1.2.4">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-security-token-validator" data-bind="visible:true" style="display:none;">
         <div class="row">
@@ -63,22 +63,24 @@ Replace {record} with a unique id that identifies the entry
 var MA_GPSNOSE_IS_MASHUP = true;
 var selector = "#ma-gpsnose-{record}";
 
-$(function() {
-    if (! gn_data.User) gn_data.User = {};
-    var vm = new SecurityTokenValidatorViewModel();
-    vm.ValidateUrl = gn_data.Settings.ValidateUrl;
-    vm.setDefaultDecoder($(selector + " #gn-qr-code-scanner canvas"), gn_data.Settings.DecoderWorkerPath);
+(function($) {
+    $(function() {
+        if (! gn_data.User) gn_data.User = {};
+        var vm = new SecurityTokenValidatorViewModel();
+        vm.ValidateUrl = gn_data.Settings.ValidateUrl;
+        vm.setDefaultDecoder($(selector + " #gn-qr-code-scanner canvas"), gn_data.Settings.DecoderWorkerPath);
 
-    vm.OnValidateComplete = function(tokenIsValide, creatorUserName) {
-        var success = tokenIsValide;
-        // Customer-Rules here...
-        if (success)
-            vm.MessageSuccess(GetLangRes('SecurityTokenValidator_validationSuccess', 'The security-token of %user_name% was successfully validated').replace('%user_name%', creatorUserName));
-        else
-            vm.MessageError(GetLangRes('SecurityTokenValidator_validationFail', 'The security-token of %user_name% is not valide').replace('%user_name%', creatorUserName));
-    };
+        vm.OnValidateComplete = function(tokenIsValide, creatorUserName) {
+            var success = tokenIsValide;
+            // Customer-Rules here...
+            if (success)
+                vm.MessageSuccess(GetLangRes('SecurityTokenValidator_validationSuccess', 'The security-token of %user_name% was successfully validated').replace('%user_name%', creatorUserName));
+            else
+                vm.MessageError(GetLangRes('SecurityTokenValidator_validationFail', 'The security-token of %user_name% is not valide').replace('%user_name%', creatorUserName));
+        };
 
-    ko.applyBindings(vm, $(selector).get(0));
-});
+        ko.applyBindings(vm, $(selector).get(0));
+    });
+})(jQuery);
 </script>
 <!-- MAIN_END -->

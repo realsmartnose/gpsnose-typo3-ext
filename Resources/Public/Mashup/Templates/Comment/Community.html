@@ -30,7 +30,7 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.2.0">
+<div class="ma-gpsnose" data-gn-version="1.2.4">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-comment" data-bind="visible:true" style="display:none;">
 
@@ -60,11 +60,13 @@ Replace {record} with a unique id that identifies the entry
 <script type="text/javascript">
 var MA_GPSNOSE_IS_MASHUP = true;
 var vm;
-$(function() {
-    if (! gn_data.User) gn_data.User = {};
-    vm = new CommunityDetailViewModel(gn_data.Community, gn_data.User);
-    ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
-});
+(function($) {
+    $(function() {
+        if (! gn_data.User) gn_data.User = {};
+        vm = new CommunityDetailViewModel(gn_data.Community, gn_data.User);
+        ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
+    });
+})(jQuery);
 function ma_gpsnose_change(container) {
     $(container).imagesLoaded(function() {
         setTimeout(function() { MasonryReload(); }, 250);

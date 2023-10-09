@@ -23,7 +23,7 @@ Replace {record} with a unique id that identifies the entry
 -->
 
 <!-- MAIN_BEG -->
-<div class="ma-gpsnose" data-gn-version="1.2.0">
+<div class="ma-gpsnose" data-gn-version="1.2.4">
 
     <div id="ma-gpsnose-{record}" class="ma-gpsnose-nearby-pois" data-bind="visible:true" style="display:none;">
 
@@ -96,22 +96,24 @@ Replace {record} with a unique id that identifies the entry
 
 <script type="text/javascript">
 var MA_GPSNOSE_IS_MASHUP = true;
-$(function() {
-    if (! gn_data.User) gn_data.User = {};
-    var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
-    vm.PageablePois.OnAddItems = function() {
-        $('#ma-gpsnose-{record} .masonry').imagesLoaded(function() {
-            MasonryReload();
-        });
-    }
+(function($) {
+    $(function() {
+        if (! gn_data.User) gn_data.User = {};
+        var vm = new NearbyViewModel(gn_data.Community, gn_data.User);
+        vm.PageablePois.OnAddItems = function() {
+            $('#ma-gpsnose-{record} .masonry').imagesLoaded(function() {
+                MasonryReload();
+            });
+        }
 
-    ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
+        ko.applyBindings(vm, $('#ma-gpsnose-{record}').get(0));
 
-    if (typeof gn_data.Pois != 'object') {
-        if (console) console.warn(gn_data.Pois);
-    } else if (gn_data.Pois) {
-        vm.PageablePois.AddItems(gn_data.Pois);
-    }
-});
+        if (typeof gn_data.Pois != 'object') {
+            if (console) console.warn(gn_data.Pois);
+        } else if (gn_data.Pois) {
+            vm.PageablePois.AddItems(gn_data.Pois);
+        }
+    });
+})(jQuery);
 </script>
 <!-- MAIN_END -->
