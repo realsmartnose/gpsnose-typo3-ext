@@ -104,12 +104,11 @@ var MA_GPSNOSE_IS_MASHUP = true;
     $(function() {
         if (! gn_data.User) gn_data.User = {};
         ko.applyBindings(new BaseViewModel(), $('#ma-gpsnose-{record}').get(0));
-        window.setTimeout(function() {
+        window.setTimeout(function() { // <f:comment></f:comment>
             MaWaitForLogin(gn_data.Settings.LoginVerifyUrl, gn_data.Settings.ReturnUrl, new Date().getTime() + 60000, function() { $('#polling-stopped-message').show(); });
         }, 3500);
     });
 })(jQuery);
-
 </script>
 <!-- MAIN_END -->
     </f:else>
