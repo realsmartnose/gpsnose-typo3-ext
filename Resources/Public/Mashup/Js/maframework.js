@@ -1,6 +1,6 @@
 var gnSettings = {
     "BaseUrl": "https://www.gpsnose.com",
-    "BaseDataUrl": "https://gpsnose.blob.core.windows.net",
+    "BaseDataUrl": "https://gpsnoselive.blob.core.windows.net",
     "ImagePath": "/Content/Mashup/Images",
     "MashupsPageSize": 12,
     "NosesPageSize": 12,
@@ -203,6 +203,20 @@ function GetUniqueKey(loginName, date) {
     else {
         return loginName + "_" + date;
     }
+}
+function EnsureUsername(username) {
+    if (username == null) {
+        return GetLangRes("Common_lblGuest", "Guest");
+    }
+    var match = username.match(/^u([0-9]*)$/);
+    if (match) {
+        return GetLangRes("Common_lblUnknownUser", "Stranger");
+    }
+    return username;
+}
+function ReplaceGenericUsername(text) {
+    console.log(text);
+    return text.replace(/u[0-9]{21}/, GetLangRes("Common_lblUnknownUser", "Stranger"));
 }
 function SetCookieDays(name, value, expiryDays) {
     SetCookieMinutes(name, value, expiryDays * 24 * 60);

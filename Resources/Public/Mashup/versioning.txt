@@ -1,3 +1,6 @@
+1.2.1
+- UPD: Update to new blob-url
+
 1.2.0
 - UPD: Update template
 

@@ -45,7 +45,7 @@ var NoseDto = (function (_super) {
             return _this.ImageUrl() + _this.ThumbSize;
         };
         _this.PreviewUrl = function () {
-            return "/nose/preview/" + encodeURIComponent(_this.LoginName);
+            return "/Nose/Preview/" + encodeURIComponent(_this.LoginName);
         };
         _this.DetailUrl = function () {
             return (MA_GPSNOSE_IS_MASHUP ? gnSettings.BaseUrl : '') + "/n/" + encodeURIComponent(_this.LoginName) + (MA_GPSNOSE_IS_MASHUP && gnSettings.LoginId ? '?lid=' + gnSettings.LoginId : '');

@@ -6,6 +6,10 @@
 Change log
 ==========
 
+Version 3.0.2
+-------------
+- UPD: Update SDK to 1.2.4
+
 Version 3.0.1
 -------------
 - FIX: Ajax response
