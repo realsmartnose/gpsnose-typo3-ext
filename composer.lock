@@ -1,0 +1,65 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "7638d6c44d9076bdda78e4b849fd0dbd",
+    "packages": [
+        {
+            "name": "smartnoses/gpsnosesdk",
+            "version": "v1.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/realsmartnose/gpsnose-sdk-php.git",
+                "reference": "46d7f035dbf9c221eb2ab6b0aa829580dbf301aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/realsmartnose/gpsnose-sdk-php/zipball/46d7f035dbf9c221eb2ab6b0aa829580dbf301aa",
+                "reference": "46d7f035dbf9c221eb2ab6b0aa829580dbf301aa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GpsNose\\SDK\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "dev",
+                    "email": "dev@gpsnose.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "GpsNose web-integration package - You can use the login, real geo-data and nearby anonymous communication from the GpsNose platform in your web-site.",
+            "homepage": "https://www.gpsnose.com/",
+            "keywords": [
+                "GpsNose",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/realsmartnose/gpsnose-sdk-php/issues",
+                "source": "https://github.com/realsmartnose/gpsnose-sdk-php/tree/v1.2.4"
+            },
+            "time": "2025-01-18T08:21:47+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
+}
